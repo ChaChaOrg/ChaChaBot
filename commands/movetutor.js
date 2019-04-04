@@ -1,6 +1,6 @@
 // JavaScript Document
 
-exports.run = (client, message, args) => {
+exports.run = (client, connection, message, args) => {
 	//message.channel.send('Bang! <:gunspurr:356191158017196032>').catch(console.error);
 	
 	//+movetutor [PokemonName] [EvoLeft (2 for 3-stage, 1 for 2-stage, 0 for no more evo)] [Move Name] [Move PP] [Successes (1-5)]

@@ -1,6 +1,6 @@
 // Generates a new ChaCha Pokemon, given level & base stats
 
-exports.run = (client, message, args) => {
+exports.run = (client, connection, message, args) => {
 	//message.channel.send('Bang! <:gunspurr:356191158017196032>').catch(console.error);
 	//Math.floor((Math.random() * 65535) + 1) randomnumgen
 	

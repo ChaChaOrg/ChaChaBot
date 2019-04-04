@@ -1,6 +1,6 @@
 // Catch calculator
 
-exports.run = (client, message, args) => {
+exports.run = (client, connection, message, args) => {
 	//get pokeball emoji
 	const shakey = client.emojis.find("name", "poke_shake");
 	

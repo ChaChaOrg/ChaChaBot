@@ -1,7 +1,7 @@
 // JavaScript Document
 
 //run
-exports.run = (client, message, args) => {
+exports.run = (client, connection, message, args) => {
 	
     
     	//check if asking for help

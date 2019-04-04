@@ -195,6 +195,18 @@ exports.run = (client, connection, message, args) => {
         //get move speed
         moveSpeed = (0.38*finalStats[5]+4).toFixed(2);
 
+        //upload
+        connection.connect(function(err) {
+            if (err) throw err;
+            console.log("Connected!");
+            var sql = "INSERT INTO pokemon (name, address) VALUES ('Company Inc', 'Highway 37')";
+            con.query(sql, function (err, result) {
+                if (err) throw err;
+                console.log("1 record inserted");
+            });
+        });
+
+
         // Final Print
         message.channel.send({embed: {
                 color: 3447003,
