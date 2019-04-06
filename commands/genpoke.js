@@ -1,12 +1,12 @@
 // Generates a new ChaCha Pokemon, given level & base stats
 
-exports.run = (client, connection,  message, args) => {
+exports.run = (client, connection, message, args) => {
 	//message.channel.send('Bang! <:gunspurr:356191158017196032>').catch(console.error);
 	//Math.floor((Math.random() * 65535) + 1) randomnumgen
 	
 	// ======================= VARIABLES =======================
-	//Pokemon name
-	let name = args[0];
+	//Pokemon species
+	let species = args[0];
 	//level
 	let level = args[1];
 	//stat arrays: HP, ATK, DEF, SPA, SPD, SPE
@@ -21,27 +21,27 @@ exports.run = (client, connection,  message, args) => {
 	let haChance = args[11];
 	
 	// IVs
-	var ivStats = [0, 0, 0, 0, 0, 0];
-	
+	let ivStats = [0, 0, 0, 0, 0, 0];
+
 	// EVs ... all naturally 0
-	var evStats = [0, 0, 0, 0, 0, 0];
+	let evStats = [0, 0, 0, 0, 0, 0];
 	
 	//formula for stats
-	var formStats = [0, 0, 0, 0, 0, 0];
+	let formStats = [0, 0, 0, 0, 0, 0];
 	// nmulti 1, calculator stats
-	var nmultiStats1 = [1, 1, 1, 1, 1, 1];
+	let nmultiStats1 = [1, 1, 1, 1, 1, 1];
 	// nmulti 2, calculator stats
-	var nmultiStats2 = [1, 1, 1, 1, 1, 1];
+	let nmultiStats2 = [1, 1, 1, 1, 1, 1];
 	
 	// final stats
-	var finalStats = [0, 0, 0, 0, 0, 0];
+	let finalStats = [0, 0, 0, 0, 0, 0];
 	
 	// gender, ability, shiny
-	var gender = 'male';
+	let gender = 'male';
 	// the final ability chosen
-	var ability;
+	let ability;
 	// if the pokemon is shiny or not
-	var shiny = false;
+	let shiny = false;
 	
 	//nature + correlating names
 	var natureFinal;
@@ -55,7 +55,7 @@ exports.run = (client, connection,  message, args) => {
 	];
 	
 	//modifier generator
-	var modGen = function (a) {
+	let modGen = function (a) {
 		var mainScore = a;
 		if (a % 2 !== 0) {mainScore = mainScore - 1;}
 		var rawMod = ((mainScore - 10)/2);
@@ -70,24 +70,24 @@ exports.run = (client, connection,  message, args) => {
 	};
 	
 	// DND STATS
-	var natArmor;
-	var armorClass;
-	var moveSpeed;
-	var conBase;
-	var conMod;
-	var strBase;
-	var strMod;
-	var intBase;
-	var intMod;
-	var wisBase;
-	var wisMod;
-	var dexBase;
-	var dexMod;
+	let natArmor;
+	let armorClass;
+	let moveSpeed;
+	let conBase;
+	let conMod;
+	let strBase;
+	let strMod;
+	let intBase;
+	let intMod;
+	let wisBase;
+	let wisMod;
+	let dexBase;
+	let dexMod;
 	
 	// ======================= END VARIABLES =======================
 	
 	//check if asking for help
-	if (name.includes('help')) {
+	if (species.includes('help')) {
 		message.reply('New Pokemon Generator. Variables in order:\n [Pokemon Name] [Level] [Base HP] [Base Atk] [Base Def] [Base SpA] [Base SpD] [Base Speed] [\% Male] [Number of Abilities Available (including hidden abilities)] [Size Bonus] [Hidden Ability % (optional)]').catch(console.error);
 		return;
 	}
@@ -97,7 +97,7 @@ exports.run = (client, connection,  message, args) => {
 		// ========================= MISC VAL GENERATORS =========================
 		
 		//assign gender
-		var genderNum = Math.floor((Math.random() * 100) + 1);
+		let genderNum = Math.floor((Math.random() * 100) + 1);
 		if (genderNum > genderChance) {
 			gender = "female";
 		}
@@ -127,9 +127,9 @@ exports.run = (client, connection,  message, args) => {
 		
 		//generate nature
 		//x-coord for nature
-		var natureXCoord = Math.floor((Math.random() * 5)); //val between 0-4 for array
+		let natureXCoord = Math.floor((Math.random() * 5)); //val between 0-4 for array
 		//y-coord for nature
-		var natureYCoord = Math.floor((Math.random() * 5));
+		let natureYCoord = Math.floor((Math.random() * 5));
 		
 		//assign nature to final val
 		natureFinal = natureNames[natureXCoord][natureYCoord];
@@ -151,7 +151,7 @@ exports.run = (client, connection,  message, args) => {
 		
 		//calculate = attribute max HP
 		//formula for hp... 16 + Conmod, with an additional 2d10 + conmod per level.
-		var diceRoll = 16;
+		let diceRoll = 16;
 		for (var i = 1; i < level; i++) {
 			diceRoll += Math.floor((Math.random() * 18) + 2) + ((conBase - 10)/2);
 		}
@@ -166,7 +166,7 @@ exports.run = (client, connection,  message, args) => {
 		
 		//get dnd stats
 		//stat calculator
-		var getAbility = function (a) { return (0.15 * a + 1.5); };
+		let getAbility = function (a) { return (0.15 * a + 1.5); };
 		
 		//strength is based off of attack stat
 		strBase = Math.round(getAbility(finalStats[1]));
@@ -194,7 +194,7 @@ exports.run = (client, connection,  message, args) => {
 		
 		//get move speed
 		moveSpeed = (0.38*finalStats[5]+4).toFixed(2);
-		
+
 		// Final Print
 		message.channel.send({embed: {
 			color: 3447003,
@@ -202,9 +202,9 @@ exports.run = (client, connection,  message, args) => {
 			  name: client.user.username,
 			  icon_url: client.user.avatarURL
 			},
-			title: `Level ${level} ${name}`,
-			url: `https://bulbapedia.bulbagarden.net/wiki/${name}_(Pok%C3%A9mon)`,
-			description: "Click the link for the Bulbapedia page, or use !data to call info using the Pokedex bot.",
+				title: `Level ${level} ${species}`,
+				url: `https://bulbapedia.bulbagarden.net/wiki/${species}_(Pok%C3%A9mon)`,
+				description: "Click the link for the Bulbapedia page, or use !data to call info using the Pokedex bot.",
 			fields: [
 			  {
 				name: "Basic Info",

@@ -5,43 +5,51 @@ exports.run = (client, connection, message, args) => {
     //Math.floor((Math.random() * 65535) + 1) randomnumgen
 
     // ======================= VARIABLES =======================
-    //Pokemon name
-    let name = args[1];
+    //Pokemon species
+    let species = args[0];
     //level
-    let level = args[2];
+    let level = args[1];
     //stat arrays: HP, ATK, DEF, SPA, SPD, SPE
-    let baseStats = [ args[3], args[4], args[5], args[6], args[7], args[8] ];
+    let baseStats = [ args[2], args[3], args[4], args[5], args[6], args[7] ];
     //chance of being male
-    let genderChance = args[9];
+    let genderChance = args[8];
     //number of abilities available
-    let abilityNum = args[10];
+    let abilityNum = args[9];
     //size bonus
-    let sizeBonus = args[11];
+    let sizeBonus = args[10];
     //hidden ability percentile
-    let haChance = args[12];
+    let haChance = args[11];
+    //pokemon nickname
+    let nickname = args[12];
+    //moves
+    let move1 = args[13];
+    let move2 = args[14];
+    let move3 = args[15];
+    let move4 = args[16];
+    let move5 = args[17];
 
     // IVs
-    var ivStats = [0, 0, 0, 0, 0, 0];
+    let ivStats = [0, 0, 0, 0, 0, 0];
 
     // EVs ... all naturally 0
-    var evStats = [0, 0, 0, 0, 0, 0];
+    let evStats = [0, 0, 0, 0, 0, 0];
 
     //formula for stats
-    var formStats = [0, 0, 0, 0, 0, 0];
+    let formStats = [0, 0, 0, 0, 0, 0];
     // nmulti 1, calculator stats
-    var nmultiStats1 = [1, 1, 1, 1, 1, 1];
+    let nmultiStats1 = [1, 1, 1, 1, 1, 1];
     // nmulti 2, calculator stats
-    var nmultiStats2 = [1, 1, 1, 1, 1, 1];
+    let nmultiStats2 = [1, 1, 1, 1, 1, 1];
 
     // final stats
-    var finalStats = [0, 0, 0, 0, 0, 0];
+    let finalStats = [0, 0, 0, 0, 0, 0];
 
     // gender, ability, shiny
-    var gender = 'male';
+    let gender = 'male';
     // the final ability chosen
-    var ability;
+    let ability;
     // if the pokemon is shiny or not
-    var shiny = false;
+    let shiny = 0;
 
     //nature + correlating names
     var natureFinal;
@@ -55,7 +63,7 @@ exports.run = (client, connection, message, args) => {
     ];
 
     //modifier generator
-    var modGen = function (a) {
+    let modGen = function (a) {
         var mainScore = a;
         if (a % 2 !== 0) {mainScore = mainScore - 1;}
         var rawMod = ((mainScore - 10)/2);
@@ -70,24 +78,24 @@ exports.run = (client, connection, message, args) => {
     };
 
     // DND STATS
-    var natArmor;
-    var armorClass;
-    var moveSpeed;
-    var conBase;
-    var conMod;
-    var strBase;
-    var strMod;
-    var intBase;
-    var intMod;
-    var wisBase;
-    var wisMod;
-    var dexBase;
-    var dexMod;
+    let natArmor;
+    let armorClass;
+    let moveSpeed;
+    let conBase;
+    let conMod;
+    let strBase;
+    let strMod;
+    let intBase;
+    let intMod;
+    let wisBase;
+    let wisMod;
+    let dexBase;
+    let dexMod;
 
     // ======================= END VARIABLES =======================
 
     //check if asking for help
-    if (name.includes('help')) {
+    if (species.includes('help')) {
         message.reply('New Pokemon Generator. Variables in order:\n [Pokemon Name] [Level] [Base HP] [Base Atk] [Base Def] [Base SpA] [Base SpD] [Base Speed] [\% Male] [Number of Abilities Available (including hidden abilities)] [Size Bonus] [Hidden Ability % (optional)]').catch(console.error);
         return;
     }
@@ -97,7 +105,7 @@ exports.run = (client, connection, message, args) => {
         // ========================= MISC VAL GENERATORS =========================
 
         //assign gender
-        var genderNum = Math.floor((Math.random() * 100) + 1);
+        let genderNum = Math.floor((Math.random() * 100) + 1);
         if (genderNum > genderChance) {
             gender = "female";
         }
@@ -110,12 +118,12 @@ exports.run = (client, connection, message, args) => {
             if (abilityNum === 2) {
                 ability = 1;
             } else {
-                ability = Math.floor((Math.random() * 1) + 1);
+                ability = Math.floor((Math.random()) + 1);
             }
         }
 
         //shiny generator!
-        if ((Math.floor((Math.random() * 4096) + 1)) >= 4093) { shiny = true;}
+        if ((Math.floor((Math.random() * 4096) + 1)) >= 4093) { shiny = 1;}
 
         // ========================= STAT ARRAY GENERATOR!!! =========================
 
@@ -127,9 +135,9 @@ exports.run = (client, connection, message, args) => {
 
         //generate nature
         //x-coord for nature
-        var natureXCoord = Math.floor((Math.random() * 5)); //val between 0-4 for array
+        let natureXCoord = Math.floor((Math.random() * 5)); //val between 0-4 for array
         //y-coord for nature
-        var natureYCoord = Math.floor((Math.random() * 5));
+        let natureYCoord = Math.floor((Math.random() * 5));
 
         //assign nature to final val
         natureFinal = natureNames[natureXCoord][natureYCoord];
@@ -151,7 +159,7 @@ exports.run = (client, connection, message, args) => {
 
         //calculate = attribute max HP
         //formula for hp... 16 + Conmod, with an additional 2d10 + conmod per level.
-        var diceRoll = 16;
+        let diceRoll = 16;
         for (var i = 1; i < level; i++) {
             diceRoll += Math.floor((Math.random() * 18) + 2) + ((conBase - 10)/2);
         }
@@ -166,7 +174,7 @@ exports.run = (client, connection, message, args) => {
 
         //get dnd stats
         //stat calculator
-        var getAbility = function (a) { return (0.15 * a + 1.5); };
+        let getAbility = function (a) { return (0.15 * a + 1.5); };
 
         //strength is based off of attack stat
         strBase = Math.round(getAbility(finalStats[1]));
@@ -189,12 +197,35 @@ exports.run = (client, connection, message, args) => {
         natArmor = (0.08*(parseFloat(finalStats[2])))-0.6;
 
         //armor class
-        //message.channel.send(`Natural Armor: ${natArmor} || Size Bonus: ${sizeBonus} || Dex: ${dexMod}`);
+        //message.channel.send(`Natural Armor: ${natArmor} \|| Size Bonus: ${sizeBonus} \|| Dex: ${dexMod}`);
         armorClass = (10 + parseFloat(natArmor) + parseFloat(sizeBonus) + ((dexBase - 10)/2)).toFixed(0);
 
         //get move speed
         moveSpeed = (0.38*finalStats[5]+4).toFixed(2);
+        //INE = INT
+        let sql = `INSERT INTO pokemon (name, species, level, nature, gender, ability, shiny, ` +
+            `hp, atk, def, spa, spd, spe, IVhp, IVatk, IVdef, IVspa, IVspd, IVspe, EVhp, EVatk, EVdef, EVspa, EVspd, EVspe, ` +
+            `str, dex, con, ine, wis, cha, move1, move2, move3, move4, move5) ` +
+            `VALUES ('${nickname}', '${species}', ${level}, '${natureFinal}', '${gender}', ${ability}, ${shiny}, ` +
+            `${Math.round(finalStats[0])}, ${Math.round(finalStats[1])}, ${Math.round(finalStats[2])}, ${Math.round(finalStats[3])}, ` +
+            `${Math.round(finalStats[4])}, ${Math.round(finalStats[5])}, ` +
+            `${ivStats[0]}, ${ivStats[1]}, ${ivStats[2]}, ${ivStats[3]}, ${ivStats[4]}, ${ivStats[5]}, ` +
+            `${evStats[0]}, ${evStats[1]}, ${evStats[2]}, ${evStats[3]}, ${evStats[4]}, ${evStats[5]}, ` +
+            `${strBase.toFixed(0)}, ${dexBase.toFixed(0)}, ${conBase.toFixed(0)}, ` +
+            `${intBase.toFixed(0)}, ${wisBase.toFixed(0)}, 0, ` +
+            `'${move1}', '${move2}', '${move3}', '${move4}', '${move5}');`;
+        console.log(sql);
+        connection.query(sql, function (err, result) {
+            if (err) throw err;
+            console.log(`${result}`);
+            console.log("1 record inserted");
+        });
 
+        let title = '';
+        if (nickname == null)
+            title = `Level ${level} ${species}`;
+        else
+            title = `${nickname}, Level ${level} ${species}`;
         // Final Print
         message.channel.send({embed: {
                 color: 3447003,
@@ -202,41 +233,41 @@ exports.run = (client, connection, message, args) => {
                     name: client.user.username,
                     icon_url: client.user.avatarURL
                 },
-                title: `Level ${level} ${name}`,
-                url: `https://bulbapedia.bulbagarden.net/wiki/${name}_(Pok%C3%A9mon)`,
+                title: `${title}`,
+                url: `https://bulbapedia.bulbagarden.net/wiki/${species}_(Pok%C3%A9mon)`,
                 description: "Click the link for the Bulbapedia page, or use !data to call info using the Pokedex bot.",
                 fields: [
                     {
                         name: "Basic Info",
-                        value: `**Ability:** ${ability} || **Gender:** ${gender} || **Nature: ** ${natureFinal} || **Shiny: ** ${shiny}\n=================`
+                        value: `**Ability:** ${ability} <> **Gender:** ${gender} <> **Nature: ** ${natureFinal} <> **Shiny: ** ${shiny}\n=================`
                     },
                     {
                         name: "HP",
-                        value: `**IV: ** ${ivStats[0]} || **Final: ** ${finalStats[0]}\n=================`
+                        value: `**IV: ** ${ivStats[0]} <> **Final: ** ${finalStats[0]}\n=================`
                     },
                     {
                         name: "Attack",
-                        value: `**IV: ** ${ivStats[1]} || **Final: ** ${finalStats[1]}\n=================`
+                        value: `**IV: ** ${ivStats[1]} <> **Final: ** ${finalStats[1]}\n=================`
                     },
                     {
                         name: "Defense",
-                        value: `**IV: ** ${ivStats[2]} || **Final: ** ${finalStats[2]}\n=================`
+                        value: `**IV: ** ${ivStats[2]} <> **Final: ** ${finalStats[2]}\n=================`
                     },
                     {
                         name: "Special Attack",
-                        value: `**IV: ** ${ivStats[3]} || **Final: ** ${finalStats[3]}\n=================`
+                        value: `**IV: ** ${ivStats[3]} <> **Final: ** ${finalStats[3]}\n=================`
                     },
                     {
                         name: "Special Defense",
-                        value: `**IV: ** ${ivStats[4]} || **Final: ** ${finalStats[4]}\n=================`
+                        value: `**IV: ** ${ivStats[4]} <> **Final: ** ${finalStats[4]}\n=================`
                     },
                     {
                         name: "Speed",
-                        value: `**IV: ** ${ivStats[5]} || **Final: ** ${finalStats[5]}\n=================`
+                        value: `**IV: ** ${ivStats[5]} <> **Final: ** ${finalStats[5]}\n=================`
                     },
                     {
                         name: "Ability Scores",
-                        value: `**STR: ** ${strBase.toFixed(0)}(${strMod}) || **DEX: ** ${dexBase.toFixed(0)}(${dexMod}) || **CON: ** ${conBase.toFixed()}(${conMod})\n**INT: ** ${intBase.toFixed(0)}(${intMod}) || **WIS: ** ${wisBase.toFixed(0)}(${wisMod})\n**AC: ** ${armorClass} || **Move Speed: ** ${moveSpeed} ft`
+                        value: `**STR: ** ${strBase.toFixed(0)}(${strMod}) <> **DEX: ** ${dexBase.toFixed(0)}(${dexMod}) <> **CON: ** ${conBase.toFixed()}(${conMod})\n**INT: ** ${intBase.toFixed(0)}(${intMod}) <> **WIS: ** ${wisBase.toFixed(0)}(${wisMod})\n**AC: ** ${armorClass} <> **Move Speed: ** ${moveSpeed} ft`
                     },
                 ],
                 timestamp: new Date(),
@@ -248,8 +279,8 @@ exports.run = (client, connection, message, args) => {
         });
 
     } catch(error) {
-        message.channel.send(error.toString);
+        message.channel.send(error.toString());
         message.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);
     }
 
-}
+};

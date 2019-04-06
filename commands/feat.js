@@ -1,7 +1,7 @@
 // JavaScript Document
 
 //run
-exports.run = (client, message, args) => {
+exports.run = (client, connection, message, args) => {
 	
     
     	//check if asking for help
@@ -689,15 +689,13 @@ function sendFeat(featName) {
 }
 	
 try {	//feat name given
-	var givenFeat = "";
-	
+
 	//elements.join('-')
-	givenFeat = args.join(' ');
+	let givenFeat = args.join(' ');
 	
 	
 	//try to find the feat
-	var featFound = ""
-    featFound = sendFeat(givenFeat);
+    let featFound = sendFeat(givenFeat);
 	
 	//if the feat isn't null, print it out
 	
