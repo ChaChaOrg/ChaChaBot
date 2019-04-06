@@ -1,6 +1,6 @@
 // Calculates a Pokemon Ranger's DC to loop/catch a Pokemon is, given its dex and catch rate.
 
-exports.run = (client, message, args) => {
+exports.run = (client, connection, message, args) => {
     
     //The Pokemon's name
     var name = args[0];

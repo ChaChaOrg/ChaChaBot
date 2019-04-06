@@ -11,7 +11,6 @@
   "license": "ISC",
   "dependencies": {
     "discord.js": "^11.4.2",
-    "enmap": "^4.0.12",
-    "mysql": "^2.16.0"
+    "enmap": "^4.0.12"
   }
 }

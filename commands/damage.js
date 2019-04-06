@@ -1,6 +1,6 @@
 // Damage Calculator
 
-exports.run = (client, message, args) => {
+exports.run = (client, connection, message, args) => {
 	try {
 			//variables required
 			let attackName = args[0];
