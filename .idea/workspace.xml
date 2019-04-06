@@ -134,9 +134,6 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration name="chachabot.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="chachabot.js" working-dir="$PROJECT_DIR$">
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Node.js.chachabot.js" />
