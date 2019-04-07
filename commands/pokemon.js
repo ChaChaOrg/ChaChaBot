@@ -6,11 +6,22 @@ exports.run = (client, connection, message, args) => {
 
     // ======================= VARIABLES =======================
     //Pokemon species
+    if (args[0] === "gen") {
+        gen(client, connection, message, args.slice(1));
+    }
+    else if (args[1] === "list"){
+
+    }
+};
+
+
+function gen(client, connection, message, args)
+{
     let species = args[0];
     //level
     let level = args[1];
     //stat arrays: HP, ATK, DEF, SPA, SPD, SPE
-    let baseStats = [ args[2], args[3], args[4], args[5], args[6], args[7] ];
+    let baseStats = [args[2], args[3], args[4], args[5], args[6], args[7]];
     //chance of being male
     let genderChance = args[8];
     //number of abilities available
@@ -27,10 +38,8 @@ exports.run = (client, connection, message, args) => {
     let move3 = args[15];
     let move4 = args[16];
     let move5 = args[17];
-
     // IVs
     let ivStats = [0, 0, 0, 0, 0, 0];
-
     // EVs ... all naturally 0
     let evStats = [0, 0, 0, 0, 0, 0];
 
@@ -65,8 +74,10 @@ exports.run = (client, connection, message, args) => {
     //modifier generator
     let modGen = function (a) {
         var mainScore = a;
-        if (a % 2 !== 0) {mainScore = mainScore - 1;}
-        var rawMod = ((mainScore - 10)/2);
+        if (a % 2 !== 0) {
+            mainScore = mainScore - 1;
+        }
+        var rawMod = ((mainScore - 10) / 2);
         rawMod = rawMod.toFixed(0);
         var modString;
         if (rawMod > 0) {
@@ -76,7 +87,6 @@ exports.run = (client, connection, message, args) => {
         }
         return modString;
     };
-
     // DND STATS
     let natArmor;
     let armorClass;
@@ -91,7 +101,6 @@ exports.run = (client, connection, message, args) => {
     let wisMod;
     let dexBase;
     let dexMod;
-
     // ======================= END VARIABLES =======================
 
     //check if asking for help
@@ -123,7 +132,9 @@ exports.run = (client, connection, message, args) => {
         }
 
         //shiny generator!
-        if ((Math.floor((Math.random() * 4096) + 1)) >= 4093) { shiny = 1;}
+        if ((Math.floor((Math.random() * 4096) + 1)) >= 4093) {
+            shiny = 1;
+        }
 
         // ========================= STAT ARRAY GENERATOR!!! =========================
 
@@ -146,14 +157,18 @@ exports.run = (client, connection, message, args) => {
         //if xcoord = ycoord, no changes, otherwise adjusting...
         if (natureXCoord !== natureYCoord) {
             for (i = 0; i < 6; i++) {
-                if (natureXCoord === i) {nmultiStats1[i + 1] = 1.1;}
-                if (natureYCoord === i) {nmultiStats2[i + 1] = 0.9;}
+                if (natureXCoord === i) {
+                    nmultiStats1[i + 1] = 1.1;
+                }
+                if (natureYCoord === i) {
+                    nmultiStats2[i + 1] = 0.9;
+                }
             }
         }
 
         //get CON + hit points
         //calculate con + conmod
-        conBase = Math.round((parseFloat(baseStats[0]) + parseFloat(ivStats[0]))*0.15 + 1.5);
+        conBase = Math.round((parseFloat(baseStats[0]) + parseFloat(ivStats[0])) * 0.15 + 1.5);
 
         conMod = modGen(conBase);
 
@@ -161,20 +176,22 @@ exports.run = (client, connection, message, args) => {
         //formula for hp... 16 + Conmod, with an additional 2d10 + conmod per level.
         let diceRoll = 16;
         for (var i = 1; i < level; i++) {
-            diceRoll += Math.floor((Math.random() * 18) + 2) + ((conBase - 10)/2);
+            diceRoll += Math.floor((Math.random() * 18) + 2) + ((conBase - 10) / 2);
         }
-        finalStats[0] = 16 + ((conBase - 10)/2) + diceRoll;
+        finalStats[0] = 16 + ((conBase - 10) / 2) + diceRoll;
 
         //get all ability scores
         //go through base formula for stat creation
         for (var ii = 1; ii < 6; ii++) {
-            formStats[ii] = Math.floor((((2*baseStats[ii]+ivStats[ii]+(evStats[ii]/4))*level)/20)+5);
+            formStats[ii] = Math.floor((((2 * baseStats[ii] + ivStats[ii] + (evStats[ii] / 4)) * level) / 20) + 5);
             finalStats[ii] = Math.floor(formStats[ii] * nmultiStats1[ii] * nmultiStats2[ii]);
         }
 
         //get dnd stats
         //stat calculator
-        let getAbility = function (a) { return (0.15 * a + 1.5); };
+        let getAbility = function (a) {
+            return (0.15 * a + 1.5);
+        };
 
         //strength is based off of attack stat
         strBase = Math.round(getAbility(finalStats[1]));
@@ -194,18 +211,19 @@ exports.run = (client, connection, message, args) => {
 
         //get nat armor, ac
         //natArmor is based off defense stat
-        natArmor = (0.08*(parseFloat(finalStats[2])))-0.6;
+        natArmor = (0.08 * (parseFloat(finalStats[2]))) - 0.6;
 
         //armor class
         //message.channel.send(`Natural Armor: ${natArmor} \|| Size Bonus: ${sizeBonus} \|| Dex: ${dexMod}`);
-        armorClass = (10 + parseFloat(natArmor) + parseFloat(sizeBonus) + ((dexBase - 10)/2)).toFixed(0);
+        armorClass = (10 + parseFloat(natArmor) + parseFloat(sizeBonus) + ((dexBase - 10) / 2)).toFixed(0);
 
         //get move speed
-        moveSpeed = (0.38*finalStats[5]+4).toFixed(2);
-        //INE = INT
+        moveSpeed = (0.38 * finalStats[5] + 4).toFixed(2);
+                //INE = INT
+        console.log(message.author.id);
         let sql = `INSERT INTO pokemon (name, species, level, nature, gender, ability, shiny, ` +
             `hp, atk, def, spa, spd, spe, IVhp, IVatk, IVdef, IVspa, IVspd, IVspe, EVhp, EVatk, EVdef, EVspa, EVspd, EVspe, ` +
-            `str, dex, con, ine, wis, cha, move1, move2, move3, move4, move5) ` +
+            `str, dex, con, ine, wis, cha, move1, move2, move3, move4, move5, user, userID) ` +
             `VALUES ('${nickname}', '${species}', ${level}, '${natureFinal}', '${gender}', ${ability}, ${shiny}, ` +
             `${Math.round(finalStats[0])}, ${Math.round(finalStats[1])}, ${Math.round(finalStats[2])}, ${Math.round(finalStats[3])}, ` +
             `${Math.round(finalStats[4])}, ${Math.round(finalStats[5])}, ` +
@@ -213,11 +231,9 @@ exports.run = (client, connection, message, args) => {
             `${evStats[0]}, ${evStats[1]}, ${evStats[2]}, ${evStats[3]}, ${evStats[4]}, ${evStats[5]}, ` +
             `${strBase.toFixed(0)}, ${dexBase.toFixed(0)}, ${conBase.toFixed(0)}, ` +
             `${intBase.toFixed(0)}, ${wisBase.toFixed(0)}, 0, ` +
-            `'${move1}', '${move2}', '${move3}', '${move4}', '${move5}');`;
-        console.log(sql);
+            `'${move1}', '${move2}', '${move3}', '${move4}', '${move5}', '${message.author.username}', '${message.author.id}');`;
         connection.query(sql, function (err, result) {
             if (err) throw err;
-            console.log(`${result}`);
             console.log("1 record inserted");
         });
 
@@ -227,7 +243,8 @@ exports.run = (client, connection, message, args) => {
         else
             title = `${nickname}, Level ${level} ${species}`;
         // Final Print
-        message.channel.send({embed: {
+        message.channel.send({
+            embed: {
                 color: 3447003,
                 author: {
                     name: client.user.username,
@@ -278,9 +295,8 @@ exports.run = (client, connection, message, args) => {
             }
         });
 
-    } catch(error) {
+    } catch (error) {
         message.channel.send(error.toString());
         message.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);
     }
-
-};
+}
