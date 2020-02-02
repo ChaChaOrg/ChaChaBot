@@ -1,6 +1,6 @@
 // Message Event
 
-module.exports = (client, connection, message) => {
+module.exports = (client, connection, P, message) => {
   // Ignore all bots
   if (message.author.bot) {return;}
 	
@@ -75,5 +75,5 @@ module.exports = (client, connection, message) => {
   if (!cmd) return;
 
   // Run the command
-  cmd.run(client, connection, message, args);
+  cmd.run(client, connection, P, message, args);
 };

@@ -1,7 +1,7 @@
 // JavaScript Document
 // takes a number, gives the mod
 
-exports.run = (client, connection, message, args) => {
+exports.run = (client, connection, P, message, args) => {
 	
 	if (args.length > 1) {
 		message.channel.send("Woahh, slow down pardner. Just give me one number and I'll give you it's modifier.");
@@ -23,4 +23,4 @@ exports.run = (client, connection, message, args) => {
 	message.channel.send(`${args[0]}(${modString})`).catch(console.error);
 	
 	
-}
+};

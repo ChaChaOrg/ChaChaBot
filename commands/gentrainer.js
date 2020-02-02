@@ -1,6 +1,6 @@
 // JavaScript Document
 
-exports.run = (client, connection, message, args) => {
+exports.run = (client, connection, P, message, args) => {
 	
 	//help statement
 	if (args[0].includes('help')) {
@@ -1831,4 +1831,4 @@ exports.run = (client, connection, message, args) => {
 	
 	
 	
-}
+};

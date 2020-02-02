@@ -1,6 +1,6 @@
 // Catch calculator
 
-exports.run = (client, connection, message, args) => {
+exports.run = (client, connection, P, message, args) => {
 	//get pokeball emoji
 	const shakey = client.emojis.find("name", "poke_shake");
 	
@@ -123,4 +123,4 @@ exports.run = (client, connection, message, args) => {
 		message.channel.send(error.toString);
 		message.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);
 	}
-}
+};

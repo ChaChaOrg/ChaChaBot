@@ -2,6 +2,7 @@ const Discord = require("discord.js");
 const Enmap = require("enmap");
 const fs = require("fs");
 const mysql = require("mysql");
+const pokedex = require('pokedex-promise-v2');
 
 const client = new Discord.Client();
 const config = require("./config.json");
@@ -13,8 +14,12 @@ let connection = mysql.createConnection({
   host: config.mysql_host,
   user: config.mysql_user,
   password: config.mysql_pass,
-  database: config.mysql_db
+  database: config.mysql_db,
+  port: config.mysql_port
 });
+
+
+let P = new pokedex();
 
 connection.connect(function(err) {
   if (err) return console.error(err);
@@ -26,7 +31,7 @@ fs.readdir("./events/", (err, files) => {
   files.forEach(file => {
     const event = require(`./events/${file}`);
     let eventName = file.split(".")[0];
-    client.on(eventName, event.bind(null, client, connection));
+    client.on(eventName, event.bind(null, client, P));
   });
 });
 

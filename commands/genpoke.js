@@ -1,6 +1,6 @@
 // Generates a new ChaCha Pokemon, given level & base stats
 
-exports.run = (client, connection, message, args) => {
+exports.run = (client, connection, P, message, args) => {
 	//message.channel.send('Bang! <:gunspurr:356191158017196032>').catch(console.error);
 	//Math.floor((Math.random() * 65535) + 1) randomnumgen
 	
@@ -110,12 +110,12 @@ exports.run = (client, connection, message, args) => {
 			if (abilityNum === 2) {
 				ability = 1;
 			} else {
-				ability = Math.floor((Math.random() * 1) + 1);
+				ability = Math.floor((Math.random()) + 1);
 			}
 		}
 		
 		//shiny generator!
-		if ((Math.floor((Math.random() * 4096) + 1)) >= 4093) { shiny = true;}
+		if ((Math.floor((Math.random() * 4096) + 1)) >= 4096) { shiny = true;}
 		
 		// ========================= STAT ARRAY GENERATOR!!! =========================
 		
@@ -252,4 +252,4 @@ exports.run = (client, connection, message, args) => {
 		message.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);
 	}
 	
-}
+};
