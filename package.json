@@ -11,8 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "discord.js": "^11.5.1",
-    "enmap": "^4.0.12",
-    "mysql": "^2.16.0",
+    "enmap": "^4.8.7",
+    "mysql": "^2.18.1",
     "pokedex-promise-v2": "^3.2.0"
   }
 }

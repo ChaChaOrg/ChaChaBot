@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ba528af2-225e-4427-ae3f-7d0367a9c9a4" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/genpoke.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/genpoke.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/pokemon.js" beforeDir="false" afterPath="$PROJECT_DIR$/pokemon.js" afterDir="false" />
-    </list>
+    <list default="true" id="ba528af2-225e-4427-ae3f-7d0367a9c9a4" name="Default Changelist" comment="90% through Refactoring&#10;&#10;Still not implemented&#10;&#10;Working on Pokedex implementation." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="ChaChaBot" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -46,12 +45,23 @@
       <recent name="C:\Users\Talmanaze\Desktop\Programming\ChaChaBot" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Node.js.chachabot.js">
     <configuration name="chachabot.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="chachabot.js" working-dir="$PROJECT_DIR$">
+      <method v="2" />
+    </configuration>
+    <configuration name="test" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="test" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="npm.test" />
         <item itemvalue="Node.js.chachabot.js" />
       </list>
     </recent_temporary>
@@ -131,30 +141,42 @@
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="640" y="253" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580613657148" />
-    <state x="754" y="0" key="CommitChangelistDialog2" timestamp="1580745729795">
+    <state x="754" y="0" key="CommitChangelistDialog2" timestamp="1580747108632">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state x="754" y="0" key="CommitChangelistDialog2/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580745729795" />
-    <state width="948" height="264" key="GridCell.Tab.0.bottom" timestamp="1580745194756">
+    <state x="754" y="0" key="CommitChangelistDialog2/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580747108632" />
+    <state width="948" height="264" key="GridCell.Tab.0.bottom" timestamp="1580747059842">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="948" height="264" key="GridCell.Tab.0.bottom/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580745194756" />
-    <state width="948" height="264" key="GridCell.Tab.0.center" timestamp="1580745194756">
+    <state width="948" height="264" key="GridCell.Tab.0.bottom/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580747059842" />
+    <state width="948" height="264" key="GridCell.Tab.0.center" timestamp="1580747059842">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="948" height="264" key="GridCell.Tab.0.center/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580745194756" />
-    <state width="948" height="264" key="GridCell.Tab.0.left" timestamp="1580745194756">
+    <state width="948" height="264" key="GridCell.Tab.0.center/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580747059842" />
+    <state width="948" height="264" key="GridCell.Tab.0.left" timestamp="1580747059842">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="948" height="264" key="GridCell.Tab.0.left/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580745194756" />
-    <state width="948" height="264" key="GridCell.Tab.0.right" timestamp="1580745194756">
+    <state width="948" height="264" key="GridCell.Tab.0.left/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580747059842" />
+    <state width="948" height="264" key="GridCell.Tab.0.right" timestamp="1580747059842">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="948" height="264" key="GridCell.Tab.0.right/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580745194756" />
+    <state width="948" height="264" key="GridCell.Tab.0.right/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580747059842" />
+    <state x="664" y="232" key="MultipleFileMergeDialog" timestamp="1580746975512">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="664" y="232" key="MultipleFileMergeDialog/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580746975512" />
+    <state x="552" y="254" key="Vcs.Push.Dialog.v2" timestamp="1580747121452">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="552" y="254" key="Vcs.Push.Dialog.v2/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580747121452" />
     <state x="767" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1580745623427">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="767" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580745623427" />
+    <state x="743" y="368" key="git4idea.rebase.GitRebaseDialog" timestamp="1580746902460">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="743" y="368" key="git4idea.rebase.GitRebaseDialog/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580746902460" />
     <state x="724" y="412" key="git4idea.ui.GitResetDialog" timestamp="1580745484868">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
