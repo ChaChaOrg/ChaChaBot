@@ -111,6 +111,8 @@ function Pokemon(tempSpecies, tempLevel, tempName, P){
         .catch(function(error) {
             console.log("Error when retrieving pokemon species Data :C  ERROR: ", error);
         });
+
+
 }
 // ========================= MISC VAL GENERATORS =========================
 //modifier generator
