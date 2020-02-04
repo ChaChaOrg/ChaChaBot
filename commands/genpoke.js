@@ -21,4 +21,4 @@ module.exports.run = (client, connection, P, message, args) => {
 		message.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);
 	}
 	
-}
+};
