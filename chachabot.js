@@ -17,8 +17,6 @@ let connection = mysql.createConnection({
   database: config.mysql_db,
   port: config.mysql_port
 });
-
-
 let P = new pokedex();
 
 connection.connect(function(err) {
@@ -31,7 +29,7 @@ fs.readdir("./events/", (err, files) => {
   files.forEach(file => {
     const event = require(`./events/${file}`);
     let eventName = file.split(".")[0];
-    client.on(eventName, event.bind(null, client, P));
+    client.on(eventName, event.bind(null, client, connection, P));
   });
 });
 

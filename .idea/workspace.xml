@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ba528af2-225e-4427-ae3f-7d0367a9c9a4" name="Default Changelist" comment="90% through Refactoring&#10;&#10;Still not implemented&#10;&#10;Working on Pokedex implementation." />
+    <list default="true" id="ba528af2-225e-4427-ae3f-7d0367a9c9a4" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chachabot.js" beforeDir="false" afterPath="$PROJECT_DIR$/chachabot.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/genpoke.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/genpoke.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/events/ready.js" beforeDir="false" afterPath="$PROJECT_DIR$/events/ready.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pokemon.js" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,6 +41,7 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="javascript.nodejs.core.library.configured.version" value="10.15.1" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -43,6 +50,7 @@
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Talmanaze\Desktop\Programming\ChaChaBot" />
+      <recent name="C:\Users\Talmanaze\Desktop\Programming\ChaChaBot\node_modules\pokemon" />
     </key>
   </component>
   <component name="RunManager" selected="Node.js.chachabot.js">
@@ -61,8 +69,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="npm.test" />
         <item itemvalue="Node.js.chachabot.js" />
+        <item itemvalue="npm.test" />
       </list>
     </recent_temporary>
   </component>
@@ -105,7 +113,14 @@
       <option name="project" value="LOCAL" />
       <updated>1580633954478</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Reupdated Node Modules">
+      <created>1580747140806</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1580747140806</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -126,7 +141,8 @@
     <MESSAGE value="Added connection to exports" />
     <MESSAGE value="Began refactoring of Pokemon.js&#10;-ShinyChance&#10;-Gender&#10;&#10;Also updated all of my nodejs modules" />
     <MESSAGE value="90% through Refactoring&#10;&#10;Still not implemented&#10;&#10;Working on Pokedex implementation." />
-    <option name="LAST_COMMIT_MESSAGE" value="90% through Refactoring&#10;&#10;Still not implemented&#10;&#10;Working on Pokedex implementation." />
+    <MESSAGE value="Reupdated Node Modules" />
+    <option name="LAST_COMMIT_MESSAGE" value="Reupdated Node Modules" />
   </component>
   <component name="WindowStateProjectService">
     <state x="723" y="184" key="#Deployment" timestamp="1580745693142">
@@ -141,34 +157,90 @@
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="640" y="253" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580613657148" />
-    <state x="754" y="0" key="CommitChangelistDialog2" timestamp="1580747108632">
+    <state x="690" y="272" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1580754326540">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state x="754" y="0" key="CommitChangelistDialog2/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580747108632" />
-    <state width="948" height="264" key="GridCell.Tab.0.bottom" timestamp="1580747059842">
+    <state x="690" y="272" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580754326540" />
+    <state x="754" y="0" key="CommitChangelistDialog2" timestamp="1580747139362">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="948" height="264" key="GridCell.Tab.0.bottom/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580747059842" />
-    <state width="948" height="264" key="GridCell.Tab.0.center" timestamp="1580747059842">
+    <state x="754" y="0" key="CommitChangelistDialog2/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580747139362" />
+    <state width="752" height="646" key="DebuggerActiveHint" timestamp="1580789299870">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="948" height="264" key="GridCell.Tab.0.center/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580747059842" />
-    <state width="948" height="264" key="GridCell.Tab.0.left" timestamp="1580747059842">
+    <state width="752" height="646" key="DebuggerActiveHint/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580789299870" />
+    <state width="948" height="264" key="GridCell.Tab.0.bottom" timestamp="1580789871865">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="948" height="264" key="GridCell.Tab.0.left/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580747059842" />
-    <state width="948" height="264" key="GridCell.Tab.0.right" timestamp="1580747059842">
+    <state width="948" height="264" key="GridCell.Tab.0.bottom/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580789871865" />
+    <state width="948" height="264" key="GridCell.Tab.0.center" timestamp="1580789871865">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="948" height="264" key="GridCell.Tab.0.right/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580747059842" />
+    <state width="948" height="264" key="GridCell.Tab.0.center/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580789871865" />
+    <state width="948" height="264" key="GridCell.Tab.0.left" timestamp="1580789871865">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="948" height="264" key="GridCell.Tab.0.left/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580789871865" />
+    <state width="948" height="264" key="GridCell.Tab.0.right" timestamp="1580789871865">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="948" height="264" key="GridCell.Tab.0.right/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580789871865" />
+    <state width="948" height="238" key="GridCell.Tab.1.bottom" timestamp="1580789604267">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="948" height="238" key="GridCell.Tab.1.bottom/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580789604267" />
+    <state width="948" height="238" key="GridCell.Tab.1.center" timestamp="1580789604266">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="948" height="238" key="GridCell.Tab.1.center/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580789604266" />
+    <state width="948" height="238" key="GridCell.Tab.1.left" timestamp="1580789604266">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="948" height="238" key="GridCell.Tab.1.left/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580789604266" />
+    <state width="948" height="238" key="GridCell.Tab.1.right" timestamp="1580789604267">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="948" height="238" key="GridCell.Tab.1.right/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580789604267" />
+    <state width="948" height="238" key="GridCell.Tab.2.bottom" timestamp="1580789604269">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="948" height="238" key="GridCell.Tab.2.bottom/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580789604269" />
+    <state width="948" height="238" key="GridCell.Tab.2.center" timestamp="1580789604268">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="948" height="238" key="GridCell.Tab.2.center/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580789604268" />
+    <state width="948" height="238" key="GridCell.Tab.2.left" timestamp="1580789604267">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="948" height="238" key="GridCell.Tab.2.left/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580789604267" />
+    <state width="948" height="238" key="GridCell.Tab.2.right" timestamp="1580789604268">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="948" height="238" key="GridCell.Tab.2.right/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580789604268" />
+    <state width="948" height="238" key="GridCell.Tab.3.bottom" timestamp="1580789604269">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="948" height="238" key="GridCell.Tab.3.bottom/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580789604269" />
+    <state width="948" height="238" key="GridCell.Tab.3.center" timestamp="1580789604269">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="948" height="238" key="GridCell.Tab.3.center/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580789604269" />
+    <state width="948" height="238" key="GridCell.Tab.3.left" timestamp="1580789604269">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="948" height="238" key="GridCell.Tab.3.left/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580789604269" />
+    <state width="948" height="238" key="GridCell.Tab.3.right" timestamp="1580789604269">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="948" height="238" key="GridCell.Tab.3.right/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580789604269" />
     <state x="664" y="232" key="MultipleFileMergeDialog" timestamp="1580746975512">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="664" y="232" key="MultipleFileMergeDialog/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580746975512" />
-    <state x="552" y="254" key="Vcs.Push.Dialog.v2" timestamp="1580747121452">
+    <state x="552" y="254" key="Vcs.Push.Dialog.v2" timestamp="1580747155473">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state x="552" y="254" key="Vcs.Push.Dialog.v2/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580747121452" />
+    <state x="552" y="254" key="Vcs.Push.Dialog.v2/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580747155473" />
     <state x="767" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1580745623427">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
@@ -181,5 +253,16 @@
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="724" y="412" key="git4idea.ui.GitResetDialog/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580745484868" />
+    <state x="616" y="243" key="run.anything.popup" timestamp="1580760253363">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="616" y="243" key="run.anything.popup/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580760253363" />
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="NodeJSConfigurationType">
+        <watch expression="this" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>
