@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ba528af2-225e-4427-ae3f-7d0367a9c9a4" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/webServers.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webServers.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/feat.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/feat.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/genpoke.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/genpoke.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +82,8 @@
       <workItem from="1580834870127" duration="54000" />
       <workItem from="1580835332130" duration="66000" />
       <workItem from="1580835421383" duration="342000" />
-      <workItem from="1580835879255" duration="1413000" />
+      <workItem from="1580835879255" duration="1543000" />
+      <workItem from="1580846793602" duration="546000" />
     </task>
     <task id="LOCAL-00001" summary="Fixed pokegen embed">
       <created>1554231045749</created>
@@ -126,7 +127,14 @@
       <option name="project" value="LOCAL" />
       <updated>1554611169219</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Tiny fixes">
+      <created>1580840614209</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1580840614209</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -162,13 +170,22 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Fixed pokegen embed" />
     <MESSAGE value="Basic Pokemon Database entry" />
-    <option name="LAST_COMMIT_MESSAGE" value="Basic Pokemon Database entry" />
+    <MESSAGE value="Tiny fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Tiny fixes" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="320" y="115" key="#Deployment" timestamp="1580847102798">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="320" y="115" key="#Deployment/0.0.1440.900@0.0.1440.900" timestamp="1580847102798" />
     <state x="408" y="185" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1580835393400">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="408" y="185" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1440.900@0.0.1440.900" timestamp="1580835393400" />
+    <state x="312" y="0" key="CommitChangelistDialog2" timestamp="1580840613529">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="312" y="0" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1580840613529" />
     <state width="1419" height="226" key="GridCell.Tab.0.bottom" timestamp="1580835992029">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -189,5 +206,9 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="229" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1580835388007" />
+    <state x="320" y="186" key="Vcs.Push.Dialog.v2" timestamp="1580840616984">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="320" y="186" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1580840616984" />
   </component>
 </project>
