@@ -308,6 +308,20 @@ Pokemon.prototype.calculateStats = function() {
 };
 
 Pokemon.prototype.sendSummaryMessage = function(client) {
+
+    let tempAbility = this.ability.name;
+    if( ~tempAbility.indexOf("-"))
+    {
+        let tempA = tempAbility.slice(0,tempAbility.indexOf("-"));
+        let tempB = tempAbility.slice(tempAbility.indexOf("-") + 1, tempAbility.length -1);
+        tempAbility = tempA + " " + tempB;
+    }
+
+    let capitalizeWord = function (tempWord)
+    {
+        return = tempWord.charAt(0). toUpperCase() + tempWord.toString();
+    }
+
     return {embed: {
             color: 3447003,
             author: {
@@ -320,7 +334,7 @@ Pokemon.prototype.sendSummaryMessage = function(client) {
             fields: [
                 {
                     name: "Basic Info",
-                    value: `**Ability:** ${this.ability.name} | **Gender:** ${this.gender} | **Nature: ** ${this.natureFinal} | **Shiny: ** ${this.shiny}\n=================`
+                    value: `**Ability:** ${tempAbility} | **Gender:** ${this.gender} | **Nature: ** ${this.natureFinal} | **Shiny: ** ${this.shiny}\n=================`
                 },
                 {
                     name: "HP",
