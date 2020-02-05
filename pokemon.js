@@ -309,7 +309,7 @@ Pokemon.prototype.calculateStats = function() {
 
 let capitalizeWord = function (tempWord)
 {
-    return tempWord.charAt(0). toUpperCase() + tempWord.toString();
+    return tempWord.charAt(0). toUpperCase() + tempWord.substr(1);
 };
 
 Pokemon.prototype.sendSummaryMessage = function(client) {
@@ -318,11 +318,12 @@ Pokemon.prototype.sendSummaryMessage = function(client) {
     if( ~tempAbility.indexOf("-"))
     {
         let tempA = tempAbility.slice(0,tempAbility.indexOf("-"));
-        let tempB = tempAbility.slice(tempAbility.indexOf("-") + 1, tempAbility.length -1);
+        let tempB = tempAbility.slice(tempAbility.indexOf("-") + 1, tempAbility.length);
         tempA = capitalizeWord(tempA);
         tempB = capitalizeWord(tempB);
         tempAbility = tempA + " " + tempB;
     }
+    else tempAbility = capitalizeWord(tempAbility);
 
 
 
