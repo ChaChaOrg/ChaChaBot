@@ -307,6 +307,11 @@ Pokemon.prototype.calculateStats = function() {
     this.moveSpeed = (MOVE_SPEED_MULT * this.finalStats[SPEED_BST_INDEX] + MOVE_SPEED_SHIFT).toFixed(2);
 };
 
+let capitalizeWord = function (tempWord)
+{
+    return tempWord.charAt(0). toUpperCase() + tempWord.toString();
+};
+
 Pokemon.prototype.sendSummaryMessage = function(client) {
 
     let tempAbility = this.ability.name;
@@ -314,13 +319,12 @@ Pokemon.prototype.sendSummaryMessage = function(client) {
     {
         let tempA = tempAbility.slice(0,tempAbility.indexOf("-"));
         let tempB = tempAbility.slice(tempAbility.indexOf("-") + 1, tempAbility.length -1);
+        tempA = capitalizeWord(tempA);
+        tempB = capitalizeWord(tempB);
         tempAbility = tempA + " " + tempB;
     }
 
-    let capitalizeWord = function (tempWord)
-    {
-        return = tempWord.charAt(0). toUpperCase() + tempWord.toString();
-    }
+
 
     return {embed: {
             color: 3447003,

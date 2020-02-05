@@ -90,7 +90,7 @@
       <workItem from="1580846793602" duration="4736000" />
       <workItem from="1580855198545" duration="469000" />
       <workItem from="1580866114603" duration="1295000" />
-      <workItem from="1580867442219" duration="4472000" />
+      <workItem from="1580867442219" duration="4547000" />
     </task>
     <task id="LOCAL-00001" summary="Fixed pokegen embed">
       <created>1554231045749</created>
@@ -162,7 +162,14 @@
       <option name="project" value="LOCAL" />
       <updated>1580871178402</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Ability Formatting">
+      <created>1580872081306</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1580872081306</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -202,7 +209,8 @@
     <MESSAGE value="Actually adds pokemon.js to git :embaressed:" />
     <MESSAGE value="Fixed things and removed incomplete function calls" />
     <MESSAGE value="added a .toLowercase on poke species name lmao" />
-    <option name="LAST_COMMIT_MESSAGE" value="added a .toLowercase on poke species name lmao" />
+    <MESSAGE value="Ability Formatting" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ability Formatting" />
   </component>
   <component name="WindowStateProjectService">
     <state x="320" y="115" key="#Deployment" timestamp="1580847102798">
@@ -217,11 +225,11 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="408" y="185" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1440.900@0.0.1440.900" timestamp="1580835393400" />
-    <state x="416" y="0" key="CommitChangelistDialog2" timestamp="1580871177512">
+    <state x="416" y="0" key="CommitChangelistDialog2" timestamp="1580872080444">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="312" y="0" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1580847648316" />
-    <state x="416" y="0" key="CommitChangelistDialog2/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580871177512" />
+    <state x="416" y="0" key="CommitChangelistDialog2/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580872080444" />
     <state x="258" y="112" key="DBNavigator.ProjectSettingsDialog" timestamp="1580855423536">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -298,11 +306,11 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="229" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1580855158911" />
-    <state x="427" y="217" key="Vcs.Push.Dialog.v2" timestamp="1580871181308">
+    <state x="427" y="217" key="Vcs.Push.Dialog.v2" timestamp="1580872086753">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="320" y="186" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1580847651510" />
-    <state x="427" y="217" key="Vcs.Push.Dialog.v2/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580871181308" />
+    <state x="427" y="217" key="Vcs.Push.Dialog.v2/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580872086753" />
     <state x="621" y="165" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1580869258866">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
