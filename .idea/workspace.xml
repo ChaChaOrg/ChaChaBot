@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ba528af2-225e-4427-ae3f-7d0367a9c9a4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/webServers.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -126,7 +123,14 @@
       <option name="project" value="LOCAL" />
       <updated>1580790884717</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="minor deployment settings changes">
+      <created>1580830406576</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1580830406576</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -149,7 +153,8 @@
     <MESSAGE value="90% through Refactoring&#10;&#10;Still not implemented&#10;&#10;Working on Pokedex implementation." />
     <MESSAGE value="Reupdated Node Modules" />
     <MESSAGE value="Completed Refactoring and Pokedex capability to pokegen.js" />
-    <option name="LAST_COMMIT_MESSAGE" value="Completed Refactoring and Pokedex capability to pokegen.js" />
+    <MESSAGE value="minor deployment settings changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="minor deployment settings changes" />
   </component>
   <component name="WindowStateProjectService">
     <state x="723" y="184" key="#Deployment" timestamp="1580791875173">
@@ -168,18 +173,18 @@
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="690" y="272" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580754326540" />
-    <state x="754" y="0" key="CommitChangelistDialog2" timestamp="1580790883778">
+    <state x="754" y="0" key="CommitChangelistDialog2" timestamp="1580830405734">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state x="754" y="0" key="CommitChangelistDialog2/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580790883778" />
+    <state x="754" y="0" key="CommitChangelistDialog2/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580830405734" />
     <state width="752" height="646" key="DebuggerActiveHint" timestamp="1580789299870">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state width="752" height="646" key="DebuggerActiveHint/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580789299870" />
-    <state x="92" y="92" width="1736" height="866" key="DiffContextDialog" timestamp="1580791936984">
+    <state x="92" y="92" width="1736" height="866" key="DiffContextDialog" timestamp="1580865890203">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state x="92" y="92" width="1736" height="866" key="DiffContextDialog/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580791936984" />
+    <state x="92" y="92" width="1736" height="866" key="DiffContextDialog/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580865890203" />
     <state x="92" y="92" width="1736" height="866" key="DirDiffDialog" timestamp="1580829235360">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
@@ -256,18 +261,26 @@
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="664" y="232" key="MultipleFileMergeDialog/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580746975512" />
-    <state x="552" y="254" key="Vcs.Push.Dialog.v2" timestamp="1580790887691">
+    <state x="718" y="151" key="RollbackChangesDialog" timestamp="1580865910400">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state x="552" y="254" key="Vcs.Push.Dialog.v2/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580790887691" />
-    <state x="767" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1580745623427">
+    <state x="718" y="151" key="RollbackChangesDialog/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580865910400" />
+    <state x="552" y="254" key="Vcs.Push.Dialog.v2" timestamp="1580830412396">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state x="767" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580745623427" />
+    <state x="552" y="254" key="Vcs.Push.Dialog.v2/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580830412396" />
+    <state x="767" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1580865781883">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="767" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580865781883" />
     <state x="949" y="176" key="ftp.server.browser" timestamp="1580791863131">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="949" y="176" key="ftp.server.browser/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580791863131" />
+    <state x="681" y="299" key="git4idea.merge.GitPullDialog" timestamp="1580865852305">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="681" y="299" key="git4idea.merge.GitPullDialog/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580865852305" />
     <state x="743" y="368" key="git4idea.rebase.GitRebaseDialog" timestamp="1580746902460">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
