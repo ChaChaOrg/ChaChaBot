@@ -13,6 +13,7 @@ module.exports.run = (client, connection, P, message, args) => {
 		genPromise
 			.then( function(response){
 				message.channel.send(genPokemon.sendSummaryMessage(client));
+				genPokemon.uploadPokemon(connection, message);
 			});
 
 	}
@@ -21,4 +22,4 @@ module.exports.run = (client, connection, P, message, args) => {
 		message.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);
 	}
 	
-}
+};
