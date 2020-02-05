@@ -17,12 +17,8 @@ let connection = mysql.createConnection({
   database: config.mysql_db,
   port: config.mysql_port
 });
-let P = new pokedex();
 
-connection.connect(function(err) {
-  if (err) return console.error(err);
-  console.log('Connection to mySQL database successful! Connected as id ' + connection.threadId);
-});
+let P = new pokedex();
 
 fs.readdir("./events/", (err, files) => {
   if (err) return console.error(err);
@@ -44,6 +40,11 @@ fs.readdir("./commands/", (err, files) => {
     console.log(`Attempting to load command ${commandName}`);
     client.commands.set(commandName, props);
   });
+});
+
+connection.connect(function(err) {
+  if (err) return console.error(err);
+  console.log('Connection to mySQL database successful! Connected as id ' + connection.threadId);
 });
 
 client.login(config.token);

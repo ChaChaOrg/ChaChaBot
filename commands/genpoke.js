@@ -8,12 +8,12 @@ module.exports.run = (client, connection, P, message, args) => {
 		message.reply('New Pokemon Generator. Variables in order:\n [Pokemon Species] [Level] [Pokemon Name] [Hidden Ability % (optional - CURRENTLY BROKEN)]').catch(console.error);
 	}
 	try{
-		let genPokemon = new Pokemon.Pokemon(args[0], args[1], args[2], P);
-		let genPromise = genPokemon.init(P);
+		let genPokemon = new Pokemon.Pokemon(args[0], args[1], args[2]);
+		let genPromise = genPokemon.init(P, message);
 		genPromise
 			.then( function(response){
 				message.channel.send(genPokemon.sendSummaryMessage(client));
-				genPokemon.uploadPokemon(connection, message);
+				//genPokemon.uploadPokemon(connection, message);
 			});
 
 	}

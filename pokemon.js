@@ -37,7 +37,7 @@ function Ability(name, ha)
 
 
 // ======================= POKEMON OBJECT =======================
-function Pokemon(tempSpecies, tempLevel, tempName, P) {
+function Pokemon(tempSpecies, tempLevel, tempName) {
 
     // ======================= VARIABLES =======================
 
@@ -105,7 +105,7 @@ function Pokemon(tempSpecies, tempLevel, tempName, P) {
 
 }
 
-Pokemon.prototype.init = function(P) {
+Pokemon.prototype.init = function(P, message) {
     return new Promise(function (resolve, reject) {
         P.getPokemonByName(this.species)
             .then(function (response) {
@@ -129,6 +129,8 @@ Pokemon.prototype.init = function(P) {
                         console.log("Assigning Nature");
                         this.assignRandNature();
 
+                        this.assignShiny();
+
                         console.log("Reading Base Stats");
 
                         let i = 1;
@@ -144,10 +146,12 @@ Pokemon.prototype.init = function(P) {
                     }.bind(this))
                     .catch(function (error) {
                         console.log("Error when retrieving pokemon species Data :C  ERROR: ", error);
+                        //message.channel.send("Error when retrieving pokemon species Data :C  ERROR: ");
                     })
             }.bind(this))
             .catch(function (error) {
                 console.log("Error when retrieving pokemon Data :C  ERROR: ", error);
+                //message.channel.send("Error when retrieving pokemon Data :C");
             });
     }.bind(this));
 };
@@ -363,6 +367,7 @@ const DEF_ARRAY_INDEX = 2;
 const SPA_ARRAY_INDEX = 3;
 const SPD_ARRAY_INDEX = 4;
 const SPE_ARRAY_INDEX = 5;
+/*
 Pokemon.prototype.uploadPokemon = function(connection, message) {
 
     connection.connect(function (err) {
@@ -385,3 +390,4 @@ Pokemon.prototype.uploadPokemon = function(connection, message) {
         });
     });
 };
+*/
