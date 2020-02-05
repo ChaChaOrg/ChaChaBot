@@ -106,7 +106,6 @@ function Pokemon(tempSpecies, tempLevel, tempName, P) {
 }
 
 Pokemon.prototype.init = function(P) {
-
     return new Promise(function (resolve, reject) {
         P.getPokemonByName(this.species)
             .then(function (response) {
@@ -358,15 +357,31 @@ Pokemon.prototype.sendSummaryMessage = function(client) {
 };
 
 
-/* //CONNECTION Function - To Be Finished
-        //upload
-        connection.connect(function(err) {
+const HP_ARRAY_INDEX = 0;
+const ATK_ARRAY_INDEX = 1;
+const DEF_ARRAY_INDEX = 2;
+const SPA_ARRAY_INDEX = 3;
+const SPD_ARRAY_INDEX = 4;
+const SPE_ARRAY_INDEX = 5;
+Pokemon.prototype.uploadPokemon = function(connection, message) {
+
+    connection.connect(function (err) {
+        if (err) throw err;
+        console.log("Connected!");
+        var sql = `INSERT INTO pokemon (name, species , level, nature, gender, ability,`
+            + `hp, atk, def, spa, spd, spe, ` +
+            `hpIV, atkIV, defIV, spaIV, spdIV, speIV, ` +
+            `EVhp, atkEV, defEV, spaEV, spdEV, speEV) ` +
+            `VALUES (${this.name}, ${this.species}, ${this.level}, ${this.natureFinal}, ${this.gender}, ${this.ability}` +
+            `${this.finalStats[HP_ARRAY_INDEX]}, ${this.finalStats[ATK_ARRAY_INDEX]}, ${this.finalStats[DEF_ARRAY_INDEX]}, ` +
+            `${this.finalStats[SPA_ARRAY_INDEX]}, ${this.finalStats[SPD_ARRAY_INDEX]}, ${this.finalStats[SPE_ARRAY_INDEX]}, ` +
+            `${this.ivStats[HP_ARRAY_INDEX]}, ${this.ivStats[ATK_ARRAY_INDEX]}, ${this.ivStats[DEF_ARRAY_INDEX]}, ` +
+            `${this.ivStats[SPA_ARRAY_INDEX]}, ${this.ivStats[SPD_ARRAY_INDEX]}, ${this.ivStats[SPE_ARRAY_INDEX]}, ) ` +
+            `${this.evStats[HP_ARRAY_INDEX]}, ${this.evStats[ATK_ARRAY_INDEX]}, ${this.evStats[DEF_ARRAY_INDEX]}, ` +
+            `${this.evStats[SPA_ARRAY_INDEX]}, ${this.evStats[SPD_ARRAY_INDEX]}, ${this.evStats[SPE_ARRAY_INDEX]})`;
+        connection.query(sql, function (err, result) {
             if (err) throw err;
-            console.log("Connected!");
-            var sql = "INSERT INTO pokemon (name, species, level, nature, gender, ability, hp, atk, def, spa, spd, spe, IVhp, IVatk, IVdef, IVspa, IVspd, IVspe, EVhp, EVatk, EVdef, EVspa, EVspd, EVspe) VALUES ('Company Inc', 'Highway 37')";
-            con.query(sql, function (err, result) {
-                if (err) throw err;
-                console.log("1 record inserted");
-            });
+            console.log("1 record inserted");
         });
-*/
+    });
+};
