@@ -336,7 +336,11 @@ Pokemon.prototype.sendSummaryMessage = function(client) {
             },
             title: `Level ${this.level} ${tempSpecies} ~ ${this.name}`,
             url: `https://bulbapedia.bulbagarden.net/wiki/${this.species}_(Pok%C3%A9mon)`,
+            thumbnail: {
+                url:  `${this.pokemonData.sprites.front_default}`,
+            },
             description: "Click the link for the Bulbapedia page, or use !data to call info using the Pokedex bot.",
+
             fields: [
                 {
                     name: "Basic Info",
