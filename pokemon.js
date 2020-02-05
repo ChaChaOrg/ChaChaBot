@@ -324,7 +324,8 @@ Pokemon.prototype.sendSummaryMessage = function(client) {
         tempAbility = tempA + " " + tempB;
     }
     else tempAbility = capitalizeWord(tempAbility);
-
+    let tempSpecies = this.species;
+    tempSpecies = capitalizeWord(tempSpecies);
 
 
     return {embed: {
@@ -333,7 +334,7 @@ Pokemon.prototype.sendSummaryMessage = function(client) {
                 name: client.user.username,
                 icon_url: client.user.avatarURL
             },
-            title: `Level ${this.level} ${this.species} ~ ${this.name}`,
+            title: `Level ${this.level} ${tempSpecies} ~ ${this.name}`,
             url: `https://bulbapedia.bulbagarden.net/wiki/${this.species}_(Pok%C3%A9mon)`,
             description: "Click the link for the Bulbapedia page, or use !data to call info using the Pokedex bot.",
             fields: [
