@@ -120,7 +120,8 @@ function Pokemon(tempSpecies, tempLevel, tempName) {
     this.move5 = "";
     this.moveProgress = 0;
     this.originalTrainer = "";
-    this.dateCreated = "1000-01-01";
+    let date = new Date();
+    this.dateCreated = date.toISOString().slice(0, 19).replace('T', ' ');
 
 }
 
