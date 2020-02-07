@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="awsChaChaBot" uploadOnCheckin="592df38f-faa9-4bf9-87a7-be6f2382907f">
+  <component name="PublishConfigData" serverName="awsChaChaBot" uploadOnCheckin="592df38f-faa9-4bf9-87a7-be6f2382907f">
     <serverData>
       <paths name="awsChaChaBot">
         <serverdata>
@@ -11,6 +11,5 @@
       </paths>
     </serverData>
     <option name="myUploadOnCheckinName" value="awsChaChaBot" />
-    <option name="myAutoUpload" value="ALWAYS" />
   </component>
 </project>
