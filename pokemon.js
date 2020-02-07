@@ -113,13 +113,13 @@ function Pokemon(tempSpecies, tempLevel, tempName) {
     this.willSave = 0;
     this.refSave = 0;
 
-    this.move1 = "n/a";
-    this.move2 = "n/a";
-    this.move3 = "n/a";
-    this.move4 = "n/a";
-    this.move5 = "n/a";
+    this.move1 = "";
+    this.move2 = "";
+    this.move3 = "";
+    this.move4 = "";
+    this.move5 = "";
     this.moveProgress = 0;
-    this.originalTrainer = "n/a";
+    this.originalTrainer = "";
     this.dateCreated = "1000-01-01";
 
 }
@@ -206,7 +206,7 @@ let modGen = function (abilityScore) {
 // grab + stow types
 Pokemon.prototype.assignTypes = function() {
     this.type1 = this.pokemonData.types[0].type.name;
-    if(this.pokemonData.types.length == 2) {
+    if(this.pokemonData.types.length === 2) {
         this.type2 = this.pokemonData.types[1].type.name;
     }
 }
@@ -481,13 +481,13 @@ const SPE_ARRAY_INDEX = 5;
 Pokemon.prototype.uploadPokemon = function(connection, message) {
 
 
-    const sql = 'INSERT INTO pokemon (name, species, level, nature, gender, ability, ' +
+    const sql = 'INSERT INTO pokemon (name, species, level, nature, gender, ability, type1, type2' +
         `hp, atk, def, spa, spd, spe, ` +
         `hpIV, atkIV, defIV, spaIV, spdIV, speIV, ` +
         `hpEV, atkEV, defEV, spaEV, spdEV, speEV, ` +
         `move1, move2, move3, move4, move5, moveProgress, ` +
         `originalTrainer, userID, dateCreated) ` +
-        `VALUES ("${this.name}", "${this.species}", ${this.level}, "${this.natureFinal}", "${this.gender}", "${this.ability.name}",` +
+        `VALUES ("${this.name}", "${this.species}", ${this.level}, "${this.natureFinal}", "${this.gender}", "${this.ability.name}", "${this.type1}", "${this.type2}` +
         `${this.finalStats[HP_ARRAY_INDEX]}, ${this.finalStats[ATK_ARRAY_INDEX]}, ${this.finalStats[DEF_ARRAY_INDEX]}, ` +
         `${this.finalStats[SPA_ARRAY_INDEX]}, ${this.finalStats[SPD_ARRAY_INDEX]}, ${this.finalStats[SPE_ARRAY_INDEX]}, ` +
         `${this.ivStats[HP_ARRAY_INDEX]}, ${this.ivStats[ATK_ARRAY_INDEX]}, ${this.ivStats[DEF_ARRAY_INDEX]}, ` +
