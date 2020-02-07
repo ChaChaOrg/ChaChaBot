@@ -43,8 +43,11 @@ function Pokemon(tempSpecies, tempLevel, tempName) {
 
     this.name = tempName;
     this.species = tempSpecies;
-    this.level = tempLevel;
     //level
+    this.level = tempLevel;
+    //type(s)
+    this.type1 = "";
+    this.type2 = "";
     //stat arrays: HP, ATK, DEF, SPA, SPD, SPE
     this.baseStats = [1, 1, 1, 1, 1, 1];
     //size bonus
@@ -117,6 +120,11 @@ Pokemon.prototype.init = function(P, message) {
 
                         this.speciesData = response;
 
+                        /*
+                        console.log("Reading Type(s)");
+                        this.assignTypes(this.speciesData);
+                        */
+
                         console.log("Assigning Gender");
                         this.assignRandGender(this.speciesData.gender_rate);
 
@@ -176,6 +184,14 @@ let modPrint = function (abilityScore) {
 let modGen = function (abilityScore) {
     return Math.floor((abilityScore - 10)/2);
 };
+
+// grab + stow types 
+Pokemon.prototype.assignTypes = function(pokemonData) { 
+    this.type1 = pokemonData.types[0].type.name;
+    if(pokemonData.types.length == 2) {
+        this.type2 = pokemonData.types[1].type.name;
+    }
+}
 
 Pokemon.prototype.genRandAbility = function(pokemonData) {
 
