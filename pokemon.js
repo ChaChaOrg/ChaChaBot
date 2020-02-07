@@ -26,6 +26,9 @@ const MOVE_SPEED_SHIFT = 4;
 const SHINY_CHANCE = 4096;
 const IV_MAX = 32;
 const CON_CALC_DIVISOR = 4;
+const GOOD_FORT_SAVE = {"grass", "ground", "ice", "poison", "rock", "steel"};
+const GOOD_WILL_SAVE = {"bug", "fairy", "dragon", "ghost", "normal", "psychic"};
+const GOOD_REFLEX_SAVE = {"dark", "electric", "fighting", "fire", "flying", "water"};
 
 module.exports.Pokemon = Pokemon;
 
@@ -88,10 +91,12 @@ function Pokemon(tempSpecies, tempLevel, tempName) {
     ];
 
 
-    // DND STATS
-    this.natArmor = 0;
+    // DND STATS - natural armor, armor class, and move speed
+    this.natArmor = 0; 
     this.armorClass = 10;
     this.moveSpeed = 20;
+
+    // DND STATS - ability scores + mods
     this.conBase = 10;
     this.conMod = 0;
     this.strBase = 0;
@@ -103,7 +108,10 @@ function Pokemon(tempSpecies, tempLevel, tempName) {
     this.dexBase = 10;
     this.dexMod = 0;
 
-
+    // DND STATS - saving throw bonuses
+    this.fortSave = 0;
+    this.willSave = 0;
+    this.refSave = 0;
 
 
 }
@@ -268,6 +276,37 @@ Pokemon.prototype.assignRandNature = function() {
     }
 };
 
+// calculate saving throws - RUN AFTER ABILITY SCORES ARE GENERATED
+Pokemon.prototype.calculateSaves = function() {
+    //temp values
+    let tempTypes = {this.type1, this.type2};
+
+    let fortTypeBonus = 0;
+    let refTypeBonus = 0;
+    let willTypeBonus = 0;
+
+    //check if types match good saves for fort, ref, and will
+    tempTypes.forEach(element => {
+        if (element != null) {
+            GOOD_FORT_SAVE.forEach (fortType => {
+                if (fortType == element) {fortTypeBonus = 2;}
+            })
+            GOOD_REFLEX_SAVE.forEach (refType => {
+                if (refType == element) {refTypeBonus = 2;}
+            })
+            GOOD_WILL_SAVE.forEach (willType => {
+                if (willType == element) {willTypeBonus = 2;}
+            })
+        }
+    })
+
+    //add type/level mod and ability score mod to final save
+    this.fortSave = Math.floor(.5 * this.level + fortTypeBonus) + modGen(this.con);
+    this.refSave = Math.floor(.5 * this.level + refTypeBonus) + modGen(this.dex);
+    this.willSave = Math.floor(.5 * this.level + willTypeBonus) + modGen(this.wis);
+
+}
+
 Pokemon.prototype.calculateStats = function() {
 //get CON + hit points
 //calculate con +  EQ: [(BaseStats + IVs + EVs/4) * .15 +1.5]
@@ -321,12 +360,25 @@ Pokemon.prototype.calculateStats = function() {
 
 //get move speed
     this.moveSpeed = (MOVE_SPEED_MULT * this.finalStats[SPEED_BST_INDEX] + MOVE_SPEED_SHIFT).toFixed(2);
+
+// generate saves based on types + scores
+
+/*
+
+let 
+
+*/
+
 };
+
+// captialize words
 
 let capitalizeWord = function (tempWord)
 {
     return tempWord.charAt(0). toUpperCase() + tempWord.substr(1);
 };
+
+// =========== EMBED ===========
 
 Pokemon.prototype.sendSummaryMessage = function(client) {
 
@@ -388,7 +440,15 @@ Pokemon.prototype.sendSummaryMessage = function(client) {
                 },
                 {
                     name: "Ability Scores",
-                    value: `**STR: ** ${this.strBase.toFixed(0)}(${this.strMod}) | **DEX: ** ${this.dexBase.toFixed(0)}(${this.dexMod}) | **CON: ** ${this.conBase.toFixed()}(${this.conMod})\n**INT: ** ${this.intBase.toFixed(0)}(${this.intMod}) | **WIS: ** ${this.wisBase.toFixed(0)}(${this.wisMod})\n**AC: ** ${this.armorClass} | **Move Speed: ** ${this.moveSpeed} ft`
+                    value: `**STR: ** ${this.strBase.toFixed(0)}(${this.strMod}) | **DEX: ** ${this.dexBase.toFixed(0)}(${this.dexMod}) | **CON: ** ${this.conBase.toFixed()}(${this.conMod})\n**INT: ** ${this.intBase.toFixed(0)}(${this.intMod}) | **WIS: ** ${this.wisBase.toFixed(0)}(${this.wisMod}) | **CHA: ** :3c`
+                },
+                {
+                    name: "Saving Throws",
+                    value: `**FORT: ** ${this.fortSave} | **REF: ** ${this.refSave} | **WILL: ** ${this.willSave}`
+                },
+                {
+                    name: "AC & Move Speed",
+                    value: `**AC: ** ${this.armorClass} | **Move Speed: ** ${this.moveSpeed} ft`
                 },
             ],
             timestamp: new Date(),
