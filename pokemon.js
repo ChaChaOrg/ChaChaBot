@@ -128,10 +128,8 @@ Pokemon.prototype.init = function(P, message) {
 
                         this.speciesData = response;
 
-                        /*
                         console.log("Reading Type(s)");
                         this.assignTypes(this.speciesData);
-                        */
 
                         console.log("Assigning Gender");
                         this.assignRandGender(this.speciesData.gender_rate);
@@ -157,6 +155,8 @@ Pokemon.prototype.init = function(P, message) {
                         console.log("Calculating Stats");
 
                         this.calculateStats();
+                        this.calculateSaves();
+                        
                         console.log("Pokemon Complete!");
                         resolve("done");
                     }.bind(this))
