@@ -488,7 +488,7 @@ Pokemon.prototype.uploadPokemon = function(connection, message) {
         `hpEV, atkEV, defEV, spaEV, spdEV, speEV, ` +
         `move1, move2, move3, move4, move5, moveProgress, ` +
         `originalTrainer, userID, dateCreated) ` +
-        `VALUES ("${this.name}", "${this.species}", ${this.level}, "${this.natureFinal}", "${this.gender}", "${this.ability.name}", "${this.type1}", "${this.type2}` +
+        `VALUES ("${this.name}", "${this.species}", ${this.level}, "${this.natureFinal}", "${this.gender}", "${this.ability.name}", "${this.type1}", "${this.type2}", ` +
         `${this.finalStats[HP_ARRAY_INDEX]}, ${this.finalStats[ATK_ARRAY_INDEX]}, ${this.finalStats[DEF_ARRAY_INDEX]}, ` +
         `${this.finalStats[SPA_ARRAY_INDEX]}, ${this.finalStats[SPD_ARRAY_INDEX]}, ${this.finalStats[SPE_ARRAY_INDEX]}, ` +
         `${this.ivStats[HP_ARRAY_INDEX]}, ${this.ivStats[ATK_ARRAY_INDEX]}, ${this.ivStats[DEF_ARRAY_INDEX]}, ` +
