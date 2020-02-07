@@ -496,9 +496,10 @@ Pokemon.prototype.uploadPokemon = function(connection, message) {
         `${this.evStats[SPA_ARRAY_INDEX]}, ${this.evStats[SPD_ARRAY_INDEX]}, ${this.evStats[SPE_ARRAY_INDEX]}, ` +
         `${this.move1}, ${this.move2}, ${this.move3}, ${this.move4}, ${this.move5}, ${this.moveProgress}, ` +
         `${this.originalTrainer}, ${message.author.id}, ${this.dateCreated})`;
+
+    console.log(sql);
     connection.query(sql, function (err, result) {
         if (err) throw err;
-        console.log(sql);
         console.log("1 record inserted");
     });
 };
