@@ -204,18 +204,18 @@ let modGen = function (abilityScore) {
 };
 
 // grab + stow types
-Pokemon.prototype.assignTypes = function(pokemonData) {
-    this.type1 = pokemonData.types[0].type.name;
+Pokemon.prototype.assignTypes = function() {
+    this.type1 = this.pokemonData.types[0].type.name;
     if(pokemonData.types.length == 2) {
-        this.type2 = pokemonData.types[1].type.name;
+        this.type2 = this.pokemonData.types[1].type.name;
     }
 }
 
-Pokemon.prototype.genRandAbility = function(pokemonData) {
+Pokemon.prototype.genRandAbility = function() {
 
     let abilityTotal = 0;
     let abilityList = [];
-    pokemonData.abilities.forEach(element => {
+    this.pokemonData.abilities.forEach(element => {
         abilityList.push(new Ability(element[abilityTotal]["ability"]["name"], element[abilityTotal]["is_hidden"]));
         abilityTotal++;
     } );
