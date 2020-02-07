@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ba528af2-225e-4427-ae3f-7d0367a9c9a4" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/genpoke.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/genpoke.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pokemon.js" beforeDir="false" afterPath="$PROJECT_DIR$/pokemon.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +49,7 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="settings.github" />
+    <property name="settings.editor.selected.configurable" value="application.passwordSafe" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -91,7 +90,7 @@
       <workItem from="1580835879255" duration="1543000" />
       <workItem from="1580846793602" duration="4736000" />
       <workItem from="1580855198545" duration="469000" />
-      <workItem from="1581022195664" duration="7106000" />
+      <workItem from="1581022195664" duration="7570000" />
     </task>
     <task id="LOCAL-00001" summary="Fixed pokegen embed">
       <created>1554231045749</created>
@@ -170,7 +169,14 @@
       <option name="project" value="LOCAL" />
       <updated>1581103327536</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="DAAATE error">
+      <created>1581105320284</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1581105320284</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -217,10 +223,14 @@
     <option name="LAST_COMMIT_MESSAGE" value="DAAATE error" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="320" y="115" key="#Deployment" timestamp="1581105269696">
+    <state x="320" y="115" key="#Deployment" timestamp="1581105737022">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="320" y="115" key="#Deployment/0.0.1440.900@0.0.1440.900" timestamp="1581105269696" />
+    <state x="320" y="115" key="#Deployment/0.0.1440.900@0.0.1440.900" timestamp="1581105737022" />
+    <state x="320" y="115" key="#Options" timestamp="1581105557353">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="320" y="115" key="#Options/0.0.1440.900@0.0.1440.900" timestamp="1581105557353" />
     <state x="320" y="115" key="#SQL_Dialects" timestamp="1581096649506">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -233,10 +243,10 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="408" y="185" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1440.900@0.0.1440.900" timestamp="1580835393400" />
-    <state x="312" y="0" key="CommitChangelistDialog2" timestamp="1581103327318">
+    <state x="312" y="0" key="CommitChangelistDialog2" timestamp="1581105755350">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="312" y="0" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1581103327318" />
+    <state x="312" y="0" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1581105755350" />
     <state x="258" y="112" key="DBNavigator.ProjectSettingsDialog" timestamp="1580855423536">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -268,17 +278,21 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="428" y="164" key="MultipleFileMergeDialog/0.0.1440.900@0.0.1440.900" timestamp="1581101389081" />
-    <state x="229" y="89" key="SettingsEditor" timestamp="1580855158911">
+    <state x="229" y="89" key="SettingsEditor" timestamp="1581105706337">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="229" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1580855158911" />
-    <state x="320" y="186" key="Vcs.Push.Dialog.v2" timestamp="1581103329472">
+    <state x="229" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1581105706337" />
+    <state x="320" y="186" key="Vcs.Push.Dialog.v2" timestamp="1581105323017">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="320" y="186" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1581103329472" />
-    <state x="508" y="369" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1581101513959">
+    <state x="320" y="186" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1581105323017" />
+    <state x="508" y="369" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1581105838114">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="508" y="369" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900@0.0.1440.900" timestamp="1581101513959" />
+    <state x="508" y="369" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900@0.0.1440.900" timestamp="1581105838114" />
+    <state x="626" y="107" key="ftp.server.browser" timestamp="1581105613123">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="626" y="107" key="ftp.server.browser/0.0.1440.900@0.0.1440.900" timestamp="1581105613123" />
   </component>
 </project>

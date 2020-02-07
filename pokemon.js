@@ -206,7 +206,7 @@ let modGen = function (abilityScore) {
 // grab + stow types
 Pokemon.prototype.assignTypes = function() {
     this.type1 = this.pokemonData.types[0].type.name;
-    if(pokemonData.types.length == 2) {
+    if(this.pokemonData.types.length == 2) {
         this.type2 = this.pokemonData.types[1].type.name;
     }
 }
