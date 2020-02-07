@@ -484,7 +484,7 @@ Pokemon.prototype.uploadPokemon = function(connection, message) {
     const sql = 'INSERT INTO pokemon (name, species, level, nature, gender, ability, ' +
         `hp, atk, def, spa, spd, spe, ` +
         `hpIV, atkIV, defIV, spaIV, spdIV, speIV, ` +
-        `EVhp, atkEV, defEV, spaEV, spdEV, speEV, ` +
+        `hpEV, atkEV, defEV, spaEV, spdEV, speEV, ` +
         `move1, move2, move3, move4, move5, moveProgress, ` +
         `originalTrainer, userID, dateCreated) ` +
         `VALUES (${this.name}, ${this.species}, ${this.level}, ${this.natureFinal}, ${this.gender}, ${this.ability.name},` +
