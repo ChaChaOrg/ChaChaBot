@@ -113,13 +113,13 @@ function Pokemon(tempSpecies, tempLevel, tempName) {
     this.willSave = 0;
     this.refSave = 0;
 
-    this.move1 = "";
-    this.move2 = "";
-    this.move3 = "";
-    this.move4 = "";
-    this.move5 = "";
+    this.move1 = "n/a";
+    this.move2 = "n/a";
+    this.move3 = "n/a";
+    this.move4 = "n/a";
+    this.move5 = "n/a";
     this.moveProgress = 0;
-    this.originalTrainer = "";
+    this.originalTrainer = "n/a";
     this.dateCreated = "1970-01-01 00:00:01.000000";
 
 }
