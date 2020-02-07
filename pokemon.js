@@ -311,9 +311,9 @@ Pokemon.prototype.calculateSaves = function() {
     })
 
     //add type/level mod and ability score mod to final save
-    this.fortSave = Math.floor(.5 * this.level + fortTypeBonus) + modGen(this.con);
-    this.refSave = Math.floor(.5 * this.level + refTypeBonus) + modGen(this.dex);
-    this.willSave = Math.floor(.5 * this.level + willTypeBonus) + modGen(this.wis);
+    this.fortSave = Math.floor(.5 * this.level + fortTypeBonus) + modGen(this.conBase);
+    this.refSave = Math.floor(.5 * this.level + refTypeBonus) + modGen(this.dexBase);
+    this.willSave = Math.floor(.5 * this.level + willTypeBonus) + modGen(this.wisBase);
 
 }
 
