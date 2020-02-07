@@ -120,7 +120,7 @@ function Pokemon(tempSpecies, tempLevel, tempName) {
     this.move5 = "";
     this.moveProgress = 0;
     this.originalTrainer = "";
-    this.dateCreated = 0;
+    this.dateCreated = "1970-01-01 00:00:01.000000";
 
 }
 
