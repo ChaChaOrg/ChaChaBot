@@ -26,9 +26,9 @@ const MOVE_SPEED_SHIFT = 4;
 const SHINY_CHANCE = 4096;
 const IV_MAX = 32;
 const CON_CALC_DIVISOR = 4;
-const GOOD_FORT_SAVE = {"grass", "ground", "ice", "poison", "rock", "steel"};
-const GOOD_WILL_SAVE = {"bug", "fairy", "dragon", "ghost", "normal", "psychic"};
-const GOOD_REFLEX_SAVE = {"dark", "electric", "fighting", "fire", "flying", "water"};
+const GOOD_FORT_SAVE = ["grass", "ground", "ice", "poison", "rock", "steel"];
+const GOOD_WILL_SAVE = ["bug", "fairy", "dragon", "ghost", "normal", "psychic"];
+const GOOD_REFLEX_SAVE = ["dark", "electric", "fighting", "fire", "flying", "water"];
 
 module.exports.Pokemon = Pokemon;
 
@@ -92,7 +92,7 @@ function Pokemon(tempSpecies, tempLevel, tempName) {
 
 
     // DND STATS - natural armor, armor class, and move speed
-    this.natArmor = 0; 
+    this.natArmor = 0;
     this.armorClass = 10;
     this.moveSpeed = 20;
 
@@ -113,6 +113,14 @@ function Pokemon(tempSpecies, tempLevel, tempName) {
     this.willSave = 0;
     this.refSave = 0;
 
+    this.move1 = "";
+    this.move2 = "";
+    this.move3 = "";
+    this.move4 = "";
+    this.move5 = "";
+    this.moveProgress = 0;
+    this.originalTrainer = "";
+    this.dateCreated = new Date.now();
 
 }
 
@@ -143,6 +151,7 @@ Pokemon.prototype.init = function(P, message) {
                         console.log("Assigning Nature");
                         this.assignRandNature();
 
+                        console.log("assigning shiny");
                         this.assignShiny();
 
                         console.log("Reading Base Stats");
@@ -152,6 +161,7 @@ Pokemon.prototype.init = function(P, message) {
                             this.baseStats[STAT_ARRAY_MAX - i] = element["base_stat"];
                             i++;
                         });
+
                         console.log("Calculating Stats");
 
                         this.calculateStats();
@@ -193,8 +203,8 @@ let modGen = function (abilityScore) {
     return Math.floor((abilityScore - 10)/2);
 };
 
-// grab + stow types 
-Pokemon.prototype.assignTypes = function(pokemonData) { 
+// grab + stow types
+Pokemon.prototype.assignTypes = function(pokemonData) {
     this.type1 = pokemonData.types[0].type.name;
     if(pokemonData.types.length == 2) {
         this.type2 = pokemonData.types[1].type.name;
@@ -206,7 +216,7 @@ Pokemon.prototype.genRandAbility = function(pokemonData) {
     let abilityTotal = 0;
     let abilityList = [];
     pokemonData.abilities.forEach(element => {
-        abilityList.push(new Ability(pokemonData.abilities[abilityTotal]["ability"]["name"], pokemonData.abilities[abilityTotal]["is_hidden"]));
+        abilityList.push(new Ability(element[abilityTotal]["ability"]["name"], element[abilityTotal]["is_hidden"]));
         abilityTotal++;
     } );
 
@@ -246,7 +256,7 @@ Pokemon.prototype.assignShiny = function() {
 
 // ========================= STAT ARRAY GENERATOR!!! =========================
 //assign IVs
-Pokemon.prototype.assignRandIVs = function(ivStats) {
+Pokemon.prototype.assignRandIVs = function() {
     for (let i = 0; i < STAT_ARRAY_MAX; i++) {
         this.ivStats[i] = Math.floor((Math.random() * IV_MAX)); //assigns a value between 0 & 31 to all the IVs
     };
@@ -279,7 +289,7 @@ Pokemon.prototype.assignRandNature = function() {
 // calculate saving throws - RUN AFTER ABILITY SCORES ARE GENERATED
 Pokemon.prototype.calculateSaves = function() {
     //temp values
-    let tempTypes = {this.type1, this.type2};
+    let tempTypes = [this.type1, this.type2];
 
     let fortTypeBonus = 0;
     let refTypeBonus = 0;
@@ -365,7 +375,7 @@ Pokemon.prototype.calculateStats = function() {
 
 /*
 
-let 
+let
 
 */
 
@@ -467,27 +477,30 @@ const DEF_ARRAY_INDEX = 2;
 const SPA_ARRAY_INDEX = 3;
 const SPD_ARRAY_INDEX = 4;
 const SPE_ARRAY_INDEX = 5;
-/*
+
 Pokemon.prototype.uploadPokemon = function(connection, message) {
 
     connection.connect(function (err) {
         if (err) throw err;
         console.log("Connected!");
-        var sql = `INSERT INTO pokemon (name, species , level, nature, gender, ability,`
+        const sql = 'INSERT INTO pokemon (name, species, level, nature, gender, ability, '
             + `hp, atk, def, spa, spd, spe, ` +
             `hpIV, atkIV, defIV, spaIV, spdIV, speIV, ` +
-            `EVhp, atkEV, defEV, spaEV, spdEV, speEV) ` +
-            `VALUES (${this.name}, ${this.species}, ${this.level}, ${this.natureFinal}, ${this.gender}, ${this.ability}` +
+            `EVhp, atkEV, defEV, spaEV, spdEV, speEV, ` +
+            `move1, move2, move3, move4, move5, moveProgress, ` +
+            `originalTrainer, userID, dateCreated) ` +
+            `VALUES (${this.name}, ${this.species}, ${this.level}, ${this.natureFinal}, ${this.gender}, ${this.ability},` +
             `${this.finalStats[HP_ARRAY_INDEX]}, ${this.finalStats[ATK_ARRAY_INDEX]}, ${this.finalStats[DEF_ARRAY_INDEX]}, ` +
             `${this.finalStats[SPA_ARRAY_INDEX]}, ${this.finalStats[SPD_ARRAY_INDEX]}, ${this.finalStats[SPE_ARRAY_INDEX]}, ` +
             `${this.ivStats[HP_ARRAY_INDEX]}, ${this.ivStats[ATK_ARRAY_INDEX]}, ${this.ivStats[DEF_ARRAY_INDEX]}, ` +
             `${this.ivStats[SPA_ARRAY_INDEX]}, ${this.ivStats[SPD_ARRAY_INDEX]}, ${this.ivStats[SPE_ARRAY_INDEX]}, ) ` +
             `${this.evStats[HP_ARRAY_INDEX]}, ${this.evStats[ATK_ARRAY_INDEX]}, ${this.evStats[DEF_ARRAY_INDEX]}, ` +
-            `${this.evStats[SPA_ARRAY_INDEX]}, ${this.evStats[SPD_ARRAY_INDEX]}, ${this.evStats[SPE_ARRAY_INDEX]})`;
+            `${this.evStats[SPA_ARRAY_INDEX]}, ${this.evStats[SPD_ARRAY_INDEX]}, ${this.evStats[SPE_ARRAY_INDEX]}, ` +
+            `${this.move1}, ${this.move2}, ${this.move3}, ${this.move4}, ${this.move5}, ${this.moveProgress}, ` +
+            `${this.originalTrainer}, ${this.userID}, ${this.dateCreated})`;
         connection.query(sql, function (err, result) {
             if (err) throw err;
             console.log("1 record inserted");
         });
     });
 };
-*/
