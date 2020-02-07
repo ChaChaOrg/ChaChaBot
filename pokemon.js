@@ -482,7 +482,7 @@ const SPE_ARRAY_INDEX = 5;
 Pokemon.prototype.uploadPokemon = function(connection, message) {
 
 
-    const sql = 'INSERT INTO pokemon (name, species, level, nature, gender, ability, type1, type2' +
+    const sql = 'INSERT INTO pokemon (name, species, level, nature, gender, ability, type1, type2, ' +
         `hp, atk, def, spa, spd, spe, ` +
         `hpIV, atkIV, defIV, spaIV, spdIV, speIV, ` +
         `hpEV, atkEV, defEV, spaEV, spdEV, speEV, ` +

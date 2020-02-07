@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ba528af2-225e-4427-ae3f-7d0367a9c9a4" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/pokemon.js" beforeDir="false" afterPath="$PROJECT_DIR$/pokemon.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,7 +94,7 @@
       <workItem from="1580835879255" duration="1543000" />
       <workItem from="1580846793602" duration="4736000" />
       <workItem from="1580855198545" duration="469000" />
-      <workItem from="1581022195664" duration="11546000" />
+      <workItem from="1581022195664" duration="11675000" />
     </task>
     <task id="LOCAL-00001" summary="Fixed pokegen embed">
       <created>1554231045749</created>
@@ -292,7 +292,21 @@
       <option name="project" value="LOCAL" />
       <updated>1581115159947</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="sql Prep">
+      <created>1581115193766</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1581115193766</updated>
+    </task>
+    <task id="LOCAL-00030" summary="sql Prep">
+      <created>1581115266447</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1581115266447</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -360,10 +374,10 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="408" y="185" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1440.900@0.0.1440.900" timestamp="1580835393400" />
-    <state x="312" y="0" key="CommitChangelistDialog2" timestamp="1581115193586">
+    <state x="312" y="0" key="CommitChangelistDialog2" timestamp="1581115266255">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="312" y="0" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1581115193586" />
+    <state x="312" y="0" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1581115266255" />
     <state x="258" y="112" key="DBNavigator.ProjectSettingsDialog" timestamp="1580855423536">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -399,10 +413,10 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="229" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1581105706337" />
-    <state x="320" y="186" key="Vcs.Push.Dialog.v2" timestamp="1581115196664">
+    <state x="320" y="186" key="Vcs.Push.Dialog.v2" timestamp="1581115270474">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="320" y="186" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1581115196664" />
+    <state x="320" y="186" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1581115270474" />
     <state x="508" y="369" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1581112904310">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
