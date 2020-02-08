@@ -1,6 +1,8 @@
 module.exports.run = (client, connection, P, message, args) => {
 
-    message.author.createDM.send("test");
+
+    message.author.send("test");
+
     connection.query("SELECT * FROM pokemon", function (err, result) {
         let printString = "";
         result.forEach(element => {
