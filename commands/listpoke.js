@@ -7,6 +7,6 @@ module.exports.run = (client, connection, P, message, args) => {
         });
         message.channel.send(printString);
         message.author.dmChannel.send("test\n" + printString);
-    });
+    }.bind(this, message));
 
 };
