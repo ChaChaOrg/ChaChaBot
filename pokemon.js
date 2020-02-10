@@ -30,6 +30,15 @@ const GOOD_FORT_SAVE = ["grass", "ground", "ice", "poison", "rock", "steel"];
 const GOOD_WILL_SAVE = ["bug", "fairy", "dragon", "ghost", "normal", "psychic"];
 const GOOD_REFLEX_SAVE = ["dark", "electric", "fighting", "fire", "flying", "water"];
 
+const NATURE_NAMES = [
+    ["Hardy", "Lonely", "Adamant", "Naughty", "Brave"],
+    ["Bold", "Docile", "Impish", "Lax", "Relaxed"],
+    ["Modest", "Mild", "Bashful", "Rash", "Quiet"],
+    ["Calm", "Gentle", "Careful", "Quirky", "Sassy"],
+    ["Timid", "Hasty", "Jolly", "Naive", "Serious"]
+];
+
+
 module.exports.Pokemon = Pokemon;
 
 function Ability(name, ha)
@@ -81,15 +90,6 @@ function Pokemon(tempSpecies, tempLevel, tempName) {
 
     //nature + correlating names
     this.natureFinal = "";
-    //nature names
-    this.natureNames = [
-        ["Hardy", "Lonely", "Adamant", "Naughty", "Brave"],
-        ["Bold", "Docile", "Impish", "Lax", "Relaxed"],
-        ["Modest", "Mild", "Bashful", "Rash", "Quiet"],
-        ["Calm", "Gentle", "Careful", "Quirky", "Sassy"],
-        ["Timid", "Hasty", "Jolly", "Naive", "Serious"]
-    ];
-
 
     // DND STATS - natural armor, armor class, and move speed
     this.natArmor = 0;
@@ -210,7 +210,7 @@ Pokemon.prototype.assignTypes = function() {
     if(this.pokemonData.types.length === 2) {
         this.type2 = this.pokemonData.types[1].type.name;
     }
-}
+};
 
 Pokemon.prototype.genRandAbility = function() {
 
@@ -271,10 +271,15 @@ Pokemon.prototype.assignRandNature = function() {
     let natureYCoord = Math.floor((Math.random() * NATURE_ARRAY_MAX));
 
 //assign nature to final val
-    this.natureFinal = this.natureNames[natureXCoord][natureYCoord];
+    this.natureFinal = NATURE_NAMES[natureXCoord][natureYCoord];
 
 //update attributes based on nature
 //if xcoord = ycoord, no changes, otherwise adjusting...
+    this.calculateNature(natureXCoord, natureYCoord);
+
+};
+
+Pokemon.prototype.calculateNature = function(natureXCoord, natureYCoord) {
     if (natureXCoord !== natureYCoord) {
         for (let i = 0; i < STAT_ARRAY_MAX; i++) {
             if (natureXCoord === i) {
@@ -285,6 +290,23 @@ Pokemon.prototype.assignRandNature = function() {
             }
         }
     }
+};
+
+Pokemon.prototype.assignNature = function(nature)
+{
+    this.natureFinal = nature;
+    let natureXCoord = 0;
+    let natureYCoord = 0;
+    NATURE_NAMES.forEach( function(natureY, natureYIndex) {
+        let natureX = natureY.find(nature);
+        if (natureX > -1) {
+            natureXCoord = natureX;
+            natureYCoord = natureYIndex;
+        }
+    });
+
+    this.calculateNature(natureXCoord, natureYCoord);
+
 };
 
 // calculate saving throws - RUN AFTER ABILITY SCORES ARE GENERATED
@@ -300,23 +322,23 @@ Pokemon.prototype.calculateSaves = function() {
     tempTypes.forEach(element => {
         if (element != null) {
             GOOD_FORT_SAVE.forEach (fortType => {
-                if (fortType == element) {fortTypeBonus = 2;}
-            })
+                if (fortType === element) {fortTypeBonus = 2;}
+            });
             GOOD_REFLEX_SAVE.forEach (refType => {
-                if (refType == element) {refTypeBonus = 2;}
-            })
+                if (refType === element) {refTypeBonus = 2;}
+            });
             GOOD_WILL_SAVE.forEach (willType => {
-                if (willType == element) {willTypeBonus = 2;}
-            })
+                if (willType === element) {willTypeBonus = 2;}
+            });
         }
-    })
+    });
 
     //add type/level mod and ability score mod to final save
-    this.fortSave = Math.floor(.5 * this.level + fortTypeBonus) + modGen(this.con);
-    this.refSave = Math.floor(.5 * this.level + refTypeBonus) + modGen(this.dex);
-    this.willSave = Math.floor(.5 * this.level + willTypeBonus) + modGen(this.wis);
+    this.fortSave = Math.floor(.5 * this.level + fortTypeBonus) + modGen(this.conBase);
+    this.refSave = Math.floor(.5 * this.level + refTypeBonus) + modGen(this.dexBase);
+    this.willSave = Math.floor(.5 * this.level + willTypeBonus) + modGen(this.wisBase);
 
-}
+};
 
 Pokemon.prototype.calculateStats = function() {
 //get CON + hit points
@@ -505,3 +527,138 @@ Pokemon.prototype.uploadPokemon = function(connection, message) {
     });
 };
 
+Pokemon.prototype.importPokemon = function(connection, P, importString) {
+    //splits the message into lines then splits the lines into words separated by spaces.
+    let lines = importString.split("/n");
+    let nameLineVals = lines[0].split(" ");
+    let evLineVals;
+    let natureLineVals;
+    let ivLineVals;
+
+    let hasNickname = false;
+    let hasGender = false;
+
+    let nameArgs = [];
+
+    //
+    //Interprets the name line
+    //
+    this.name = nameLineVals[0]; //First word is always the name or the species;
+    nameLineVals.forEach(element => {
+        if(element.charAt(0) === "(") {
+            nameArgs.push(element.substr(1, element.length - 2));
+        }
+    });
+
+    //If there's two options, the first is the species and the second is the gender
+    if (nameArgs.length === 2){
+        this.species = nameArgs[0];
+        this.gender = nameArgs[1];
+    }
+    else if (nameArgs.length === 1){
+        //If there's just one option, check if pokemon name or if it is the pokemon's gender
+        if (nameArgs[0] === "M" || nameArgs[0] === "F") {
+            this.species = nameLineVals[0];
+            if (nameArgs[0] === "M") {this.gender = "male";} else this.gender ="female";
+        }
+    }
+    else if (nameArgs.length === 0) {
+        this.species = nameLineVals[0];
+    }
+
+    lines.forEach(element => {
+        switch (element.split(" ")) {
+            case ("Ability:"): {
+                //Grabs ability
+                this.ability = element.substr(8, element.length - 8).toLowerCase().replace(" ", "-");
+                break;
+            }
+            case("Level:"): {
+                this.level = element.substr(7, element.length - 7);
+                break;
+            }
+            case("EVs:"): {
+                evLineVals = element.split(" ");
+                evLineVals.forEach(function (evElement, i) {
+                    let j = -1;
+                    switch (evElement) {
+                        case ("Atk"):
+                            j = ATK_ARRAY_INDEX;
+                        case ("Def"):
+                            j = DEF_ARRAY_INDEX;
+                        case ("SpD"):
+                            j = SPD_ARRAY_INDEX;
+                        case ("SpA"):
+                            j = SPA_ARRAY_INDEX;
+                        case ("Spe"):
+                            j = SPE_ARRAY_INDEX;
+                        case ("HP"):
+                            j = HP_ARRAY_INDEX;
+                    }
+                    if (j >= 0) this.evStats[ATK_ARRAY_INDEX] = evLineVals[i - 1];
+                });
+                break;
+            }
+            case("IVs:"): {
+                ivLineVals = element.split(" ");
+                ivLineVals.forEach(function (ivElement, i) {
+                    let j = -1;
+                    switch (ivElement) {
+                        case ("Atk"):
+                            j = ATK_ARRAY_INDEX;
+                            break;
+                        case ("Def"):
+                            j = DEF_ARRAY_INDEX;
+                            break;
+                        case ("SpD"):
+                            j = SPD_ARRAY_INDEX;
+                            break;
+                        case ("SpA"):
+                            j = SPA_ARRAY_INDEX;
+                            break;
+                        case ("Spe"):
+                            j = SPE_ARRAY_INDEX;
+                            break;
+                        case ("HP"):
+                            j = HP_ARRAY_INDEX;
+                            break;
+                    }
+                    if (j >= 0) this.ivStats[ATK_ARRAY_INDEX] = evLineVals[i - 1];
+                });
+                break;
+            }
+            case "Hardy":
+            case "Lonely":
+            case "Adamant":
+            case "Naughty":
+            case "Brave":
+            case "Bold":
+            case "Docile":
+            case "Impish":
+            case "Lax":
+            case "Relaxed" :
+            case "Modest":
+            case "Mild":
+            case "Bashful":
+            case "Rash":
+            case "Quiet" :
+            case "Calm":
+            case "Gentle":
+            case "Careful":
+            case "Quirky":
+            case "Sassy" :
+            case "Timid":
+            case "Hasty":
+            case "Jolly":
+            case "Naive":
+            case "Serious":
+                {
+                    natureLineVals = element.split(" ");
+                    this.assignNature(natureLineVals[0]);
+                    break;
+                }
+        }
+    })
+
+
+};
