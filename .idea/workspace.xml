@@ -2,167 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ba528af2-225e-4427-ae3f-7d0367a9c9a4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/Talmanze.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/damage.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/damage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/.tern-project" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/browser.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/Client.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/ClientDataManager.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/ClientDataResolver.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/ClientManager.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/WebhookClient.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/Action.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/ActionsManager.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/ChannelCreate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/ChannelDelete.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/ChannelUpdate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/GuildBanRemove.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/GuildChannelsPositionUpdate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/GuildDelete.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/GuildEmojiCreate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/GuildEmojiDelete.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/GuildEmojiUpdate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/GuildEmojisUpdate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/GuildMemberGet.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/GuildMemberRemove.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/GuildRoleCreate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/GuildRoleDelete.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/GuildRoleUpdate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/GuildRolesPositionUpdate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/GuildSync.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/GuildUpdate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/MessageCreate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/MessageDelete.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/MessageDeleteBulk.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/MessageReactionAdd.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/MessageReactionRemove.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/MessageReactionRemoveAll.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/MessageUpdate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/UserGet.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/UserNoteUpdate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/UserUpdate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/rest/APIRequest.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/rest/DiscordAPIError.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/rest/RESTManager.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/rest/RESTMethods.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/rest/RequestHandlers/Burst.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/rest/RequestHandlers/RequestHandler.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/rest/RequestHandlers/Sequential.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/rest/UserAgentManager.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/ClientVoiceManager.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/VoiceBroadcast.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/VoiceConnection.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/VoiceUDPClient.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/VoiceWebSocket.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/dispatcher/StreamDispatcher.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/opus/BaseOpusEngine.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/opus/NodeOpusEngine.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/opus/OpusEngineList.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/opus/OpusScriptEngine.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/player/AudioPlayer.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/receiver/VoiceReadable.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/receiver/VoiceReceiver.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/util/SecretKey.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/util/Secretbox.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/util/VolumeInterface.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/WebSocketConnection.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/WebSocketManager.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/WebSocketPacketManager.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/AbstractHandler.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/ChannelCreate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/ChannelDelete.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/ChannelPinsUpdate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/ChannelUpdate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/GuildBanAdd.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/GuildBanRemove.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/GuildCreate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/GuildDelete.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/GuildEmojisUpdate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/GuildMemberAdd.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/GuildMemberRemove.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/GuildMemberUpdate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/GuildMembersChunk.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/GuildRoleCreate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/GuildRoleDelete.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/GuildRoleUpdate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/GuildSync.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/GuildUpdate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/MessageCreate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/MessageDelete.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/MessageDeleteBulk.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/MessageReactionAdd.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/MessageReactionRemove.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/MessageReactionRemoveAll.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/MessageUpdate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/PresenceUpdate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/Ready.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/RelationshipAdd.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/RelationshipRemove.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/Resumed.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/TypingStart.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/UserGuildSettingsUpdate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/UserNoteUpdate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/UserSettingsUpdate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/UserUpdate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/VoiceServerUpdate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/VoiceStateUpdate.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/sharding/Shard.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/sharding/ShardClientUtil.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/sharding/ShardingManager.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/Attachment.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/CategoryChannel.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/Channel.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/ClientUser.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/ClientUserChannelOverride.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/ClientUserGuildSettings.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/ClientUserSettings.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/DMChannel.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/Emoji.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/GroupDMChannel.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/Guild.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/GuildAuditLogs.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/GuildChannel.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/GuildMember.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/Invite.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/Message.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/MessageAttachment.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/MessageCollector.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/MessageEmbed.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/MessageMentions.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/MessageReaction.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/OAuth2Application.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/PartialGuild.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/PartialGuildChannel.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/PermissionOverwrites.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/Presence.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/ReactionCollector.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/ReactionEmoji.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/RichEmbed.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/Role.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/TextChannel.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/User.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/UserConnection.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/UserProfile.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/VoiceChannel.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/VoiceRegion.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/Webhook.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/interfaces/Collector.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/interfaces/TextBasedChannel.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/shared/resolvePermissions.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/util/Collection.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/util/Constants.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/util/Permissions.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/util/Snowflake.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/util/Util.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/typings/discord.js-test.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/typings/index.d.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pokemon.js" beforeDir="false" afterPath="$PROJECT_DIR$/pokemon.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -255,7 +96,7 @@
       <workItem from="1580846793602" duration="4736000" />
       <workItem from="1580855198545" duration="469000" />
       <workItem from="1581022195664" duration="15741000" />
-      <workItem from="1581222704600" duration="12439000" />
+      <workItem from="1581222704600" duration="12631000" />
     </task>
     <task id="LOCAL-00001" summary="Fixed pokegen embed">
       <created>1554231045749</created>
@@ -516,7 +357,14 @@
       <option name="project" value="LOCAL" />
       <updated>1581141619651</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="Started Import and damage.js">
+      <created>1581294382415</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1581294382415</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -561,7 +409,8 @@
     <MESSAGE value="Prep for SQL" />
     <MESSAGE value="DAAATE error" />
     <MESSAGE value="sql Prep" />
-    <option name="LAST_COMMIT_MESSAGE" value="sql Prep" />
+    <MESSAGE value="Started Import and damage.js" />
+    <option name="LAST_COMMIT_MESSAGE" value="Started Import and damage.js" />
   </component>
   <component name="WindowStateProjectService">
     <state x="320" y="115" key="#Deployment" timestamp="1581105737022">
@@ -584,33 +433,38 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="408" y="185" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1440.900@0.0.1440.900" timestamp="1580835393400" />
-    <state x="312" y="0" key="CommitChangelistDialog2" timestamp="1581141619307">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state x="312" y="23" width="826" height="877" key="CommitChangelistDialog2" timestamp="1581294380618">
+      <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state x="312" y="0" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1581141619307" />
+    <state x="312" y="23" width="826" height="877" key="CommitChangelistDialog2/0.23.1440.877@0.23.1440.877" timestamp="1581294380618" />
     <state x="258" y="112" key="DBNavigator.ProjectSettingsDialog" timestamp="1580855423536">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="258" y="112" key="DBNavigator.ProjectSettingsDialog/0.0.1440.900@0.0.1440.900" timestamp="1580855423536" />
-    <state width="1398" height="226" key="GridCell.Tab.0.bottom" timestamp="1581293973967">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="1398" height="226" key="GridCell.Tab.0.bottom" timestamp="1581294388116">
+      <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state width="1398" height="226" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1581293973967" />
+    <state width="1398" height="226" key="GridCell.Tab.0.bottom/0.23.1440.877@0.23.1440.877" timestamp="1581294388116" />
     <state width="1877" height="264" key="GridCell.Tab.0.bottom/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580873390347" />
-    <state width="1398" height="226" key="GridCell.Tab.0.center" timestamp="1581293973965">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="1398" height="226" key="GridCell.Tab.0.center" timestamp="1581294388113">
+      <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state width="1398" height="226" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1581293973965" />
+    <state width="1398" height="226" key="GridCell.Tab.0.center/0.23.1440.877@0.23.1440.877" timestamp="1581294388113" />
     <state width="1877" height="264" key="GridCell.Tab.0.center/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580873390347" />
-    <state width="1398" height="226" key="GridCell.Tab.0.left" timestamp="1581293973964">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="1398" height="226" key="GridCell.Tab.0.left" timestamp="1581294388109">
+      <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state width="1398" height="226" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1581293973964" />
+    <state width="1398" height="226" key="GridCell.Tab.0.left/0.23.1440.877@0.23.1440.877" timestamp="1581294388109" />
     <state width="1877" height="264" key="GridCell.Tab.0.left/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580873390346" />
-    <state width="1398" height="226" key="GridCell.Tab.0.right" timestamp="1581293973966">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="1398" height="226" key="GridCell.Tab.0.right" timestamp="1581294388114">
+      <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state width="1398" height="226" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1581293973966" />
+    <state width="1398" height="226" key="GridCell.Tab.0.right/0.23.1440.877@0.23.1440.877" timestamp="1581294388114" />
     <state x="144" y="79" key="MergeDialog" timestamp="1581101389042">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -623,10 +477,11 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="229" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1581105706337" />
-    <state x="320" y="186" key="Vcs.Push.Dialog.v2" timestamp="1581141621287">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state x="320" y="204" key="Vcs.Push.Dialog.v2" timestamp="1581294388082">
+      <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state x="320" y="186" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1581141621287" />
+    <state x="320" y="204" key="Vcs.Push.Dialog.v2/0.23.1440.877@0.23.1440.877" timestamp="1581294388082" />
     <state x="508" y="369" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1581112904310">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
