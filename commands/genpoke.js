@@ -8,9 +8,8 @@ module.exports.run = (client, connection, P, message, args) => {
 		message.reply('New Pokemon Generator. Variables in order:\n [Pokemon Species] [Level] [Pokemon Name] [Hidden Ability % (optional - CURRENTLY BROKEN)]').catch(console.error);
 	}
 	try{
-		let genPokemon = new Pokemon.Pokemon(args[0].toLowerCase(), args[1], args[2]);
-		let genPromise = genPokemon.init(P, message);
-		genPromise
+		let genPokemon = new Pokemon(args[0].toLowerCase(), args[1], args[2]);
+		genPokemon.init(P, message)
 			.then( function(response){
 				message.channel.send(genPokemon.sendSummaryMessage(client));
 				genPokemon.uploadPokemon(connection, message);

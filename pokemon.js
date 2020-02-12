@@ -1,45 +1,20 @@
 const GENDER_MAX = 8;
-const NATURE_ARRAY_MAX = 5;
+
 const STAT_ARRAY_MAX = 6;
-const NATURE_POSITIVE_MULIPLIER = 1.1;
-const NATURE_NEGATIVE_MULTIPLIER = 0.9;
-const BASE_HP = 16;
-const EV_MULTIPLIER = 4;
-const BASE_STAT_MULTIPLIER = 2;
-const ATTACK_BST_INDEX = 1;
-const SPECIALATTACK_BST_INDEX = 3;
-const SPECIALDEFENSE_BST_INDEX = 4;
-const SPEED_BST_INDEX = 5;
-const NATURAL_ARMOUR_MULT = 0.08;
-const DEFENSE_BST_INDEX = 2;
-const NATURAL_ARMOUR_SHIFT = 0.6;
-const AC_BASE = 10;
-const DEX_AC_CALC_BASE = 10;
-const DEX_AC_CALC_MULT = 2;
-const STAT_CALC_MULT = 0.15;
-const STAT_CALC_BASE = 1.5;
-const DTEN = 10;
-const FORM_DIVISOR = 20;
-const FORM_SHIFT = 5;
-const MOVE_SPEED_MULT = 0.38;
-const MOVE_SPEED_SHIFT = 4;
+const HP_ARRAY_INDEX = 0;
+const ATK_ARRAY_INDEX = 1;
+const DEF_ARRAY_INDEX = 2;
+const SPA_ARRAY_INDEX = 3;
+const SPD_ARRAY_INDEX = 4;
+const SPE_ARRAY_INDEX = 5;
 const SHINY_CHANCE = 4096;
-const IV_MAX = 32;
-const CON_CALC_DIVISOR = 4;
-const GOOD_FORT_SAVE = ["grass", "ground", "ice", "poison", "rock", "steel"];
-const GOOD_WILL_SAVE = ["bug", "fairy", "dragon", "ghost", "normal", "psychic"];
-const GOOD_REFLEX_SAVE = ["dark", "electric", "fighting", "fire", "flying", "water"];
 
-const NATURE_NAMES = [
-    ["Hardy", "Lonely", "Adamant", "Naughty", "Brave"],
-    ["Bold", "Docile", "Impish", "Lax", "Relaxed"],
-    ["Modest", "Mild", "Bashful", "Rash", "Quiet"],
-    ["Calm", "Gentle", "Careful", "Quirky", "Sassy"],
-    ["Timid", "Hasty", "Jolly", "Naive", "Serious"]
-];
+let Nature = require('./nature.js');
+let Moveset = require('./moveset.js');
+let Statblock = require('./statblock.js');
 
 
-module.exports.Pokemon = Pokemon;
+module.exports = Pokemon;
 
 function Ability(name, ha)
 {
@@ -60,97 +35,50 @@ function Pokemon(tempSpecies, tempLevel, tempName) {
     //type(s)
     this.type1 = "";
     this.type2 = "";
-    //stat arrays: HP, ATK, DEF, SPA, SPD, SPE
-    this.baseStats = [1, 1, 1, 1, 1, 1];
-    //size bonus
-    this.sizeBonus = 1;
+
+    //Pokemon's Statblock
+    this.statBlock = new Statblock();
+
     //hidden ability percentile
     this.haChance = 1;
 
-    // IVs
-    this.ivStats = [0, 0, 0, 0, 0, 0];
+    this.moveSet = new Moveset.MoveSet();
 
-    // EVs ... all naturally 0
-    this.evStats = [0, 0, 0, 0, 0, 0];
-
-    //formula for stats
-    this.formStats = [0, 0, 0, 0, 0, 0];
-    // nmulti, calculator stats
-    this.nMultiStats = [1, 1, 1, 1, 1, 1];
-
-    // final stats
-    this.finalStats = [0, 0, 0, 0, 0, 0];
-
-    // gender, ability, shiny
-    this.gender = "";
-    // the final ability chosen
-    this.ability = "";
-    // if the pokemon is shiny or not
-    this.shiny = false;
-
-    //nature + correlating names
-    this.natureFinal = "";
-
-    // DND STATS - natural armor, armor class, and move speed
-    this.natArmor = 0;
-    this.armorClass = 10;
-    this.moveSpeed = 20;
-
-    // DND STATS - ability scores + mods
-    this.conBase = 10;
-    this.conMod = 0;
-    this.strBase = 0;
-    this.strMod = 0;
-    this.intBase = 0;
-    this.intMod = 0;
-    this.wisBase = 0;
-    this.wisMod = 0;
-    this.dexBase = 10;
-    this.dexMod = 0;
-
-    // DND STATS - saving throw bonuses
-    this.fortSave = 0;
-    this.willSave = 0;
-    this.refSave = 0;
-
-    this.move1 = "";
-    this.move2 = "";
-    this.move3 = "";
-    this.move4 = "";
-    this.move5 = "";
-    this.moveProgress = 0;
     this.originalTrainer = "";
+
     let date = new Date();
     this.dateCreated = date.toISOString().slice(0, 19).replace('T', ' ');
+
+    this.nature = new Nature();
 
 }
 
 Pokemon.prototype.init = function(P, message) {
     return new Promise(function (resolve, reject) {
-        P.getPokemonByName(this.species)
+        P.getPokemonSpeciesByName(this.species)
             .then(function (response) {
-                this.pokemonData = response;
-                console.log(this.pokemonData);
-                P.getPokemonSpeciesByName(this.species)
+                this.speciesData = response;
+                console.log(this.speciesData);
+                P.getPokemonByName(this.speciesData.id)
                     .then(function (response) {
                         console.log("Retrieved Pokemon and Species Data!");
 
-                        this.speciesData = response;
+                        this.pokemonData = response;
 
                         console.log("Reading Type(s)");
-                        this.assignTypes(this.speciesData);
+                        this.assignTypes();
 
                         console.log("Assigning Gender");
-                        this.assignRandGender(this.speciesData.gender_rate);
+                        this.assignRandGender();
 
                         console.log("Assigning Ability");
-                        this.genRandAbility(this.pokemonData);
+                        this.genRandAbility();
 
                         console.log("Assigning IVs");
-                        this.assignRandIVs();
+                        this.statBlock.assignRandIVs();
 
                         console.log("Assigning Nature");
-                        this.assignRandNature();
+                        this.nature.assignRandNature(this);
 
                         console.log("assigning shiny");
                         this.assignShiny();
@@ -159,14 +87,14 @@ Pokemon.prototype.init = function(P, message) {
 
                         let i = 1;
                         this.pokemonData["stats"].forEach(element => {
-                            this.baseStats[STAT_ARRAY_MAX - i] = element["base_stat"];
+                            this.statBlock.baseStats[STAT_ARRAY_MAX - i] = element["base_stat"];
                             i++;
                         });
 
                         console.log("Calculating Stats");
 
-                        this.calculateStats();
-                        this.calculateSaves();
+                        this.statBlock.calculateStats(this);
+                        this.statBlock.calculateSaves([this.type1, this.type2]);
                         
                         console.log("Pokemon Complete!");
                         resolve("done");
@@ -236,13 +164,13 @@ Pokemon.prototype.genRandAbility = function() {
     */
 };
 //Assign gender
-Pokemon.prototype.assignRandGender = function(genderChance) {
+Pokemon.prototype.assignRandGender = function() {
     //assign gender
     let gender = "genderless";
     //Calculates Gender as a fraction of 8
     const genderNum = Math.floor((Math.random() * GENDER_MAX) + 1);
-    if (genderChance <= -1) return gender;
-    else if (genderNum <= genderChance) {
+    if (this.speciesData.gender_rate <= -1) return gender;
+    else if (genderNum <= this.speciesData.gender_rate) {
            gender = "female";
     }
     else gender = "male";
@@ -253,155 +181,6 @@ Pokemon.prototype.assignRandGender = function(genderChance) {
 //shiny generator!
 Pokemon.prototype.assignShiny = function() {
     this.shiny = (Math.floor((Math.random() * SHINY_CHANCE) + 1)) >= SHINY_CHANCE;
-};
-
-// ========================= STAT ARRAY GENERATOR!!! =========================
-//assign IVs
-Pokemon.prototype.assignRandIVs = function() {
-    for (let i = 0; i < STAT_ARRAY_MAX; i++) {
-        this.ivStats[i] = Math.floor((Math.random() * IV_MAX)); //assigns a value between 0 & 31 to all the IVs
-    };
-};
-
-//generate nature
-Pokemon.prototype.assignRandNature = function() {
-//x-coord for nature
-    let natureXCoord = Math.floor((Math.random() * NATURE_ARRAY_MAX)); //val between 0-4 for array
-//y-coord for nature
-    let natureYCoord = Math.floor((Math.random() * NATURE_ARRAY_MAX));
-
-//assign nature to final val
-    this.natureFinal = NATURE_NAMES[natureXCoord][natureYCoord];
-
-//update attributes based on nature
-//if xcoord = ycoord, no changes, otherwise adjusting...
-    this.calculateNature(natureXCoord, natureYCoord);
-
-};
-
-Pokemon.prototype.calculateNature = function(natureXCoord, natureYCoord) {
-    if (natureXCoord !== natureYCoord) {
-        for (let i = 0; i < STAT_ARRAY_MAX; i++) {
-            if (natureXCoord === i) {
-                this.nMultiStats[i + 1] = NATURE_POSITIVE_MULIPLIER;
-            }
-            if (natureYCoord === i) {
-                this.nMultiStats[i + 1] = NATURE_NEGATIVE_MULTIPLIER;
-            }
-        }
-    }
-};
-
-Pokemon.prototype.assignNature = function(nature)
-{
-    this.natureFinal = nature;
-    let natureXCoord = 0;
-    let natureYCoord = 0;
-    NATURE_NAMES.forEach( function(natureY, natureYIndex) {
-        let natureX = natureY.find(nature);
-        if (natureX > -1) {
-            natureXCoord = natureX;
-            natureYCoord = natureYIndex;
-        }
-    });
-
-    this.calculateNature(natureXCoord, natureYCoord);
-
-};
-
-// calculate saving throws - RUN AFTER ABILITY SCORES ARE GENERATED
-Pokemon.prototype.calculateSaves = function() {
-    //temp values
-    let tempTypes = [this.type1, this.type2];
-
-    let fortTypeBonus = 0;
-    let refTypeBonus = 0;
-    let willTypeBonus = 0;
-
-    //check if types match good saves for fort, ref, and will
-    tempTypes.forEach(element => {
-        if (element != null) {
-            GOOD_FORT_SAVE.forEach (fortType => {
-                if (fortType === element) {fortTypeBonus = 2;}
-            });
-            GOOD_REFLEX_SAVE.forEach (refType => {
-                if (refType === element) {refTypeBonus = 2;}
-            });
-            GOOD_WILL_SAVE.forEach (willType => {
-                if (willType === element) {willTypeBonus = 2;}
-            });
-        }
-    });
-
-    //add type/level mod and ability score mod to final save
-    this.fortSave = Math.floor(.5 * this.level + fortTypeBonus) + modGen(this.conBase);
-    this.refSave = Math.floor(.5 * this.level + refTypeBonus) + modGen(this.dexBase);
-    this.willSave = Math.floor(.5 * this.level + willTypeBonus) + modGen(this.wisBase);
-
-};
-
-Pokemon.prototype.calculateStats = function() {
-//get CON + hit points
-//calculate con +  EQ: [(BaseStats + IVs + EVs/4) * .15 +1.5]
-    this.conBase = Math.round(((this.baseStats[0] + this.ivStats[0] + this.evStats[0]) / CON_CALC_DIVISOR) * STAT_CALC_MULT + STAT_CALC_BASE);
-    this.conMod = modPrint(this.conBase);
-
-//calculate = attribute max HP
-//formula for hp... 16 + Conmod, with an additional 2d10 + conmod per level.
-    let diceRoll = BASE_HP;
-    for (let i = 1; i < this.level; i++) {
-        diceRoll += Math.floor((Math.random() * DTEN) + 1) + Math.floor((Math.random() * DTEN) + 1) + (modGen(this.conBase));
-    }
-    this.finalStats[0] = BASE_HP + (modGen(this.conBase) + diceRoll);
-
-//get all ability scores
-//go through base formula for stat creation
-    for (let ii = 1; ii < STAT_ARRAY_MAX; ii++) {
-        this.formStats[ii] = Math.floor((((BASE_STAT_MULTIPLIER * this.baseStats[ii] + this.ivStats[ii] + (this.evStats[ii] / EV_MULTIPLIER)) * this.level) / FORM_DIVISOR) + FORM_SHIFT);
-        this.finalStats[ii] = Math.floor(this.formStats[ii] * this.nMultiStats[ii]);
-    }
-
-//get dnd stats
-//stat calculator
-    const getAbility = function (a) {
-        return (STAT_CALC_MULT * a + STAT_CALC_BASE);
-    };
-
-//strength is based off of attack stat
-    this.strBase = Math.round(getAbility(this.finalStats[ATTACK_BST_INDEX]));
-    this.strMod = modPrint(this.strBase);
-
-//int is based off of special attack stat
-    this.intBase = Math.round(getAbility(this.finalStats[SPECIALATTACK_BST_INDEX]));
-    this.intMod = modPrint(this.intBase);
-
-//wis is based off of special defense stat
-    this.wisBase = Math.round(getAbility(this.finalStats[SPECIALDEFENSE_BST_INDEX]));
-    this.wisMod = modPrint(this.wisBase);
-
-//dex is based off of speed stat
-    this.dexBase = Math.round(getAbility(this.finalStats[SPEED_BST_INDEX]));
-    this.dexMod = modPrint(this.dexBase);
-
-//get nat armor, ac
-//natArmor is based off defense stat
-    this.natArmor = (NATURAL_ARMOUR_MULT * (this.finalStats[DEFENSE_BST_INDEX])) - NATURAL_ARMOUR_SHIFT;
-
-//armor class
-//message.channel.send(`Natural Armor: ${natArmor} || Size Bonus: ${sizeBonus} || Dex: ${dexMod}`);
-    this.armorClass = (AC_BASE + this.natArmor + this.sizeBonus + ((this.dexBase - DEX_AC_CALC_BASE) / DEX_AC_CALC_MULT)).toFixed(0);
-
-//get move speed
-    this.moveSpeed = (MOVE_SPEED_MULT * this.finalStats[SPEED_BST_INDEX] + MOVE_SPEED_SHIFT).toFixed(2);
-
-// generate saves based on types + scores
-
-/*
-
-let
-
-*/
-
 };
 
 // captialize words
@@ -445,43 +224,43 @@ Pokemon.prototype.sendSummaryMessage = function(client) {
             fields: [
                 {
                     name: "Basic Info",
-                    value: `**Ability:** ${tempAbility} | **Gender:** ${this.gender} | **Nature: ** ${this.natureFinal} | **Shiny: ** ${this.shiny}\n=================`
+                    value: `**Ability:** ${tempAbility} | **Gender:** ${this.gender} | **Nature: ** ${this.nature.natureFinal} | **Shiny: ** ${this.shiny}\n=================`
                 },
                 {
                     name: "HP",
-                    value: `**IV: ** ${this.ivStats[0]} | **Final: ** ${this.finalStats[0]}\n=================`
+                    value: `**IV: ** ${this.statBlock.ivStats[0]} | **Final: ** ${this.statBlock.finalStats[0]}\n=================`
                 },
                 {
                     name: "Attack",
-                    value: `**IV: ** ${this.ivStats[1]} | **Final: ** ${this.finalStats[1]}\n=================`
+                    value: `**IV: ** ${this.statBlock.ivStats[1]} | **Final: ** ${this.statBlock.finalStats[1]}\n=================`
                 },
                 {
                     name: "Defense",
-                    value: `**IV: ** ${this.ivStats[2]} | **Final: ** ${this.finalStats[2]}\n=================`
+                    value: `**IV: ** ${this.statBlock.ivStats[2]} | **Final: ** ${this.statBlock.finalStats[2]}\n=================`
                 },
                 {
                     name: "Special Attack",
-                    value: `**IV: ** ${this.ivStats[3]} | **Final: ** ${this.finalStats[3]}\n=================`
+                    value: `**IV: ** ${this.statBlock.ivStats[3]} | **Final: ** ${this.statBlock.finalStats[3]}\n=================`
                 },
                 {
                     name: "Special Defense",
-                    value: `**IV: ** ${this.ivStats[4]} | **Final: ** ${this.finalStats[4]}\n=================`
+                    value: `**IV: ** ${this.statBlock.ivStats[4]} | **Final: ** ${this.statBlock.finalStats[4]}\n=================`
                 },
                 {
                     name: "Speed",
-                    value: `**IV: ** ${this.ivStats[5]} | **Final: ** ${this.finalStats[5]}\n=================`
+                    value: `**IV: ** ${this.statBlock.ivStats[5]} | **Final: ** ${this.statBlock.finalStats[5]}\n=================`
                 },
                 {
                     name: "Ability Scores",
-                    value: `**STR: ** ${this.strBase.toFixed(0)}(${this.strMod}) | **DEX: ** ${this.dexBase.toFixed(0)}(${this.dexMod}) | **CON: ** ${this.conBase.toFixed()}(${this.conMod})\n**INT: ** ${this.intBase.toFixed(0)}(${this.intMod}) | **WIS: ** ${this.wisBase.toFixed(0)}(${this.wisMod}) | **CHA: ** :3c`
+                    value: `**STR: ** ${this.statBlock.strBase.toFixed(0)}(${this.statBlock.strMod}) | **DEX: ** ${this.statBlock.dexBase.toFixed(0)}(${this.statBlock.dexMod}) | **CON: ** ${this.statBlock.conBase.toFixed()}(${this.statBlock.conMod})\n**INT: ** ${this.statBlock.intBase.toFixed(0)}(${this.statBlock.intMod}) | **WIS: ** ${this.statBlock.wisBase.toFixed(0)}(${this.statBlock.wisMod}) | **CHA: ** :3c`
                 },
                 {
                     name: "Saving Throws",
-                    value: `**FORT: ** ${this.fortSave} | **REF: ** ${this.refSave} | **WILL: ** ${this.willSave}`
+                    value: `**FORT: ** ${this.statBlock.fortSave} | **REF: ** ${this.statBlock.refSave} | **WILL: ** ${this.statBlock.willSave}`
                 },
                 {
                     name: "AC & Move Speed",
-                    value: `**AC: ** ${this.armorClass} | **Move Speed: ** ${this.moveSpeed} ft`
+                    value: `**AC: ** ${this.statBlock.armorClass} | **Move Speed: ** ${this.statBlock.moveSpeed} ft`
                 },
             ],
             timestamp: new Date(),
@@ -494,30 +273,26 @@ Pokemon.prototype.sendSummaryMessage = function(client) {
 };
 
 
-const HP_ARRAY_INDEX = 0;
-const ATK_ARRAY_INDEX = 1;
-const DEF_ARRAY_INDEX = 2;
-const SPA_ARRAY_INDEX = 3;
-const SPD_ARRAY_INDEX = 4;
-const SPE_ARRAY_INDEX = 5;
+
 
 Pokemon.prototype.uploadPokemon = function(connection, message) {
 
+    message.channel.send("Debug: " + message.author.id + "\n" + message.author.username);
 
-    const sql = 'INSERT INTO pokemon (name, species, level, nature, gender, ability, type1, type2, ' +
+    let sql = 'INSERT INTO pokemon (name, species, level, nature, gender, ability, type1, type2, shiny ' +
         `hp, atk, def, spa, spd, spe, ` +
         `hpIV, atkIV, defIV, spaIV, spdIV, speIV, ` +
         `hpEV, atkEV, defEV, spaEV, spdEV, speEV, ` +
         `move1, move2, move3, move4, move5, moveProgress, ` +
         `originalTrainer, userID, dateCreated) ` +
-        `VALUES ("${this.name}", "${this.species}", ${this.level}, "${this.natureFinal}", "${this.gender}", "${this.ability.name}", "${this.type1}", "${this.type2}", ` +
-        `${this.finalStats[HP_ARRAY_INDEX]}, ${this.finalStats[ATK_ARRAY_INDEX]}, ${this.finalStats[DEF_ARRAY_INDEX]}, ` +
-        `${this.finalStats[SPA_ARRAY_INDEX]}, ${this.finalStats[SPD_ARRAY_INDEX]}, ${this.finalStats[SPE_ARRAY_INDEX]}, ` +
-        `${this.ivStats[HP_ARRAY_INDEX]}, ${this.ivStats[ATK_ARRAY_INDEX]}, ${this.ivStats[DEF_ARRAY_INDEX]}, ` +
-        `${this.ivStats[SPA_ARRAY_INDEX]}, ${this.ivStats[SPD_ARRAY_INDEX]}, ${this.ivStats[SPE_ARRAY_INDEX]}, ` +
-        `${this.evStats[HP_ARRAY_INDEX]}, ${this.evStats[ATK_ARRAY_INDEX]}, ${this.evStats[DEF_ARRAY_INDEX]}, ` +
-        `${this.evStats[SPA_ARRAY_INDEX]}, ${this.evStats[SPD_ARRAY_INDEX]}, ${this.evStats[SPE_ARRAY_INDEX]}, ` +
-        `"${this.move1}", "${this.move2}", "${this.move3}", "${this.move4}", "${this.move5}", ${this.moveProgress}, ` +
+        `VALUES ("${this.name}", "${this.species}", ${this.level}, "${this.nature.natureFinal}", "${this.gender}", "${this.ability.name}", "${this.type1}", "${this.type2}", ${this.shiny}, ` +
+        `${this.statBlock.finalStats[HP_ARRAY_INDEX]}, ${this.statBlock.finalStats[ATK_ARRAY_INDEX]}, ${this.statBlock.finalStats[DEF_ARRAY_INDEX]}, ` +
+        `${this.statBlock.finalStats[SPA_ARRAY_INDEX]}, ${this.statBlock.finalStats[SPD_ARRAY_INDEX]}, ${this.statBlock.finalStats[SPE_ARRAY_INDEX]}, ` +
+        `${this.statBlock.ivStats[HP_ARRAY_INDEX]}, ${this.statBlock.ivStats[ATK_ARRAY_INDEX]}, ${this.statBlock.ivStats[DEF_ARRAY_INDEX]}, ` +
+        `${this.statBlock.ivStats[SPA_ARRAY_INDEX]}, ${this.statBlock.ivStats[SPD_ARRAY_INDEX]}, ${this.statBlock.ivStats[SPE_ARRAY_INDEX]}, ` +
+        `${this.statBlock.evStats[HP_ARRAY_INDEX]}, ${this.statBlock.evStats[ATK_ARRAY_INDEX]}, ${this.statBlock.evStats[DEF_ARRAY_INDEX]}, ` +
+        `${this.statBlock.evStats[SPA_ARRAY_INDEX]}, ${this.statBlock.evStats[SPD_ARRAY_INDEX]}, ${this.statBlock.evStats[SPE_ARRAY_INDEX]}, ` +
+        `"${this.moveSet.move1.name}", "${this.moveSet.move2.name}", "${this.moveSet.move3.name}", "${this.moveSet.move4.name}", "${this.moveSet.move5.name}", ${this.moveSet.moveProgress}, ` +
         `"${this.originalTrainer}", ${message.author.id}, '${this.dateCreated}');`;
 
     console.log(sql);
@@ -623,7 +398,7 @@ Pokemon.prototype.importPokemon = function(connection, P, importString) {
                             j = HP_ARRAY_INDEX;
                             break;
                     }
-                    if (j >= 0) this.ivStats[ATK_ARRAY_INDEX] = evLineVals[i - 1];
+                    if (j >= 0) this.statBlock.ivStats[ATK_ARRAY_INDEX] = evLineVals[i - 1];
                 });
                 break;
             }
@@ -654,10 +429,12 @@ Pokemon.prototype.importPokemon = function(connection, P, importString) {
             case "Serious":
                 {
                     natureLineVals = element.split(" ");
-                    this.assignNature(natureLineVals[0]);
+                    this.nature.assignNature(this, natureLineVals[0]);
                     break;
                 }
         }
+
+
     })
 
 
