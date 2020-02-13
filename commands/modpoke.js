@@ -14,9 +14,19 @@ module.exports.run = (client, connection, P, message, args) => {
         }
 
         if (args[0].includes('help')) {
-            message.reply('Modify Pokemon Command USE "list" to get all available fields- Args: [Pokemon Name] [Field to change] [new value]');
+            message.reply('Modify Pokemon Command. USE "list" to get all available fields- Args: [Pokemon Name] [Field to change] [new value]');
             return;
         }
+        let valueString;
+        if (typeof args[2] == "string") valueString = `${args[2]}`; else valueString = args[2];
+
+        let sql = `UPDATE pokemon () SET ${args[1]} = ${valueString} WHERE name == ${args[0]};`;
+
+        console.log(sql);
+        connection.query(sql, function (err, result) {
+            if (err) throw err;
+            console.log("1 record inserted");
+        });
 
 
     } catch (error) {

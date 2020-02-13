@@ -2,21 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0e2fdc44-d39a-4440-afbe-b82b2faadb85" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/commands/modpoke.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/genpoke.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/genpoke.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/neodamage.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/neodamage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nature.js" beforeDir="false" afterPath="$PROJECT_DIR$/nature.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/tweetnacl/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/tweetnacl/CHANGELOG.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/tweetnacl/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/tweetnacl/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/tweetnacl/nacl-fast.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/tweetnacl/nacl-fast.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/tweetnacl/nacl-fast.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/tweetnacl/nacl-fast.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/tweetnacl/nacl.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/tweetnacl/nacl.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/tweetnacl/nacl.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/tweetnacl/nacl.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/tweetnacl/nacl.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/tweetnacl/nacl.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/tweetnacl/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/tweetnacl/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pokemon.js" beforeDir="false" afterPath="$PROJECT_DIR$/pokemon.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/modpoke.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/modpoke.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -217,7 +204,14 @@
       <option name="project" value="LOCAL" />
       <updated>1581574555653</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="neodamage.js alpha version ;)">
+      <created>1581579903547</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1581579903547</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -261,7 +255,8 @@
     <MESSAGE value="Species Formatting" />
     <MESSAGE value="neoDamage command added.&#10;Testing needed" />
     <MESSAGE value="squash! sql Prep" />
-    <option name="LAST_COMMIT_MESSAGE" value="squash! sql Prep" />
+    <MESSAGE value="neodamage.js alpha version ;)" />
+    <option name="LAST_COMMIT_MESSAGE" value="neodamage.js alpha version ;)" />
   </component>
   <component name="WindowStateProjectService">
     <state x="320" y="115" key="#Deployment" timestamp="1580847102798">
@@ -276,11 +271,11 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="408" y="185" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1440.900@0.0.1440.900" timestamp="1580835393400" />
-    <state x="416" y="0" key="CommitChangelistDialog2" timestamp="1581574554768">
+    <state x="416" y="0" key="CommitChangelistDialog2" timestamp="1581579902448">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="312" y="0" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1580847648316" />
-    <state x="416" y="0" key="CommitChangelistDialog2/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1581574554768" />
+    <state x="416" y="0" key="CommitChangelistDialog2/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1581579902448" />
     <state x="258" y="112" key="DBNavigator.ProjectSettingsDialog" timestamp="1580855423536">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -373,11 +368,11 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="229" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1580855158911" />
-    <state x="427" y="217" key="Vcs.Push.Dialog.v2" timestamp="1581574573384">
+    <state x="427" y="217" key="Vcs.Push.Dialog.v2" timestamp="1581579908568">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="320" y="186" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1580847651510" />
-    <state x="427" y="217" key="Vcs.Push.Dialog.v2/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1581574573384" />
+    <state x="427" y="217" key="Vcs.Push.Dialog.v2/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1581579908568" />
     <state x="621" y="165" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1580869258866">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
