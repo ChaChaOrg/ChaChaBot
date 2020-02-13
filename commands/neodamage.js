@@ -8,25 +8,51 @@ const SPE_ARRAY_INDEX = 5;
 
 module.exports.run = (client, connection, P, message, args) => {
     try {
+        let attackerName;
+        let attackerMove;
+        let defenderName;
+        let bonusDef = 0;
+        let bonusAtk = 0;
+        let other = 0;
+        let otherMult = 1;
+
         //variables required
-        let attackerName = args[0];
-        let attackerMove = args[1];
-        let defenderName = args[2];
         let Pokemon = require('../pokemon.js');
         let attackPoke = new Pokemon();
         let defendPoke = new Pokemon();
 
-        let level;
-        let attack;
-        let defense;
-        let dice;
-        let stab;
-        let effective;
-        let critical = args[3];
-        let other = args[6];
-        let bonusAtk = args[4]; //Stages Attack
-        let bonusDef = args[5];
-        let otherMult = args[6];
+        let dice = 0;
+        let stab = 1;
+        let effective = 1;
+        let critical = 1;
+        args.forEach(function(element, index) {
+            if (element !== null) {
+                switch (index) {
+                    case 0:
+                        attackerName = args[0];
+                        break;
+                    case 1:
+                        attackerMove = args[1];
+                        break;
+                    case 2:
+                        defenderName = args[2];
+                        break;
+                    case 3:
+                        bonusDef = args[4]; //Stages Defense
+                        break;
+                    case 4:
+                        bonusAtk = args[3]; //Stages Attack
+                        break;
+                    case 5:
+                        other =  Number(args[5]);
+                        break;
+                    case 6:
+                        otherMult = args[6];
+                        break;
+                }
+            }
+        });
+
 
         //values used for calculation
         let stageModAtk = 0;
@@ -39,26 +65,27 @@ module.exports.run = (client, connection, P, message, args) => {
         let combatString = "";
 
         //clause for helping!
-        if (attackName.includes('help')) {
+        if (args[0].includes('help')) {
             message.reply('Damage Calculator. Variables in order:\n [Attacker (A) Name] [Attacker Move] [Defender (D) Name] [Stages of Attack] [Stages of Defense] [Extra Base Power] [MultDamage]').catch(console.error);
             return;
         }
 
-        let sql = 'SELECT * FROM pokemon WHERE name = `${attackerName}` OR name = `${defenderName}`;';
+        let sql = `SELECT * FROM pokemon WHERE name = '${attackerName}' OR name = '${defenderName}';`;
 
         console.log(sql);
-        connection.query(sql, function (err, result) {
+        connection.query(sql, function (err, response) {
             if (err) throw err;
             console.log("attacker and defender read");
-        }).then(function (response) {
+            console.log(response[0].name);
+            console.log(response[1].name);
             response.forEach(element => {
-                if (element.name() === attackerName) attackPoke.loadFromSQL(element);
+                if (element["name"] === attackerName) attackPoke.loadFromSQL(element);
                 else defendPoke.loadFromSQL(element);
             });
 
             P.getMoveByName(attackerMove.toLowerCase())
                 .then(moveData => {
-                    P.getTypeByName(moveData.name)
+                    P.getTypeByName(moveData.type.name)
                         .then(typeData => {
                             //check if attack or defense are modded by terrain
                             // attack stages
@@ -103,38 +130,41 @@ module.exports.run = (client, connection, P, message, args) => {
                             {
                                 effectiveString = "It's super effective!\n";
                             }
+                            else if (effective === 0)
+                            {
+                                effectiveString = `It has no effect on ${defendPoke.name}\n`;
+                            }
                             else if (effective < 1)
                             {
-                                effectiveString = "It's not very effective.\n"
+                                effectiveString = "It's not very effective.\n";
                             }
 
+                            let numDice = (moveData.power + other) *.2;
 
-
-
-
-                            let numDice = (moveData.power + other) / 5;
-
-                            for(numDice; numDice>0 ; numDice--){
+                            for(numDice; numDice > 0 ; numDice--){
                                 dice += Math.floor(Math.random() * 8 + 1);
                             }
+                            let critRoll = Math.floor(Math.random() * 20 + 1);
 
-                            if(Math.floor(Math.random() * 20 + 1))
+                            if(Math.floor(Math.random() * 20 + 1) >= 20)
                             {
                                 critical = 1.5;
                                 criticalString = "A critical hit!\n"
                             }
 
-                            damageTotal = ((10 * attackPoke.level + 10) / 250 * ((attackPoke.statBlock.baseStats[ATK_ARRAY_INDEX] * stageModAtk) / (defense * stageModDef)) * dice) * stab * effective * critical * otherMult;
+                            damageTotal = ((10 * attackPoke.level + 10) / 250 * ((attackPoke.statBlock.baseStats[ATK_ARRAY_INDEX] * stageModAtk) / (defendPoke.statBlock.baseStats[DEF_ARRAY_INDEX] * stageModDef)) * dice) * stab * effective * critical * otherMult;
                             damageTotal = damageTotal.toFixed(2);
 
-                            combatString = effectiveString + criticalString + `${attackerName} deals ${damageTotal} damage to the defending ${defendName}`;
+                            combatString = `${attackerName} (level ${attackPoke.level} ${attackPoke.species}) used ${moveData.name} on ${defenderName} (level ${defendPoke.level} ${defendPoke.species})\n` +
+                                effectiveString + criticalString +
+                                `${attackerName} deals ${damageTotal} damage to the defending ${defenderName}\n(Base Power: ${moveData.power} - damage roll: ${dice} - Crit roll: ${critRoll})`;
 
                             message.channel.send(combatString).catch(console.error);
                         })
                 });
         })
     } catch (error) {
-        message.channel.send(error.toString);
+        message.channel.send(error.toString());
         message.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);
 
     }

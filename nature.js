@@ -39,13 +39,19 @@ Nature.prototype.assignNature = function(pokemon, nature)
     this.natureFinal = nature;
     this.natureXCoord = 0;
     this.natureYCoord = 0;
+
+
+
     NATURE_NAMES.forEach( function(natureY, natureYIndex) {
-        let natureX = natureY.find(nature);
+        let natureX = -1;
+        natureX = natureY.findIndex(element => {
+            return element === nature;
+        });
         if (natureX > -1) {
             this.natureXCoord = natureX;
             this.natureYCoord = natureYIndex;
         }
-    }).bind(this);
+    });
 
     this.calculateNatureStats(pokemon, natureXCoord, natureYCoord);
 

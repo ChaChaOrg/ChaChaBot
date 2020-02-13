@@ -443,9 +443,9 @@ Pokemon.prototype.importPokemon = function(connection, P, importString) {
 
 Pokemon.prototype.loadFromSQL = function (sqlObject) {
     this.statBlock.finalStats[HP_ARRAY_INDEX] = sqlObject.hp;
-    this.statBlock.finalStats[ATK_ARRAY_INDEX] =sqlObject.atk;
-    this.statBlock.finalStats[DEF_ARRAY_INDEX] =sqlObject.def;
-    this.statBlock.finalStats[SPA_ARRAY_INDEX] =sqlObject.spa;
+    this.statBlock.finalStats[ATK_ARRAY_INDEX] = sqlObject.atk;
+    this.statBlock.finalStats[DEF_ARRAY_INDEX] = sqlObject.def;
+    this.statBlock.finalStats[SPA_ARRAY_INDEX] = sqlObject.spa;
     this.statBlock.finalStats[SPD_ARRAY_INDEX] = sqlObject.spd;
     this.statBlock.finalStats[SPE_ARRAY_INDEX] = sqlObject.spe;
 
@@ -474,7 +474,7 @@ Pokemon.prototype.loadFromSQL = function (sqlObject) {
 
     this.originalTrainer = sqlObject.originalTrainer;
 
-    this.nature.assignNature(sqlObject.nature);
+    this.nature.assignNature(this, sqlObject.nature);
 
     this.shiny = sqlObject.shiny;
 
