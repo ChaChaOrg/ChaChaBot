@@ -16,16 +16,18 @@ const NATURE_NAMES = [
 function Nature()
 {
     this.natureFinal = "";
+    this.natureXCoord = 0;
+    this.natureYCoord = 0;
 
 }
 
-Nature.prototype.calculateNatureStats = function(pokemon, natureXCoord, natureYCoord) {
-    if (natureXCoord !== natureYCoord) {
+Nature.prototype.calculateNatureStats = function(pokemon) {
+    if (this.natureXCoord !== this.natureYCoord) {
         for (let i = 0; i < STAT_ARRAY_MAX; i++) {
-            if (natureXCoord === i) {
+            if (this.natureXCoord === i) {
                 pokemon.statBlock.nMultiStats[i + 1] = NATURE_POSITIVE_MULIPLIER;
             }
-            if (natureYCoord === i) {
+            if (this.natureYCoord === i) {
                 pokemon.statBlock.nMultiStats[i + 1] = NATURE_NEGATIVE_MULTIPLIER;
             }
         }
@@ -35,15 +37,15 @@ Nature.prototype.calculateNatureStats = function(pokemon, natureXCoord, natureYC
 Nature.prototype.assignNature = function(pokemon, nature)
 {
     this.natureFinal = nature;
-    let natureXCoord = 0;
-    let natureYCoord = 0;
+    this.natureXCoord = 0;
+    this.natureYCoord = 0;
     NATURE_NAMES.forEach( function(natureY, natureYIndex) {
         let natureX = natureY.find(nature);
         if (natureX > -1) {
-            natureXCoord = natureX;
-            natureYCoord = natureYIndex;
+            this.natureXCoord = natureX;
+            this.natureYCoord = natureYIndex;
         }
-    });
+    }).bind(this);
 
     this.calculateNatureStats(pokemon, natureXCoord, natureYCoord);
 

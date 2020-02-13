@@ -302,6 +302,7 @@ Pokemon.prototype.uploadPokemon = function(connection, message) {
     });
 };
 
+
 Pokemon.prototype.importPokemon = function(connection, P, importString) {
     //splits the message into lines then splits the lines into words separated by spaces.
     let lines = importString.split("/n");
@@ -436,6 +437,46 @@ Pokemon.prototype.importPokemon = function(connection, P, importString) {
 
 
     })
+
+
+};
+
+Pokemon.prototype.loadFromSQL = function (sqlObject) {
+    this.statBlock.finalStats[HP_ARRAY_INDEX] = sqlObject.hp;
+    this.statBlock.finalStats[ATK_ARRAY_INDEX] =sqlObject.atk;
+    this.statBlock.finalStats[DEF_ARRAY_INDEX] =sqlObject.def;
+    this.statBlock.finalStats[SPA_ARRAY_INDEX] =sqlObject.spa;
+    this.statBlock.finalStats[SPD_ARRAY_INDEX] = sqlObject.spd;
+    this.statBlock.finalStats[SPE_ARRAY_INDEX] = sqlObject.spe;
+
+    //type(s)
+    this.type1 = sqlObject.type1;
+    this.type2 = sqlObject.type2;
+    
+    this.gender = sqlObject.gender;
+    this.ability = sqlObject.ability;
+
+
+    this.name = sqlObject.name;
+    this.species = sqlObject.species;
+    //level
+    this.level = sqlObject.level;
+
+    this.statBlock.evStats = [sqlObject.hpEV, sqlObject.atkEV, sqlObject.defEV, sqlObject.spaEV, sqlObject.spdEV, sqlObject.speEV]
+    this.statBlock.ivStats = [sqlObject.hpIV, sqlObject.atkIV, sqlObject.defIV, sqlObject.spaIV, sqlObject.spdIV, sqlObject.speIV]
+
+    this.moveSet.move1 = sqlObject.move1;
+    this.moveSet.move2 = sqlObject.move2;
+    this.moveSet.move3 = sqlObject.move3;
+    this.moveSet.move4 = sqlObject.move4;
+    this.moveSet.move5 = sqlObject.move5;
+    this.moveSet.moveProgress = sqlObject.moveProgress;
+
+    this.originalTrainer = sqlObject.originalTrainer;
+
+    this.nature.assignNature(sqlObject.nature);
+
+    this.shiny = sqlObject.shiny;
 
 
 };
