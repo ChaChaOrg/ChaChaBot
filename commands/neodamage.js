@@ -73,94 +73,92 @@ module.exports.run = (client, connection, P, message, args) => {
         let sql = `SELECT * FROM pokemon WHERE name = '${attackerName}' OR name = '${defenderName}';`;
 
         console.log(sql);
+
+        let loadSQLPromise = [];
+
         connection.query(sql, function (err, response) {
             if (err) throw err;
             console.log("attacker and defender read");
             console.log(response[0].name);
             console.log(response[1].name);
             response.forEach(element => {
-                if (element["name"] === attackerName) attackPoke.loadFromSQL(element);
-                else defendPoke.loadFromSQL(element);
+                if (element["name"] === attackerName) loadSQLPromise.push(attackPoke.loadFromSQL(element));
+                else loadSQLPromise.push(defendPoke.loadFromSQL(element));
             });
 
-            P.getMoveByName(attackerMove.toLowerCase())
-                .then(moveData => {
-                    P.getTypeByName(moveData.type.name)
-                        .then(typeData => {
-                            //check if attack or defense are modded by terrain
-                            // attack stages
-                            if (bonusAtk > -1) {
-                                stageModAtk = ((2 + bonusAtk) / 2);
-                            } else {
-                                stageModAtk = (2 / (Math.abs(bonusAtk) + 2));
-                            }
-                            //defense stages
-                            if (bonusDef > -1) {
-                                stageModDef = (2 + bonusDef) / 2;
-                            } else {
-                                stageModDef = (2 / (Math.abs(bonusDef) + 2));
-                            }
+            Promise.all(loadSQLPromise)
+                .then( response => {
 
-                            let attackerTypes = [attackPoke.type1, attackPoke.type2];
-                            let defenderTypes = [defendPoke.type1, defendPoke.type2];
+                    P.getMoveByName(attackerMove.toLowerCase())
+                        .then(moveData => {
+                            P.getTypeByName(moveData.type.name)
+                                .then(typeData => {
+                                    //check if attack or defense are modded by terrain
+                                    // attack stages
+                                    if (bonusAtk > -1) {
+                                        stageModAtk = ((2 + bonusAtk) / 2);
+                                    } else {
+                                        stageModAtk = (2 / (Math.abs(bonusAtk) + 2));
+                                    }
+                                    //defense stages
+                                    if (bonusDef > -1) {
+                                        stageModDef = (2 + bonusDef) / 2;
+                                    } else {
+                                        stageModDef = (2 / (Math.abs(bonusDef) + 2));
+                                    }
+
+                                    let attackerTypes = [attackPoke.type1, attackPoke.type2];
+                                    let defenderTypes = [defendPoke.type1, defendPoke.type2];
 
 
-                            //Set STAB bonus;
-                            if (attackerTypes[0] === moveData.type.name || attackerTypes[1] === moveData.type.name) {
-                                stab = 1.5;
-                            }
+                                    //Set STAB bonus;
+                                    if (attackerTypes[0] === moveData.type.name || attackerTypes[1] === moveData.type.name) {
+                                        stab = 1.5;
+                                    }
 
-                            //Calculate Type Effectiveness
-                            typeData.damage_relations.half_damage_to.forEach(typeElement =>
-                            {
-                                if (typeElement.name === defenderTypes[0] || typeElement.name === defenderTypes[1]) effective = effective * .5;
-                            });
+                                    //Calculate Type Effectiveness
+                                    typeData.damage_relations.half_damage_to.forEach(typeElement => {
+                                        if (typeElement.name === defenderTypes[0] || typeElement.name === defenderTypes[1]) effective = effective * .5;
+                                    });
 
-                            typeData.damage_relations.double_damage_to.forEach(typeElement =>
-                            {
-                                if (typeElement.name === defenderTypes[0] || typeElement.name === defenderTypes[1]) effective = effective * 2;
-                            });
+                                    typeData.damage_relations.double_damage_to.forEach(typeElement => {
+                                        if (typeElement.name === defenderTypes[0] || typeElement.name === defenderTypes[1]) effective = effective * 2;
+                                    });
 
-                            typeData.damage_relations.no_damage_to.forEach(typeElement =>
-                            {
-                                if (typeElement.name === defenderTypes[0] || typeElement.name === defenderTypes[1]) effective = 0;
-                            });
+                                    typeData.damage_relations.no_damage_to.forEach(typeElement => {
+                                        if (typeElement.name === defenderTypes[0] || typeElement.name === defenderTypes[1]) effective = 0;
+                                    });
 
-                            if (effective > 1 )
-                            {
-                                effectiveString = "It's super effective!\n";
-                            }
-                            else if (effective === 0)
-                            {
-                                effectiveString = `It has no effect on ${defendPoke.name}\n`;
-                            }
-                            else if (effective < 1)
-                            {
-                                effectiveString = "It's not very effective.\n";
-                            }
+                                    if (effective > 1) {
+                                        effectiveString = "It's super effective!\n";
+                                    } else if (effective === 0) {
+                                        effectiveString = `It has no effect on ${defendPoke.name}\n`;
+                                    } else if (effective < 1) {
+                                        effectiveString = "It's not very effective.\n";
+                                    }
 
-                            let numDice = (moveData.power + other) *.2;
+                                    let numDice = (moveData.power + other) * .2;
 
-                            for(numDice; numDice > 0 ; numDice--){
-                                dice += Math.floor(Math.random() * 8 + 1);
-                            }
-                            let critRoll = Math.floor(Math.random() * 20 + 1);
+                                    for (numDice; numDice > 0; numDice--) {
+                                        dice += Math.floor(Math.random() * 8 + 1);
+                                    }
+                                    let critRoll = Math.floor(Math.random() * 20 + 1);
 
-                            if(Math.floor(Math.random() * 20 + 1) >= 20)
-                            {
-                                critical = 1.5;
-                                criticalString = "A critical hit!\n"
-                            }
+                                    if (Math.floor(Math.random() * 20 + 1) >= 20) {
+                                        critical = 1.5;
+                                        criticalString = "A critical hit!\n"
+                                    }
 
-                            damageTotal = ((10 * attackPoke.level + 10) / 250 * ((attackPoke.statBlock.baseStats[ATK_ARRAY_INDEX] * stageModAtk) / (defendPoke.statBlock.baseStats[DEF_ARRAY_INDEX] * stageModDef)) * dice) * stab * effective * critical * otherMult;
-                            damageTotal = damageTotal.toFixed(2);
+                                    damageTotal = ((10 * attackPoke.level + 10) / 250 * ((attackPoke.statBlock.baseStats[ATK_ARRAY_INDEX] * stageModAtk) / (defendPoke.statBlock.baseStats[DEF_ARRAY_INDEX] * stageModDef)) * dice) * stab * effective * critical * otherMult;
+                                    damageTotal = damageTotal.toFixed(2);
 
-                            combatString = `${attackerName} (level ${attackPoke.level} ${attackPoke.species}) used ${moveData.name} on ${defenderName} (level ${defendPoke.level} ${defendPoke.species})\n` +
-                                effectiveString + criticalString +
-                                `${attackerName} deals ${damageTotal} damage to the defending ${defenderName}\n(Base Power: ${moveData.power} - damage roll: ${dice} - Crit roll: ${critRoll})`;
+                                    combatString = `${attackerName} (level ${attackPoke.level} ${attackPoke.species}) used ${moveData.name} on ${defenderName} (level ${defendPoke.level} ${defendPoke.species})\n` +
+                                        effectiveString + criticalString +
+                                        `${attackerName} deals ${damageTotal} damage to the defending ${defenderName}\n(Base Power: ${moveData.power} - damage roll: ${dice} - Crit roll: ${critRoll})`;
 
-                            message.channel.send(combatString).catch(console.error);
-                        })
+                                    message.channel.send(combatString).catch(console.error);
+                                })
+                        });
                 });
         })
     } catch (error) {

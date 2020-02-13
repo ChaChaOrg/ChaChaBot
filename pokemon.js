@@ -36,6 +36,8 @@ function Pokemon(tempSpecies, tempLevel, tempName) {
     this.type1 = "";
     this.type2 = "";
 
+    this.ability = new Ability("", false);
+
     //Pokemon's Statblock
     this.statBlock = new Statblock();
 
@@ -272,14 +274,12 @@ Pokemon.prototype.sendSummaryMessage = function(client) {
     };
 };
 
-
-
-
 Pokemon.prototype.uploadPokemon = function(connection, message) {
 
     message.channel.send("Debug: " + message.author.id + "\n" + message.author.username);
 
-    let sql = 'INSERT INTO pokemon (name, species, level, nature, gender, ability, type1, type2, shiny ' +
+    let sql =
+        'INSERT INTO pokemon (name, species, level, nature, gender, ability, type1, type2, shiny, ' +
         `hp, atk, def, spa, spd, spe, ` +
         `hpIV, atkIV, defIV, spaIV, spdIV, speIV, ` +
         `hpEV, atkEV, defEV, spaEV, spdEV, speEV, ` +
@@ -301,7 +301,6 @@ Pokemon.prototype.uploadPokemon = function(connection, message) {
         console.log("1 record inserted");
     });
 };
-
 
 Pokemon.prototype.importPokemon = function(connection, P, importString) {
     //splits the message into lines then splits the lines into words separated by spaces.
@@ -441,42 +440,76 @@ Pokemon.prototype.importPokemon = function(connection, P, importString) {
 
 };
 
-Pokemon.prototype.loadFromSQL = function (sqlObject) {
-    this.statBlock.finalStats[HP_ARRAY_INDEX] = sqlObject.hp;
-    this.statBlock.finalStats[ATK_ARRAY_INDEX] = sqlObject.atk;
-    this.statBlock.finalStats[DEF_ARRAY_INDEX] = sqlObject.def;
-    this.statBlock.finalStats[SPA_ARRAY_INDEX] = sqlObject.spa;
-    this.statBlock.finalStats[SPD_ARRAY_INDEX] = sqlObject.spd;
-    this.statBlock.finalStats[SPE_ARRAY_INDEX] = sqlObject.spe;
+Pokemon.prototype.loadFromSQL = function (P, sqlObject) {
+    return new Promise(function (resolve, reject) {
+        P.getPokemonSpeciesByName(sqlObject.species)
+            .then(function (response) {
+                this.speciesData = response;
+                P.getPokemonByName(this.speciesData.id)
+                    .then(function (response) {
+                        this.pokemonData = response;
 
-    //type(s)
-    this.type1 = sqlObject.type1;
-    this.type2 = sqlObject.type2;
-    
-    this.gender = sqlObject.gender;
-    this.ability = sqlObject.ability;
+                        //type(s)
+                        this.type1 = sqlObject.type1;
+                        this.type2 = sqlObject.type2;
+
+                        this.gender = sqlObject.gender;
+                        this.ability.name = sqlObject.ability;
 
 
-    this.name = sqlObject.name;
-    this.species = sqlObject.species;
-    //level
-    this.level = sqlObject.level;
+                        this.name = sqlObject.name;
+                        this.species = sqlObject.species;
+                        //level
+                        this.level = sqlObject.level;
 
-    this.statBlock.evStats = [sqlObject.hpEV, sqlObject.atkEV, sqlObject.defEV, sqlObject.spaEV, sqlObject.spdEV, sqlObject.speEV]
-    this.statBlock.ivStats = [sqlObject.hpIV, sqlObject.atkIV, sqlObject.defIV, sqlObject.spaIV, sqlObject.spdIV, sqlObject.speIV]
+                        this.statBlock.evStats = [sqlObject.hpEV, sqlObject.atkEV, sqlObject.defEV, sqlObject.spaEV, sqlObject.spdEV, sqlObject.speEV];
+                        this.statBlock.ivStats = [sqlObject.hpIV, sqlObject.atkIV, sqlObject.defIV, sqlObject.spaIV, sqlObject.spdIV, sqlObject.speIV];
 
-    this.moveSet.move1 = sqlObject.move1;
-    this.moveSet.move2 = sqlObject.move2;
-    this.moveSet.move3 = sqlObject.move3;
-    this.moveSet.move4 = sqlObject.move4;
-    this.moveSet.move5 = sqlObject.move5;
-    this.moveSet.moveProgress = sqlObject.moveProgress;
+                        this.moveSet.move1 = sqlObject.move1;
+                        this.moveSet.move2 = sqlObject.move2;
+                        this.moveSet.move3 = sqlObject.move3;
+                        this.moveSet.move4 = sqlObject.move4;
+                        this.moveSet.move5 = sqlObject.move5;
+                        this.moveSet.moveProgress = sqlObject.moveProgress;
 
-    this.originalTrainer = sqlObject.originalTrainer;
+                        this.originalTrainer = sqlObject.originalTrainer;
 
-    this.nature.assignNature(this, sqlObject.nature);
+                        this.nature.assignNature(this, sqlObject.nature);
 
-    this.shiny = sqlObject.shiny;
+                        this.shiny = sqlObject.shiny;
+
+                        let i = 1;
+                        this.pokemonData["stats"].forEach(element => {
+                            this.statBlock.baseStats[STAT_ARRAY_MAX - i] = element["base_stat"];
+                            i++;
+                        });
+
+                        console.log("Calculating Stats");
+
+                        this.statBlock.calculateStats(this);
+                        this.statBlock.calculateSaves(this);
+
+                        this.statBlock.finalStats[HP_ARRAY_INDEX] = sqlObject.hp;
+                        this.statBlock.finalStats[ATK_ARRAY_INDEX] = sqlObject.atk;
+                        this.statBlock.finalStats[DEF_ARRAY_INDEX] = sqlObject.def;
+                        this.statBlock.finalStats[SPA_ARRAY_INDEX] = sqlObject.spa;
+                        this.statBlock.finalStats[SPD_ARRAY_INDEX] = sqlObject.spd;
+                        this.statBlock.finalStats[SPE_ARRAY_INDEX] = sqlObject.spe;
+
+                        resolve("done");
+                    }.bind(this))
+                    .catch(function (error) {
+                        console.log("Error when retrieving pokemon species Data :C  ERROR: ", error);
+                        //message.channel.send("Error when retrieving pokemon species Data :C  ERROR: ");
+                    })
+            }.bind(this))
+            .catch(function (error) {
+                console.log("Error when retrieving pokemon Data :C  ERROR: ", error);
+                //message.channel.send("Error when retrieving pokemon Data :C");
+            });
+    }.bind(this));
+
+
 
 
 };
