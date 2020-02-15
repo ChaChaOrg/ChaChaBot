@@ -31,7 +31,8 @@ function Pokemon(tempSpecies, tempLevel, tempName) {
     this.name = tempName;
     this.species = tempSpecies;
     //level
-    this.level = tempLevel;
+    if(tempLevel > 0) this.level = tempLevel;
+    else this.level = 1;
     //type(s)
     this.type1 = "";
     this.type2 = "";
@@ -56,61 +57,38 @@ function Pokemon(tempSpecies, tempLevel, tempName) {
 }
 
 Pokemon.prototype.init = function(P, message) {
-    return new Promise(function (resolve, reject) {
-        P.getPokemonSpeciesByName(this.species)
-            .then(function (response) {
-                this.speciesData = response;
-                console.log(this.speciesData);
-                P.getPokemonByName(this.speciesData.id)
-                    .then(function (response) {
-                        console.log("Retrieved Pokemon and Species Data!");
+    this.getPokemonAndSpeciesData(P)
+        .then(function (response) {
+            console.log("Retrieved Pokemon and Species Data!");
 
-                        this.pokemonData = response;
+            console.log("Reading Type(s)");
+            this.assignTypes();
 
-                        console.log("Reading Type(s)");
-                        this.assignTypes();
+            console.log("Assigning Gender");
+            this.assignRandGender();
 
-                        console.log("Assigning Gender");
-                        this.assignRandGender();
+            console.log("Assigning Ability");
+            this.genRandAbility();
 
-                        console.log("Assigning Ability");
-                        this.genRandAbility();
+            console.log("Assigning IVs");
+            this.statBlock.assignRandIVs();
 
-                        console.log("Assigning IVs");
-                        this.statBlock.assignRandIVs();
+            console.log("Assigning Nature");
+            this.nature.assignRandNature(this);
 
-                        console.log("Assigning Nature");
-                        this.nature.assignRandNature(this);
+            console.log("assigning shiny");
+            this.assignShiny();
 
-                        console.log("assigning shiny");
-                        this.assignShiny();
+            console.log("Reading Base Stats");
+            this.assignBaseStats(this);
 
-                        console.log("Reading Base Stats");
+            console.log("Calculating Stats");
 
-                        let i = 1;
-                        this.pokemonData["stats"].forEach(element => {
-                            this.statBlock.baseStats[STAT_ARRAY_MAX - i] = element["base_stat"];
-                            i++;
-                        });
+            this.statBlock.calculateStats(this);
+            this.statBlock.calculateSaves([this.type1, this.type2]);
 
-                        console.log("Calculating Stats");
-
-                        this.statBlock.calculateStats(this);
-                        this.statBlock.calculateSaves([this.type1, this.type2]);
-                        
-                        console.log("Pokemon Complete!");
-                        resolve("done");
-                    }.bind(this))
-                    .catch(function (error) {
-                        console.log("Error when retrieving pokemon species Data :C  ERROR: ", error);
-                        //message.channel.send("Error when retrieving pokemon species Data :C  ERROR: ");
-                    })
-            }.bind(this))
-            .catch(function (error) {
-                console.log("Error when retrieving pokemon Data :C  ERROR: ", error);
-                //message.channel.send("Error when retrieving pokemon Data :C");
-            });
-    }.bind(this));
+            console.log("Pokemon Complete!");
+        });
 };
 
 // ========================= MISC VAL GENERATORS =========================
@@ -304,15 +282,11 @@ Pokemon.prototype.uploadPokemon = function(connection, message) {
 
 Pokemon.prototype.importPokemon = function(connection, P, importString) {
     //splits the message into lines then splits the lines into words separated by spaces.
-    let lines = importString.split("/n");
-    let nameLineVals = lines[0].split(" ");
+    let lines = importString.split("\n");
+    let nameLineVals = lines[0].split(" " );
     let evLineVals;
     let natureLineVals;
     let ivLineVals;
-
-    let hasNickname = false;
-    let hasGender = false;
-
     let nameArgs = [];
 
     //
@@ -341,15 +315,15 @@ Pokemon.prototype.importPokemon = function(connection, P, importString) {
         this.species = nameLineVals[0];
     }
 
-    lines.forEach(element => {
-        switch (element.split(" ")) {
+    lines.forEach(function(element) {
+        switch (element.split(" ")[0]) {
             case ("Ability:"): {
                 //Grabs ability
-                this.ability = element.substr(8, element.length - 8).toLowerCase().replace(" ", "-");
+                this.ability.name = element.substr(9, element.length - 9).toLowerCase().replace(" ", "-");
                 break;
             }
             case("Level:"): {
-                this.level = element.substr(7, element.length - 7);
+                this.level = element.substr(7, element.length - 7) / 5;
                 break;
             }
             case("EVs:"): {
@@ -370,8 +344,8 @@ Pokemon.prototype.importPokemon = function(connection, P, importString) {
                         case ("HP"):
                             j = HP_ARRAY_INDEX;
                     }
-                    if (j >= 0) this.evStats[ATK_ARRAY_INDEX] = evLineVals[i - 1];
-                });
+                    if (j >= 0) this.statBlock.evStats[j] = Number(evLineVals[i - 1]);
+                }.bind(this));
                 break;
             }
             case("IVs:"): {
@@ -398,8 +372,8 @@ Pokemon.prototype.importPokemon = function(connection, P, importString) {
                             j = HP_ARRAY_INDEX;
                             break;
                     }
-                    if (j >= 0) this.statBlock.ivStats[ATK_ARRAY_INDEX] = evLineVals[i - 1];
-                });
+                    if (j >= 0) this.statBlock.ivStats[j] = Number(ivLineVals[i - 1]);
+                }.bind(this));
                 break;
             }
             case "Hardy":
@@ -426,19 +400,46 @@ Pokemon.prototype.importPokemon = function(connection, P, importString) {
             case "Hasty":
             case "Jolly":
             case "Naive":
-            case "Serious":
-                {
-                    natureLineVals = element.split(" ");
-                    this.nature.assignNature(this, natureLineVals[0]);
-                    break;
-                }
+            case "Serious": {
+                natureLineVals = element.split(" ");
+                this.nature.assignNature(this, natureLineVals[0]);
+                break;
+            }
         }
+    }.bind(this));
 
-
-    })
-
-
+    return this.getPokemonAndSpeciesData(P).then(
+        function(response){
+            this.assignTypes();
+            this.statBlock.assignBaseStats(this);
+            this.statBlock.calculateStats(this);
+            this.statBlock.calculateSaves(this);
+        }.bind(this));
 };
+
+Pokemon.prototype.getPokemonAndSpeciesData = function(P) {
+    return new Promise(function(resolve, reject)
+    {
+        P.getPokemonSpeciesByName(this.species.toLowerCase())
+            .then(function (response) {
+                this.speciesData = response;
+                P.getPokemonByName(this.speciesData.id)
+                    .then(function (response) {
+                        this.pokemonData = response;
+                        resolve("done");
+                    }.bind(this))
+                    .catch(function (error) {
+                        console.log("Error when retrieving pokemon species Data :C  ERROR: ", error);
+                        //message.channel.send("Error when retrieving pokemon species Data :C  ERROR: ");
+                    })
+            }.bind(this))
+            .catch(function (error) {
+                console.log("Error when retrieving pokemon Data :C  ERROR: ", error);
+                //message.channel.send("Error when retrieving pokemon Data :C");
+            });
+    }.bind(this));
+};
+
 
 Pokemon.prototype.loadFromSQL = function (P, sqlObject) {
     return new Promise(function (resolve, reject) {
@@ -508,8 +509,4 @@ Pokemon.prototype.loadFromSQL = function (P, sqlObject) {
                 //message.channel.send("Error when retrieving pokemon Data :C");
             });
     }.bind(this));
-
-
-
-
 };

@@ -198,3 +198,12 @@ Statblock.prototype.calculateStats = function(pokemon) {
 
 };
 
+Statblock.prototype.assignBaseStats = function(pokemon){
+    let i = 1;
+    pokemon.pokemonData["stats"].forEach(element => {
+        this.baseStats[STAT_ARRAY_MAX - i] = element["base_stat"];
+        i++;
+    });
+};
+
+
