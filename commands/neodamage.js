@@ -50,6 +50,7 @@ module.exports.run = (client, connection, P, message, args) => {
                         break;
                     case 6:
                         otherMult = args[6];
+                        break;
                     case 7:
                         critHit = args[7]; //critical hit
                         break;
@@ -86,8 +87,8 @@ module.exports.run = (client, connection, P, message, args) => {
             console.log(response[0].name);
             console.log(response[1].name);
             response.forEach(element => {
-                if (element["name"] === attackerName) loadSQLPromise.push(attackPoke.loadFromSQL(element));
-                else loadSQLPromise.push(defendPoke.loadFromSQL(element));
+                if (element["name"] === attackerName) loadSQLPromise.push(attackPoke.loadFromSQL(P, element));
+                else loadSQLPromise.push(defendPoke.loadFromSQL(P, element));
             });
 
             Promise.all(loadSQLPromise)
@@ -134,11 +135,11 @@ module.exports.run = (client, connection, P, message, args) => {
                                     });
 
                                     if (effective > 1) {
-                                        effectiveString = "It's super effective!\n";
+                                        effectiveString = "*It's super effective!*\n";
                                     } else if (effective === 0) {
-                                        effectiveString = `It has no effect on ${defendPoke.name}\n`;
+                                        effectiveString = `*It has no effect on ${defendPoke.name}*\n`;
                                     } else if (effective < 1) {
-                                        effectiveString = "It's not very effective.\n";
+                                        effectiveString = "*It's not very effective.*\n";
                                     }
 
                                     //calculate damage dice roll
@@ -150,9 +151,9 @@ module.exports.run = (client, connection, P, message, args) => {
 
                                     //critical hit - done manually, checks first letter only
 
-                                    if (critHit.charAt(0).toUpperCase == "Y") {
+                                    if (critHit.charAt(0).toUpperCase === "Y") {
                                         critical = CRITICAL_HIT_MULTIPLIER;
-                                        criticalString = "A critical hit!";
+                                        criticalString = "**A critical hit!**\n";
                                     }
 
                                     damageTotal = ((10 * attackPoke.level + 10) / 250 * ((attackPoke.statBlock.baseStats[ATK_ARRAY_INDEX] * stageModAtk) / (defendPoke.statBlock.baseStats[DEF_ARRAY_INDEX] * stageModDef)) * dice) * stab * effective * critical * otherMult;
@@ -181,43 +182,44 @@ module.exports.run = (client, connection, P, message, args) => {
                                     else tempMove = tempMove.charAt(0).toUpperCase(0) + tempMove.slice(1);
 
 
-                                    let combatEmbedString = {embed: {
-                                        color: 3447003,
-                                        author: {
-                                            name: client.user.username,
-                                            icon_url: client.user.avatarURL
-                                        },
-                                        title: `**${attackerName}** used ${tempMove} on **${defenderName}**!!!`,
-                                        url: `https://bulbapedia.bulbagarden.net/wiki/${tempMove}_(Move)`,
-                                        // thumbnail: { url:  `${this.pokemonData.sprites.front_default}`,
-                                        },
-                                        description: "*${effectiveString}*\n\n**${criticalString)**",
+                                    let combatEmbedString = {
+                                        embed: {
+                                            color: 3447003,
+                                            author: {
+                                                name: client.user.username,
+                                                icon_url: client.user.avatarURL
+                                            },
+                                            title: `**${attackerName}** used ${tempMove} on **${defenderName}**!!!`,
+                                            url: `https://bulbapedia.bulbagarden.net/wiki/${tempMove.replace(" ", "")}_(Move)`,
+                                            // thumbnail: { url:  `${this.pokemonData.sprites.front_default}`,
+                                            description: `${effectiveString}${criticalString}`,
 
-                                        fields: [
-                                            {
-                                                name: "Attacker Info",
-                                                value: `**${attackerName}**, Lv ${attackPoke.level} ${atkPokeSpecies_formatted}\n=================`
-                                            },
-                                            {
-                                                name: "Defender Info",
-                                                value: `**${defenderName}**, Lv ${defendPoke.level} ${defPokeSpecies_formatted}\n=================`
-                                            },
-                                            {
-                                                name: "${tempMove} Info",
-                                                value: `**Base Power:** ${moveData.power} pw\n**Damage Roll:** ${dice}\n=================`
-                                            },
-                                        ],
-                                        timestamp: new Date(),
-                                        footer: {
-                                            icon_url: client.user.avatarURL,
-                                            text: "Chambers and Charizard!"
+                                            fields: [
+                                                {
+                                                    name: "Attacker Info",
+                                                    value: `**${attackerName}**, Lv ${attackPoke.level} ${atkPokeSpecies_formatted}\n=================`
+                                                },
+                                                {
+                                                    name: "Defender Info",
+                                                    value: `**${defenderName}**, Lv ${defendPoke.level} ${defPokeSpecies_formatted}\n=================`
+                                                },
+                                                {
+                                                    name: `${tempMove} Info`,
+                                                    value: `**Base Power:** ${moveData.power} pw\n**Damage Roll:** ${dice}\n=================`
+                                                },
+                                            ],
+                                            timestamp: new Date(),
+                                            footer: {
+                                                icon_url: client.user.avatarURL,
+                                                text: "Chambers and Charizard!"
                                             }
+                                        }
                                     };
 
                                     // */ comment out embed if necessary
 
                                     //original message
-                                    message.channel.send(combatString).catch(console.error);
+                                    //message.channel.send(combatString).catch(console.error);
 
                                     //embed message
                                     message.channel.send(combatEmbedString).catch(console.error);
@@ -232,4 +234,9 @@ module.exports.run = (client, connection, P, message, args) => {
 
     }
 
+};
+
+let capitalizeWord = function (tempWord)
+{
+    return tempWord.charAt(0). toUpperCase() + tempWord.substr(1);
 };

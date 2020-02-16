@@ -9,7 +9,7 @@ module.exports.run = (client, connection, P, message, args) => {
                 if (element.userID === message.author.id || element.private === 0) {
                 promises.push(client.fetchUser(element.userID)
                     .then(function (response) {
-                        printString += `${element.name} (Level ${element.level} ${element.species}) - Created by ${response.username}\n`;
+                        printString += `${element.name} (Level ${element.level} ${element.species}) - Created by ${response.username} [Private: ${element.private}]\n`;
                     })
                     .catch(error => {
                         console.log(error);
