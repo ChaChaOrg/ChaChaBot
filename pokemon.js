@@ -81,7 +81,7 @@ Pokemon.prototype.init = function(P, message) {
             this.assignShiny();
 
             console.log("Reading Base Stats");
-            this.assignBaseStats(this);
+            this.statBlock.assignBaseStats(this);
 
             console.log("Calculating Stats");
 
@@ -89,7 +89,7 @@ Pokemon.prototype.init = function(P, message) {
             this.statBlock.calculateSaves([this.type1, this.type2]);
 
             console.log("Pokemon Complete!");
-        });
+        }.bind(this));
 };
 
 // ========================= MISC VAL GENERATORS =========================
