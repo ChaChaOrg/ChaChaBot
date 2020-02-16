@@ -5,6 +5,7 @@ const DEF_ARRAY_INDEX = 2;
 const SPA_ARRAY_INDEX = 3;
 const SPD_ARRAY_INDEX = 4;
 const SPE_ARRAY_INDEX = 5;
+const CRITICAL_HIT_MULTIPLIER = 1.5;
 
 module.exports.run = (client, connection, P, message, args) => {
     try {
@@ -15,6 +16,7 @@ module.exports.run = (client, connection, P, message, args) => {
         let bonusAtk = 0;
         let other = 0;
         let otherMult = 1;
+        let critHit = "n";
 
         //variables required
         let Pokemon = require('../pokemon.js');
@@ -48,6 +50,8 @@ module.exports.run = (client, connection, P, message, args) => {
                         break;
                     case 6:
                         otherMult = args[6];
+                    case 7:
+                        critHit = args[7]; //critical hit
                         break;
                 }
             }
@@ -66,7 +70,7 @@ module.exports.run = (client, connection, P, message, args) => {
 
         //clause for helping!
         if (args[0].includes('help')) {
-            message.reply('Damage Calculator. Variables in order:\n [Attacker (A) Name] [Attacker Move] [Defender (D) Name] [Stages of Attack] [Stages of Defense] [Extra Base Power] [MultDamage]').catch(console.error);
+            message.reply('Damage Calculator. Variables in order:\n [Attacker (A) Name] [Attacker Move] [Defender (D) Name] [Stages of Attack] [Stages of Defense] [Extra Base Power] [MultDamage (min 1)] [Critical Hit (y/n)]').catch(console.error);
             return;
         }
 
@@ -137,26 +141,87 @@ module.exports.run = (client, connection, P, message, args) => {
                                         effectiveString = "It's not very effective.\n";
                                     }
 
+                                    //calculate damage dice roll
                                     let numDice = (moveData.power + other) * .2;
 
                                     for (numDice; numDice > 0; numDice--) {
                                         dice += Math.floor(Math.random() * 8 + 1);
                                     }
-                                    let critRoll = Math.floor(Math.random() * 20 + 1);
 
-                                    if (Math.floor(Math.random() * 20 + 1) >= 20) {
-                                        critical = 1.5;
-                                        criticalString = "A critical hit!\n"
+                                    //critical hit - done manually, checks first letter only
+
+                                    if (critHit.charAt(0).toUpperCase == "Y") {
+                                        critical = CRITICAL_HIT_MULTIPLIER;
+                                        criticalString = "A critical hit!";
                                     }
 
                                     damageTotal = ((10 * attackPoke.level + 10) / 250 * ((attackPoke.statBlock.baseStats[ATK_ARRAY_INDEX] * stageModAtk) / (defendPoke.statBlock.baseStats[DEF_ARRAY_INDEX] * stageModDef)) * dice) * stab * effective * critical * otherMult;
                                     damageTotal = damageTotal.toFixed(2);
 
-                                    combatString = `${attackerName} (level ${attackPoke.level} ${attackPoke.species}) used ${moveData.name} on ${defenderName} (level ${defendPoke.level} ${defendPoke.species})\n` +
+                                    combatString = `**${attackerName}** (level ${attackPoke.level} ${attackPoke.species}) used ${moveData.name} on ${defenderName} (level ${defendPoke.level} ${defendPoke.species})\n` +
                                         effectiveString + criticalString +
-                                        `${attackerName} deals ${damageTotal} damage to the defending ${defenderName}\n(Base Power: ${moveData.power} - damage roll: ${dice} - Crit roll: ${critRoll})`;
+                                        `${attackerName} deals ${damageTotal} damage to the defending ${defenderName}\n(Base Power: ${moveData.power} - damage roll: ${dice}`;
+                                   
+                                    // Embed for damage, comment out if necessary /*
 
+                                    //format pokemon names
+                                    let atkPokeSpecies_formatted = attackPoke.species.charAt(0).toUpperCase() + attackPoke.species.slice(1);
+                                    let defPokeSpecies_formatted = defendPoke.species.charAt(0).toUpperCase() + defendPoke.species.slice(1);
+                                   
+                                    //format move
+                                    let tempMove = moveData.name;
+                                    if( ~tempMove.indexOf("-"))
+                                    {
+                                        let tempA = tempMove.slice(0,tempMove.indexOf("-"));
+                                        let tempB = tempMove.slice(tempMove.indexOf("-") + 1, tempMove.length);
+                                        tempA = capitalizeWord(tempA);
+                                        tempB = capitalizeWord(tempB);
+                                        tempMove = tempA + " " + tempB;
+                                    }
+                                    else tempMove = tempMove.charAt(0).toUpperCase(0) + tempMove.slice(1);
+
+
+                                    let combatEmbedString = {embed: {
+                                        color: 3447003,
+                                        author: {
+                                            name: client.user.username,
+                                            icon_url: client.user.avatarURL
+                                        },
+                                        title: `**${attackerName}** used ${tempMove} on **${defenderName}**!!!`,
+                                        url: `https://bulbapedia.bulbagarden.net/wiki/${tempMove}_(Move)`,
+                                        // thumbnail: { url:  `${this.pokemonData.sprites.front_default}`,
+                                        },
+                                        description: "*${effectiveString}*\n\n**${criticalString)**",
+
+                                        fields: [
+                                            {
+                                                name: "Attacker Info",
+                                                value: `**${attackerName}**, Lv ${attackPoke.level} ${atkPokeSpecies_formatted}\n=================`
+                                            },
+                                            {
+                                                name: "Defender Info",
+                                                value: `**${defenderName}**, Lv ${defendPoke.level} ${defPokeSpecies_formatted}\n=================`
+                                            },
+                                            {
+                                                name: "${tempMove} Info",
+                                                value: `**Base Power:** ${moveData.power} pw\n**Damage Roll:** ${dice}\n=================`
+                                            },
+                                        ],
+                                        timestamp: new Date(),
+                                        footer: {
+                                            icon_url: client.user.avatarURL,
+                                            text: "Chambers and Charizard!"
+                                            }
+                                    };
+
+                                    // */ comment out embed if necessary
+
+                                    //original message
                                     message.channel.send(combatString).catch(console.error);
+
+                                    //embed message
+                                    message.channel.send(combatEmbedString).catch(console.error);
+
                                 })
                         });
                 });
