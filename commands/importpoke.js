@@ -14,5 +14,6 @@ module.exports.run = (client, connection, P, message, args) => {
     importPoke.importPokemon(connection, P, importContent)
         .then(response =>{
             message.channel.send(importPoke.sendSummaryMessage(client));
+            importPoke.uploadPokemon(connection, message);
         });
 };
