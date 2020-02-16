@@ -151,7 +151,7 @@ module.exports.run = (client, connection, P, message, args) => {
 
                                     //critical hit - done manually, checks first letter only
 
-                                    if (critHit.charAt(0).toUpperCase === "Y") {
+                                    if ("Y" === critHit.charAt(0).toUpperCase()) {
                                         critical = CRITICAL_HIT_MULTIPLIER;
                                         criticalString = "**A critical hit!**\n";
                                     }
@@ -179,7 +179,7 @@ module.exports.run = (client, connection, P, message, args) => {
                                         tempB = capitalizeWord(tempB);
                                         tempMove = tempA + " " + tempB;
                                     }
-                                    else tempMove = tempMove.charAt(0).toUpperCase(0) + tempMove.slice(1);
+                                    else tempMove = tempMove.charAt(0).toUpperCase() + tempMove.slice(1);
 
 
                                     let combatEmbedString = {
