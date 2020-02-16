@@ -53,6 +53,7 @@ function Pokemon(tempSpecies, tempLevel, tempName) {
     this.dateCreated = date.toISOString().slice(0, 19).replace('T', ' ');
 
     this.nature = new Nature();
+    this.shiny = false;
 
 }
 
@@ -333,16 +334,22 @@ Pokemon.prototype.importPokemon = function(connection, P, importString) {
                     switch (evElement) {
                         case ("Atk"):
                             j = ATK_ARRAY_INDEX;
+                            break;
                         case ("Def"):
                             j = DEF_ARRAY_INDEX;
+                            break;
                         case ("SpD"):
                             j = SPD_ARRAY_INDEX;
+                            break;
                         case ("SpA"):
                             j = SPA_ARRAY_INDEX;
+                            break;
                         case ("Spe"):
                             j = SPE_ARRAY_INDEX;
+                            break;
                         case ("HP"):
                             j = HP_ARRAY_INDEX;
+                            break;
                     }
                     if (j >= 0) this.statBlock.evStats[j] = Number(evLineVals[i - 1]);
                 }.bind(this));
@@ -477,7 +484,9 @@ Pokemon.prototype.loadFromSQL = function (P, sqlObject) {
 
                         this.nature.assignNature(this, sqlObject.nature);
 
-                        this.shiny = sqlObject.shiny;
+                        if (sqlObject.shiny === null){
+                            this.shiny = sqlObject.shiny;
+                        }
 
                         let i = 1;
                         this.pokemonData["stats"].forEach(element => {
