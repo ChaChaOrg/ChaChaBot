@@ -189,12 +189,16 @@ module.exports.run = (client, connection, P, message, args) => {
                                                 name: client.user.username,
                                                 icon_url: client.user.avatarURL
                                             },
-                                            title: `**${attackerName}** used ${tempMove} on **${defenderName}**!!!`,
+                                            title: `**${attackerName}** used ${tempMove} on **${defenderName}**!`,
                                             url: `https://bulbapedia.bulbagarden.net/wiki/${tempMove.replace(" ", "")}_(Move)`,
                                             // thumbnail: { url:  `${this.pokemonData.sprites.front_default}`,
                                             description: `${effectiveString}${criticalString}`,
 
                                             fields: [
+                                                {
+                                                    name: "Damage Dealt",
+                                                    value: `${defenderName} takes ${damageTotal} damage.`
+                                                },
                                                 {
                                                     name: "Attacker Info",
                                                     value: `**${attackerName}**, Lv ${attackPoke.level} ${atkPokeSpecies_formatted}\n=================`
