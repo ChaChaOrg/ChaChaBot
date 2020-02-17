@@ -156,7 +156,7 @@ module.exports.run = (client, connection, P, message, args) => {
                                         criticalString = "**A critical hit!**\n";
                                     }
 
-                                    damageTotal = ((10 * attackPoke.level + 10) / 250 * ((attackPoke.statBlock.baseStats[ATK_ARRAY_INDEX] * stageModAtk) / (defendPoke.statBlock.baseStats[DEF_ARRAY_INDEX] * stageModDef)) * dice) * stab * effective * critical * otherMult;
+                                    damageTotal = ((10 * attackPoke.level + 10) / 250 * ((attackPoke.statBlock.finalStats[ATK_ARRAY_INDEX] * stageModAtk) / (defendPoke.finalStats[DEF_ARRAY_INDEX] * stageModDef)) * dice) * stab * effective * critical * otherMult;
                                     damageTotal = damageTotal.toFixed(2);
 
                                     combatString = `**${attackerName}** (level ${attackPoke.level} ${attackPoke.species}) used ${moveData.name} on ${defenderName} (level ${defendPoke.level} ${defendPoke.species})\n` +
