@@ -86,7 +86,7 @@
       <workItem from="1581531495272" duration="267000" />
       <workItem from="1581726594183" duration="5510000" />
       <workItem from="1581895593281" duration="2163000" />
-      <workItem from="1583028631736" duration="740000" />
+      <workItem from="1583028631736" duration="787000" />
     </task>
     <task id="LOCAL-00001" summary="Fixed pokegen embed">
       <created>1554231045749</created>
@@ -298,7 +298,14 @@
       <option name="project" value="LOCAL" />
       <updated>1583029298876</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="Testing lgf setup on webstorm shenananananigans">
+      <created>1583029391763</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1583029391763</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -343,14 +350,15 @@
     <MESSAGE value="neoDamage command added.&#10;Testing needed" />
     <MESSAGE value="squash! sql Prep" />
     <MESSAGE value="neodamage.js alpha version ;)" />
-    <option name="LAST_COMMIT_MESSAGE" value="neodamage.js alpha version ;)" />
+    <MESSAGE value="Testing lgf setup on webstorm shenananananigans" />
+    <option name="LAST_COMMIT_MESSAGE" value="Testing lgf setup on webstorm shenananananigans" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="320" y="115" key="#Deployment" timestamp="1583029372814">
+    <state x="320" y="115" key="#Deployment" timestamp="1583029420080">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="320" y="115" key="#Deployment/0.0.1440.900@0.0.1440.900" timestamp="1580847102798" />
-    <state x="320" y="115" key="#Deployment/74.-768.1366.768/1440.-485.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1583029372814" />
+    <state x="320" y="115" key="#Deployment/74.-768.1366.768/1440.-485.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1583029420080" />
     <state x="729" y="315" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1580869240380">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
@@ -359,12 +367,12 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="408" y="185" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1440.900@0.0.1440.900" timestamp="1580835393400" />
-    <state x="312" y="0" key="CommitChangelistDialog2" timestamp="1583029298506">
+    <state x="312" y="0" key="CommitChangelistDialog2" timestamp="1583029391577">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="312" y="0" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1581900124584" />
     <state x="416" y="0" key="CommitChangelistDialog2/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1581582214309" />
-    <state x="312" y="0" key="CommitChangelistDialog2/74.-768.1366.768/1440.-485.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1583029298506" />
+    <state x="312" y="0" key="CommitChangelistDialog2/74.-768.1366.768/1440.-485.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1583029391577" />
     <state x="258" y="112" key="DBNavigator.ProjectSettingsDialog" timestamp="1580855423536">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
