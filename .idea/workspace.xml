@@ -102,7 +102,7 @@
       <workItem from="1583081389896" duration="36000" />
       <workItem from="1583166956324" duration="5000" />
       <workItem from="1583167048181" duration="10000" />
-      <workItem from="1583176507846" duration="12765000" />
+      <workItem from="1583176507846" duration="12965000" />
     </task>
     <task id="LOCAL-00001" summary="Fixed pokegen embed">
       <created>1554231045749</created>
@@ -237,7 +237,14 @@
       <option name="project" value="LOCAL" />
       <updated>1583190018856</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="commented out self-reaction for now">
+      <created>1583191806823</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1583191806823</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -286,7 +293,8 @@
     <MESSAGE value="Fixing embed issue :3c" />
     <MESSAGE value="Fixing embed issue again" />
     <MESSAGE value="Still doing embeds, sorry gamer" />
-    <option name="LAST_COMMIT_MESSAGE" value="Still doing embeds, sorry gamer" />
+    <MESSAGE value="commented out self-reaction for now" />
+    <option name="LAST_COMMIT_MESSAGE" value="commented out self-reaction for now" />
   </component>
   <component name="WindowStateProjectService">
     <state x="373" y="134" key="#Deployment" timestamp="1583189082339">
@@ -311,11 +319,11 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="408" y="185" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1440.900@0.0.1440.900" timestamp="1580835393400" />
-    <state x="364" y="0" key="CommitChangelistDialog2" timestamp="1583191788941">
+    <state x="364" y="0" key="CommitChangelistDialog2" timestamp="1583191806697">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="312" y="0" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1581106000120" />
-    <state x="364" y="0" key="CommitChangelistDialog2/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583191788941" />
+    <state x="364" y="0" key="CommitChangelistDialog2/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583191806697" />
     <state x="258" y="112" key="DBNavigator.ProjectSettingsDialog" timestamp="1580855423536">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -358,11 +366,11 @@
     <state x="267" y="125" key="SettingsEditor/0.23.1680.1027@0.23.1680.1027" timestamp="1583081419681" />
     <state x="150" y="137" key="SettingsEditor/314.-745.1366.745/0.0.1680.1050/1680.-437.1920.1057@0.0.1680.1050" timestamp="1583187711591" />
     <state x="150" y="137" width="1443" height="880" key="SettingsEditor/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583189309047" />
-    <state x="373" y="217" key="Vcs.Push.Dialog.v2" timestamp="1583189690716">
+    <state x="373" y="217" key="Vcs.Push.Dialog.v2" timestamp="1583191813973">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="320" y="186" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1581105323017" />
-    <state x="373" y="217" key="Vcs.Push.Dialog.v2/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583189690716" />
+    <state x="373" y="217" key="Vcs.Push.Dialog.v2/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583191813973" />
     <state x="508" y="369" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1581105838114">
       <screen x="0" y="0" width="1440" height="900" />
     </state>

@@ -24,8 +24,8 @@ module.exports.run = (client, connection, P, message, args) => {
 				//grab embed message
 				let pokeEmbed = genPokemon.sendSummaryMessage(client);
 
-				/* send message to channel; not working yet
-				let pokeEmbedMessage = message.channel.send(pokeEmbed).then( sentEmbed => {
+				// send message to channel; not working yet
+				let pokeEmbedMessage = message.channel.send(pokeEmbed);/* .then( sentEmbed => {
 					sentEmbed.react("💾").catch(console.error);
 				}); */
 
