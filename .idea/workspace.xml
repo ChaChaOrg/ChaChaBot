@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ba528af2-225e-4427-ae3f-7d0367a9c9a4" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/lilgreenfox.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/lilgreenfox.xml" afterDir="false" />
+    <list default="true" id="ba528af2-225e-4427-ae3f-7d0367a9c9a4" name="Default Changelist" comment="Fixing embed issue again">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/genpoke.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/genpoke.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/genpokelegacy.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/genpokelegacy.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pokemon.js" beforeDir="false" afterPath="$PROJECT_DIR$/pokemon.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -105,7 +102,7 @@
       <workItem from="1583081389896" duration="36000" />
       <workItem from="1583166956324" duration="5000" />
       <workItem from="1583167048181" duration="10000" />
-      <workItem from="1583176507846" duration="10742000" />
+      <workItem from="1583176507846" duration="10884000" />
     </task>
     <task id="LOCAL-00001" summary="Fixed pokegen embed">
       <created>1554231045749</created>
@@ -219,7 +216,14 @@
       <option name="project" value="LOCAL" />
       <updated>1583189111556</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Fixing embed issue :3c">
+      <created>1583189688125</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1583189688125</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -265,7 +269,9 @@
     <MESSAGE value="DAAATE error" />
     <MESSAGE value="sql Prep" />
     <MESSAGE value="First pass at react-to-save pokemon, can't test in webstorm so I have to upload this way to test for now rip rip rip.&#10;&#10;Also added a bunch of comments and todos" />
-    <option name="LAST_COMMIT_MESSAGE" value="First pass at react-to-save pokemon, can't test in webstorm so I have to upload this way to test for now rip rip rip.&#10;&#10;Also added a bunch of comments and todos" />
+    <MESSAGE value="Fixing embed issue :3c" />
+    <MESSAGE value="Fixing embed issue again" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixing embed issue again" />
   </component>
   <component name="WindowStateProjectService">
     <state x="373" y="134" key="#Deployment" timestamp="1583189082339">
@@ -290,11 +296,11 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="408" y="185" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1440.900@0.0.1440.900" timestamp="1580835393400" />
-    <state x="364" y="0" key="CommitChangelistDialog2" timestamp="1583189111430">
+    <state x="364" y="0" key="CommitChangelistDialog2" timestamp="1583189785488">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="312" y="0" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1581106000120" />
-    <state x="364" y="0" key="CommitChangelistDialog2/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583189111430" />
+    <state x="364" y="0" key="CommitChangelistDialog2/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583189785488" />
     <state x="258" y="112" key="DBNavigator.ProjectSettingsDialog" timestamp="1580855423536">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -337,11 +343,11 @@
     <state x="267" y="125" key="SettingsEditor/0.23.1680.1027@0.23.1680.1027" timestamp="1583081419681" />
     <state x="150" y="137" key="SettingsEditor/314.-745.1366.745/0.0.1680.1050/1680.-437.1920.1057@0.0.1680.1050" timestamp="1583187711591" />
     <state x="150" y="137" width="1443" height="880" key="SettingsEditor/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583189309047" />
-    <state x="373" y="217" key="Vcs.Push.Dialog.v2" timestamp="1583189114900">
+    <state x="373" y="217" key="Vcs.Push.Dialog.v2" timestamp="1583189690716">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="320" y="186" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1581105323017" />
-    <state x="373" y="217" key="Vcs.Push.Dialog.v2/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583189114900" />
+    <state x="373" y="217" key="Vcs.Push.Dialog.v2/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583189690716" />
     <state x="508" y="369" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1581105838114">
       <screen x="0" y="0" width="1440" height="900" />
     </state>

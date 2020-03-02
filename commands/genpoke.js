@@ -12,15 +12,15 @@ module.exports.run = (client, connection, P, message, args) => {
 	// attempt to create the pokemon itself
 	try{
 
-		// remind user to react to save the pokemon to the sql
-		let loadingEmbed = genPokemon.sendLoadingMessage(client);
-		message.channel.send(loadingEmbed).catch(console.error);
-
 		//import the pokemon args to generate it
 		let genPokemon = new Pokemon.Pokemon(args[0].toLowerCase(), args[1], args[2]);
 		let genPromise = genPokemon.init(P, message);
 		genPromise
-			.then( function(response){
+			.then(function(response){
+				// remind user to react to save the pokemon to the sql
+				let loadingEmbed = genPokemon.sendLoadingMessage(client);
+				message.channel.send(loadingEmbed).catch(console.error);
+
 				//grab embed message
 				let pokeEmbed = genPokemon.sendSummaryMessage(client);
 
