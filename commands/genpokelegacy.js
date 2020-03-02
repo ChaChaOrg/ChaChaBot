@@ -208,35 +208,35 @@ exports.run = (client, connection, P, message, args) => {
                 fields: [
                     {
                         name: "Basic Info",
-                        value: `**Ability:** ${ability} || **Gender:** ${gender} || **Nature: ** ${natureFinal} || **Shiny: ** ${shiny}\n=================`
+                        value: `**Ability:** ${ability} | **Gender:** ${gender} | **Nature: ** ${natureFinal} || **Shiny: ** ${shiny}\n=================`
                     },
                     {
                         name: "HP",
-                        value: `**IV: ** ${ivStats[0]} || **Final: ** ${finalStats[0]}\n=================`
+                        value: `**IV: ** ${ivStats[0]} | **Final: ** ${finalStats[0]}\n=================`
                     },
                     {
                         name: "Attack",
-                        value: `**IV: ** ${ivStats[1]} || **Final: ** ${finalStats[1]}\n=================`
+                        value: `**IV: ** ${ivStats[1]} | **Final: ** ${finalStats[1]}\n=================`
                     },
                     {
                         name: "Defense",
-                        value: `**IV: ** ${ivStats[2]} || **Final: ** ${finalStats[2]}\n=================`
+                        value: `**IV: ** ${ivStats[2]} | **Final: ** ${finalStats[2]}\n=================`
                     },
                     {
                         name: "Special Attack",
-                        value: `**IV: ** ${ivStats[3]} || **Final: ** ${finalStats[3]}\n=================`
+                        value: `**IV: ** ${ivStats[3]} | **Final: ** ${finalStats[3]}\n=================`
                     },
                     {
                         name: "Special Defense",
-                        value: `**IV: ** ${ivStats[4]} || **Final: ** ${finalStats[4]}\n=================`
+                        value: `**IV: ** ${ivStats[4]} | **Final: ** ${finalStats[4]}\n=================`
                     },
                     {
                         name: "Speed",
-                        value: `**IV: ** ${ivStats[5]} || **Final: ** ${finalStats[5]}\n=================`
+                        value: `**IV: ** ${ivStats[5]} | **Final: ** ${finalStats[5]}\n=================`
                     },
                     {
                         name: "Ability Scores",
-                        value: `**STR: ** ${strBase.toFixed(0)}(${strMod}) || **DEX: ** ${dexBase.toFixed(0)}(${dexMod}) || **CON: ** ${conBase.toFixed()}(${conMod})\n**INT: ** ${intBase.toFixed(0)}(${intMod}) || **WIS: ** ${wisBase.toFixed(0)}(${wisMod})\n**AC: ** ${armorClass} || **Move Speed: ** ${moveSpeed} ft`
+                        value: `**STR: ** ${strBase.toFixed(0)}(${strMod}) | **DEX: ** ${dexBase.toFixed(0)}(${dexMod}) | **CON: ** ${conBase.toFixed()}(${conMod})\n**INT: ** ${intBase.toFixed(0)}(${intMod}) | **WIS: ** ${wisBase.toFixed(0)}(${wisMod})\n**AC: ** ${armorClass} | **Move Speed: ** ${moveSpeed} ft`
                     },
                 ],
                 timestamp: new Date(),

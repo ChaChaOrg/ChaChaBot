@@ -1,3 +1,8 @@
+// This is the main pokemon js. Put a better description here later maybe lol
+
+// ==== CONSTANTS ====
+
+//pokemon stats
 const GENDER_MAX = 8;
 const NATURE_ARRAY_MAX = 5;
 const STAT_ARRAY_MAX = 6;
@@ -26,19 +31,30 @@ const MOVE_SPEED_SHIFT = 4;
 const SHINY_CHANCE = 4096;
 const IV_MAX = 32;
 const CON_CALC_DIVISOR = 4;
+
+// "good" saves by type
 const GOOD_FORT_SAVE = ["grass", "ground", "ice", "poison", "rock", "steel"];
 const GOOD_WILL_SAVE = ["bug", "fairy", "dragon", "ghost", "normal", "psychic"];
 const GOOD_REFLEX_SAVE = ["dark", "electric", "fighting", "fire", "flying", "water"];
 
+// stat array indices for the sql upload
+const HP_ARRAY_INDEX = 0;
+const ATK_ARRAY_INDEX = 1;
+const DEF_ARRAY_INDEX = 2;
+const SPA_ARRAY_INDEX = 3;
+const SPD_ARRAY_INDEX = 4;
+const SPE_ARRAY_INDEX = 5;
+
 module.exports.Pokemon = Pokemon;
 
+//TODO: add hidden ability % chance functionality
 function Ability(name, ha)
 {
     this.name = name;
     this.hiddenAbility = ha;
 }
 
-
+// TODO: assign trainer id to pokemon
 // ======================= POKEMON OBJECT =======================
 function Pokemon(tempSpecies, tempLevel, tempName) {
 
@@ -211,6 +227,7 @@ Pokemon.prototype.assignTypes = function() {
     }
 }
 
+//generate random ability
 Pokemon.prototype.genRandAbility = function() {
 
     let abilityTotal = 0;
@@ -234,6 +251,7 @@ Pokemon.prototype.genRandAbility = function() {
     }
     */
 };
+
 //Assign gender
 Pokemon.prototype.assignRandGender = function(genderChance) {
     //assign gender
@@ -255,11 +273,12 @@ Pokemon.prototype.assignShiny = function() {
 };
 
 // ========================= STAT ARRAY GENERATOR!!! =========================
+
 //assign IVs
 Pokemon.prototype.assignRandIVs = function() {
     for (let i = 0; i < STAT_ARRAY_MAX; i++) {
         this.ivStats[i] = Math.floor((Math.random() * IV_MAX)); //assigns a value between 0 & 31 to all the IVs
-    };
+    }
 };
 
 //generate nature
@@ -300,15 +319,15 @@ Pokemon.prototype.calculateSaves = function() {
         if (element != null) {
             GOOD_FORT_SAVE.forEach (fortType => {
                 if (fortType == element) {fortTypeBonus = 2;}
-            })
+            });
             GOOD_REFLEX_SAVE.forEach (refType => {
                 if (refType == element) {refTypeBonus = 2;}
-            })
+            });
             GOOD_WILL_SAVE.forEach (willType => {
                 if (willType == element) {willTypeBonus = 2;}
-            })
+            });
         }
-    })
+    });
 
     //add type/level mod and ability score mod to final save
     this.fortSave = Math.floor(.5 * this.level + fortTypeBonus) + modGen(this.conBase);
@@ -317,6 +336,7 @@ Pokemon.prototype.calculateSaves = function() {
 
 }
 
+// calculate actual stats themselves
 Pokemon.prototype.calculateStats = function() {
 //get CON + hit points
 //calculate con +  EQ: [(BaseStats + IVs + EVs/4) * .15 +1.5]
@@ -381,7 +401,7 @@ let
 
 };
 
-// captialize words
+// capitalize words
 
 let capitalizeWord = function (tempWord)
 {
@@ -470,17 +490,12 @@ Pokemon.prototype.sendSummaryMessage = function(client) {
     };
 };
 
-
-const HP_ARRAY_INDEX = 0;
-const ATK_ARRAY_INDEX = 1;
-const DEF_ARRAY_INDEX = 2;
-const SPA_ARRAY_INDEX = 3;
-const SPD_ARRAY_INDEX = 4;
-const SPE_ARRAY_INDEX = 5;
+//upload the pokemon to the sql
 
 Pokemon.prototype.uploadPokemon = function(connection, message) {
 
-
+//uploads everything to the sql and returns a nice lil embed on a success
+// TODO: send info to different sql depending on trainer id?
     const sql = 'INSERT INTO pokemon (name, species, level, nature, gender, ability, '
         + `hp, atk, def, spa, spd, spe, ` +
         `hpIV, atkIV, defIV, spaIV, spdIV, speIV, ` +
@@ -501,5 +516,34 @@ Pokemon.prototype.uploadPokemon = function(connection, message) {
         console.log(sql);
         console.log("1 record inserted");
     });
+
+    //return nice lil embed
+
+    return {embed: {
+            color: 3447003,
+            author: {
+                name: client.user.username,
+                icon_url: client.user.avatarURL
+            },
+            title: `${this.name} the ${tempSpecies} has been added to the SQL.`,
+            url: `https://bulbapedia.bulbagarden.net/wiki/${this.species}_(Pok%C3%A9mon)`,
+            thumbnail: {
+                url:  `${this.pokemonData.sprites.front_default}`,
+            },
+            description: "ChaChaBot will remember this.",
+
+            fields: [
+                {
+                    name: "",
+                    value: `You can now use the bot to view this pokemon, calculate combat damage between it and other pokemon in the database, and edit the pokemon's stored info.`
+                },
+            ],
+            timestamp: new Date(),
+            footer: {
+                icon_url: client.user.avatarURL,
+                text: "Chambers and Charizard!"
+            }
+        }
+    };
 };
 

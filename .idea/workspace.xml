@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ba528af2-225e-4427-ae3f-7d0367a9c9a4" name="Default Changelist" comment="sql Prep">
-      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
+    <list default="true" id="ba528af2-225e-4427-ae3f-7d0367a9c9a4" name="Default Changelist" comment="First pass at react-to-save pokemon, can't test in webstorm so I have to upload this way to test for now rip rip rip.&#10;&#10;Also added a bunch of comments and todos">
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/lilgreenfox.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/genpoke.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/genpoke.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/genpokelegacy.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/genpokelegacy.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pokemon.js" beforeDir="false" afterPath="$PROJECT_DIR$/pokemon.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -47,10 +51,17 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="application.passwordSafe" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Material File Colors" />
+    <property name="settings.editor.splitter.proportion" value="0.19512194" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -92,6 +103,11 @@
       <workItem from="1580846793602" duration="4736000" />
       <workItem from="1580855198545" duration="469000" />
       <workItem from="1581022195664" duration="7896000" />
+      <workItem from="1583081363198" duration="14000" />
+      <workItem from="1583081389896" duration="36000" />
+      <workItem from="1583166956324" duration="5000" />
+      <workItem from="1583167048181" duration="10000" />
+      <workItem from="1583176507846" duration="10025000" />
     </task>
     <task id="LOCAL-00001" summary="Fixed pokegen embed">
       <created>1554231045749</created>
@@ -229,7 +245,8 @@
     <MESSAGE value="Prep for SQL" />
     <MESSAGE value="DAAATE error" />
     <MESSAGE value="sql Prep" />
-    <option name="LAST_COMMIT_MESSAGE" value="sql Prep" />
+    <MESSAGE value="First pass at react-to-save pokemon, can't test in webstorm so I have to upload this way to test for now rip rip rip.&#10;&#10;Also added a bunch of comments and todos" />
+    <option name="LAST_COMMIT_MESSAGE" value="First pass at react-to-save pokemon, can't test in webstorm so I have to upload this way to test for now rip rip rip.&#10;&#10;Also added a bunch of comments and todos" />
   </component>
   <component name="WindowStateProjectService">
     <state x="320" y="115" key="#Deployment" timestamp="1581105737022">
@@ -244,22 +261,28 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="320" y="115" key="#SQL_Dialects/0.0.1440.900@0.0.1440.900" timestamp="1581096649506" />
-    <state x="320" y="115" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1581096682517">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state x="373" y="134" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1583187099876">
+      <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="320" y="115" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1440.900@0.0.1440.900" timestamp="1581096682517" />
+    <state x="373" y="134" key="#com.intellij.execution.impl.EditConfigurationsDialog/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583187099876" />
     <state x="408" y="185" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1580835393400">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="408" y="185" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1440.900@0.0.1440.900" timestamp="1580835393400" />
-    <state x="312" y="0" key="CommitChangelistDialog2" timestamp="1581106000120">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state x="364" y="0" key="CommitChangelistDialog2" timestamp="1583188803521">
+      <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="312" y="0" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1581106000120" />
+    <state x="364" y="0" key="CommitChangelistDialog2/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583188803521" />
     <state x="258" y="112" key="DBNavigator.ProjectSettingsDialog" timestamp="1580855423536">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="258" y="112" key="DBNavigator.ProjectSettingsDialog/0.0.1440.900@0.0.1440.900" timestamp="1580855423536" />
+    <state x="659" y="277" width="947" height="538" key="FileChooserDialogImpl" timestamp="1583186918109">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state x="659" y="277" width="947" height="538" key="FileChooserDialogImpl/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583186918109" />
     <state width="1398" height="226" key="GridCell.Tab.0.bottom" timestamp="1581103071620">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -287,10 +310,13 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="428" y="164" key="MultipleFileMergeDialog/0.0.1440.900@0.0.1440.900" timestamp="1581101389081" />
-    <state x="229" y="89" key="SettingsEditor" timestamp="1581105706337">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state x="150" y="137" width="1443" height="880" key="SettingsEditor" timestamp="1583187711591">
+      <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="229" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1581105706337" />
+    <state x="267" y="125" key="SettingsEditor/0.23.1680.1027@0.23.1680.1027" timestamp="1583081419681" />
+    <state x="150" y="137" key="SettingsEditor/314.-745.1366.745/0.0.1680.1050/1680.-437.1920.1057@0.0.1680.1050" timestamp="1583187711591" />
+    <state x="150" y="137" width="1443" height="880" key="SettingsEditor/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583187575857" />
     <state x="320" y="186" key="Vcs.Push.Dialog.v2" timestamp="1581105323017">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -303,5 +329,13 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="626" y="107" key="ftp.server.browser/0.0.1440.900@0.0.1440.900" timestamp="1581105613123" />
+    <state x="596" y="392" key="jetbrains.nodejs.interpreters-dialog" timestamp="1583186920342">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state x="596" y="392" key="jetbrains.nodejs.interpreters-dialog/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583186920342" />
+    <state x="505" y="233" width="670" height="676" key="search.everywhere.popup" timestamp="1583184572904">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state x="505" y="233" width="670" height="676" key="search.everywhere.popup/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583184572904" />
   </component>
 </project>
