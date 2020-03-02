@@ -4,6 +4,64 @@
     <list default="true" id="ba528af2-225e-4427-ae3f-7d0367a9c9a4" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/genpoke.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/genpoke.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/Client.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/client/Client.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/ClientDataResolver.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/client/ClientDataResolver.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/ActionsManager.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/ActionsManager.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/ChannelDelete.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/client/actions/ChannelDelete.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/rest/RESTMethods.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/client/rest/RESTMethods.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/ClientVoiceManager.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/ClientVoiceManager.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/VoiceConnection.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/VoiceConnection.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/VoiceWebSocket.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/VoiceWebSocket.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/opus/NodeOpusEngine.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/opus/NodeOpusEngine.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/opus/OpusEngineList.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/opus/OpusEngineList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/opus/OpusScriptEngine.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/opus/OpusScriptEngine.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/receiver/VoiceReceiver.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/receiver/VoiceReceiver.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/util/SecretKey.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/client/voice/util/SecretKey.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/WebSocketConnection.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/WebSocketConnection.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/WebSocketPacketManager.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/WebSocketPacketManager.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/Ready.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/Ready.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/Resumed.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/Resumed.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/VoiceStateUpdate.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/client/websocket/packets/handlers/VoiceStateUpdate.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/Emoji.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/structures/Emoji.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/Guild.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/structures/Guild.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/GuildAuditLogs.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/structures/GuildAuditLogs.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/GuildChannel.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/structures/GuildChannel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/GuildMember.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/structures/GuildMember.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/Message.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/structures/Message.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/MessageAttachment.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/structures/MessageAttachment.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/MessageCollector.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/structures/MessageCollector.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/MessageMentions.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/structures/MessageMentions.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/MessageReaction.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/structures/MessageReaction.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/OAuth2Application.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/structures/OAuth2Application.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/Presence.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/structures/Presence.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/ReactionCollector.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/structures/ReactionCollector.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/ReactionEmoji.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/structures/ReactionEmoji.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/RichEmbed.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/structures/RichEmbed.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/User.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/structures/User.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/Webhook.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/structures/Webhook.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/interfaces/Collector.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/structures/interfaces/Collector.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/structures/interfaces/TextBasedChannel.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/structures/interfaces/TextBasedChannel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/util/Constants.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/util/Constants.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/util/Permissions.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/util/Permissions.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/src/util/Util.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/src/util/Util.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/discord.js/typings/index.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/discord.js/typings/index.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/prism-media/.eslintrc.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/prism-media/.eslintrc.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/prism-media/.travis.yml" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/prism-media/.travis.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/prism-media/output.opus" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/prism-media/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/prism-media/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/prism-media/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/prism-media/src/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/prism-media/src/transcoders/ffmpeg/Ffmpeg.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/prism-media/src/transcoders/ffmpeg/Ffmpeg.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/tweetnacl/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/tweetnacl/CHANGELOG.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/tweetnacl/nacl-fast.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/tweetnacl/nacl-fast.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/tweetnacl/nacl-fast.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/tweetnacl/nacl-fast.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/tweetnacl/nacl.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/tweetnacl/nacl.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/tweetnacl/nacl.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/tweetnacl/nacl.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/tweetnacl/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/tweetnacl/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,7 +160,7 @@
       <workItem from="1583081389896" duration="36000" />
       <workItem from="1583166956324" duration="5000" />
       <workItem from="1583167048181" duration="10000" />
-      <workItem from="1583176507846" duration="12965000" />
+      <workItem from="1583176507846" duration="13652000" />
     </task>
     <task id="LOCAL-00001" summary="Fixed pokegen embed">
       <created>1554231045749</created>
@@ -244,7 +302,14 @@
       <option name="project" value="LOCAL" />
       <updated>1583191806823</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="commented out self-reaction for now">
+      <created>1583191912879</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1583191912879</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -319,11 +384,11 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="408" y="185" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1440.900@0.0.1440.900" timestamp="1580835393400" />
-    <state x="364" y="0" key="CommitChangelistDialog2" timestamp="1583191806697">
+    <state x="364" y="0" key="CommitChangelistDialog2" timestamp="1583192637458">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="312" y="0" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1581106000120" />
-    <state x="364" y="0" key="CommitChangelistDialog2/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583191806697" />
+    <state x="364" y="0" key="CommitChangelistDialog2/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583192637458" />
     <state x="258" y="112" key="DBNavigator.ProjectSettingsDialog" timestamp="1580855423536">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -332,25 +397,29 @@
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="659" y="277" width="947" height="538" key="FileChooserDialogImpl/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583186918109" />
-    <state width="1398" height="226" key="GridCell.Tab.0.bottom" timestamp="1581103071620">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="1659" height="286" key="GridCell.Tab.0.bottom" timestamp="1583192637481">
+      <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state width="1398" height="226" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1581103071620" />
     <state width="1877" height="264" key="GridCell.Tab.0.bottom/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580873390347" />
-    <state width="1398" height="226" key="GridCell.Tab.0.center" timestamp="1581103071618">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="1659" height="286" key="GridCell.Tab.0.bottom/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583192637481" />
+    <state width="1659" height="286" key="GridCell.Tab.0.center" timestamp="1583192637479">
+      <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state width="1398" height="226" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1581103071618" />
     <state width="1877" height="264" key="GridCell.Tab.0.center/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580873390347" />
-    <state width="1398" height="226" key="GridCell.Tab.0.left" timestamp="1581103071617">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="1659" height="286" key="GridCell.Tab.0.center/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583192637479" />
+    <state width="1659" height="286" key="GridCell.Tab.0.left" timestamp="1583192637477">
+      <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state width="1398" height="226" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1581103071617" />
     <state width="1877" height="264" key="GridCell.Tab.0.left/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1580873390346" />
-    <state width="1398" height="226" key="GridCell.Tab.0.right" timestamp="1581103071619">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="1659" height="286" key="GridCell.Tab.0.left/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583192637477" />
+    <state width="1659" height="286" key="GridCell.Tab.0.right" timestamp="1583192637480">
+      <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state width="1398" height="226" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1581103071619" />
+    <state width="1659" height="286" key="GridCell.Tab.0.right/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583192637480" />
     <state x="144" y="79" key="MergeDialog" timestamp="1581101389042">
       <screen x="0" y="0" width="1440" height="900" />
     </state>

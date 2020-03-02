@@ -35,18 +35,27 @@ module.exports.run = (client, connection, P, message, args) => {
 				const savecheck = (reaction, user) => {
 					return ['💾'].includes(reaction.emoji.name) && user.id === message.author.id;
 				};
+
 				//look at reactions- if the creator of the message reacts appropriately, save to sql
-				pokeEmbedMessage.awaitReactions(savecheck, {max: 1, time: 60000, errors: ['time']})
+
+				/* old ver uses awaitReactions which didn't work, so, comment out before ensuring we don't need
+				pokeEmbedMessage.awaitReactions(savecheck, {max: 1, time: 60000, errors: ['time'] })
 					.then(collected => {
 						//grab the reaction from the collected thingy
 						const reaction = collected.first();
 
-						/*if the person who reacted was the one who sent the initial message, then the
-						pokemon is saved and a confirmation message is printed */
+						//if the person who reacted was the one who sent the initial message, then the pokemon is saved and a confirmation message is printed
 						if (reaction.emoji.name === '💾'){
 							message.channel.send(genPokemon.uploadPokemon(connection, message)).catch(console.error);
-						} else { /* nothing happens otherwise */ }
-					});
+						} else { nothing happens otherwise  }
+					}); */
+
+				//attempt instead to use reaction collector
+				let collector = pokeEmbedMessage.createReactionCollector(savecheck, {time: 60000, errors: ['time']});
+				collector.on('collect', (reaction, collector) => {
+					console.log('got a reaction');
+					message.channel.send(genPokemon.uploadPokemon(connection, message)).catch(console.error);
+				})
 			});
 
 	}
