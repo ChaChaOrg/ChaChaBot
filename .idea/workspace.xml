@@ -102,7 +102,7 @@
       <workItem from="1583081389896" duration="36000" />
       <workItem from="1583166956324" duration="5000" />
       <workItem from="1583167048181" duration="10000" />
-      <workItem from="1583176507846" duration="11077000" />
+      <workItem from="1583176507846" duration="12765000" />
     </task>
     <task id="LOCAL-00001" summary="Fixed pokegen embed">
       <created>1554231045749</created>
@@ -230,7 +230,14 @@
       <option name="project" value="LOCAL" />
       <updated>1583189818595</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Still doing embeds, sorry gamer">
+      <created>1583190018856</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1583190018856</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -278,7 +285,8 @@
     <MESSAGE value="First pass at react-to-save pokemon, can't test in webstorm so I have to upload this way to test for now rip rip rip.&#10;&#10;Also added a bunch of comments and todos" />
     <MESSAGE value="Fixing embed issue :3c" />
     <MESSAGE value="Fixing embed issue again" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixing embed issue again" />
+    <MESSAGE value="Still doing embeds, sorry gamer" />
+    <option name="LAST_COMMIT_MESSAGE" value="Still doing embeds, sorry gamer" />
   </component>
   <component name="WindowStateProjectService">
     <state x="373" y="134" key="#Deployment" timestamp="1583189082339">
@@ -303,11 +311,11 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="408" y="185" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1440.900@0.0.1440.900" timestamp="1580835393400" />
-    <state x="364" y="0" key="CommitChangelistDialog2" timestamp="1583189818483">
+    <state x="364" y="0" key="CommitChangelistDialog2" timestamp="1583191788941">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="312" y="0" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1581106000120" />
-    <state x="364" y="0" key="CommitChangelistDialog2/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583189818483" />
+    <state x="364" y="0" key="CommitChangelistDialog2/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583191788941" />
     <state x="258" y="112" key="DBNavigator.ProjectSettingsDialog" timestamp="1580855423536">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
