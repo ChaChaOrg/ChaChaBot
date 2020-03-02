@@ -26,7 +26,7 @@ module.exports.run = (client, connection, P, message, args) => {
 
 				//send message to channel
 				let pokeEmbedMessage = message.channel.send(pokeEmbed);
-				pokeEmbedMessage.id.react("💾").catch(console.error);
+				pokeEmbedMessage.react("💾").catch(console.error);
 
 
 				//savecheck lets bot check reaction and user id
