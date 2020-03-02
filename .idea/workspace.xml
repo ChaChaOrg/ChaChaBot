@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ba528af2-225e-4427-ae3f-7d0367a9c9a4" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/webServers.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webServers.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/lilgreenfox.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/lilgreenfox.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/genpoke.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/genpoke.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/genpokelegacy.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/genpokelegacy.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pokemon.js" beforeDir="false" afterPath="$PROJECT_DIR$/pokemon.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +58,7 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Material File Colors" />
+    <property name="settings.editor.selected.configurable" value="MTCustomThemeConfigurable" />
     <property name="settings.editor.splitter.proportion" value="0.19512194" />
   </component>
   <component name="RecentsManager">
@@ -103,7 +105,7 @@
       <workItem from="1583081389896" duration="36000" />
       <workItem from="1583166956324" duration="5000" />
       <workItem from="1583167048181" duration="10000" />
-      <workItem from="1583176507846" duration="10177000" />
+      <workItem from="1583176507846" duration="10742000" />
     </task>
     <task id="LOCAL-00001" summary="Fixed pokegen embed">
       <created>1554231045749</created>
@@ -210,7 +212,14 @@
       <option name="project" value="LOCAL" />
       <updated>1583189013220</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="First pass at react-to-save pokemon, can't test in webstorm so I have to upload this way to test for now rip rip rip.&#10;&#10;Also added a bunch of comments and todos">
+      <created>1583189111556</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1583189111556</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -272,20 +281,20 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="320" y="115" key="#SQL_Dialects/0.0.1440.900@0.0.1440.900" timestamp="1581096649506" />
-    <state x="373" y="134" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1583187099876">
+    <state x="373" y="134" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1583189194552">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="320" y="115" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1440.900@0.0.1440.900" timestamp="1581096682517" />
-    <state x="373" y="134" key="#com.intellij.execution.impl.EditConfigurationsDialog/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583187099876" />
+    <state x="373" y="134" key="#com.intellij.execution.impl.EditConfigurationsDialog/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583189194552" />
     <state x="408" y="185" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1580835393400">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="408" y="185" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1440.900@0.0.1440.900" timestamp="1580835393400" />
-    <state x="364" y="0" key="CommitChangelistDialog2" timestamp="1583189085836">
+    <state x="364" y="0" key="CommitChangelistDialog2" timestamp="1583189111430">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="312" y="0" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1581106000120" />
-    <state x="364" y="0" key="CommitChangelistDialog2/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583189085836" />
+    <state x="364" y="0" key="CommitChangelistDialog2/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583189111430" />
     <state x="258" y="112" key="DBNavigator.ProjectSettingsDialog" timestamp="1580855423536">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -321,18 +330,18 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="428" y="164" key="MultipleFileMergeDialog/0.0.1440.900@0.0.1440.900" timestamp="1581101389081" />
-    <state x="150" y="137" width="1443" height="880" key="SettingsEditor" timestamp="1583187711591">
+    <state x="150" y="137" width="1443" height="880" key="SettingsEditor" timestamp="1583189309047">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="229" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1581105706337" />
     <state x="267" y="125" key="SettingsEditor/0.23.1680.1027@0.23.1680.1027" timestamp="1583081419681" />
     <state x="150" y="137" key="SettingsEditor/314.-745.1366.745/0.0.1680.1050/1680.-437.1920.1057@0.0.1680.1050" timestamp="1583187711591" />
-    <state x="150" y="137" width="1443" height="880" key="SettingsEditor/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583187575857" />
-    <state x="373" y="217" key="Vcs.Push.Dialog.v2" timestamp="1583189022044">
+    <state x="150" y="137" width="1443" height="880" key="SettingsEditor/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583189309047" />
+    <state x="373" y="217" key="Vcs.Push.Dialog.v2" timestamp="1583189114900">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="320" y="186" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1581105323017" />
-    <state x="373" y="217" key="Vcs.Push.Dialog.v2/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583189022044" />
+    <state x="373" y="217" key="Vcs.Push.Dialog.v2/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1583189114900" />
     <state x="508" y="369" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1581105838114">
       <screen x="0" y="0" width="1440" height="900" />
     </state>

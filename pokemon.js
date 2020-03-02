@@ -408,7 +408,7 @@ let capitalizeWord = function (tempWord)
     return tempWord.charAt(0). toUpperCase() + tempWord.substr(1);
 };
 
-// =========== EMBED ===========
+// =========== EMBEDS ===========
 
 Pokemon.prototype.sendSummaryMessage = function(client) {
 
@@ -491,6 +491,33 @@ Pokemon.prototype.sendSummaryMessage = function(client) {
 };
 
 //upload the pokemon to the sql
+
+Pokemon.prototype.sendLoadingMessage = function(client) {
+    return {
+        embed: {
+            color: 3447003,
+            author: {
+                name: client.user.username,
+                icon_url: client.user.avatarURL
+            },
+            title: `Generating Pokemon...`,
+            url: ``,
+            description: "ChaChaBot will remember this.",
+
+            fields: [
+                {
+                    name: "",
+                    value: `**NOTE:** Don\'t forget to react with a floppy to save it to the database!`
+                },
+            ],
+            timestamp: new Date(),
+            footer: {
+                icon_url: client.user.avatarURL,
+                text: "Chambers and Charizard!"
+            }
+        }
+    }
+};
 
 Pokemon.prototype.uploadPokemon = function(connection, message) {
 

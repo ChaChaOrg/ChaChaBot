@@ -13,10 +13,7 @@ module.exports.run = (client, connection, P, message, args) => {
 	try{
 
 		// remind user to react to save the pokemon to the sql
-		let loadingEmbed = new Discord.RichEmbed()
-			.setColor(3447003)
-			.setTitle('Generating Pokemon...')
-			.setDescription('**NOTE:** Don\'t forget to react with a floppy to save it to the database!');
+		let loadingEmbed = genPokemon.sendLoadingMessage(client);
 		message.channel.send(loadingEmbed).catch(console.error);
 
 		//import the pokemon args to generate it

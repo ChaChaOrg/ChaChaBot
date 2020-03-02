@@ -120,7 +120,7 @@ exports.run = (client, connection, P, message, args) => {
         // ========================= STAT ARRAY GENERATOR!!! =========================
 
 
-        //assign IVss
+        //assign IVsschacha
         for (i = 0; i < 6; i++) {
             ivStats[i] = Math.floor((Math.random() * 32)); //assigns a value between 0 & 31 to all the IVs
         }
