@@ -19,7 +19,7 @@ module.exports.run = (client, connection, P, message, args) => {
         let critHit = "n";
 
         //variables required
-        let Pokemon = require('../pokemon.js');
+        let Pokemon = require('../models/pokemon.js');
         let attackPoke = new Pokemon();
         let defendPoke = new Pokemon();
 

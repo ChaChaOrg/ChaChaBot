@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0e2fdc44-d39a-4440-afbe-b82b2faadb85" name="Default Changelist" comment="" />
+    <list default="true" id="0e2fdc44-d39a-4440-afbe-b82b2faadb85" name="Default Changelist" comment="Moved objects to models folder">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/ChaCha Project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ChaCha Project.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/genpoke.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/genpoke.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/importpoke.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/importpoke.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/neodamage.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/neodamage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/showpoke.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/showpoke.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/PokemonObject.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/moveset.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/moveset.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nature.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/nature.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pokemon.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/pokemon.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -36,7 +50,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/models" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -47,13 +61,24 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Node.js.chachabot.js">
     <configuration name="chachabot.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="chachabot.js" working-dir="$PROJECT_DIR$">
+      <method v="2" />
+    </configuration>
+    <configuration name="test" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="test" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Node.js.chachabot.js" />
+        <item itemvalue="npm.test" />
       </list>
     </recent_temporary>
   </component>
@@ -351,7 +376,8 @@
     <MESSAGE value="squash! sql Prep" />
     <MESSAGE value="neodamage.js alpha version ;)" />
     <MESSAGE value="Testing lgf setup on webstorm shenananananigans" />
-    <option name="LAST_COMMIT_MESSAGE" value="Testing lgf setup on webstorm shenananananigans" />
+    <MESSAGE value="Moved objects to models folder" />
+    <option name="LAST_COMMIT_MESSAGE" value="Moved objects to models folder" />
   </component>
   <component name="WindowStateProjectService">
     <state x="320" y="115" key="#Deployment" timestamp="1583029420080">
@@ -367,11 +393,11 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="408" y="185" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1440.900@0.0.1440.900" timestamp="1580835393400" />
-    <state x="312" y="0" key="CommitChangelistDialog2" timestamp="1583029391577">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state x="416" y="0" width="975" height="981" key="CommitChangelistDialog2" timestamp="1583466847222">
+      <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="312" y="0" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1581900124584" />
-    <state x="416" y="0" key="CommitChangelistDialog2/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1581582214309" />
+    <state x="416" y="0" width="975" height="981" key="CommitChangelistDialog2/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1583466847222" />
     <state x="312" y="0" key="CommitChangelistDialog2/74.-768.1366.768/1440.-485.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1583029391577" />
     <state x="258" y="112" key="DBNavigator.ProjectSettingsDialog" timestamp="1580855423536">
       <screen x="0" y="0" width="1440" height="900" />
@@ -386,29 +412,33 @@
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="184" y="92" key="DiffContextDialog/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1581531906099" />
-    <state width="1419" height="175" key="GridCell.Tab.0.bottom" timestamp="1583029305079">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state x="740" y="266" key="FileChooserDialogImpl" timestamp="1583466731068">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="740" y="266" key="FileChooserDialogImpl/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1583466731068" />
+    <state width="1877" height="264" key="GridCell.Tab.0.bottom" timestamp="1583466847278">
+      <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state width="696" height="226" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1581896913474" />
-    <state width="1877" height="264" key="GridCell.Tab.0.bottom/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1581609259614" />
+    <state width="1877" height="264" key="GridCell.Tab.0.bottom/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1583466847278" />
     <state width="1419" height="175" key="GridCell.Tab.0.bottom/74.-768.1366.768/1440.-485.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1583029305079" />
-    <state width="1419" height="175" key="GridCell.Tab.0.center" timestamp="1583029305078">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="1877" height="264" key="GridCell.Tab.0.center" timestamp="1583466847277">
+      <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state width="696" height="226" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1581896913472" />
-    <state width="1877" height="264" key="GridCell.Tab.0.center/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1581609259613" />
+    <state width="1877" height="264" key="GridCell.Tab.0.center/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1583466847277" />
     <state width="1419" height="175" key="GridCell.Tab.0.center/74.-768.1366.768/1440.-485.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1583029305078" />
-    <state width="1419" height="175" key="GridCell.Tab.0.left" timestamp="1583029305077">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="1877" height="264" key="GridCell.Tab.0.left" timestamp="1583466847277">
+      <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state width="696" height="226" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1581896913471" />
-    <state width="1877" height="264" key="GridCell.Tab.0.left/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1581609259613" />
+    <state width="1877" height="264" key="GridCell.Tab.0.left/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1583466847277" />
     <state width="1419" height="175" key="GridCell.Tab.0.left/74.-768.1366.768/1440.-485.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1583029305077" />
-    <state width="1419" height="175" key="GridCell.Tab.0.right" timestamp="1583029305079">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="1877" height="264" key="GridCell.Tab.0.right" timestamp="1583466847277">
+      <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state width="696" height="226" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1581896913473" />
-    <state width="1877" height="264" key="GridCell.Tab.0.right/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1581609259613" />
+    <state width="1877" height="264" key="GridCell.Tab.0.right/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1583466847277" />
     <state width="1419" height="175" key="GridCell.Tab.0.right/74.-768.1366.768/1440.-485.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1583029305079" />
     <state width="1398" height="284" key="GridCell.Tab.1.bottom" timestamp="1581895984508">
       <screen x="0" y="0" width="1440" height="900" />
@@ -487,11 +517,11 @@
     </state>
     <state x="229" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1580855158911" />
     <state x="229" y="89" key="SettingsEditor/74.-768.1366.768/1440.-485.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1583029033996" />
-    <state x="320" y="186" key="Vcs.Push.Dialog.v2" timestamp="1583029305065">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state x="427" y="217" key="Vcs.Push.Dialog.v2" timestamp="1583466047872">
+      <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="320" y="186" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1581900127373" />
-    <state x="427" y="217" key="Vcs.Push.Dialog.v2/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1581582220027" />
+    <state x="427" y="217" key="Vcs.Push.Dialog.v2/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1583466047872" />
     <state x="320" y="186" key="Vcs.Push.Dialog.v2/74.-768.1366.768/1440.-485.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1583029305065" />
     <state x="621" y="165" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1580869258866">
       <screen x="0" y="0" width="1920" height="1050" />
@@ -521,27 +551,27 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/pokemon.js</url>
+          <url>file://$PROJECT_DIR$/models/pokemon.js</url>
           <line>60</line>
           <option name="timeStamp" value="35" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/pokemon.js</url>
+          <url>file://$PROJECT_DIR$/models/pokemon.js</url>
           <line>429</line>
           <option name="timeStamp" value="36" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/pokemon.js</url>
+          <url>file://$PROJECT_DIR$/models/pokemon.js</url>
           <line>431</line>
           <option name="timeStamp" value="38" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/pokemon.js</url>
+          <url>file://$PROJECT_DIR$/models/pokemon.js</url>
           <line>433</line>
           <option name="timeStamp" value="39" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/pokemon.js</url>
+          <url>file://$PROJECT_DIR$/models/pokemon.js</url>
           <line>434</line>
           <option name="timeStamp" value="40" />
         </line-breakpoint>

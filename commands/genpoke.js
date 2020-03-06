@@ -2,7 +2,7 @@
 
 module.exports.run = (client, connection, P, message, args) => {
 
-	let Pokemon = require('../pokemon.js');
+	let Pokemon = require('../models/pokemon.js');
 
 	if (args[0] === "help"){
 		message.reply('New Pokemon Generator. Variables in order:\n [Pokemon Species] [Level] [Pokemon Name] [Hidden Ability % (optional - CURRENTLY BROKEN)]').catch(console.error);
