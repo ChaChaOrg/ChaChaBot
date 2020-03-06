@@ -50,3 +50,5 @@ connection.connect(function(err) {
 });
 
 client.login(config.token);
+
+

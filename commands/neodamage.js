@@ -6,6 +6,7 @@ const SPA_ARRAY_INDEX = 3;
 const SPD_ARRAY_INDEX = 4;
 const SPE_ARRAY_INDEX = 5;
 const CRITICAL_HIT_MULTIPLIER = 1.5;
+const DEBUG = true;
 
 module.exports.run = (client, connection, P, message, args) => {
     try {
@@ -32,27 +33,35 @@ module.exports.run = (client, connection, P, message, args) => {
                 switch (index) {
                     case 0:
                         attackerName = args[0];
+                        if (DEBUG) `attackerName = ${attackerName}`;
                         break;
                     case 1:
                         attackerMove = args[1];
+                        if (DEBUG) `attackerMove = ${attackerMove}`;
                         break;
                     case 2:
                         defenderName = args[2];
+                        if (DEBUG) `defenderName = ${defenderName}`;
                         break;
                     case 3:
                         bonusDef = args[4]; //Stages Defense
+                        if (DEBUG) `bonusDef = ${bonusDef}`;
                         break;
                     case 4:
                         bonusAtk = args[3]; //Stages Attack
+                        if (DEBUG) `bonusAtk = ${bonusAtk}`;
                         break;
                     case 5:
                         other =  Number(args[5]);
+                        if (DEBUG) `other = ${other}`;
                         break;
                     case 6:
                         otherMult = args[6];
+                        if (DEBUG) `otherMult = ${otherMult}`;
                         break;
                     case 7:
                         critHit = args[7]; //critical hit
+                        if (DEBUG) `critHit = ${critHit}`;
                         break;
                 }
             }
@@ -77,7 +86,7 @@ module.exports.run = (client, connection, P, message, args) => {
 
         let sql = `SELECT * FROM pokemon WHERE name = '${attackerName}' OR name = '${defenderName}';`;
 
-        console.log(sql);
+        if(DEBUG) console.log(sql);
 
         let loadSQLPromise = [];
 

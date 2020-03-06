@@ -13,6 +13,8 @@
     "discord.js": "^11.5.1",
     "enmap": "^4.8.7",
     "mysql": "^2.18.1",
-    "pokedex-promise-v2": "^3.2.0"
+    "pokedex-promise-v2": "^3.2.0",
+    "winston": "^3.2.1",
+    "winston-transport": "latest"
   }
 }

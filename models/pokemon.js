@@ -11,7 +11,7 @@ const SHINY_CHANCE = 4096;
 
 let Nature = require('./nature.js');
 let Moveset = require('./moveset.js');
-let Statblock = require('../statblock.js');
+let Statblock = require('./statblock.js');
 
 
 module.exports = Pokemon;
