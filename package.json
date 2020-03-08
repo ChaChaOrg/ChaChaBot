@@ -16,5 +16,14 @@
     "pokedex-promise-v2": "^3.2.0",
     "winston": "^3.2.1",
     "winston-transport": "latest"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Talmanaze/ChaChaBot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Talmanaze/ChaChaBot/issues"
+  },
+  "homepage": "https://github.com/Talmanaze/ChaChaBot#readme"
 }
