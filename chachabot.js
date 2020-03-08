@@ -15,7 +15,9 @@ let connection = mysql.createConnection({
   user: config.mysql_user,
   password: config.mysql_pass,
   database: config.mysql_db,
-  port: config.mysql_port
+  port: config.mysql_port,
+  supportBigNumbers: true,
+  bigNumberStrings: true
 });
 
 let P = new pokedex();
@@ -48,3 +50,5 @@ connection.connect(function(err) {
 });
 
 client.login(config.token);
+
+
