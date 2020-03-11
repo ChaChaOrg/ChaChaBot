@@ -58,7 +58,7 @@ function Pokemon(tempSpecies, tempLevel, tempName) {
 }
 
 Pokemon.prototype.init = function(P, message) {
-    this.getPokemonAndSpeciesData(P)
+    return this.getPokemonAndSpeciesData(P)
         .then(function (response) {
             console.log("Retrieved Pokemon and Species Data!");
 
