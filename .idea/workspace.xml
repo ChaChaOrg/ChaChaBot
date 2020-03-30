@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0e2fdc44-d39a-4440-afbe-b82b2faadb85" name="Default Changelist" comment="Moved objects to models folder">
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/pokemon.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/pokemon.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/mysql/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/mysql/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +40,12 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/models" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -104,6 +108,10 @@
       <workItem from="1581895593281" duration="2163000" />
       <workItem from="1583028631736" duration="787000" />
       <workItem from="1583699412912" duration="1177000" />
+      <workItem from="1583941537528" duration="50000" />
+      <workItem from="1584294358813" duration="158000" />
+      <workItem from="1585533938228" duration="9000" />
+      <workItem from="1585533972072" duration="253000" />
     </task>
     <task id="LOCAL-00001" summary="Fixed pokegen embed">
       <created>1554231045749</created>
@@ -408,31 +416,35 @@
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="740" y="266" key="FileChooserDialogImpl/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1583466731068" />
-    <state width="699" height="284" key="GridCell.Tab.0.bottom" timestamp="1583700553926">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="1659" height="286" key="GridCell.Tab.0.bottom" timestamp="1583941587024">
+      <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state width="699" height="284" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1583700553926" />
+    <state width="1659" height="286" key="GridCell.Tab.0.bottom/0.0.1680.1050/1680.0.1920.1080@0.0.1680.1050" timestamp="1583941587024" />
     <state width="696" height="211" key="GridCell.Tab.0.bottom/0.23.1440.877@0.23.1440.877" timestamp="1583700066747" />
     <state width="1877" height="264" key="GridCell.Tab.0.bottom/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1583466847278" />
     <state width="1419" height="175" key="GridCell.Tab.0.bottom/74.-768.1366.768/1440.-485.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1583029305079" />
-    <state width="699" height="284" key="GridCell.Tab.0.center" timestamp="1583700553924">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="1659" height="286" key="GridCell.Tab.0.center" timestamp="1583941587023">
+      <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state width="699" height="284" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1583700553924" />
+    <state width="1659" height="286" key="GridCell.Tab.0.center/0.0.1680.1050/1680.0.1920.1080@0.0.1680.1050" timestamp="1583941587023" />
     <state width="696" height="211" key="GridCell.Tab.0.center/0.23.1440.877@0.23.1440.877" timestamp="1583700066746" />
     <state width="1877" height="264" key="GridCell.Tab.0.center/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1583466847277" />
     <state width="1419" height="175" key="GridCell.Tab.0.center/74.-768.1366.768/1440.-485.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1583029305078" />
-    <state width="699" height="284" key="GridCell.Tab.0.left" timestamp="1583700553922">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="1659" height="286" key="GridCell.Tab.0.left" timestamp="1583941587022">
+      <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state width="699" height="284" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1583700553922" />
+    <state width="1659" height="286" key="GridCell.Tab.0.left/0.0.1680.1050/1680.0.1920.1080@0.0.1680.1050" timestamp="1583941587022" />
     <state width="696" height="211" key="GridCell.Tab.0.left/0.23.1440.877@0.23.1440.877" timestamp="1583700066745" />
     <state width="1877" height="264" key="GridCell.Tab.0.left/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1583466847277" />
     <state width="1419" height="175" key="GridCell.Tab.0.left/74.-768.1366.768/1440.-485.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1583029305077" />
-    <state width="699" height="284" key="GridCell.Tab.0.right" timestamp="1583700553925">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="1659" height="286" key="GridCell.Tab.0.right" timestamp="1583941587023">
+      <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state width="699" height="284" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1583700553925" />
+    <state width="1659" height="286" key="GridCell.Tab.0.right/0.0.1680.1050/1680.0.1920.1080@0.0.1680.1050" timestamp="1583941587023" />
     <state width="696" height="211" key="GridCell.Tab.0.right/0.23.1440.877@0.23.1440.877" timestamp="1583700066747" />
     <state width="1877" height="264" key="GridCell.Tab.0.right/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1583466847277" />
     <state width="1419" height="175" key="GridCell.Tab.0.right/74.-768.1366.768/1440.-485.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1583029305079" />
@@ -533,10 +545,11 @@
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="725" y="156" key="git4idea.branch.GitSmartOperationDialog/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1581533503368" />
-    <state x="511" y="256" key="git4idea.merge.GitPullDialog" timestamp="1583028954314">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state x="775" y="-612" key="git4idea.merge.GitPullDialog" timestamp="1585535369189">
+      <screen x="314" y="-768" width="1366" height="768" />
     </state>
     <state x="681" y="299" key="git4idea.merge.GitPullDialog/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1581531825712" />
+    <state x="775" y="-612" key="git4idea.merge.GitPullDialog/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@314.-768.1366.768" timestamp="1585535369189" />
     <state x="511" y="256" key="git4idea.merge.GitPullDialog/74.-768.1366.768/1440.-485.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1583028954314" />
     <state x="724" y="412" key="git4idea.ui.GitResetDialog" timestamp="1581531757323">
       <screen x="0" y="0" width="1920" height="1050" />
