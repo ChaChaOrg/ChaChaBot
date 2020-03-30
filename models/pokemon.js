@@ -57,33 +57,39 @@ function Pokemon(tempSpecies, tempLevel, tempName) {
 
 }
 
-Pokemon.prototype.init = function(P, message) {
-    return this.getPokemonAndSpeciesData(P)
+Pokemon.prototype.init = function(P, message, logger) {
+    this.getPokemonAndSpeciesData(P, logger)
         .then(function (response) {
-            console.log("Retrieved Pokemon and Species Data!");
+            logger.log({
+                level: 'info',
+                message: 'Retrieved Pokemon and Species Data!'}
+            );
 
-            console.log("Reading Type(s)");
-            this.assignTypes();
 
-            console.log("Assigning Gender");
+
+
+            logger.log("Reading Type(s)");
+            this.assignTypes(logger);
+
+            logger.log("Assigning Gender");
             this.assignRandGender();
 
-            console.log("Assigning Ability");
+            logger.log("Assigning Ability");
             this.genRandAbility();
 
-            console.log("Assigning IVs");
+            logger.log("Assigning IVs");
             this.statBlock.assignRandIVs();
 
-            console.log("Assigning Nature");
+            logger.log("Assigning Nature");
             this.nature.assignRandNature(this);
 
-            console.log("assigning shiny");
+            logger.log("assigning shiny");
             this.assignShiny();
 
-            console.log("Reading Base Stats");
+            logger.log("Reading Base Stats");
             this.statBlock.assignBaseStats(this);
 
-            console.log("Calculating Stats");
+            logger.log("Calculating Stats");
 
             this.statBlock.calculateStats(this);
             this.statBlock.calculateSaves([this.type1, this.type2]);
@@ -114,11 +120,17 @@ let modGen = function (abilityScore) {
 };
 
 // grab + stow types
-Pokemon.prototype.assignTypes = function() {
+Pokemon.prototype.assignTypes = function(logger) {
     this.type1 = this.pokemonData.types[0].type.name;
     if(this.pokemonData.types.length === 2) {
         this.type2 = this.pokemonData.types[1].type.name;
     }
+
+    logger.log({
+        level: 'info',
+        message: `Assigned ${this.name} Type(s): ${this.type1} ${this.type2}`}
+    );
+
 };
 
 Pokemon.prototype.genRandAbility = function() {
