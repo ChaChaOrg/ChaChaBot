@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0e2fdc44-d39a-4440-afbe-b82b2faadb85" name="Default Changelist" comment="" />
+    <list default="true" id="0e2fdc44-d39a-4440-afbe-b82b2faadb85" name="Default Changelist" comment="Testing lgf setup on webstorm shenananananigans">
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/importpoke.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/importpoke.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/mysql/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/mysql/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pokemon.js" beforeDir="false" afterPath="$PROJECT_DIR$/pokemon.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -37,6 +43,12 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -87,6 +99,8 @@
       <workItem from="1581726594183" duration="5510000" />
       <workItem from="1581895593281" duration="2163000" />
       <workItem from="1583028631736" duration="787000" />
+      <workItem from="1585707952542" duration="2398000" />
+      <workItem from="1585712303540" duration="2804000" />
     </task>
     <task id="LOCAL-00001" summary="Fixed pokegen embed">
       <created>1554231045749</created>
@@ -367,11 +381,12 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="408" y="185" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1440.900@0.0.1440.900" timestamp="1580835393400" />
-    <state x="312" y="0" key="CommitChangelistDialog2" timestamp="1583029391577">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state x="610" y="-768" key="CommitChangelistDialog2" timestamp="1585535681694">
+      <screen x="314" y="-768" width="1366" height="768" />
     </state>
     <state x="312" y="0" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1581900124584" />
     <state x="416" y="0" key="CommitChangelistDialog2/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1581582214309" />
+    <state x="610" y="-768" key="CommitChangelistDialog2/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@314.-768.1366.768" timestamp="1585535681694" />
     <state x="312" y="0" key="CommitChangelistDialog2/74.-768.1366.768/1440.-485.1920.1080/0.0.1440.900@0.0.1440.900" timestamp="1583029391577" />
     <state x="258" y="112" key="DBNavigator.ProjectSettingsDialog" timestamp="1580855423536">
       <screen x="0" y="0" width="1440" height="900" />
@@ -516,33 +531,37 @@
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="724" y="412" key="git4idea.ui.GitResetDialog/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1581531757323" />
+    <state x="505" y="233" width="670" height="676" key="search.everywhere.popup" timestamp="1585709395753">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state x="505" y="233" width="670" height="676" key="search.everywhere.popup/314.-768.1366.768/0.0.1680.1050/1680.-460.1920.1080@0.0.1680.1050" timestamp="1585709395753" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/pokemon.js</url>
-          <line>60</line>
+          <line>63</line>
           <option name="timeStamp" value="35" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/pokemon.js</url>
-          <line>429</line>
+          <line>446</line>
           <option name="timeStamp" value="36" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/pokemon.js</url>
-          <line>431</line>
+          <line>448</line>
           <option name="timeStamp" value="38" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/pokemon.js</url>
-          <line>433</line>
+          <line>450</line>
           <option name="timeStamp" value="39" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/pokemon.js</url>
-          <line>434</line>
+          <line>451</line>
           <option name="timeStamp" value="40" />
         </line-breakpoint>
       </breakpoints>

@@ -28,11 +28,14 @@ function Pokemon(tempSpecies, tempLevel, tempName) {
 
     // ======================= VARIABLES =======================
 
+    //assign name and species
     this.name = tempName;
     this.species = tempSpecies;
+
     //level
     if(tempLevel > 0) this.level = tempLevel;
     else this.level = 1;
+
     //type(s)
     this.type1 = "";
     this.type2 = "";
@@ -164,7 +167,7 @@ Pokemon.prototype.assignShiny = function() {
     this.shiny = (Math.floor((Math.random() * SHINY_CHANCE) + 1)) >= SHINY_CHANCE;
 };
 
-// captialize words
+// capitalize words
 
 let capitalizeWord = function (tempWord)
 {
@@ -253,6 +256,8 @@ Pokemon.prototype.sendSummaryMessage = function(client) {
     };
 };
 
+// =========== Upload ===========
+
 Pokemon.prototype.uploadPokemon = function(connection, message) {
 
     message.channel.send("Debug: " + message.author.id + "\n" + message.author.username);
@@ -281,6 +286,8 @@ Pokemon.prototype.uploadPokemon = function(connection, message) {
     });
 };
 
+// =========== Import (Showdown Style) ===========
+
 Pokemon.prototype.importPokemon = function(connection, P, importString) {
     //splits the message into lines then splits the lines into words separated by spaces.
     let lines = importString.split("\n");
@@ -300,16 +307,26 @@ Pokemon.prototype.importPokemon = function(connection, P, importString) {
         }
     });
 
+    // ======= FIRST LINE - NAME/SPECIES/GENDER =======
+
     //If there's two options, the first is the species and the second is the gender
     if (nameArgs.length === 2){
-        this.species = nameArgs[0];
-        this.gender = nameArgs[1];
+        this.species = nameArgs[0].toLowerCase();
+        if (nameArgs[1] === "M") {
+            this.gender = "male";
+        } else if (nameArgs[1] === "F") {
+            this.gender ="female";
+        } else this.gender="genderless";
     }
     else if (nameArgs.length === 1){
         //If there's just one option, check if pokemon name or if it is the pokemon's gender
-        if (nameArgs[0] === "M" || nameArgs[0] === "F") {
-            this.species = nameLineVals[0];
-            if (nameArgs[0] === "M") {this.gender = "male";} else this.gender ="female";
+        if (nameArgs[0].toUpperCase() === "M" || nameArgs[0].toUpperCase() === "F" || nameArgs[0].toUpperCase() === "N" ) {
+            this.species = nameLineVals[0].toLowerCase();
+            if (nameArgs[0] === "M") {
+                this.gender = "male";
+            } else if (nameArgs[0] === "F") {
+                this.gender ="female";
+            } else this.gender="genderless";
         }
     }
     else if (nameArgs.length === 0) {
