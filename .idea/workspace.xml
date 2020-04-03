@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0e2fdc44-d39a-4440-afbe-b82b2faadb85" name="Default Changelist" comment="Testing lgf setup on webstorm shenananananigans">
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/importpoke.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/importpoke.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/mysql/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/mysql/package.json" afterDir="false" />
+    <list default="true" id="0e2fdc44-d39a-4440-afbe-b82b2faadb85" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pokemon.js" beforeDir="false" afterPath="$PROJECT_DIR$/pokemon.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -546,22 +543,22 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/pokemon.js</url>
-          <line>446</line>
+          <line>444</line>
           <option name="timeStamp" value="36" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/pokemon.js</url>
-          <line>448</line>
+          <line>446</line>
           <option name="timeStamp" value="38" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/pokemon.js</url>
-          <line>450</line>
+          <line>448</line>
           <option name="timeStamp" value="39" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/pokemon.js</url>
-          <line>451</line>
+          <line>449</line>
           <option name="timeStamp" value="40" />
         </line-breakpoint>
       </breakpoints>

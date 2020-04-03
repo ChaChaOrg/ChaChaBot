@@ -60,39 +60,40 @@ function Pokemon(tempSpecies, tempLevel, tempName) {
 
 }
 
-Pokemon.prototype.init = function(P, message) {
-    this.getPokemonAndSpeciesData(P)
-        .then(function (response) {
-            console.log("Retrieved Pokemon and Species Data!");
+ Pokemon.prototype.init = function(P, message) {
+    return this.getPokemonAndSpeciesData(P)
+            .then(function (response) {
+                console.log("Retrieved Pokemon and Species Data!");
 
-            console.log("Reading Type(s)");
-            this.assignTypes();
+                console.log("Reading Type(s)");
+                this.assignTypes();
 
-            console.log("Assigning Gender");
-            this.assignRandGender();
+                console.log("Assigning Gender");
+                this.assignRandGender();
 
-            console.log("Assigning Ability");
-            this.genRandAbility();
+                console.log("Assigning Ability");
+                this.genRandAbility();
 
-            console.log("Assigning IVs");
-            this.statBlock.assignRandIVs();
+                console.log("Assigning IVs");
+                this.statBlock.assignRandIVs();
 
-            console.log("Assigning Nature");
-            this.nature.assignRandNature(this);
+                console.log("Assigning Nature");
+                this.nature.assignRandNature(this);
 
-            console.log("assigning shiny");
-            this.assignShiny();
+                console.log("assigning shiny");
+                this.assignShiny();
 
-            console.log("Reading Base Stats");
-            this.statBlock.assignBaseStats(this);
+                console.log("Reading Base Stats");
+                this.statBlock.assignBaseStats(this);
 
-            console.log("Calculating Stats");
+                console.log("Calculating Stats");
 
-            this.statBlock.calculateStats(this);
-            this.statBlock.calculateSaves([this.type1, this.type2]);
+                this.statBlock.calculateStats(this);
+                this.statBlock.calculateSaves([this.type1, this.type2]);
 
-            console.log("Pokemon Complete!");
-        }.bind(this));
+                console.log("Pokemon Complete!");
+
+            }.bind(this));
 };
 
 // ========================= MISC VAL GENERATORS =========================
