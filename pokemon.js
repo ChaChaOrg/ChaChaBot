@@ -61,38 +61,40 @@ function Pokemon(tempSpecies, tempLevel, tempName) {
 }
 
 Pokemon.prototype.init = function(P, message) {
-    this.getPokemonAndSpeciesData(P)
-        .then(function (response) {
-            console.log("Retrieved Pokemon and Species Data!");
+    return new Promise(function(){
+        this.getPokemonAndSpeciesData(P)
+            .then(function (response) {
+                console.log("Retrieved Pokemon and Species Data!");
 
-            console.log("Reading Type(s)");
-            this.assignTypes();
+                console.log("Reading Type(s)");
+                this.assignTypes();
 
-            console.log("Assigning Gender");
-            this.assignRandGender();
+                console.log("Assigning Gender");
+                this.assignRandGender();
 
-            console.log("Assigning Ability");
-            this.genRandAbility();
+                console.log("Assigning Ability");
+                this.genRandAbility();
 
-            console.log("Assigning IVs");
-            this.statBlock.assignRandIVs();
+                console.log("Assigning IVs");
+                this.statBlock.assignRandIVs();
 
-            console.log("Assigning Nature");
-            this.nature.assignRandNature(this);
+                console.log("Assigning Nature");
+                this.nature.assignRandNature(this);
 
-            console.log("assigning shiny");
-            this.assignShiny();
+                console.log("assigning shiny");
+                this.assignShiny();
 
-            console.log("Reading Base Stats");
-            this.statBlock.assignBaseStats(this);
+                console.log("Reading Base Stats");
+                this.statBlock.assignBaseStats(this);
 
-            console.log("Calculating Stats");
+                console.log("Calculating Stats");
 
-            this.statBlock.calculateStats(this);
-            this.statBlock.calculateSaves([this.type1, this.type2]);
+                this.statBlock.calculateStats(this);
+                this.statBlock.calculateSaves([this.type1, this.type2]);
 
-            console.log("Pokemon Complete!");
-        }.bind(this));
+                console.log("Pokemon Complete!");
+            }.bind(this));
+    }.bind(this));
 };
 
 // ========================= MISC VAL GENERATORS =========================
@@ -307,8 +309,6 @@ Pokemon.prototype.importPokemon = function(connection, P, importString) {
         }
     });
 
-    // ======= FIRST LINE - NAME/SPECIES/GENDER =======
-
     //If there's two options, the first is the species and the second is the gender
     if (nameArgs.length === 2){
         this.species = nameArgs[0].toLowerCase();
@@ -334,7 +334,7 @@ Pokemon.prototype.importPokemon = function(connection, P, importString) {
     }
 
     lines.forEach(function(element) {
-        switch (element.split(" ")[0]) {
+        switch (element.split(" ")[0]) { // switch case for everything else in the message
             case ("Ability:"): {
                 //Grabs ability
                 this.ability.name = element.substr(9, element.length - 9).toLowerCase().replace(" ", "-");
@@ -344,7 +344,7 @@ Pokemon.prototype.importPokemon = function(connection, P, importString) {
                 this.level = element.substr(7, element.length - 7) / 5;
                 break;
             }
-            case("EVs:"): {
+            case("EVs:"): { // assign EVs
                 evLineVals = element.split(" ");
                 evLineVals.forEach(function (evElement, i) {
                     let j = -1;
@@ -372,7 +372,7 @@ Pokemon.prototype.importPokemon = function(connection, P, importString) {
                 }.bind(this));
                 break;
             }
-            case("IVs:"): {
+            case("IVs:"): { // assign IVs
                 ivLineVals = element.split(" ");
                 ivLineVals.forEach(function (ivElement, i) {
                     let j = -1;
@@ -474,19 +474,29 @@ Pokemon.prototype.loadFromSQL = function (P, sqlObject) {
                     .then(function (response) {
                         this.pokemonData = response;
 
-                        //type(s)
+                        // assign type(s)
                         this.type1 = sqlObject.type1;
                         this.type2 = sqlObject.type2;
 
+                        // assign gender
                         this.gender = sqlObject.gender;
+
+                        // assign ability
                         this.ability.name = sqlObject.ability;
 
+                        // assign nature
+                        this.nature.assignNature(this, sqlObject.nature);
 
+                        // assign name
                         this.name = sqlObject.name;
+
+                        //assign species
                         this.species = sqlObject.species;
-                        //level
+
+                        //assign level
                         this.level = sqlObject.level;
 
+                        // assign EVs & IVs
                         this.statBlock.evStats = [sqlObject.hpEV, sqlObject.atkEV, sqlObject.defEV, sqlObject.spaEV, sqlObject.spdEV, sqlObject.speEV];
                         this.statBlock.ivStats = [sqlObject.hpIV, sqlObject.atkIV, sqlObject.defIV, sqlObject.spaIV, sqlObject.spdIV, sqlObject.speIV];
 
@@ -498,8 +508,6 @@ Pokemon.prototype.loadFromSQL = function (P, sqlObject) {
                         this.moveSet.moveProgress = sqlObject.moveProgress;
 
                         this.originalTrainer = sqlObject.originalTrainer;
-
-                        this.nature.assignNature(this, sqlObject.nature);
 
                         if (sqlObject.shiny === null){
                             this.shiny = sqlObject.shiny;
