@@ -60,9 +60,8 @@ function Pokemon(tempSpecies, tempLevel, tempName) {
 
 }
 
-Pokemon.prototype.init = function(P, message) {
-    return new Promise(function(){
-        this.getPokemonAndSpeciesData(P)
+ Pokemon.prototype.init = function(P, message) {
+    return this.getPokemonAndSpeciesData(P)
             .then(function (response) {
                 console.log("Retrieved Pokemon and Species Data!");
 
@@ -93,8 +92,8 @@ Pokemon.prototype.init = function(P, message) {
                 this.statBlock.calculateSaves([this.type1, this.type2]);
 
                 console.log("Pokemon Complete!");
+
             }.bind(this));
-    }.bind(this));
 };
 
 // ========================= MISC VAL GENERATORS =========================
@@ -309,6 +308,8 @@ Pokemon.prototype.importPokemon = function(connection, P, importString) {
         }
     });
 
+    // ======= FIRST LINE - NAME/SPECIES/GENDER =======
+
     //If there's two options, the first is the species and the second is the gender
     if (nameArgs.length === 2){
         this.species = nameArgs[0].toLowerCase();
@@ -334,7 +335,7 @@ Pokemon.prototype.importPokemon = function(connection, P, importString) {
     }
 
     lines.forEach(function(element) {
-        switch (element.split(" ")[0]) { // switch case for everything else in the message
+        switch (element.split(" ")[0]) {
             case ("Ability:"): {
                 //Grabs ability
                 this.ability.name = element.substr(9, element.length - 9).toLowerCase().replace(" ", "-");
@@ -344,7 +345,7 @@ Pokemon.prototype.importPokemon = function(connection, P, importString) {
                 this.level = element.substr(7, element.length - 7) / 5;
                 break;
             }
-            case("EVs:"): { // assign EVs
+            case("EVs:"): {
                 evLineVals = element.split(" ");
                 evLineVals.forEach(function (evElement, i) {
                     let j = -1;
@@ -372,7 +373,7 @@ Pokemon.prototype.importPokemon = function(connection, P, importString) {
                 }.bind(this));
                 break;
             }
-            case("IVs:"): { // assign IVs
+            case("IVs:"): {
                 ivLineVals = element.split(" ");
                 ivLineVals.forEach(function (ivElement, i) {
                     let j = -1;
@@ -474,29 +475,19 @@ Pokemon.prototype.loadFromSQL = function (P, sqlObject) {
                     .then(function (response) {
                         this.pokemonData = response;
 
-                        // assign type(s)
+                        //type(s)
                         this.type1 = sqlObject.type1;
                         this.type2 = sqlObject.type2;
 
-                        // assign gender
                         this.gender = sqlObject.gender;
-
-                        // assign ability
                         this.ability.name = sqlObject.ability;
 
-                        // assign nature
-                        this.nature.assignNature(this, sqlObject.nature);
 
-                        // assign name
                         this.name = sqlObject.name;
-
-                        //assign species
                         this.species = sqlObject.species;
-
-                        //assign level
+                        //level
                         this.level = sqlObject.level;
 
-                        // assign EVs & IVs
                         this.statBlock.evStats = [sqlObject.hpEV, sqlObject.atkEV, sqlObject.defEV, sqlObject.spaEV, sqlObject.spdEV, sqlObject.speEV];
                         this.statBlock.ivStats = [sqlObject.hpIV, sqlObject.atkIV, sqlObject.defIV, sqlObject.spaIV, sqlObject.spdIV, sqlObject.speIV];
 
@@ -508,6 +499,8 @@ Pokemon.prototype.loadFromSQL = function (P, sqlObject) {
                         this.moveSet.moveProgress = sqlObject.moveProgress;
 
                         this.originalTrainer = sqlObject.originalTrainer;
+
+                        this.nature.assignNature(this, sqlObject.nature);
 
                         if (sqlObject.shiny === null){
                             this.shiny = sqlObject.shiny;
