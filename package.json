@@ -14,5 +14,8 @@
     "enmap": "^4.8.7",
     "mysql": "^2.18.1",
     "pokedex-promise-v2": "^3.2.0"
+  },
+  "devDependencies": {
+    "winston": "^3.2.1"
   }
 }
