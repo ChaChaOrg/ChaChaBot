@@ -135,6 +135,10 @@ Statblock.prototype.calculateSaves = function(pokemon) {
 };
 
 Statblock.prototype.calculateStats = function(pokemon) {
+    // start by taking care of Nature
+    pokemon.nature.calculateNatureStats(pokemon);
+    //pokemon.Nautre.calculateNatureStats(pokemon)
+
 //get CON + hit points
 //calculate con +  EQ: [(BaseStats + IVs + EVs/4) * .15 +1.5]
     this.conBase = Math.round(((this.baseStats[0] + this.ivStats[0] + this.evStats[0]) / CON_CALC_DIVISOR) * STAT_CALC_MULT + STAT_CALC_BASE);

@@ -33,7 +33,11 @@ Nature.prototype.calculateNatureStats = function(pokemon) {
         }
     }
 };
-
+/**
+ * Assigns a nature to a Pokemon given both the Pokemon itself and the desired nature
+ * @param pokemon the Pokemon to update
+ * @param nature the desired new Nature
+ */
 Nature.prototype.assignNature = function(pokemon, nature)
 {
     this.natureFinal = nature;

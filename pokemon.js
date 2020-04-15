@@ -212,27 +212,27 @@ Pokemon.prototype.sendSummaryMessage = function(client) {
                 },
                 {
                     name: "HP",
-                    value: `**IV: ** ${this.statBlock.ivStats[0]} | **Final: ** ${this.statBlock.finalStats[0]}\n=================`
+                    value: `**IV: ** ${this.statBlock.ivStats[0]} | **EV: ** ${this.statBlock.evStats[0]} | **Final: ** ${this.statBlock.finalStats[0]}\n=================`
                 },
                 {
                     name: "Attack",
-                    value: `**IV: ** ${this.statBlock.ivStats[1]} | **Final: ** ${this.statBlock.finalStats[1]}\n=================`
+                    value: `**IV: ** ${this.statBlock.ivStats[1]} |  **EV: ** ${this.statBlock.evStats[1]} | **Final: ** ${this.statBlock.finalStats[1]}\n=================`
                 },
                 {
                     name: "Defense",
-                    value: `**IV: ** ${this.statBlock.ivStats[2]} | **Final: ** ${this.statBlock.finalStats[2]}\n=================`
+                    value: `**IV: ** ${this.statBlock.ivStats[2]} |  **EV: ** ${this.statBlock.evStats[2]} | **Final: ** ${this.statBlock.finalStats[2]}\n=================`
                 },
                 {
                     name: "Special Attack",
-                    value: `**IV: ** ${this.statBlock.ivStats[3]} | **Final: ** ${this.statBlock.finalStats[3]}\n=================`
+                    value: `**IV: ** ${this.statBlock.ivStats[3]} |  **EV: ** ${this.statBlock.evStats[3]} | **Final: ** ${this.statBlock.finalStats[3]}\n=================`
                 },
                 {
                     name: "Special Defense",
-                    value: `**IV: ** ${this.statBlock.ivStats[4]} | **Final: ** ${this.statBlock.finalStats[4]}\n=================`
+                    value: `**IV: ** ${this.statBlock.ivStats[4]} |  **EV: ** ${this.statBlock.evStats[4]} | **Final: ** ${this.statBlock.finalStats[4]}\n=================`
                 },
                 {
                     name: "Speed",
-                    value: `**IV: ** ${this.statBlock.ivStats[5]} | **Final: ** ${this.statBlock.finalStats[5]}\n=================`
+                    value: `**IV: ** ${this.statBlock.ivStats[5]} |  **EV: ** ${this.statBlock.evStats[5]} | **Final: ** ${this.statBlock.finalStats[5]}\n=================`
                 },
                 {
                     name: "Ability Scores",
@@ -307,7 +307,7 @@ Pokemon.prototype.uploadPokemon = function(connection, message) {
     //console.log(sql);
     connection.query(sql, function (err, result) {
         if (err) throw err;
-        console.log("1 record inserted:" + this.name + ", Lv " + this.level + " " + this.species.toUpperCase());
+        console.log("1 record inserted");
     });
 };
 
@@ -368,7 +368,7 @@ Pokemon.prototype.updatePokemon = function(connection, message, pokePrivate) {
     //console.log(sql);
     connection.query(sql, function (err, result) {
         if (err) throw err;
-        console.log("1 record updated:" + this.name );
+        console.log("1 record updated.");
     }).bind(this);
 };
 
@@ -573,6 +573,7 @@ Pokemon.prototype.loadFromSQL = function (P, sqlObject) {
                         this.gender = sqlObject.gender;
                         this.ability.name = sqlObject.ability;
 
+                        this.nature.assignNature(this, sqlObject.nature);
 
                         this.name = sqlObject.name;
                         this.species = sqlObject.species;
@@ -591,8 +592,6 @@ Pokemon.prototype.loadFromSQL = function (P, sqlObject) {
 
                         this.originalTrainer = sqlObject.originalTrainer;
 
-                        this.nature.assignNature(this, sqlObject.nature);
-
                         if (sqlObject.shiny === null){
                             this.shiny = sqlObject.shiny;
                         }
@@ -603,7 +602,7 @@ Pokemon.prototype.loadFromSQL = function (P, sqlObject) {
                             i++;
                         });
 
-                        console.log("Calculating Stats");
+                        console.log("Calculating Stats of " + this.name);
 
                         this.statBlock.calculateStats(this);
                         this.statBlock.calculateSaves(this);

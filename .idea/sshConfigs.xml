@@ -3,7 +3,7 @@
   <component name="SshConfigs">
     <configs>
       <sshConfig host="ec2-34-226-119-6.compute-1.amazonaws.com" id="f988c0b6-8846-4b36-999d-3497c486580f" keyPath="$PROJECT_DIR$/../ChaChaBot.pem" port="22" customName="awsChaChaBot" nameFormat="CUSTOM" username="ubuntu" />
-      <sshConfig host="ec2-34-226-119-6.compute-1.amazonaws.com" id="c8c26f8a-64aa-485c-a3f9-e48a41880ca6" keyPath="$PROJECT_DIR$/../ChaChaBot.pem" port="22" customName="awsChaChaBot" nameFormat="CUSTOM" username="ubuntu" />
+      <sshConfig host="ec2-34-226-119-6.compute-1.amazonaws.com" id="d8d74268-f5a5-4266-98d5-e7d5fa209e6e" keyPath="$PROJECT_DIR$/../ChaChaBot.pem" port="22" customName="awsChaChaBot" nameFormat="CUSTOM" username="ubuntu" />
     </configs>
   </component>
 </project>
