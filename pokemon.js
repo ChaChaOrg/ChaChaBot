@@ -9,9 +9,9 @@ const SPD_ARRAY_INDEX = 4;
 const SPE_ARRAY_INDEX = 5;
 const SHINY_CHANCE = 4096;
 
-let Nature = require('./nature.js');
-let Moveset = require('./moveset.js');
-let Statblock = require('./statblock.js');
+let Nature = require('./models/nature.js');
+let Moveset = require('./models/moveset.js');
+let Statblock = require('./models/statblock.js');
 
 
 module.exports = Pokemon;
@@ -261,28 +261,117 @@ Pokemon.prototype.sendSummaryMessage = function(client) {
 Pokemon.prototype.uploadPokemon = function(connection, message) {
 
     let sql =
-        'INSERT INTO pokemon (name, species, level, nature, gender, ability, type1, type2, shiny, ' +
-        `hp, atk, def, spa, spd, spe, ` +
-        `hpIV, atkIV, defIV, spaIV, spdIV, speIV, ` +
-        `hpEV, atkEV, defEV, spaEV, spdEV, speEV, ` +
-        `move1, move2, move3, move4, move5, moveProgress, ` +
-        `originalTrainer, userID, dateCreated) ` +
-        `VALUES ("${this.name}", "${this.species}", ${this.level}, "${this.nature.natureFinal}", "${this.gender}", "${this.ability.name}", "${this.type1}", "${this.type2}", ${this.shiny}, ` +
-        `${this.statBlock.finalStats[HP_ARRAY_INDEX]}, ${this.statBlock.finalStats[ATK_ARRAY_INDEX]}, ${this.statBlock.finalStats[DEF_ARRAY_INDEX]}, ` +
-        `${this.statBlock.finalStats[SPA_ARRAY_INDEX]}, ${this.statBlock.finalStats[SPD_ARRAY_INDEX]}, ${this.statBlock.finalStats[SPE_ARRAY_INDEX]}, ` +
-        `${this.statBlock.ivStats[HP_ARRAY_INDEX]}, ${this.statBlock.ivStats[ATK_ARRAY_INDEX]}, ${this.statBlock.ivStats[DEF_ARRAY_INDEX]}, ` +
-        `${this.statBlock.ivStats[SPA_ARRAY_INDEX]}, ${this.statBlock.ivStats[SPD_ARRAY_INDEX]}, ${this.statBlock.ivStats[SPE_ARRAY_INDEX]}, ` +
-        `${this.statBlock.evStats[HP_ARRAY_INDEX]}, ${this.statBlock.evStats[ATK_ARRAY_INDEX]}, ${this.statBlock.evStats[DEF_ARRAY_INDEX]}, ` +
-        `${this.statBlock.evStats[SPA_ARRAY_INDEX]}, ${this.statBlock.evStats[SPD_ARRAY_INDEX]}, ${this.statBlock.evStats[SPE_ARRAY_INDEX]}, ` +
-        `"${this.moveSet.move1.name}", "${this.moveSet.move2.name}", "${this.moveSet.move3.name}", "${this.moveSet.move4.name}", "${this.moveSet.move5.name}", ${this.moveSet.moveProgress}, ` +
-        `"${this.originalTrainer}", ${message.author.id}, '${this.dateCreated}');`;
-
+        `INSERT INTO pokemon (name, species, level, nature, gender, ability, type1, type2, shiny, 
+        hp, atk, def, spa, spd, spe, 
+        hpIV, atkIV, defIV, spaIV, spdIV, speIV, 
+        hpEV, atkEV, defEV, spaEV, spdEV, speEV, 
+        move1, move2, move3, move4, move5, moveProgress, 
+        originalTrainer, userID, dateCreated) 
+        VALUES (
+        "${this.name}",
+        "${this.species}",
+        ${this.level},
+        "${this.nature.natureFinal}",
+        "${this.gender}",
+        "${this.ability.name}",
+        "${this.type1}",
+        "${this.type2}",
+        ${this.shiny},
+        ${this.statBlock.finalStats[HP_ARRAY_INDEX]},
+        ${this.statBlock.finalStats[ATK_ARRAY_INDEX]},
+        ${this.statBlock.finalStats[DEF_ARRAY_INDEX]},
+        ${this.statBlock.finalStats[SPA_ARRAY_INDEX]},
+        ${this.statBlock.finalStats[SPD_ARRAY_INDEX]},
+        ${this.statBlock.finalStats[SPE_ARRAY_INDEX]},
+        ${this.statBlock.ivStats[HP_ARRAY_INDEX]},
+        ${this.statBlock.ivStats[ATK_ARRAY_INDEX]},
+        ${this.statBlock.ivStats[DEF_ARRAY_INDEX]},
+        ${this.statBlock.ivStats[SPA_ARRAY_INDEX]},
+        ${this.statBlock.ivStats[SPD_ARRAY_INDEX]},
+        ${this.statBlock.ivStats[SPE_ARRAY_INDEX]},
+        ${this.statBlock.evStats[HP_ARRAY_INDEX]},
+        ${this.statBlock.evStats[ATK_ARRAY_INDEX]},
+        ${this.statBlock.evStats[DEF_ARRAY_INDEX]},
+        ${this.statBlock.evStats[SPA_ARRAY_INDEX]},
+        ${this.statBlock.evStats[SPD_ARRAY_INDEX]},
+        ${this.statBlock.evStats[SPE_ARRAY_INDEX]},
+        "${this.moveSet.move1.name}",
+        "${this.moveSet.move2.name}",
+        "${this.moveSet.move3.name}",
+        "${this.moveSet.move4.name}",
+        "${this.moveSet.move5.name}",
+        ${this.moveSet.moveProgress},
+        "${this.originalTrainer}",
+        ${message.author.id},
+        '${this.dateCreated}');` ;
     //console.log(sql);
     connection.query(sql, function (err, result) {
         if (err) throw err;
         console.log("1 record inserted:" + this.name + ", Lv " + this.level + " " + this.species.toUpperCase());
     });
 };
+
+//Instead of uploading a new pokemon, instead updates the existing entry BASED OFF OF POKEMON NAME
+//BE CAREFUL
+Pokemon.prototype.updatePokemon = function(connection, message, pokePrivate) {
+
+    if (pokePrivate === NULL) pokePrivate = false;
+
+    //uses SQL UPDATE to alter the existing entry
+    // SQL UPDATE reference: https://www.w3schools.com/sql/sql_update.asp
+    let sql =
+        `UPDATE pokemon
+        SET (
+            name = "${this.name}",
+            species = "${this.species}",
+            level =  ${this.level},
+            nature = "${this.nature.natureFinal}",
+            gender = "${this.gender}",
+            ability = "${this.ability.name}",
+            type1 = "${this.type1}",
+            type2 = "${this.type2}",
+            shiny = ${this.shiny},
+        
+            hp = ${this.statBlock.finalStats[HP_ARRAY_INDEX]},
+            atk = ${this.statBlock.finalStats[ATK_ARRAY_INDEX]},
+            def = ${this.statBlock.finalStats[DEF_ARRAY_INDEX]},
+
+            spa = ${this.statBlock.finalStats[SPA_ARRAY_INDEX]},
+            spd = ${this.statBlock.finalStats[SPD_ARRAY_INDEX]},
+            spe = ${this.statBlock.finalStats[SPE_ARRAY_INDEX]},
+
+            hpIV = ${this.statBlock.ivStats[HP_ARRAY_INDEX]},
+            atkIV = ${this.statBlock.ivStats[ATK_ARRAY_INDEX]},
+            defIV = ${this.statBlock.ivStats[DEF_ARRAY_INDEX]},
+            spaIV = ${this.statBlock.ivStats[SPA_ARRAY_INDEX]},
+            spdIV = ${this.statBlock.ivStats[SPD_ARRAY_INDEX]},
+            speIV = ${this.statBlock.ivStats[SPE_ARRAY_INDEX]},
+
+            hpEV = ${this.statBlock.evStats[HP_ARRAY_INDEX]},
+            atkEV = ${this.statBlock.evStats[ATK_ARRAY_INDEX]},
+            defEV = ${this.statBlock.evStats[DEF_ARRAY_INDEX]},
+            spaEV = ${this.statBlock.evStats[SPA_ARRAY_INDEX]},
+            spdEV = ${this.statBlock.evStats[SPD_ARRAY_INDEX]},
+            speEV = ${this.statBlock.evStats[SPE_ARRAY_INDEX]},
+
+            move1 = "${this.moveSet.move1.name}",
+            move2 = "${this.moveSet.move2.name}",
+            move3 = "${this.moveSet.move3.name}",
+            move4 = "${this.moveSet.move4.name}",
+            move5 = "${this.moveSet.move5.name}",
+            moveProgress = ${this.moveSet.moveProgress} 
+            
+            private = ${pokePrivate})
+         WHERE name = ${this.name};`
+
+
+    //console.log(sql);
+    connection.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log("1 record updated:" + this.name );
+    }).bind(this);
+};
+
 
 // =========== Import (Showdown Style) ===========
 
@@ -339,10 +428,12 @@ Pokemon.prototype.importPokemon = function(connection, P, importString) {
                 break;
             }
             case("Level:"): {
+                //Grabs level
                 this.level = element.substr(7, element.length - 7) / 5;
                 break;
             }
             case("EVs:"): {
+                //For each listed EV: look at name then assign the corresponding value
                 evLineVals = element.split(" ");
                 evLineVals.forEach(function (evElement, i) {
                     let j = -1;
@@ -371,6 +462,7 @@ Pokemon.prototype.importPokemon = function(connection, P, importString) {
                 break;
             }
             case("IVs:"): {
+                //For each listed IV: look at name then assign the corresponding value
                 ivLineVals = element.split(" ");
                 ivLineVals.forEach(function (ivElement, i) {
                     let j = -1;
@@ -398,6 +490,7 @@ Pokemon.prototype.importPokemon = function(connection, P, importString) {
                 }.bind(this));
                 break;
             }
+            //If the line is any of the Natures, Grab it.
             case "Hardy":
             case "Lonely":
             case "Adamant":
@@ -431,6 +524,7 @@ Pokemon.prototype.importPokemon = function(connection, P, importString) {
     }.bind(this));
 
     return this.getPokemonAndSpeciesData(P).then(
+        //assign types, base states and then calculate those Stats
         function(response){
             this.assignTypes();
             this.statBlock.assignBaseStats(this);
