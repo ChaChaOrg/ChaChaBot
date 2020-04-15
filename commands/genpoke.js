@@ -12,14 +12,18 @@ module.exports.run = (client, connection, P, message, args) => {
 		let genPokemon = new Pokemon(args[0].toLowerCase(), args[1], args[2]);
 		genPokemon.init(P, message)
 			.then( function(response){
-				message.channel.send(genPokemon.sendSummaryMessage(client));
+				// upload pokemon to database
 				genPokemon.uploadPokemon(connection, message);
+				// post embed
+				message.channel.send(genPokemon.sendSummaryMessage(client));
+				// alert user that their poke has been added to the database
+				message.reply(genPokemon.name + " has been added to the database.\nTo remove it, use this command: `+rempoke " + genPokemon.name + "`");
 			});
 
 	}
 	catch(error) {
 		console.log(error);
-		message.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);
+		message.channel.send('ChaCha machine :b:roke while attempting to generate a Pokemon, please try again later').catch(console.error);
 	}
 	
 };

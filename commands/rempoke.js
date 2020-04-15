@@ -5,7 +5,7 @@
  */
 
 // The help message provided when requested by the user.
-const helpMessage = "Deletes the listed Pokemon from the SQL database, if it exists.\n((If found, confirm deletion by reaction to the posted message.))";
+const helpMessage = "\n`+rempoke [nickname]`\n\nDeletes the listed Pokemon from the SQL database, if it exists.\n\n((If found, confirm deletion by reaction to the posted message.))";
 
 module.exports.run = (client, connection, P, message, args) => {
     try {
@@ -40,14 +40,12 @@ module.exports.run = (client, connection, P, message, args) => {
                     // if picked up, stow the response
                     message.channel.send(
                         'Pokemon found. Are you sure you want to release `' +
-                        rows[0].name + ", Lv " + rows[0].level + " " + rows[0].species.toUpperCase() +
+                        rows[0].name + ", LV " + rows[0].level + " " + rows[0].species.toUpperCase() +
                         "`?\n\n**:warning: This action cannot be undone. :warning:**"
                     ).then(function(response) {
                         // add reactions so user can just click on em
-                        // CHECKMARK = CONFIRM deletion
-                        response.react('✅');
-                        // CHECKMARK = CANCEL deletion
-                        response.react('❌');
+                        // CHECKMARK = CONFIRM deletion, X = CANCEL deletion
+                        response.react('✅').then(response.react('❌'));
 
                         // then listen for reactions
                         response.awaitReactions((reaction, user) => user.id == message.author.id && (reaction.emoji.name == '✅' || reaction.emoji.name == '❌'),
@@ -67,9 +65,11 @@ module.exports.run = (client, connection, P, message, args) => {
                                     });
                                 }
                                 else {
+                                    console.log("Action cancelled by user.");
                                     message.reply(pokeName + "'s release has been cancelled.");
                                 }
                                 }).catch(() => {
+                                    console.log("Action cancelled via timeout.");
                                     message.reply("Timed out after 30 seconds, so " + pokeName + "'s release has been cancelled.");
                             })
                         });

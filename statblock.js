@@ -188,14 +188,6 @@ Statblock.prototype.calculateStats = function(pokemon) {
 //get move speed
     this.moveSpeed = (MOVE_SPEED_MULT * this.finalStats[SPEED_BST_INDEX] + MOVE_SPEED_SHIFT).toFixed(2);
 
-// generate saves based on types + scores
-
-    /*
-
-    let
-
-    */
-
 };
 
 Statblock.prototype.assignBaseStats = function(pokemon){

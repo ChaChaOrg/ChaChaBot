@@ -63,35 +63,30 @@ function Pokemon(tempSpecies, tempLevel, tempName) {
  Pokemon.prototype.init = function(P, message) {
     return this.getPokemonAndSpeciesData(P)
             .then(function (response) {
-                console.log("Retrieved Pokemon and Species Data!");
+                //let the log know the poke is initializing
+                console.log("Initializing " + this.name + "...");
+                //console.log("Retrieved Pokemon and Species Data!");
 
-                console.log("Reading Type(s)");
+                //console.log("Reading Type(s)");
                 this.assignTypes();
-
-                console.log("Assigning Gender");
+                //console.log("Assigning Gender");
                 this.assignRandGender();
-
-                console.log("Assigning Ability");
+                //console.log("Assigning Ability");
                 this.genRandAbility();
-
-                console.log("Assigning IVs");
+                //console.log("Assigning IVs");
                 this.statBlock.assignRandIVs();
-
-                console.log("Assigning Nature");
+                //console.log("Assigning Nature");
                 this.nature.assignRandNature(this);
-
-                console.log("assigning shiny");
+                //console.log("Assigning shiny");
                 this.assignShiny();
-
-                console.log("Reading Base Stats");
+                //console.log("Reading Base Stats");
                 this.statBlock.assignBaseStats(this);
-
-                console.log("Calculating Stats");
-
+                //console.log("Calculating Stats");
                 this.statBlock.calculateStats(this);
-                this.statBlock.calculateSaves([this.type1, this.type2]);
+                //console.log("Calculating Saves");
+                this.statBlock.calculateSaves(this);
 
-                console.log("Pokemon Complete!");
+                console.log("Pokemon Initialization Sequence Complete!");
 
             }.bind(this));
 };
@@ -150,11 +145,15 @@ Pokemon.prototype.genRandAbility = function() {
 };
 //Assign gender
 Pokemon.prototype.assignRandGender = function() {
-    //assign gender
-    let gender = "genderless";
+    //assign gender, default to genderless
+    let gender;
+
     //Calculates Gender as a fraction of 8
     const genderNum = Math.floor((Math.random() * GENDER_MAX) + 1);
-    if (this.speciesData.gender_rate <= -1) return gender;
+
+    if (this.speciesData.gender_rate <= -1){
+        gender = "genderless"
+    }
     else if (genderNum <= this.speciesData.gender_rate) {
            gender = "female";
     }
@@ -261,8 +260,6 @@ Pokemon.prototype.sendSummaryMessage = function(client) {
 
 Pokemon.prototype.uploadPokemon = function(connection, message) {
 
-    message.channel.send("Debug: " + message.author.id + "\n" + message.author.username);
-
     let sql =
         'INSERT INTO pokemon (name, species, level, nature, gender, ability, type1, type2, shiny, ' +
         `hp, atk, def, spa, spd, spe, ` +
@@ -280,10 +277,10 @@ Pokemon.prototype.uploadPokemon = function(connection, message) {
         `"${this.moveSet.move1.name}", "${this.moveSet.move2.name}", "${this.moveSet.move3.name}", "${this.moveSet.move4.name}", "${this.moveSet.move5.name}", ${this.moveSet.moveProgress}, ` +
         `"${this.originalTrainer}", ${message.author.id}, '${this.dateCreated}');`;
 
-    console.log(sql);
+    //console.log(sql);
     connection.query(sql, function (err, result) {
         if (err) throw err;
-        console.log("1 record inserted");
+        console.log("1 record inserted:" + this.name + ", Lv " + this.level + " " + this.species.toUpperCase());
     });
 };
 
