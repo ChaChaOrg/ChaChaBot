@@ -1,3 +1,4 @@
+//TODO split printed string by creator/ ensure it doesn't break discord character limit
 module.exports.run = (client, connection, P, message, args) => {
 
     connection.query("SELECT * FROM pokemon", function (err, result) {
@@ -5,7 +6,7 @@ module.exports.run = (client, connection, P, message, args) => {
         let promises = [];
         new Promise(function(resolve){
             result.forEach(element => {
-                console.log(element.userID);
+                //console.log(element.userID);
                 if (element.userID === message.author.id || element.private === 0) {
                 promises.push(client.fetchUser(element.userID)
                     .then(function (response) {
@@ -23,7 +24,7 @@ module.exports.run = (client, connection, P, message, args) => {
         })
             .then( function(response)
             {
-                console.log(`String: ${printString}`);
+                //console.log(`String: ${printString}`);
                 message.author.send(printString);
                 message.channel.send("I've DM'd you the list!");
             })

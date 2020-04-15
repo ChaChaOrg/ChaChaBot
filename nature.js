@@ -1,6 +1,6 @@
 module.exports = Nature;
 
-const NATURE_POSITIVE_MULIPLIER = 1.1;
+const NATURE_POSITIVE_MULTIPLIER = 1.1;
 const NATURE_NEGATIVE_MULTIPLIER = 0.9;
 const NATURE_ARRAY_MAX = 5;
 const STAT_ARRAY_MAX = 6;
@@ -25,7 +25,7 @@ Nature.prototype.calculateNatureStats = function(pokemon) {
     if (this.natureXCoord !== this.natureYCoord) {
         for (let i = 0; i < STAT_ARRAY_MAX; i++) {
             if (this.natureXCoord === i) {
-                pokemon.statBlock.nMultiStats[i + 1] = NATURE_POSITIVE_MULIPLIER;
+                pokemon.statBlock.nMultiStats[i + 1] = NATURE_POSITIVE_MULTIPLIER;
             }
             if (this.natureYCoord === i) {
                 pokemon.statBlock.nMultiStats[i + 1] = NATURE_NEGATIVE_MULTIPLIER;
