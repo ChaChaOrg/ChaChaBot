@@ -34,6 +34,10 @@ const HELP_FIELDS_LIST = "Here's the list of all available fields on a Pokemon t
 // array of variables that can go straight to being updated
 const STATIC_FIELDS = ["NAME", "GENDER", "HP", "ATK", "DEF", "SPA", "SPD", "SPE", "MOVE1", "MOVE2", "MOVE3", "MOVE4", "MOVE5", "MOVEPROGRESS", "ORIGINALTRAINER", "SHINY", "PRIVATE"];
 
+// code formatting variables for the embed
+const CODE_FORMAT_START = "```diff\n";
+const CODE_FORMAT_END = "\n```"
+
 module.exports.run = (client, connection, P, message, args) => {
     let Pokemon = require('../pokemon.js');
     try {
@@ -191,27 +195,84 @@ module.exports.run = (client, connection, P, message, args) => {
                                    let oldSpecies = capitalize(oldPoke.species);
                                    let newSpecies = capitalize(tempPoke.species);
 
-                                   // function to compare old and new item, returning appropriate string
-                                   let fieldChanged = function (oldVal, newVal) {
+                                   /**
+                                    * This function compares two values, an original and "updated",
+                                    * returning a string displaying the one value if left unchanged, or both if changed.
+                                    * If designated as a number, will color green if value increased, and red if decreased
+                                    * @param oldVal The original value
+                                    * @param newVal The "updated" value to compare
+                                    * @param isNum Whether or not the value is a number
+                                    * @returns {string|*}
+                                    */
+                                   let fieldChanged = function (oldVal, newVal, isNum) {
+                                       // convert entered values into
                                        let oldString = oldVal.toString();
                                        let newString = newVal.toString();
                                        // if different, return string with both
                                        if (oldString.localeCompare(newString) == 0) {
-                                           return oldVal;
+                                           return "\n--- " + oldVal + "\n\n";
                                        } else {
+                                           // the full different field string, to be returned at the end
+                                           let diffFieldString = "";
+                                           //if the isNum value is false, simply return the string with red text for the "updated" text
+                                           if (!isNum) {
+                                               diffFieldString = "\n- " + newString + "\n--- OLD: " + oldString + "\n";
+                                           } else {
+                                               // if it is a number, it's time to compare the two
+                                               // to see if the new value is higher or lower than the original
+
+                                               // parse int value from oldVal
+                                               let oldNum = parseInt(oldVal, 10);
+                                               // parse int val from newVal
+                                               let newNum = parseInt(newVal, 10);
+
+                                               // if newNum is higher than old, make it green
+                                               if (newNum > oldNum) {
+                                                   diffFieldString = "\n+ " + newString + "\n--- OLD: " + oldString + "\n";
+                                               } else {
+                                                   // you're only here if newNum is lower than old, so make it red
+                                                   diffFieldString = "\n- " + newString + "\n--- OLD: " + oldString + "\n";
+                                               }
+                                           }
+
                                            // if here, the two are different
-                                           return "(`OLD: " + oldVal + "` // NEW: " + newVal + ")";
+                                           return diffFieldString;
                                        }
                                    };
 
                                    // formatted ability score strings. STR(0) DEX(1) CON(2) INT(3) WIS(4) CHA(5)
                                    let abilityScoreString = [
-                                       "**STR: ** " + fieldChanged(oldPoke.statBlock.strBase.toFixed(0), tempPoke.statBlock.strBase.toFixed(0)) + "( " + fieldChanged(oldPoke.statBlock.strMod, tempPoke.statBlock.strMod) + " )",
-                                       "**DEX: ** " + fieldChanged(oldPoke.statBlock.dexBase.toFixed(0), tempPoke.statBlock.dexBase.toFixed(0)) + "( " + fieldChanged(oldPoke.statBlock.dexMod, tempPoke.statBlock.dexMod) + " )",
-                                       "**CON: ** " + fieldChanged(oldPoke.statBlock.conBase.toFixed(0), tempPoke.statBlock.conBase.toFixed(0)) + "( " + fieldChanged(oldPoke.statBlock.conMod, tempPoke.statBlock.conMod) + " )",
-                                       "**INT: ** " + fieldChanged(oldPoke.statBlock.intBase.toFixed(0), tempPoke.statBlock.intBase.toFixed(0)) + "( " + fieldChanged(oldPoke.statBlock.intMod, tempPoke.statBlock.intMod) + " )",
-                                       "**WIS: ** " + fieldChanged(oldPoke.statBlock.wisBase.toFixed(0), tempPoke.statBlock.wisBase.toFixed(0)) + "( " + fieldChanged(oldPoke.statBlock.wisMod, tempPoke.statBlock.wisMod) + " )",
-                                       "**CHA: ** :3c"
+                                       CODE_FORMAT_START
+                                       + "SCORE:" + fieldChanged(oldPoke.statBlock.strBase.toFixed(0), tempPoke.statBlock.strBase.toFixed(0),true)
+                                       + "MODIFIER:" + fieldChanged(oldPoke.statBlock.strMod, tempPoke.statBlock.strMod, true)
+                                       + CODE_FORMAT_END,
+
+
+                                       CODE_FORMAT_START
+                                       + "SCORE:" +  fieldChanged(oldPoke.statBlock.dexBase.toFixed(0), tempPoke.statBlock.dexBase.toFixed(0), true)
+                                       + "MODIFIER:" + fieldChanged(oldPoke.statBlock.dexMod, tempPoke.statBlock.dexMod, true)
+                                       + CODE_FORMAT_END,
+
+
+                                        CODE_FORMAT_START
+                                       + "SCORE:" + fieldChanged(oldPoke.statBlock.conBase.toFixed(0), tempPoke.statBlock.conBase.toFixed(0), true)
+                                       + "MODIFIER:" + fieldChanged(oldPoke.statBlock.conMod, tempPoke.statBlock.conMod, true)
+                                       + CODE_FORMAT_END,
+
+
+                                       CODE_FORMAT_START
+                                       + "SCORE:" + fieldChanged(oldPoke.statBlock.intBase.toFixed(0), tempPoke.statBlock.intBase.toFixed(0), true)
+                                       + "MODIFIER:" + fieldChanged(oldPoke.statBlock.intMod, tempPoke.statBlock.intMod, true)
+                                       + CODE_FORMAT_END,
+
+
+                                       CODE_FORMAT_START
+                                       + "SCORE:" + fieldChanged(oldPoke.statBlock.wisBase.toFixed(0), tempPoke.statBlock.wisBase.toFixed(0), true)
+                                       + "MODIFIER:" + fieldChanged(oldPoke.statBlock.wisMod, tempPoke.statBlock.wisMod, true)
+                                       + CODE_FORMAT_END,
+
+
+                                       "```\n:3c```"
                                    ];
 
                                    // TODO update above array with charisma calculator when that's done and ready
@@ -224,51 +285,126 @@ module.exports.run = (client, connection, P, message, args) => {
                                                name: client.user.username,
                                                icon_url: client.user.avatarURL
                                            },
-                                           title: `Level ${fieldChanged(oldPoke.level, tempPoke.level)} ${fieldChanged(oldSpecies, newSpecies)} ~ ${tempPoke.name}`,
+                                           title: `Review & Confirm Changes to ${tempPoke.name}`,
                                            thumbnail: {
                                                url: `${tempPoke.pokemonData.sprites.front_default}`,
                                            },
-                                           description: "Use !data to call info using the Pokedex bot.",
+                                           description: `Please review the Pokemon's updated stats, highlighted in color below. If the updates are correct, confirm the changes to the Pokemon by reacting to the message beneath this embed.`,
                                            fields: [
                                                {
-                                                   name: "Basic Info",
-                                                   value: `**Ability:** ${formatAbility(tempPoke.ability.name)} | **Gender:** ${tempPoke.gender} | **Nature: ** ${fieldChanged(oldPoke.nature.natureFinal, tempPoke.nature.natureFinal)} | **Shiny: ** ${tempPoke.shiny}\n=================`
+                                                   name: "Static Fields",
+                                                   value: `These should not change via dynamic field updates.\n`
+                                                       + `**Name:** ${tempPoke.name}\n`
+                                                       + `**Ability:** ${formatAbility(tempPoke.ability.name)}\n`
+                                                       + `**Gender:** ${capitalize(tempPoke.gender)}\n`
+                                                       + `**Shiny?** ${tempPoke.shiny}`,
+                                                   inline: true
                                                },
                                                {
-                                                   name: "HP",
-                                                   value: `**IV: ** ${fieldChanged(oldPoke.statBlock.ivStats[0], tempPoke.statBlock.ivStats[0])} | **EV: ** ${fieldChanged(oldPoke.statBlock.evStats[0], tempPoke.statBlock.evStats[0])} | **Final: ** ${fieldChanged(oldPoke.statBlock.finalStats[0], tempPoke.statBlock.finalStats[0])}\n=================`
+                                                   name: "Core Fields",
+                                                   value: `${CODE_FORMAT_START}Level${fieldChanged(oldPoke.level, tempPoke.level, true)}Species${fieldChanged(oldSpecies, newSpecies, false)}${CODE_FORMAT_END}`,
+                                                   inline: true
                                                },
                                                {
-                                                   name: "Attack",
-                                                   value: `**IV: ** ${fieldChanged(oldPoke.statBlock.ivStats[1], tempPoke.statBlock.ivStats[1])} | **EV: ** ${fieldChanged(oldPoke.statBlock.evStats[1], tempPoke.statBlock.evStats[1])} | **Final: ** ${fieldChanged(oldPoke.statBlock.finalStats[1], tempPoke.statBlock.finalStats[1])}\n=================`
+                                                 name: "=====",
+                                                 value: "**BASE STATS**"
                                                },
                                                {
-                                                   name: "Defense",
-                                                   value: `**IV: ** ${fieldChanged(oldPoke.statBlock.ivStats[2], tempPoke.statBlock.ivStats[2])} | **EV: ** ${fieldChanged(oldPoke.statBlock.evStats[2], tempPoke.statBlock.evStats[2])} | **Final: ** ${fieldChanged(oldPoke.statBlock.finalStats[2], tempPoke.statBlock.finalStats[2])}\n=================`
+                                                   name: "Hit Points (HP)",
+                                                   value: `${CODE_FORMAT_START}IV: ${fieldChanged(oldPoke.statBlock.ivStats[0], tempPoke.statBlock.ivStats[0], true)}EV: ${fieldChanged(oldPoke.statBlock.evStats[0], tempPoke.statBlock.evStats[0], true)}FINAL: ${fieldChanged(oldPoke.statBlock.finalStats[0], tempPoke.statBlock.finalStats[0], true)}${CODE_FORMAT_END}`,
+                                                   inline: true
                                                },
                                                {
-                                                   name: "Special Attack",
-                                                   value: `**IV: ** ${fieldChanged(oldPoke.statBlock.ivStats[3], tempPoke.statBlock.ivStats[3])} | **EV: ** ${fieldChanged(oldPoke.statBlock.evStats[3], tempPoke.statBlock.evStats[3])} | **Final: ** ${fieldChanged(oldPoke.statBlock.finalStats[3], tempPoke.statBlock.finalStats[3])}\n=================`
+                                                   name: "Attack (ATK)",
+                                                   value: `${CODE_FORMAT_START}IV: ${fieldChanged(oldPoke.statBlock.ivStats[1], tempPoke.statBlock.ivStats[1], true)}EV: ${fieldChanged(oldPoke.statBlock.evStats[1], tempPoke.statBlock.evStats[1], true)}FINAL: ${fieldChanged(oldPoke.statBlock.finalStats[1], tempPoke.statBlock.finalStats[1], true)}${CODE_FORMAT_END}`,
+                                                   inline: true
                                                },
                                                {
-                                                   name: "Special Defense",
-                                                   value: `**IV: ** ${fieldChanged(oldPoke.statBlock.ivStats[4], tempPoke.statBlock.ivStats[4])} | **EV: ** ${fieldChanged(oldPoke.statBlock.evStats[4], tempPoke.statBlock.evStats[4])} | **Final: ** ${fieldChanged(oldPoke.statBlock.finalStats[4], tempPoke.statBlock.finalStats[4])}\n=================`
+                                                   name: "Defense (DEF)",
+                                                   value: `${CODE_FORMAT_START}IV: ${fieldChanged(oldPoke.statBlock.ivStats[2], tempPoke.statBlock.ivStats[2], true)}EV: ${fieldChanged(oldPoke.statBlock.evStats[2], tempPoke.statBlock.evStats[2], true)}FINAL: ${fieldChanged(oldPoke.statBlock.finalStats[2], tempPoke.statBlock.finalStats[2], true)}${CODE_FORMAT_END}`,
+                                                   inline: true
                                                },
                                                {
-                                                   name: "Speed",
-                                                   value: `**IV: ** ${fieldChanged(oldPoke.statBlock.ivStats[5], tempPoke.statBlock.ivStats[5])} | **EV: ** ${fieldChanged(oldPoke.statBlock.evStats[5], tempPoke.statBlock.evStats[5])} | **Final: ** ${fieldChanged(oldPoke.statBlock.finalStats[5], tempPoke.statBlock.finalStats[5])}\n=================`
+                                                   name: "Spec. Attack (SPA)",
+                                                   value: `${CODE_FORMAT_START}IV: ${fieldChanged(oldPoke.statBlock.ivStats[3], tempPoke.statBlock.ivStats[3], true)}EV: ${fieldChanged(oldPoke.statBlock.evStats[3], tempPoke.statBlock.evStats[3], true)}FINAL: ${fieldChanged(oldPoke.statBlock.finalStats[3], tempPoke.statBlock.finalStats[3], true)}${CODE_FORMAT_END}`,
+                                                   inline: true
                                                },
                                                {
-                                                   name: "Ability Scores",
-                                                   value: `${abilityScoreString[0]} | ${abilityScoreString[1]} | ${abilityScoreString[2]}\n${abilityScoreString[3]} | ${abilityScoreString[4]} | ${abilityScoreString[5]}`
+                                                   name: "Spec. Defense (SPD)",
+                                                   value: `${CODE_FORMAT_START}IV: ${fieldChanged(oldPoke.statBlock.ivStats[4], tempPoke.statBlock.ivStats[4], true)}EV: ${fieldChanged(oldPoke.statBlock.evStats[4], tempPoke.statBlock.evStats[4], true)}FINAL: ${fieldChanged(oldPoke.statBlock.finalStats[4], tempPoke.statBlock.finalStats[4], true)}${CODE_FORMAT_END}`,
+                                                   inline: true
                                                },
                                                {
-                                                   name: "Saving Throws",
-                                                   value: `**FORT: ** ${fieldChanged(oldPoke.statBlock.fortSave, tempPoke.statBlock.fortSave)} | **REF: ** ${fieldChanged(oldPoke.statBlock.refSave, tempPoke.statBlock.refSave)} | **WILL: ** ${fieldChanged(oldPoke.statBlock.willSave, tempPoke.statBlock.willSave)}`
+                                                   name: "Speed (SPE)",
+                                                   value: `${CODE_FORMAT_START}IV: ${fieldChanged(oldPoke.statBlock.ivStats[5], tempPoke.statBlock.ivStats[5], true)}EV: ${fieldChanged(oldPoke.statBlock.evStats[5], tempPoke.statBlock.evStats[5], true)}FINAL: ${fieldChanged(oldPoke.statBlock.finalStats[5], tempPoke.statBlock.finalStats[5], true)}${CODE_FORMAT_END}`,
+                                                   inline: true
                                                },
                                                {
-                                                   name: "AC & Move Speed",
-                                                   value: `**AC: ** ${fieldChanged(oldPoke.statBlock.armorClass, tempPoke.statBlock.armorClass)} | **Move Speed: ** ${fieldChanged(oldPoke.statBlock.moveSpeed, tempPoke.statBlock.moveSpeed)} ft`
+                                                 name: "=====",
+                                                 value: "**ABILITY SCORES**"
+                                               },
+                                               {
+                                                   name: "Strength (STR)",
+                                                   value: `${abilityScoreString[0]}`,
+                                                   inline: true
+                                               },
+                                               {
+                                                   name: "Dexterity (DEX)",
+                                                   value: `${abilityScoreString[1]}`,
+                                                   inline: true
+                                               },
+                                               {
+                                                   name: "Constitution (CON)",
+                                                   value: `${abilityScoreString[2]}`,
+                                                   inline: true
+                                               },
+                                               {
+                                                   name: "Intelligence (INT)",
+                                                   value: `${abilityScoreString[3]}`,
+                                                   inline: true
+                                               },
+                                               {
+                                                   name: "Wisdom (WIS)",
+                                                   value: `${abilityScoreString[4]}`,
+                                                   inline: true
+                                               },
+                                               {
+                                                   name: "Charisma (CHA)",
+                                                   value: `${abilityScoreString[5]}`,
+                                                   inline: true
+                                               },
+                                               {
+                                                   name: "=====",
+                                                   value: "**SAVING THROWS**"
+                                               },
+                                               {
+                                                   name: "Fortitude (FORT)\nBased on CON",
+                                                   value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.statBlock.fortSave, tempPoke.statBlock.fortSave, true)}${CODE_FORMAT_END}`,
+                                                   inline: true
+                                               },
+                                               {
+                                                   name: "Reflex (REF)\nBased on DEX",
+                                                   value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.statBlock.refSave, tempPoke.statBlock.refSave, true)}${CODE_FORMAT_END}`,
+                                                   inline: true
+                                               },
+                                               {
+                                                   name: "Will (WILL)\nBased on WIS",
+                                                   value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.statBlock.willSave, tempPoke.statBlock.willSave, true)}${CODE_FORMAT_END}`,
+                                                   inline: true
+                                               },
+                                               {
+                                                   name: "=====",
+                                                   value: "**AC & Move Speed**"
+                                               },
+                                               {
+                                                   name: "Armor Class (AC)",
+                                                   value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.statBlock.armorClass, tempPoke.statBlock.armorClass, true)}${CODE_FORMAT_END}`,
+                                                   inline: true
+                                               },
+                                               {
+                                                   name: "Move Speed (measured in feet)",
+                                                   value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.statBlock.armorClass, tempPoke.statBlock.armorClass, true)}${CODE_FORMAT_END}`,
+                                                   inline: true
                                                },
                                            ],
                                            timestamp: new Date(),
@@ -290,7 +426,7 @@ module.exports.run = (client, connection, P, message, args) => {
                                        response.react('✅').then(response.react('❌'));
 
                                        // await user reaction
-                                       response.awaitReactions((reaction, user) => user.id === message.author.id && (reaction.emoji.name === '✅' || reaction.emoji.name === '❌'), {max: 1, time: 90000}).then(collected => {
+                                       response.awaitReactions((reaction, user) => user.id === message.author.id && (reaction.emoji.name === '✅' || reaction.emoji.name === '❌'), {max: 1, time: 180000}).then(collected => {
                                            // if confirmed, update the poke and alert the user to such
                                            if (collected.first().emoji.name === '✅') {
                                                // update the pokemon and print confirmation
