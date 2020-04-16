@@ -136,7 +136,7 @@ Statblock.prototype.calculateSaves = function(pokemon) {
 
 Statblock.prototype.calculateStats = function(pokemon) {
     // start by taking care of Nature
-    pokemon.nature.calculateNatureStats(pokemon);
+    //pokemon.nature.calculateNatureStats(pokemon);
     //pokemon.Nautre.calculateNatureStats(pokemon)
 
 //get CON + hit points

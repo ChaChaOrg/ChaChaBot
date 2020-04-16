@@ -55,9 +55,9 @@ Nature.prototype.assignNature = function(pokemon, nature)
             this.natureXCoord = natureX;
             this.natureYCoord = natureYIndex;
         }
-    });
+    }.bind(this));
 
-    this.calculateNatureStats(pokemon, natureXCoord, natureYCoord);
+    this.calculateNatureStats(pokemon);
 
 };
 

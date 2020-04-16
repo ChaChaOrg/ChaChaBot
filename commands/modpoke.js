@@ -160,10 +160,10 @@ module.exports.run = (client, connection, P, message, args) => {
                                    console.log("SQL has been converted to a Pokemon Object\nAll values recalculated as necessary\nProviding user with comparison embed & awaiting change confirmation...");
 
                                    // DEBUG display old and new pokes
-                                   message.channel.send("Old Pokemon Below (debug)");
-                                   message.channel.send(oldPoke.sendSummaryMessage(client));
-                                   message.channel.send("New Pokemon Below (debug)");
-                                   message.channel.send(tempPoke.sendSummaryMessage(client));
+                                   //message.channel.send("Old Pokemon Below (debug)");
+                                   //message.channel.send(oldPoke.sendSummaryMessage(client));
+                                   //message.channel.send("New Pokemon Below (debug)");
+                                   //message.channel.send(tempPoke.sendSummaryMessage(client));
 
                                    // ======== FORMATTED VARIABLES & STRINGS & EMBED ========
 
@@ -290,9 +290,9 @@ module.exports.run = (client, connection, P, message, args) => {
                                        response.react('✅').then(response.react('❌'));
 
                                        // await user reaction
-                                       response.awaitReactions((reaction, user) => user.id == message.author.id && (reaction.emoji.name == '✅' || reaction.emoji.name == '❌'), {max: 1, time: 90000}).then(collected => {
+                                       response.awaitReactions((reaction, user) => user.id === message.author.id && (reaction.emoji.name === '✅' || reaction.emoji.name === '❌'), {max: 1, time: 90000}).then(collected => {
                                            // if confirmed, update the poke and alert the user to such
-                                           if (collected.first().emoji.name == '✅') {
+                                           if (collected.first().emoji.name === '✅') {
                                                // update the pokemon and print confirmation
                                                tempPoke.updatePokemon(connection, message, rows[0].private).then(function (results) {
                                                    console.log("Success! " + pokeName + "'s " + valName + "has been changed to " + valString + "and all related stats have been updated.\n\nHint: View Pokemon's stat's using `+showpoke [nickname]`");
@@ -320,8 +320,6 @@ module.exports.run = (client, connection, P, message, args) => {
                                    //would have to add this within pokemon to do it neatly.
                                    //We can add an arg to .updatePokemon but I'm already doing that with private
                                    //and a one-off fix here would be messy since hp might change in another part of the bot
-
-                                   //TODO: Actually test it
 
 
                                }).catch(function (error) {
