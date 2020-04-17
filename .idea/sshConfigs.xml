@@ -2,8 +2,8 @@
 <project version="4">
   <component name="SshConfigs">
     <configs>
-      <sshConfig host="ec2-34-226-119-6.compute-1.amazonaws.com" id="f988c0b6-8846-4b36-999d-3497c486580f" keyPath="$PROJECT_DIR$/../ChaChaBot.pem" port="22" customName="awsChaChaBot" nameFormat="CUSTOM" username="ubuntu" />
       <sshConfig host="ec2-34-226-119-6.compute-1.amazonaws.com" id="d8d74268-f5a5-4266-98d5-e7d5fa209e6e" keyPath="$PROJECT_DIR$/../ChaChaBot.pem" port="22" customName="awsChaChaBot" nameFormat="CUSTOM" username="ubuntu" />
+      <sshConfig host="localhost" id="41930da5-da00-4604-9aa2-1a3b9f4d56ff" keyPath="$USER_HOME$/.ssh/id_rsa" port="22" nameFormat="DESCRIPTIVE" />
     </configs>
   </component>
 </project>

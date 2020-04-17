@@ -1,11 +1,17 @@
 // Generates a new ChaCha Pokemon, given level & base stats
 
+//help message
+const HELP_MESSAGE = '\n`+genpoke [species] [level (1-20)] [nickname] \n' +
+	'**FIELDS TO ADD LATER:**\n[hidden ability % (as a number, 0-100)] [trainerName] [private (optional: leave blank if public, put 1 if private]`' +
+	'\n\nCreates a new Pokemon when given the values above, printing it upon completion.\n\n' +
+	'(Hint: You can view an existing Pokemon with `+showpoke [nickname]`, or remove it using `+rempoke [nickname]`';
+
 module.exports.run = (client, connection, P, message, args) => {
 
 	let Pokemon = require('../pokemon.js');
 
 	if (args[0] === "help"){
-		message.reply('New Pokemon Generator. Variables in order:\n [Pokemon Species] [Level] [Pokemon Name] [Hidden Ability % (optional - CURRENTLY BROKEN)]').catch(console.error);
+		message.reply(HELP_MESSAGE).catch(console.error);
 		return;
 	}
 	try{

@@ -140,8 +140,9 @@ Statblock.prototype.calculateStats = function(pokemon) {
     //pokemon.Nautre.calculateNatureStats(pokemon)
 
 //get CON + hit points
-//calculate con +  EQ: [(BaseStats + IVs + EVs/4) * .15 +1.5]
-    this.conBase = Math.round(((this.baseStats[0] + this.ivStats[0] + this.evStats[0]) / CON_CALC_DIVISOR) * STAT_CALC_MULT + STAT_CALC_BASE);
+//calculate con +  EQ: [(BaseStats + IVs + (EVs/4)) * .15 +1.5]
+
+    this.conBase = Math.round(((this.baseStats[0] + this.ivStats[0] + (this.evStats[0]/4)) * STAT_CALC_MULT)+STAT_CALC_BASE);
     this.conMod = modPrint(this.conBase);
 
 //calculate = attribute max HP
