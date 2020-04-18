@@ -146,8 +146,9 @@ module.exports.run = (client, connection, P, message, args) => {
                                // grab the row and stow it
                                let thisPoke = rows[0];
 
-                               // inside thisPoke, update the given field with the given value
-                               thisPoke[valName] = valString;
+                               // if the valName is species, assign directly, otherwise convert it into a number
+                               if (valName.toUpperCase() == "SPECIES") thisPoke[valName] = valString;
+                               else thisPoke[valName] = parseInt(valString);
 
                                //Make new empty Pokemon object
                                let tempPoke = new Pokemon();
@@ -423,12 +424,20 @@ module.exports.run = (client, connection, P, message, args) => {
                                    // alert user that they must confirm before actually sending changes
                                    message.reply("Changes displayed in embed above. Confirm with reaction ✅, or cancel with ❌").then(function(response) {
                                        // add reactions for easy user access
-                                       response.react('✅').then(response.react('❌'));
+                                       response.react('✅').then(r => {
+                                           response.react('❌');
+                                       });
 
-                                       // await user reaction
-                                       response.awaitReactions((reaction, user) => user.id === message.author.id && (reaction.emoji.name === '✅' || reaction.emoji.name === '❌'), {max: 1, time: 180000}).then(collected => {
-                                           // if confirmed, update the poke and alert the user to such
-                                           if (collected.first().emoji.name === '✅') {
+                                       //filter for the reaction collector
+                                       const filter = (reaction, user) => user.id === message.author.id && (reaction.emoji.name === '✅' || reaction.emoji.name === '❌');
+/*
+                                       // reaction collector
+                                       const reactionCollector = response.createReactionCollector(filter, {max: 1, time: 100000});
+
+                                       // when collection has been collected, time to process their decision
+                                       reactionCollector.on('end', r => {
+                                           // if the emoji sent was a check, then update
+                                           if (r.first().emoji.name === '✅') {
                                                // update the pokemon and print confirmation
                                                tempPoke.updatePokemon(connection, message, rows[0].private).then(function (results) {
                                                    console.log("Success! " + pokeName + "'s " + valName + "has been changed to " + valString + "and all related stats have been updated.\n\nHint: View Pokemon's stat's using `+showpoke [nickname]`");
@@ -442,11 +451,39 @@ module.exports.run = (client, connection, P, message, args) => {
                                                console.log("Edits to Pokemon cancelled by user.");
                                                message.reply(pokeName + "'s edits have been cancelled");
                                            }
-                                       }).catch(() => {
+                                       });
+*/
+
+                                       // await user reaction
+                                       response.awaitReactions(filter, {max: 1, time: 100000}).then(collected => {
+                                           // tell the log
+                                           console.log(`Collected ${collected.size} reactions`);
+                                           // ===== This is where it's crashing!!!
+                                           //
+                                           //    this is around where it is crashing, :(
+                                           //
+                                           //
+                                           // if confirmed, update the poke and alert the user to such
+                                           if (collected.first().emoji.name == '✅') {
+                                               // update the pokemon and print confirmation
+                                               tempPoke.updatePokemon(connection, message, rows[0].private).then(function (results) {
+                                                   console.log("Success! " + pokeName + "'s " + valName + "has been changed to " + valString + "and all related stats have been updated.\n\nHint: View Pokemon's stat's using `+showpoke [nickname]`");
+                                               }).catch(function (error) {
+                                                   message.reply("Error updating SQL for: " + pokeName);
+                                                   console.log("Error updating SQL for: " + pokeName);
+                                                   console.log(error.toString());
+                                               });
+                                           } else {
+                                               // if you're here, the user clicked X
+                                               console.log("Edits to Pokemon cancelled by user.");
+                                               message.reply(pokeName + "'s edits have been cancelled");
+                                           }
+                                       }).catch((err) => {
                                            // timeout message
                                            let timeoutMessage = "Edits to " + pokeName + " cancelled via timeout.";
                                            // if you're here, the action timed out
                                            console.log(timeoutMessage);
+                                           console.log(err.toString());
                                            message.reply(timeoutMessage);
                                        });
                                    });

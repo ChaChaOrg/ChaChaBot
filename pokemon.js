@@ -16,10 +16,16 @@ let Statblock = require('./models/statblock.js');
 
 module.exports = Pokemon;
 
-function Ability(name, ha)
+/**
+ * Creates an Ability object, which hold's the ability's name and whether or not it's a hidden ability
+ * @param abilityName The Ability's name
+ * @param isHiddenAbility Whether or not the ability is hidden
+ * @constructor
+ */
+function Ability(abilityName, isHiddenAbility)
 {
-    this.name = name;
-    this.hiddenAbility = ha;
+    this.name = abilityName;
+    this.isHiddenAbility = isHiddenAbility;
 }
 
 
@@ -46,7 +52,7 @@ function Pokemon(tempSpecies, tempLevel, tempName) {
     this.statBlock = new Statblock();
 
     //hidden ability percentile
-    this.haChance = 1;
+    this.haChance = 0;
 
     this.moveSet = new Moveset.MoveSet();
 
@@ -120,28 +126,98 @@ Pokemon.prototype.assignTypes = function() {
     }
 };
 
+// Generates a random ability given the ability options from PokeAPI & the assigned hidden ability chance
 Pokemon.prototype.genRandAbility = function() {
 
+    // the total # of abilities the pokemon can have
     let abilityTotal = 0;
-    let abilityList = [];
+    // the list of abilities the pokemon has, to be populated by sifting through pokemonData
+    let normalAbilities = [];
+
+    // hidden ability, if they have one
+    let hiddenAbility = new Ability("", true);
+
+    // a coin flip, for if you need to pick through two abilities
+    let coinFlip = Math.floor(Math.random() * 2);
+
+    // go through abilities and grab hidden + non-hidden abilities
+    this.pokemonData.abilities.forEach(speciesAbility => {
+       if (speciesAbility["is_hidden"]) hiddenAbility = new Ability(speciesAbility["ability"]["name"], speciesAbility["is_hidden"]);
+       else normalAbilities.push(new Ability(speciesAbility["ability"]["name"], speciesAbility["is_hidden"]));
+       abilityTotal++;
+    });
+
+    // first check if the poke can even have other abilities, or if it only has one
+    if (abilityTotal === 1) {
+        // if it can only have one ability, assign and be done
+        this.ability = normalAbilities[0];
+    } else if (this.haChance > 0) {
+        // if you're here, there's a possibility for it to have it's hidden ability
+
+        // roll for ha
+        let haChanceRoll = Math.floor(Math.random() * 100) + 1;
+        // check if you struck gold B)
+        if (haChanceRoll <= this.haChance) {
+            // if you're here, you rolled the HA!
+            this.ability = hiddenAbility;
+        } else {
+            // no hidden ability chosen, so roll through & assign from non-hidden
+            if (abilityTotal < 3) this.ability = normalAbilities[0];
+            else this.ability = normalAbilities[coinFlip];
+        }
+    } else {
+        // no hidden ability enabled, so roll through & assign from non-hidden
+        if (abilityTotal < 3) this.ability = normalAbilities[0];
+        else this.ability = normalAbilities[coinFlip];
+    }
+
+    /*
+    // go through each item in pokemonData.Abilities, adding them to abilityList
     this.pokemonData.abilities.forEach(element => {
         abilityList.push(new Ability(element["ability"]["name"], element["is_hidden"]));
         abilityTotal++;
     } );
 
-    this.ability = abilityList[Math.floor((Math.random()*abilityList.length))];
+    // roll through some checks- if there's only one ability, or if there's a chance for hidden
+    if (abilityTotal === 1) {
+        // if there's only one ability, go ahead and assign it and be done
+        this.ability = abilityList[0];
+        // TODO remove when done testing
+        console.log("Only one ability available, " + this.ability.name);
+    } else if (this.haChance > 0) {
+        // if you're here, it's time to roll to see if you have a hidden ability or not
 
-    /*
-    if (Math.floor((Math.random() * 100) + 1) <= haChance) {
-        this.ability = abilityNum;
-    } else {
-        if (abilityNum === 2) {
-            this.ability = 1;
+        // roll to see if you hit the hidden ability
+        let hiddenAbilityRoll = Math.floor(Math.random() * 100) + 1; // 1-100 value
+
+        // if the roll is between 1 & the HA chance, the ability is assigned as hidden and this whole shebang is done
+        if (hiddenAbilityRoll <= this.haChance) {
+            // roll through and grab the ha
+            abilityList.forEach(ability => {
+                if (ability.isHiddenAbility) {
+                    // if it's the hidden one, assign it and scoot boots
+                    this.ability = ability;
+                    // TODO remove when done testing
+                    console.log("Rolled a " + hiddenAbilityRoll + " on HA chance, so assigned ability " + this.ability.name);
+                }
+            });
         } else {
-            this.ability = Math.floor((Math.random()) + 1);
+            // if you here, you didn't win the HA roll and get a normal ability
+            if (abilityList.length < 3) {
+                this.ability = abilityList[0];
+            } else {
+                this.ability = abilityList[coinFlip];
+            }
+            // TODO remove when done testing
+            console.log("Lost HA roll with a " + hiddenAbilityRoll + ", so assigned ability " + this.ability.name);
         }
-    }
-    */
+    } else {
+        // if you're here, then the pokemon has multiple abilities and isn't getting it's HA, so it's a 50/50 roll
+        this.ability = abilityList[coinFlip];
+        // todo remove this when done testing
+        console.log("No HA chance detected, so assigned ability " + this.ability.name);
+    }*/
+
 };
 //Assign gender
 Pokemon.prototype.assignRandGender = function() {
@@ -178,6 +254,7 @@ let capitalizeWord = function (tempWord)
 
 Pokemon.prototype.sendSummaryMessage = function(client) {
 
+    // set up formatted ability name
     let tempAbility = this.ability.name;
     if( ~tempAbility.indexOf("-"))
     {
@@ -188,9 +265,12 @@ Pokemon.prototype.sendSummaryMessage = function(client) {
         tempAbility = tempA + " " + tempB;
     }
     else tempAbility = capitalizeWord(tempAbility);
+
+    // if the ability is hidden, append a lil O to it
+    if (this.ability.isHiddenAbility) tempAbility = tempAbility.concat(" (HA)");
+
     let tempSpecies = this.species;
     tempSpecies = capitalizeWord(tempSpecies);
-
 
     return {embed: {
             color: 3447003,
@@ -266,7 +346,7 @@ Pokemon.prototype.uploadPokemon = function(connection, message) {
         hpIV, atkIV, defIV, spaIV, spdIV, speIV, 
         hpEV, atkEV, defEV, spaEV, spdEV, speEV, 
         move1, move2, move3, move4, move5, moveProgress, 
-        originalTrainer, userID, dateCreated) 
+        originalTrainer, discordID, dateCreated) 
         VALUES (
         "${this.name}",
         "${this.species}",
@@ -315,7 +395,7 @@ Pokemon.prototype.uploadPokemon = function(connection, message) {
 //BE CAREFUL
 Pokemon.prototype.updatePokemon = function(connection, message, pokePrivate) {
 
-    if (pokePrivate === NULL) pokePrivate = false;
+    if (pokePrivate === null) pokePrivate = false;
 
     //uses SQL UPDATE to alter the existing entry
     // SQL UPDATE reference: https://www.w3schools.com/sql/sql_update.asp
@@ -370,6 +450,7 @@ Pokemon.prototype.updatePokemon = function(connection, message, pokePrivate) {
         if (err) throw err;
         console.log("1 record updated.");
     }).bind(this);
+
 };
 
 
@@ -575,6 +656,13 @@ Pokemon.prototype.loadFromSQL = function (P, sqlObject) {
 
                         this.gender = sqlObject.gender;
                         this.ability.name = sqlObject.ability;
+
+                        // roll through abilities and check if this one is hidden
+                        response.abilities.forEach(ability => {
+                            if (ability.ability.name == this.ability.name) {
+                                this.ability.isHiddenAbility = ability['is_hidden'];
+                            }
+                        });
 
                         this.nature.assignNature(this, sqlObject.nature);
 

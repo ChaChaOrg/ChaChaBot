@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^11.5.1",
+    "discord.js": "^11.6.4",
     "enmap": "^4.8.7",
     "mysql": "^2.18.1",
     "pokedex-promise-v2": "^3.2.0"

@@ -10,12 +10,19 @@ module.exports.run = (client, connection, P, message, args) => {
 
 	let Pokemon = require('../pokemon.js');
 
+	// if asking for help, return the help info
 	if (args[0] === "help"){
 		message.reply(HELP_MESSAGE).catch(console.error);
 		return;
 	}
+
+	// try to generate the poke
 	try{
+		// create a new Pokemon object
 		let genPokemon = new Pokemon(args[0].toLowerCase(), args[1], args[2]);
+		// assign hidden ability chance, if listed
+		if (args[3] !== null) genPokemon.haChance = args[3];
+		// initialize the Pokemon
 		genPokemon.init(P, message)
 			.then( function(response){
 				// upload pokemon to database
