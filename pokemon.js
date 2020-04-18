@@ -401,7 +401,7 @@ Pokemon.prototype.updatePokemon = function(connection, message, pokePrivate) {
     // SQL UPDATE reference: https://www.w3schools.com/sql/sql_update.asp
     let sql =
         `UPDATE pokemon
-        SET (
+        SET 
             name = "${this.name}",
             species = "${this.species}",
             level =  ${this.level},
@@ -439,17 +439,20 @@ Pokemon.prototype.updatePokemon = function(connection, message, pokePrivate) {
             move3 = "${this.moveSet.move3.name}",
             move4 = "${this.moveSet.move4.name}",
             move5 = "${this.moveSet.move5.name}",
-            moveProgress = ${this.moveSet.moveProgress} 
-            
-            private = ${pokePrivate})
-         WHERE name = ${this.name};`
+            moveProgress = ${this.moveSet.moveProgress},
+            private = ${pokePrivate}
+
+         WHERE name = "${this.name}";`
 
 
     //console.log(sql);
-    connection.query(sql, function (err, result) {
-        if (err) throw err;
-        console.log("1 record updated.");
-    }).bind(this);
+    return new Promise( (resolve, reject) => {
+        connection.query(sql, function (err, result) {
+            if (err) return reject(err);
+            console.log("1 record updated.");
+            return resolve(result);
+        });
+    });
 
 };
 

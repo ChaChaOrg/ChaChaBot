@@ -424,9 +424,8 @@ module.exports.run = (client, connection, P, message, args) => {
                                    // alert user that they must confirm before actually sending changes
                                    message.reply("Changes displayed in embed above. Confirm with reaction ✅, or cancel with ❌").then(function(response) {
                                        // add reactions for easy user access
-                                       response.react('✅').then(r => {
-                                           response.react('❌');
-                                       });
+                                       response.react('✅');
+                                       response.react('❌');
 
                                        //filter for the reaction collector
                                        const filter = (reaction, user) => user.id === message.author.id && (reaction.emoji.name === '✅' || reaction.emoji.name === '❌');
@@ -464,10 +463,11 @@ module.exports.run = (client, connection, P, message, args) => {
                                            //
                                            //
                                            // if confirmed, update the poke and alert the user to such
-                                           if (collected.first().emoji.name == '✅') {
+                                           if (collected.first().emoji.name === '✅') {
                                                // update the pokemon and print confirmation
                                                tempPoke.updatePokemon(connection, message, rows[0].private).then(function (results) {
                                                    console.log("Success! " + pokeName + "'s " + valName + "has been changed to " + valString + "and all related stats have been updated.\n\nHint: View Pokemon's stat's using `+showpoke [nickname]`");
+                                                   message.reply("Pokemon Saved");
                                                }).catch(function (error) {
                                                    message.reply("Error updating SQL for: " + pokeName);
                                                    console.log("Error updating SQL for: " + pokeName);
