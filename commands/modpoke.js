@@ -429,45 +429,18 @@ module.exports.run = (client, connection, P, message, args) => {
 
                                        //filter for the reaction collector
                                        const filter = (reaction, user) => user.id === message.author.id && (reaction.emoji.name === '✅' || reaction.emoji.name === '❌');
-/*
-                                       // reaction collector
-                                       const reactionCollector = response.createReactionCollector(filter, {max: 1, time: 100000});
-
-                                       // when collection has been collected, time to process their decision
-                                       reactionCollector.on('end', r => {
-                                           // if the emoji sent was a check, then update
-                                           if (r.first().emoji.name === '✅') {
-                                               // update the pokemon and print confirmation
-                                               tempPoke.updatePokemon(connection, message, rows[0].private).then(function (results) {
-                                                   console.log("Success! " + pokeName + "'s " + valName + "has been changed to " + valString + "and all related stats have been updated.\n\nHint: View Pokemon's stat's using `+showpoke [nickname]`");
-                                               }).catch(function (error) {
-                                                   message.reply("Error updating SQL for: " + pokeName);
-                                                   console.log("Error updating SQL for: " + pokeName);
-                                                   console.log(error.toString());
-                                               });
-                                           } else {
-                                               // if you're here, the user clicked X
-                                               console.log("Edits to Pokemon cancelled by user.");
-                                               message.reply(pokeName + "'s edits have been cancelled");
-                                           }
-                                       });
-*/
 
                                        // await user reaction
                                        response.awaitReactions(filter, {max: 1, time: 100000}).then(collected => {
                                            // tell the log
                                            console.log(`Collected ${collected.size} reactions`);
-                                           // ===== This is where it's crashing!!!
-                                           //
-                                           //    this is around where it is crashing, :(
-                                           //
-                                           //
                                            // if confirmed, update the poke and alert the user to such
                                            if (collected.first().emoji.name === '✅') {
                                                // update the pokemon and print confirmation
                                                tempPoke.updatePokemon(connection, message, rows[0].private).then(function (results) {
-                                                   console.log("Success! " + pokeName + "'s " + valName + "has been changed to " + valString + "and all related stats have been updated.\n\nHint: View Pokemon's stat's using `+showpoke [nickname]`");
-                                                   message.reply("Pokemon Saved");
+                                                   let successString = "Success! " + pokeName + "'s " + valName + "has been changed to " + valString + "and all related stats have been updated.\n\nHint: View Pokemon's stat's using `+showpoke [nickname]`";
+                                                   console.log(successString);
+                                                   message.reply(successString);
                                                }).catch(function (error) {
                                                    message.reply("Error updating SQL for: " + pokeName);
                                                    console.log("Error updating SQL for: " + pokeName);
