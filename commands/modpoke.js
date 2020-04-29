@@ -88,7 +88,7 @@ module.exports.run = (client, connection, P, message, args) => {
            } else {
 
                // check if the user is allowed to edit the Pokemon. If a Pokemon is private, the user's discord ID must match the Pokemon's creator ID
-               if (rows[0].private > 0 && message.user.id !== rows[0].userID) {
+               if (rows[0].private > 0 && message.author.id !== rows[0].userID) {
                    console.log("Detected user attempting to edit private Pokemon that isn't their own.");
                    // If user found a pokemon that was marked private and belongs to another user, act as if the pokemon doesn't exist in messages
                    message.reply(notFoundMessage);
@@ -112,7 +112,7 @@ module.exports.run = (client, connection, P, message, args) => {
                                    } else {
                                        let successMessage = "**" + pokeName + "'s** " + valName + " has been changed to " + valString + "!";
                                        console.log(successMessage);
-                                       message.reply(successMessage);
+                                       message.reply(successMessage + "\nNOTE: Any updates to base stats will be overwritten if related variables (such as IVs, EVs, and level) are changed.");
                                        isStaticVal = true;
                                        resolve();
                                    }
