@@ -320,11 +320,11 @@ Pokemon.prototype.sendSummaryMessage = function(client) {
                 },
                 {
                     name: "Saving Throws",
-                    value: `**FORT: ** ${this.statBlock.fortSave} | **REF: ** ${this.statBlock.refSave} | **WILL: ** ${this.statBlock.willSave}`
+                    value: `**FORT: ** +${this.statBlock.fortSave} | **REF: ** +${this.statBlock.refSave} | **WILL: ** +${this.statBlock.willSave}`
                 },
                 {
                     name: "AC & Move Speed",
-                    value: `**AC: ** ${this.statBlock.armorClass} | **Move Speed: ** ${this.statBlock.moveSpeed} ft`
+                    value: `**AC: ** ${this.statBlock.armorClass} | **Move Speed: ** ${this.statBlock.moveSpeed} ft\n\n((NOTE - AC does *not* include Size Bonus, which you can find based on the Pokemon's height and [this chart](https://www.d20pfsrd.com/BASICS-ABILITY-SCORES/GLOSSARY/#Size)`
                 },
             ],
             timestamp: new Date(),
@@ -703,10 +703,17 @@ Pokemon.prototype.loadFromSQL = function (P, sqlObject) {
                         this.statBlock.finalStats[SPD_ARRAY_INDEX] = sqlObject.spd;
                         this.statBlock.finalStats[SPE_ARRAY_INDEX] = sqlObject.spe;
 
-
+                        // calculate stats and saves before re-assigning actual stats
                         this.statBlock.calculateStats(this);
                         this.statBlock.calculateSaves(this);
 
+                        //assign again to make sure you have true inside-sql values
+                        this.statBlock.finalStats[HP_ARRAY_INDEX] = sqlObject.hp;
+                        this.statBlock.finalStats[ATK_ARRAY_INDEX] = sqlObject.atk;
+                        this.statBlock.finalStats[DEF_ARRAY_INDEX] = sqlObject.def;
+                        this.statBlock.finalStats[SPA_ARRAY_INDEX] = sqlObject.spa;
+                        this.statBlock.finalStats[SPD_ARRAY_INDEX] = sqlObject.spd;
+                        this.statBlock.finalStats[SPE_ARRAY_INDEX] = sqlObject.spe;
 
                         resolve("done");
                     }.bind(this))

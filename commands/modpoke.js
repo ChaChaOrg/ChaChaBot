@@ -2,37 +2,38 @@
 const HELP_MESSAGE = "\n`+modpoke [nickname] [fieldToChange] [newValue]`\n\nModifies an existing Pokemon in the database. \nUse `+modpoke list` to view all available changeable fields.)";
 // list of editable fields
 const HELP_FIELDS_LIST = "Here's the list of all available fields on a Pokemon that can be manipulated. Fields marked with a ♢ will update other related stats upon being updated.\n" +
+    "NOTE - Fields are **case-sensitive**" +
     "\n" +
     "**BASIC FEATURES**\n" +
-    "> `NAME` // Nickname (\"Sparky\", \"Blaze\")\n" +
-    "> `SPECIES♢` // Species (\"Pikachu\", \"Vulpix\")\n" +
-    "> `LEVEL♢` // ChaCha level, ranging from level 1-20. Each ChaCha level is equivalent to 5 in-videogame levels\n" +
-    "> `GENDER` // Gender (*Male, Female, or Genderless*)\n" +
-    "> `ABILITY` // Ability (\"Static\", \"Flash Fire\")\n" +
-    "> `NATURE♢` // Nature (\"Quirky\", \"Sassy\")\n" +
-    "> `TYPE1` // First (or only) type. *Cannot be empty*!\n" +
-    "> `TYPE2` // Second type, if it has one\n" +
+    "> `name` // Nickname (\"Sparky\", \"Blaze\")\n" +
+    "> `species♢` // Species (\"Pikachu\", \"Vulpix\")\n" +
+    "> `level♢` // ChaCha level, ranging from level 1-20. Each ChaCha level is equivalent to 5 in-videogame levels\n" +
+    "> `gender` // Gender (*Male, Female, or Genderless*)\n" +
+    "> `ability` // Ability (\"Static\", \"Flash Fire\")\n" +
+    "> `nature♢` // Nature (\"Quirky\", \"Sassy\")\n" +
+    "> `type1` // First (or only) type. *Cannot be empty*!\n" +
+    "> `type2` // Second type, if it has one\n" +
     "\n" +
     "**Base Stats, EVs, & IVs**\n" +
-    "> `HP` // `HPIV♢` // `HPEV♢` // Hit Points\n" +
-    "> `ATK` // `ATKIV♢` // `ATKEV♢` // Attack\n" +
-    "> `DEF` // `DEFIV♢` // `DEFEV♢` // Defense\n" +
-    "> `SPA` // `SPAIV♢` // `SPAEV♢` // Special Attack\n" +
-    "> `SPD` // `SPDIV♢` // `SPDEV♢` // Special Defense\n" +
-    "> `SPE` // `SPEIV` // `SPEIV` // Speed\n" +
+    "> `hp` // `hpIV♢` // `hpEV♢` // Hit Points\n" +
+    "> `atk` // `atkIV♢` // `atkEV♢` // Attack\n" +
+    "> `def` // `defIV♢` // `defEV♢` // Defense\n" +
+    "> `spa` // `spaIV♢` // `spaEV♢` // Special Attack\n" +
+    "> `spd` // `spdIV♢` // `spdEV♢` // Special Defense\n" +
+    "> `spe` // `speIV` // `speEV` // Speed\n" +
     "\n" +
     "**Moves**\n" +
-    "> `MOVE1` // `MOVE2` // `MOVE3` //  `MOVE4` // Main 4 moves known\n" +
-    "> `MOVE5` // The currently in-progress move\n" +
-    "> `MOVEPROGRESS` // Progress on move learning. Can be 0-5; upon 6th success, move is learned and replaces other move.\n" +
+    "> `move1` // `move2` // `move3` //  `move4` // Main 4 moves known\n" +
+    "> `move5` // The currently in-progress move\n" +
+    "> `moveProgress` // Progress on move learning. Can be 0-5; upon 6th success, move is learned and replaces other move.\n" +
     "> (For move learning DCs, use `+movetutor help`)\n" +
     "\n" +
     "**Other**\n" +
-    "> `ORIGINALTRAINER` // The Pokemon's trainer\n" +
-    "> `SHINY` // Shiny status (0 = false, 1 = true)\n" +
-    "> `PRIVATE` // Private marker. (0 = false, 1 = true) (*Private Pokemon can only be seen by their creator*)";
+    "> `originalTrainer` // The Pokemon's trainer\n" +
+    "> `shiny` // Shiny status (0 = false, 1 = true)\n" +
+    "> `private` // Private marker. (0 = false, 1 = true) (*Private Pokemon can only be seen by their creator*)";
 // array of variables that can go straight to being updated
-const STATIC_FIELDS = ["NAME", "GENDER", "HP", "ATK", "DEF", "SPA", "SPD", "SPE", "MOVE1", "MOVE2", "MOVE3", "MOVE4", "MOVE5", "MOVEPROGRESS", "ORIGINALTRAINER", "SHINY", "PRIVATE"];
+const STATIC_FIELDS = ["name", "gender", "hp", "atk", "def", "spa", "spd", "spe", "move1", "move2", "move3", "move4", "move5", "moveProgress", "originalTrainer", "shiny", "private"];
 
 // code formatting variables for the embed
 const CODE_FORMAT_START = "```diff\n";
@@ -100,7 +101,7 @@ module.exports.run = (client, connection, P, message, args) => {
                    let staticCheck = new Promise((resolve, reject) => {
                        // check if the variable is a "static" one, and go straight to updating if so
                        STATIC_FIELDS.forEach(staticField => {
-                           if (staticField === valName.toUpperCase()) {
+                           if (staticField === valName) {
                                // go ahead and run the update string right away
                                connection.query(sqlUpdateString, function(err, results) {
                                    if (err) {
@@ -109,15 +110,16 @@ module.exports.run = (client, connection, P, message, args) => {
                                        console.log(err.toString());
                                        message.reply(errorMessage);
                                    } else {
-                                       let successMessage = pokeName + "'s " + valName + " changed to " + valString;
+                                       let successMessage = "**" + pokeName + "'s** " + valName + " has been changed to " + valString + "!";
                                        console.log(successMessage);
                                        message.reply(successMessage);
                                        isStaticVal = true;
+                                       resolve();
                                    }
                                });
                            }
                        });
-                       resolve();
+                       // resolve();
                    });
 
                    // await promise before attempting non-static update
@@ -147,7 +149,7 @@ module.exports.run = (client, connection, P, message, args) => {
                                let thisPoke = rows[0];
 
                                // if the valName is species, assign directly, otherwise convert it into a number
-                               if (valName.toUpperCase() == "SPECIES") thisPoke[valName] = valString;
+                               if (valName == "species") thisPoke[valName] = valString;
                                else thisPoke[valName] = parseInt(valString);
 
                                //Make new empty Pokemon object
