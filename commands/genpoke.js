@@ -8,7 +8,7 @@ const HELP_MESSAGE = '\n`+genpoke [species] [level (1-20)] [nickname] [hidden ab
 
 module.exports.run = (client, connection, P, message, args) => {
 
-	let Pokemon = require('../pokemon.js');
+	let Pokemon = require('../models/pokemon.js');
 
 	// if asking for help, return the help info
 	if (args[0] === "help"){

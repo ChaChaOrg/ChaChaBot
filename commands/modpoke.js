@@ -40,7 +40,7 @@ const CODE_FORMAT_START = "```diff\n";
 const CODE_FORMAT_END = "\n```"
 
 module.exports.run = (client, connection, P, message, args) => {
-    let Pokemon = require('../pokemon.js');
+    let Pokemon = require('../models/pokemon.js');
     try {
         // if asking for help, print the help message
         if (args[0].includes('help')) {
