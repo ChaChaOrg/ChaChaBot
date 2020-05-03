@@ -7,8 +7,33 @@ const SPD_ARRAY_INDEX = 4;
 const SPE_ARRAY_INDEX = 5;
 const CRITICAL_HIT_MULTIPLIER = 1.5;
 
+// help message
+const HELP_MESSAGE = "A damage calculator that uses the Pokemon in the database. (★ = required)\n\n" +
+    "`+neodamage [Attacker Name★] [Move Used (with dashes for spaces)★] [Defender Name★] [Critical Hit (y/n)] [Stages of Attack] [Stages of Defense] [Additive Damage Bonus] [Multiplicative Damage Bonus]`\n\n" +
+    "**Attacker Name★** The name of the attacker, as listed in the database\n" +
+    "**Move Used★** The move used (gen 1-7 only sorry :<) lowercase with dashes instead of spaces. Ie, 'rock-smash'\n" +
+    "**Defender Name★** The name of the pokemon being hit by the attack, as listed in the database\n" +
+    "**Critical Hit** If the attacker struck a critical hit, as 'y' for yes and 'n' for no. Defaults to no. A critical hit multiplies the total damage done by 1.5\n" +
+    "**Stages of Attack** Stages of attack/special attack the attacker has. Minimum -6, maximum +6\n" +
+    "**Stages of Defense** Stages of defense/special defense (matching the attack) the defender has. Minimum -6, maximum +6\n" +
+    "**Additive Damage Bonus** Extra damage *added* to the base power. Usually done through ChaCha feats. Defaults to 0\n" +
+    "**Multiplicative Damage Bonus** Extra damage *multiplying* the base power. Usually done through abilities, such as Rivalry or Technician. Defaults to 1, add .X to multiply (ie 1.5 = Technician Boost)";
+
+// OLD HELP MESSAGE - Damage Calculator. Variables in order:
+//  [Attacker (A) Name] [Attacker Move] [Defender (D) Name] [Stages of Attack] [Stages of Defense] [Extra Base Power (min 0)] [MultDamage (min 1)] [Critical Hit (y/n)]
+
 module.exports.run = (client, connection, P, message, args) => {
   try {
+
+    //clause for helping!
+    if (args[0].includes("help")) {
+      message
+          .reply(
+              HELP_MESSAGE
+          )
+          .catch(console.error);
+      return;
+    }
 
     // NEODAMAGE
     // args[0] = attacker's name [REQUIRED]
@@ -18,7 +43,7 @@ module.exports.run = (client, connection, P, message, args) => {
     // args[4] = stages of attack [Defaults to 1]
     // args[5] = stages of defense [Defaults to 1]
     // args[6] = additive damage bonus [Defaults to 0]
-    // args[7] = multiplicative damage bonus [Defaults to 0]
+    // args[7] = multiplicative damage bonus [Defaults to 1]
     //
 
     let attackerName;
@@ -85,15 +110,6 @@ module.exports.run = (client, connection, P, message, args) => {
     let criticalString = "";
     let combatString = "";
 
-    //clause for helping!
-    if (args[0].includes("help")) {
-      message
-        .reply(
-          "Damage Calculator. Variables in order:\n [Attacker (A) Name] [Attacker Move] [Defender (D) Name] [Stages of Attack] [Stages of Defense] [Extra Base Power (min 0)] [MultDamage (min 1)] [Critical Hit (y/n)]"
-        )
-        .catch(console.error);
-      return;
-    }
     //
     // Grabs the SQL entry for both attacking and defending pokemon.
     //
