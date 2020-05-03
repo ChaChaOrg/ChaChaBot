@@ -1,5 +1,5 @@
 #Models
-The objects that we split mainly pokemon into to keep things organized.
+The objects that we split pokemon into to keep things organized.
 
 ##moveset.js
 An object that holds an object for a "moveset", and an object for a "move".
