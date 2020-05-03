@@ -71,7 +71,7 @@ module.exports.run = (client, connection, P, message, args) => {
 
         //clause for helping!
         if (args[0].includes('help')) {
-            message.reply('Damage Calculator. Variables in order:\n [Attacker (A) Name] [Attacker Move] [Defender (D) Name] [Stages of Attack] [Stages of Defense] [Extra Base Power] [MultDamage (min 1)] [Critical Hit (y/n)]').catch(console.error);
+            message.reply('Damage Calculator. Variables in order:\n [Attacker (A) Name] [Attacker Move] [Defender (D) Name] [Stages of Attack] [Stages of Defense] [Extra Base Power (min 0)] [MultDamage (min 1)] [Critical Hit (y/n)]').catch(console.error);
             return;
         }
 
@@ -163,7 +163,7 @@ module.exports.run = (client, connection, P, message, args) => {
                                         effectiveString + criticalString +
                                         `${attackerName} deals ${damageTotal} damage to the defending ${defenderName}\n(Base Power: ${moveData.power} - damage roll: ${dice}`;
                                    
-                                    // Embed for damage, comment out if necessary /*
+                                    // Embed for damage
 
                                     //format pokemon names
                                     let atkPokeSpecies_formatted = attackPoke.species.charAt(0).toUpperCase() + attackPoke.species.slice(1);
@@ -220,10 +220,7 @@ module.exports.run = (client, connection, P, message, args) => {
                                         }
                                     };
 
-                                    // */ comment out embed if necessary
-
-                                    //original message
-                                    //message.channel.send(combatString).catch(console.error);
+                                    // comment out embed if necessary
 
                                     //embed message
                                     message.channel.send(combatEmbedString).catch(console.error);

@@ -2,19 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0e2fdc44-d39a-4440-afbe-b82b2faadb85" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/commands/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/events/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/models/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/webServers.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webServers.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/genpoke.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/genpoke.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/importpoke.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/importpoke.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/modpoke.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/modpoke.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/neodamage.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/neodamage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/showpoke.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/showpoke.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/moveset.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/moveset.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pokemon.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/pokemon.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/~$ArceusTesting.xlsx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
