@@ -9,6 +9,18 @@ const CRITICAL_HIT_MULTIPLIER = 1.5;
 
 module.exports.run = (client, connection, P, message, args) => {
   try {
+
+    // NEODAMAGE
+    // args[0] = attacker's name [REQUIRED]
+    // args[1] = move name [REQUIRED]
+    // args[2] = defender's name [REQUIRED]
+    // args[3] = Crit [y/n Defaults to n]
+    // args[4] = stages of attack [Defaults to 1]
+    // args[5] = stages of defense [Defaults to 1]
+    // args[6] = additive damage bonus [Defaults to 0]
+    // args[7] = multiplicative damage bonus [Defaults to 0]
+    //
+
     let attackerName;
     let attackerMove;
     let defenderName;
@@ -27,6 +39,10 @@ module.exports.run = (client, connection, P, message, args) => {
     let stab = 1;
     let effective = 1;
     let critical = 1;
+    //
+    // Checks if an arg is there, than assigns it. This keeps null values out of the way.
+    // This means that if an arg is left off, it will just keep the defaults, but you CAN'T put them out of order.
+    //
     args.forEach(function (element, index) {
       if (element !== null) {
         switch (index) {
@@ -40,22 +56,24 @@ module.exports.run = (client, connection, P, message, args) => {
             defenderName = args[2];
             break;
           case 3:
-            bonusDef = Number(args[4]); //Stages Defense
+            critHit = args[3]; //critical hit
             break;
           case 4:
-            bonusAtk = Number(args[3]); //Stages Attack
+            bonusAtk = Number(args[4]); //Stages Attack
             break;
           case 5:
-            other = Number(args[5]);
+            bonusDef = Number(args[5]); //Stages Defense
             break;
           case 6:
-            otherMult = Number(args[6]);
+            other = Number(args[6]);
             break;
           case 7:
-            critHit = args[7]; //critical hit
+            otherMult = Number(args[7]);
             break;
+
         }
       }
+      else if (index < 3) throwError(`ARG at ${index} not found! Check your input`);
     });
 
     //values used for calculation
@@ -76,7 +94,9 @@ module.exports.run = (client, connection, P, message, args) => {
         .catch(console.error);
       return;
     }
-
+    //
+    // Grabs the SQL entry for both attacking and defending pokemon.
+    //
     let sql = `SELECT * FROM pokemon WHERE name = '${attackerName}' OR name = '${defenderName}';`;
 
     console.log(sql);
@@ -88,6 +108,10 @@ module.exports.run = (client, connection, P, message, args) => {
       console.log("attacker and defender read");
       console.log(response[0].name);
       console.log(response[1].name);
+
+      //
+      // Load the found pokemon into pokemon objects, then wait til they both complete before continuing.
+      //
       response.forEach((element) => {
         if (element["name"] === attackerName)
           loadSQLPromise.push(attackPoke.loadFromSQL(P, element));
@@ -95,26 +119,37 @@ module.exports.run = (client, connection, P, message, args) => {
       });
 
       Promise.all(loadSQLPromise).then((response) => {
+        //
+        // Now that the pokemon have been found, grab the move information and the relevant type information.
+        //
         P.getMoveByName(attackerMove.toLowerCase()).then((moveData) => {
           P.getTypeByName(moveData.type.name).then((typeData) => {
-            //check if attack or defense are modded by terrain
-            // attack stages
+
+            //
+            // parse attack stages into the effect it has on damage.
+            //
             if (bonusAtk > -1) {
               stageModAtk = (2 + bonusAtk) / 2;
             } else {
               stageModAtk = 2 / (Math.abs(bonusAtk) + 2);
             }
-            //defense stages
+            //
+            // parse defense stages into the effect it has on damage.
+            //
             if (bonusDef > -1) {
               stageModDef = (2 + bonusDef) / 2;
             } else {
               stageModDef = 2 / (Math.abs(bonusDef) + 2);
             }
-
+            //
+            // Grab each pokemon's types into a temporary object
+            //
             let attackerTypes = [attackPoke.type1, attackPoke.type2];
             let defenderTypes = [defendPoke.type1, defendPoke.type2];
 
-            //Set STAB bonus;
+            //Set STAB bonus
+            //If either of the Pokemon's types are the same as the move, stab is set to 1.5. Other wise it is 1.0
+            //
             if (
               attackerTypes[0] === moveData.type.name ||
               attackerTypes[1] === moveData.type.name
@@ -122,9 +157,14 @@ module.exports.run = (client, connection, P, message, args) => {
               stab = 1.5;
             }
 
-            //Calculate Type Effectiveness
+            //
+            // Calculate Type Effectiveness
+            //
             typeData.damage_relations.half_damage_to.forEach((typeElement) => {
               if (
+                  // Loops through the "typeData" api object for the types that this move deals half damage to.
+                  // It then multiplies the effectiveness accordingly.
+                  //
                 typeElement.name === defenderTypes[0] ||
                 typeElement.name === defenderTypes[1]
               )
@@ -134,6 +174,9 @@ module.exports.run = (client, connection, P, message, args) => {
             typeData.damage_relations.double_damage_to.forEach(
               (typeElement) => {
                 if (
+                    // Loops through the "typeData" api object for the types that this move deals double damage to.
+                    // It then multiplies the effectiveness accordingly.
+                    //
                   typeElement.name === defenderTypes[0] ||
                   typeElement.name === defenderTypes[1]
                 )
@@ -143,12 +186,18 @@ module.exports.run = (client, connection, P, message, args) => {
 
             typeData.damage_relations.no_damage_to.forEach((typeElement) => {
               if (
+                  // Loops through the "typeData" api object for the types that this move deals no damage to.
+                  // It then sets the effectiveness accordingly.
+                  //
                 typeElement.name === defenderTypes[0] ||
                 typeElement.name === defenderTypes[1]
               )
                 effective = 0;
             });
 
+            //
+            // Sets the relevant effectiveness string.
+            //
             if (effective > 1) {
               effectiveString = "*It's super effective!*\n";
             } else if (effective === 0) {
@@ -156,8 +205,9 @@ module.exports.run = (client, connection, P, message, args) => {
             } else if (effective < 1) {
               effectiveString = "*It's not very effective.*\n";
             }
-
-            //calculate damage dice roll
+            //
+            // calculate damage dice roll
+            //
             let numDice = (moveData.power + other) * 0.2;
 
             for (numDice; numDice > 0; numDice--) {
@@ -171,6 +221,9 @@ module.exports.run = (client, connection, P, message, args) => {
               criticalString = "**A critical hit!**\n";
             }
 
+            //Checks if the move does physical or special damage.
+            // then grabs the relevant stat.
+            //
             let tempAttack = 0;
             let tempDefense = 0;
 
@@ -181,6 +234,10 @@ module.exports.run = (client, connection, P, message, args) => {
                 tempAttack = attackPoke.statBlock.finalStats[SPA_ARRAY_INDEX];
                 tempDefense = defendPoke.statBlock.finalStats[SPD_ARRAY_INDEX];
             }
+
+            //
+            // Final damage calculation
+            //
 
             damageTotal =
               ((10 * attackPoke.level + 10) / 250) *
