@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="0e2fdc44-d39a-4440-afbe-b82b2faadb85" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
@@ -74,6 +92,8 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="npm.test" />
+        <item itemvalue="Node.js.chachabot.js" />
         <item itemvalue="Node.js.chachabot.js" />
         <item itemvalue="Node.js.chachabot.js" />
         <item itemvalue="npm.test" />
@@ -419,7 +439,7 @@
     </state>
     <state width="846" height="554" key="DebuggerActiveHint/0.0.1440.900@0.0.1440.900" timestamp="1583700276159" />
     <state width="822" height="646" key="DebuggerActiveHint/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1581608695991" />
-    <state x="184" y="92" key="DiffContextDialog" timestamp="1581531906099">
+    <state x="184" y="92" width="1536" height="868" key="DiffContextDialog" timestamp="1588481890997">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="184" y="92" key="DiffContextDialog/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1581531906099" />
@@ -527,7 +547,7 @@
     <state x="664" y="232" key="MultipleFileMergeDialog" timestamp="1581533668763">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state x="664" y="232" key="MultipleFileMergeDialog/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1581533668763" />
+    <state x="349" y="234" width="1362" height="649" key="MultipleFileMergeDialog/1920.103.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1588481878845" />
     <state x="229" y="89" key="SettingsEditor" timestamp="1583029033996">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
