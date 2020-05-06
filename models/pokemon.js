@@ -16,8 +16,7 @@ let Statblock = require('./statblock.js');
 
 module.exports = Pokemon;
 
-function Ability(name, ha)
-{
+function Ability(name, ha) {
     this.name = name;
     this.hiddenAbility = ha;
 }
@@ -31,7 +30,8 @@ function Pokemon(tempSpecies, tempLevel, tempName) {
     this.name = tempName;
     this.species = tempSpecies;
     //level
-    if(tempLevel > 0) this.level = tempLevel;
+    if (tempLevel > 0 && tempLevel <= 100)
+        this.level = tempLevel;
     else this.level = 1;
     //type(s)
     this.type1 = "";
@@ -57,7 +57,7 @@ function Pokemon(tempSpecies, tempLevel, tempName) {
 
 }
 
-Pokemon.prototype.init = function(P, message) {
+Pokemon.prototype.init = function (P, message) {
     return this.getPokemonAndSpeciesData(P)
         .then(function (response) {
             console.log("Retrieved Pokemon and Species Data!");
@@ -110,27 +110,27 @@ let modPrint = function (abilityScore) {
 };
 
 let modGen = function (abilityScore) {
-    return Math.floor((abilityScore - 10)/2);
+    return Math.floor((abilityScore - 10) / 2);
 };
 
 // grab + stow types
-Pokemon.prototype.assignTypes = function() {
+Pokemon.prototype.assignTypes = function () {
     this.type1 = this.pokemonData.types[0].type.name;
-    if(this.pokemonData.types.length === 2) {
+    if (this.pokemonData.types.length === 2) {
         this.type2 = this.pokemonData.types[1].type.name;
     }
 };
 
-Pokemon.prototype.genRandAbility = function() {
+Pokemon.prototype.genRandAbility = function () {
 
     let abilityTotal = 0;
     let abilityList = [];
     this.pokemonData.abilities.forEach(element => {
         abilityList.push(new Ability(element["ability"]["name"], element["is_hidden"]));
         abilityTotal++;
-    } );
+    });
 
-    this.ability = abilityList[Math.floor((Math.random()*abilityList.length))];
+    this.ability = abilityList[Math.floor((Math.random() * abilityList.length))];
 
     /*
     if (Math.floor((Math.random() * 100) + 1) <= haChance) {
@@ -145,40 +145,38 @@ Pokemon.prototype.genRandAbility = function() {
     */
 };
 //Assign gender
-Pokemon.prototype.assignRandGender = function() {
+Pokemon.prototype.assignRandGender = function () {
     //assign gender
     let gender = "genderless";
     //Calculates Gender as a fraction of 8
     const genderNum = Math.floor((Math.random() * GENDER_MAX) + 1);
     if (this.speciesData.gender_rate <= -1) return gender;
     else if (genderNum <= this.speciesData.gender_rate) {
-           gender = "female";
+        gender = "female";
     }
     else gender = "male";
 
-     this.gender = gender;
+    this.gender = gender;
 };
 
 //shiny generator!
-Pokemon.prototype.assignShiny = function() {
+Pokemon.prototype.assignShiny = function () {
     this.shiny = (Math.floor((Math.random() * SHINY_CHANCE) + 1)) >= SHINY_CHANCE;
 };
 
 // captialize words
 
-let capitalizeWord = function (tempWord)
-{
-    return tempWord.charAt(0). toUpperCase() + tempWord.substr(1);
+let capitalizeWord = function (tempWord) {
+    return tempWord.charAt(0).toUpperCase() + tempWord.substr(1);
 };
 
 // =========== EMBED ===========
 
-Pokemon.prototype.sendSummaryMessage = function(client) {
+Pokemon.prototype.sendSummaryMessage = function (client) {
 
     let tempAbility = this.ability.name;
-    if( ~tempAbility.indexOf("-"))
-    {
-        let tempA = tempAbility.slice(0,tempAbility.indexOf("-"));
+    if (~tempAbility.indexOf("-")) {
+        let tempA = tempAbility.slice(0, tempAbility.indexOf("-"));
         let tempB = tempAbility.slice(tempAbility.indexOf("-") + 1, tempAbility.length);
         tempA = capitalizeWord(tempA);
         tempB = capitalizeWord(tempB);
@@ -189,7 +187,8 @@ Pokemon.prototype.sendSummaryMessage = function(client) {
     tempSpecies = capitalizeWord(tempSpecies);
 
 
-    return {embed: {
+    return {
+        embed: {
             color: 3447003,
             author: {
                 name: client.user.username,
@@ -198,7 +197,7 @@ Pokemon.prototype.sendSummaryMessage = function(client) {
             title: `Level ${this.level} ${tempSpecies} ~ ${this.name}`,
             url: `https://bulbapedia.bulbagarden.net/wiki/${this.species}_(Pok%C3%A9mon)`,
             thumbnail: {
-                url:  `${this.pokemonData.sprites.front_default}`,
+                url: `${this.pokemonData.sprites.front_default}`,
             },
             description: "Click the link for the Bulbapedia page, or use !data to call info using the Pokedex bot.",
 
@@ -253,7 +252,7 @@ Pokemon.prototype.sendSummaryMessage = function(client) {
     };
 };
 
-Pokemon.prototype.uploadPokemon = function(connection, message) {
+Pokemon.prototype.uploadPokemon = function (connection, message) {
 
     message.channel.send("Debug: " + message.author.id + "\n" + message.author.username);
 
@@ -281,10 +280,10 @@ Pokemon.prototype.uploadPokemon = function(connection, message) {
     });
 };
 
-Pokemon.prototype.importPokemon = function(connection, P, importString) {
+Pokemon.prototype.importPokemon = function (connection, P, importString) {
     //splits the message into lines then splits the lines into words separated by spaces.
     let lines = importString.split("\n");
-    let nameLineVals = lines[0].split(" " );
+    let nameLineVals = lines[0].split(" ");
     let evLineVals;
     let natureLineVals;
     let ivLineVals;
@@ -295,39 +294,39 @@ Pokemon.prototype.importPokemon = function(connection, P, importString) {
     //
     this.name = nameLineVals[0]; //First word is always the name or the species;
     nameLineVals.forEach(element => {
-        if(element.charAt(0) === "(") {
+        if (element.charAt(0) === "(") {
             nameArgs.push(element.substr(1, element.length - 2));
         }
     });
 
     //If there's two options, the first is the species and the second is the gender
-    if (nameArgs.length === 2){
+    if (nameArgs.length === 2) {
         this.species = nameArgs[0];
         this.gender = nameArgs[1];
     }
-    else if (nameArgs.length === 1){
+    else if (nameArgs.length === 1) {
         //If there's just one option, check if pokemon name or if it is the pokemon's gender
         if (nameArgs[0] === "M" || nameArgs[0] === "F") {
             this.species = nameLineVals[0];
-            if (nameArgs[0] === "M") {this.gender = "male";} else this.gender ="female";
+            if (nameArgs[0] === "M") { this.gender = "male"; } else this.gender = "female";
         }
     }
     else if (nameArgs.length === 0) {
         this.species = nameLineVals[0];
     }
 
-    lines.forEach(function(element) {
+    lines.forEach(function (element) {
         switch (element.split(" ")[0]) {
             case ("Ability:"): {
                 //Grabs ability
                 this.ability.name = element.substr(9, element.length - 9).toLowerCase().replace(" ", "-");
                 break;
             }
-            case("Level:"): {
+            case ("Level:"): {
                 this.level = element.substr(7, element.length - 7) / 5;
                 break;
             }
-            case("EVs:"): {
+            case ("EVs:"): {
                 evLineVals = element.split(" ");
                 evLineVals.forEach(function (evElement, i) {
                     let j = -1;
@@ -355,7 +354,7 @@ Pokemon.prototype.importPokemon = function(connection, P, importString) {
                 }.bind(this));
                 break;
             }
-            case("IVs:"): {
+            case ("IVs:"): {
                 ivLineVals = element.split(" ");
                 ivLineVals.forEach(function (ivElement, i) {
                     let j = -1;
@@ -392,17 +391,17 @@ Pokemon.prototype.importPokemon = function(connection, P, importString) {
             case "Docile":
             case "Impish":
             case "Lax":
-            case "Relaxed" :
+            case "Relaxed":
             case "Modest":
             case "Mild":
             case "Bashful":
             case "Rash":
-            case "Quiet" :
+            case "Quiet":
             case "Calm":
             case "Gentle":
             case "Careful":
             case "Quirky":
-            case "Sassy" :
+            case "Sassy":
             case "Timid":
             case "Hasty":
             case "Jolly":
@@ -416,7 +415,7 @@ Pokemon.prototype.importPokemon = function(connection, P, importString) {
     }.bind(this));
 
     return this.getPokemonAndSpeciesData(P).then(
-        function(response){
+        function (response) {
             this.assignTypes();
             this.statBlock.assignBaseStats(this);
             this.statBlock.calculateStats(this);
@@ -424,9 +423,8 @@ Pokemon.prototype.importPokemon = function(connection, P, importString) {
         }.bind(this));
 };
 
-Pokemon.prototype.getPokemonAndSpeciesData = function(P) {
-    return new Promise(function(resolve, reject)
-    {
+Pokemon.prototype.getPokemonAndSpeciesData = function (P) {
+    return new Promise(function (resolve, reject) {
         P.getPokemonSpeciesByName(this.species.toLowerCase())
             .then(function (response) {
                 this.speciesData = response;
@@ -442,6 +440,7 @@ Pokemon.prototype.getPokemonAndSpeciesData = function(P) {
             }.bind(this))
             .catch(function (error) {
                 console.log("Error when retrieving pokemon Data :C  ERROR: ", error);
+                //reject("Error getting pokemon: ", error)
                 //message.channel.send("Error when retrieving pokemon Data :C");
             });
     }.bind(this));
@@ -484,7 +483,7 @@ Pokemon.prototype.loadFromSQL = function (P, sqlObject) {
 
                         this.nature.assignNature(this, sqlObject.nature);
 
-                        if (sqlObject.shiny === null){
+                        if (sqlObject.shiny === null) {
                             this.shiny = sqlObject.shiny;
                         }
 

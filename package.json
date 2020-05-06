@@ -4,14 +4,16 @@
   "description": "A comprehensive compendium/tool for the Chambers and Charizard TRPG system.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "better-sqlite-pool": "github:eslachance/better-sqlite-pool",
     "discord.js": "^11.5.1",
     "enmap": "^4.8.7",
+    "mocha": "^7.1.2",
     "mysql": "^2.18.1",
     "pokedex-promise-v2": "^3.2.0",
     "winston": "^3.2.1",
