@@ -3,4 +3,4 @@ config.json
 /ChaChaBot/.idea/modules.xml
 /ChaChaBot/.idea/ChaChaBot.iml
 /ChaChaBot/.idea/misc.xml
-/ChaChaBot/
+node_modules/
