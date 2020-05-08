@@ -33,9 +33,15 @@ function Pokemon(tempSpecies, tempLevel, tempName) {
   this.name = tempName;
   this.species = tempSpecies;
 
-  //level
-  if (tempLevel > 0) this.level = tempLevel;
-  else this.level = 1;
+    this.name = tempName;
+    this.species = tempSpecies;
+    //level
+    if (tempLevel > 0 && tempLevel <= 100)
+        this.level = tempLevel;
+    else this.level = 1;
+    //type(s)
+    this.type1 = "";
+    this.type2 = "";
 
   //type(s)
   this.type1 = "";

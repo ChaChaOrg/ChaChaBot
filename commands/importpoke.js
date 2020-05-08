@@ -27,7 +27,7 @@ IVs: [#] HP / [#] Atk / [#] Def / [#] SpA / [#] SpD / [#] Spe```
     }
     console.log(importContent);
     importPoke.importPokemon(connection, P, importContent)
-        .then(response =>{
+        .then(response => {
             message.channel.send(importPoke.sendSummaryMessage(client));
             importPoke.uploadPokemon(connection, message);
         });

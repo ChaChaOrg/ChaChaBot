@@ -4,7 +4,7 @@
   "description": "A comprehensive compendium/tool for the Chambers and Charizard TRPG system.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +17,15 @@
   },
   "devDependencies": {
     "prettier": "2.0.4",
-    "winston": "^3.2.1"
-  }
+    "winston": "^3.2.1",
+    "mocha": "^7.1.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Talmanaze/ChaChaBot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Talmanaze/ChaChaBot/issues"
+  },
+  "homepage": "https://github.com/Talmanaze/ChaChaBot#readme"
 }

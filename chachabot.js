@@ -45,11 +45,9 @@ fs.readdir("./commands/", (err, files) => {
   });
 });
 
-connection.connect(function(err) {
+connection.connect(function (err) {
   if (err) return console.error(err);
   console.log('Connection to mySQL database successful! Connected as id ' + connection.threadId);
 });
 
 client.login(config.token);
-
-
