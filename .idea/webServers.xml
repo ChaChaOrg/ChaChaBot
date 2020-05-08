@@ -3,11 +3,10 @@
   <component name="WebServers">
     <option name="servers">
       <webServer id="592df38f-faa9-4bf9-87a7-be6f2382907f" name="awsChaChaBot" url="http://ec2-34-226-119-6.compute-1.amazonaws.com">
-        <fileTransfer host="ec2-34-226-119-6.compute-1.amazonaws.com" port="22" privateKey="$PROJECT_DIR$/../ChaChaBot.pem" rootFolder="/home/ubuntu/ChaChaBot" accessType="SFTP" keyPair="true">
+        <fileTransfer rootFolder="/home/ubuntu/ChaChaBot" accessType="SFTP" sshConfigId="4e942bb3-5dad-48fc-97cc-181ffded64a0" sshConfig="awsChaChaBot">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
-          <option name="port" value="22" />
         </fileTransfer>
       </webServer>
     </option>

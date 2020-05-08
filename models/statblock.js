@@ -135,9 +135,14 @@ Statblock.prototype.calculateSaves = function(pokemon) {
 };
 
 Statblock.prototype.calculateStats = function(pokemon) {
+    // start by taking care of Nature
+    //pokemon.nature.calculateNatureStats(pokemon);
+    //pokemon.Nautre.calculateNatureStats(pokemon)
+
 //get CON + hit points
-//calculate con +  EQ: [(BaseStats + IVs + EVs/4) * .15 +1.5]
-    this.conBase = Math.round(((this.baseStats[0] + this.ivStats[0] + this.evStats[0]) / CON_CALC_DIVISOR) * STAT_CALC_MULT + STAT_CALC_BASE);
+//calculate con +  EQ: [(BaseStats + IVs + (EVs/4)) * .15 +1.5]
+
+    this.conBase = Math.round(((this.baseStats[0] + this.ivStats[0] + (this.evStats[0]/CON_CALC_DIVISOR)) * STAT_CALC_MULT)+STAT_CALC_BASE);
     this.conMod = modPrint(this.conBase);
 
 //calculate = attribute max HP
@@ -187,14 +192,6 @@ Statblock.prototype.calculateStats = function(pokemon) {
 
 //get move speed
     this.moveSpeed = (MOVE_SPEED_MULT * this.finalStats[SPEED_BST_INDEX] + MOVE_SPEED_SHIFT).toFixed(2);
-
-// generate saves based on types + scores
-
-    /*
-
-    let
-
-    */
 
 };
 

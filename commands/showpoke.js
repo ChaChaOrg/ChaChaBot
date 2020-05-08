@@ -9,7 +9,7 @@ const SPE_ARRAY_INDEX = 5;
 module.exports.run = (client, connection, P, message, args) => {
     try {
         let name = args[0];
-        let Pokemon = require(`models/pokemon`);
+        let Pokemon = require(`../models/pokemon`);
         let tempPoke = new Pokemon;
 
         let sql = `SELECT * FROM pokemon WHERE name = '${name}';`;

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig host="ec2-34-226-119-6.compute-1.amazonaws.com" id="cad71423-f5ae-4538-88c9-b8918af48d28" keyPath="$PROJECT_DIR$/../ChaChaBot.pem" port="22" customName="awsChaChaBot" nameFormat="CUSTOM" username="ubuntu" />
+    </configs>
+  </component>
+</project>
