@@ -78,7 +78,7 @@ module.exports.run = (client, connection, P, message, args) => {
         connection.query(sqlFindPoke, function(err, rows, fields) {
             // if you're here, the name couldn't be found in the table
            if (err) {
-               let cantAccessSQLMessage = "Error while attempting to search the SQL for " + pokeName;
+               let cantAccessSQLMessage = "SQL error, please try again later or contact a maintainer if the issue persists.";
                console.log(cantAccessSQLMessage);
                message.reply(cantAccessSQLMessage);
            } else if (rows.length === 0) {

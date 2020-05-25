@@ -33,6 +33,9 @@ module.exports.run = (client, connection, P, message, args) => {
 				message.channel.send(genPokemon.sendSummaryMessage(client));
 				// alert user that their poke has been added to the database
 				message.reply(genPokemon.name + " has been added to the database.\nTo remove it, use this command: `+rempoke " + genPokemon.name + "`");
+			})
+			.catch(function(error) {
+				message.reply(error);
 			});
 
 	}

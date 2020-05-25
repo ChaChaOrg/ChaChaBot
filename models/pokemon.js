@@ -67,7 +67,8 @@ function Pokemon(tempSpecies, tempLevel, tempName) {
 }
 
 Pokemon.prototype.init = function (P, message) {
-  return this.getPokemonAndSpeciesData(P).then(
+  return this.getPokemonAndSpeciesData(P)
+  .then(
     function (response) {
       //let the log know the poke is initializing
       console.log("Initializing " + this.name + "...");
@@ -94,7 +95,10 @@ Pokemon.prototype.init = function (P, message) {
 
       console.log("Pokemon Initialization Sequence Complete!");
     }.bind(this)
-  );
+  )
+  .catch(function(error) {
+    throw error;
+  });
 };
 
 // ========================= MISC VAL GENERATORS =========================
@@ -655,7 +659,11 @@ Pokemon.prototype.getPokemonAndSpeciesData = function (P) {
           }.bind(this)
         )
         .catch(function (error) {
-          console.log("Error when retrieving pokemon Data :C  ERROR: ", error);
+          console.log("Error when retrieving pokemon Data :C  ERROR: ", error.response.statusText);
+          if(error.response.status == 404) {
+            let errMsg = "Pokemon not found, please check your spelling."
+            reject(errMsg)
+          }
           //message.channel.send("Error when retrieving pokemon Data :C");
         });
     }.bind(this)

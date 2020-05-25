@@ -120,10 +120,36 @@ module.exports.run = (client, connection, P, message, args) => {
     let loadSQLPromise = [];
 
     connection.query(sql, function (err, response) {
-      if (err) throw err;
+      if (err) {
+        let errMsg = `Error with SQL query: ${err}`;
+        console.log(errMsg);
+        message.reply(errMsg);
+        return;
+      };
+
+      if (response.length == 0) {
+        let errMsg= `Cannot find neither '${attackerName}' nor '${defenderName}'. Please check your spelling + case-sensitivity.`
+        console.log(errMsg);
+        message.reply(errMsg);
+        return;
+      }
+      else if(response.length == 1) {
+        let foundPokeName = response[0].name;
+        let errMsg = '';
+
+        if(foundPokeName === attackerName)
+          errMsg = `I found the attacker '${attackerName}' but not the defender. Please check your spelling + case-sensitivity.`
+        else if(foundPokeName === defenderName)
+          errMsg = `I found the defender '${attackerName}' but not the attacker. Please check your spelling + case-sensitivity.`
+      
+        console.log(errMsg);
+        message.reply(errMsg);
+        return;
+      }
+
       console.log("attacker and defender read");
-      console.log(response[0].name);
-      console.log(response[1].name);
+      console.log('Attacker:' + response[0].name);
+      console.log('Defender: ' + response[1].name);
 
       //
       // Load the found pokemon into pokemon objects, then wait til they both complete before continuing.
