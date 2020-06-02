@@ -32,6 +32,10 @@ const HELP_FIELDS_LIST = "Here's the list of all available fields on a Pokemon t
     "> `originalTrainer` // The Pokemon's trainer\n" +
     "> `shiny` // Shiny status (0 = false, 1 = true)\n" +
     "> `private` // Private marker. (0 = false, 1 = true) (*Private Pokemon can only be seen by their creator*)";
+
+//message when there are too few arguments
+const FEWARGS_MESSAGE = "Too few arguments submitted. Check your submission for errors.";
+
 // array of variables that can go straight to being updated
 const STATIC_FIELDS = ["name", "gender", "hp", "atk", "def", "spa", "spd", "spe", "move1", "move2", "move3", "move4", "move5", "moveProgress", "originalTrainer", "shiny", "private"];
 
@@ -42,6 +46,13 @@ const CODE_FORMAT_END = "\n```"
 module.exports.run = (client, connection, P, message, args) => {
     let Pokemon = require('../models/pokemon.js');
     try {
+        //Check if enough args
+        if(args.length < 3) {
+            message.reply(FEWARGS_MESSAGE);
+            console.log(FEWARGS_MESSAGE);
+            return;
+        }
+
         // if asking for help, print the help message
         if (args[0].includes('help')) {
             message.reply(HELP_MESSAGE);
@@ -119,7 +130,7 @@ module.exports.run = (client, connection, P, message, args) => {
                                });
                            }
                        });
-                       // resolve();
+                       resolve();
                    });
 
                    // await promise before attempting non-static update
@@ -149,7 +160,7 @@ module.exports.run = (client, connection, P, message, args) => {
                                let thisPoke = rows[0];
 
                                // if the valName is species, assign directly, otherwise convert it into a number
-                               if (valName == "species") thisPoke[valName] = valString;
+                               if (valName === "species") thisPoke[valName] = valString;
                                else thisPoke[valName] = parseInt(valString);
 
                                //Make new empty Pokemon object
@@ -212,7 +223,7 @@ module.exports.run = (client, connection, P, message, args) => {
                                        let oldString = oldVal.toString();
                                        let newString = newVal.toString();
                                        // if different, return string with both
-                                       if (oldString.localeCompare(newString) == 0) {
+                                       if (oldString.localeCompare(newString) === 0) {
                                            return "\n--- " + oldVal + "\n\n";
                                        } else {
                                            // the full different field string, to be returned at the end
@@ -440,7 +451,7 @@ module.exports.run = (client, connection, P, message, args) => {
                                            if (collected.first().emoji.name === '✅') {
                                                // update the pokemon and print confirmation
                                                tempPoke.updatePokemon(connection, message, rows[0].private).then(function (results) {
-                                                   let successString = "Success! " + pokeName + "'s " + valName + "has been changed to " + valString + "and all related stats have been updated.\n\nHint: View Pokemon's stat's using `+showpoke [nickname]`";
+                                                   let successString = "Success! " + pokeName + "'s " + valName + " has been changed to " + valString + " and all related stats have been updated.\n\nHint: View Pokemon's stat's using `+showpoke [nickname]`";
                                                    console.log(successString);
                                                    message.reply(successString);
                                                }).catch(function (error) {

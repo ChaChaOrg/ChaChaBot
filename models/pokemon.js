@@ -754,13 +754,15 @@ Pokemon.prototype.loadFromSQL = function (P, sqlObject) {
                   this.statBlock.calculateStats(this);
                   this.statBlock.calculateSaves(this);
 
+                  // We WANT the stats to be recalculated. This was originally used to keep track of health.
+                  //
                   //assign again to make sure you have true inside-sql values
-                  this.statBlock.finalStats[HP_ARRAY_INDEX] = sqlObject.hp;
-                  this.statBlock.finalStats[ATK_ARRAY_INDEX] = sqlObject.atk;
-                  this.statBlock.finalStats[DEF_ARRAY_INDEX] = sqlObject.def;
-                  this.statBlock.finalStats[SPA_ARRAY_INDEX] = sqlObject.spa;
-                  this.statBlock.finalStats[SPD_ARRAY_INDEX] = sqlObject.spd;
-                  this.statBlock.finalStats[SPE_ARRAY_INDEX] = sqlObject.spe;
+                  //this.statBlock.finalStats[HP_ARRAY_INDEX] = sqlObject.hp;
+                  //this.statBlock.finalStats[ATK_ARRAY_INDEX] = sqlObject.atk;
+                  //this.statBlock.finalStats[DEF_ARRAY_INDEX] = sqlObject.def;
+                  //this.statBlock.finalStats[SPA_ARRAY_INDEX] = sqlObject.spa;
+                  //this.statBlock.finalStats[SPD_ARRAY_INDEX] = sqlObject.spd;
+                  //this.statBlock.finalStats[SPE_ARRAY_INDEX] = sqlObject.spe;
 
                   resolve("done");
                 }.bind(this)

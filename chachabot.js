@@ -10,7 +10,7 @@ const config = require("./config.json");
 client.config = config;
 
 //Connect to the Mysql Server!
-let connection = mysql.createConnection({
+let connection = mysql.createPool({
   host: config.mysql_host,
   user: config.mysql_user,
   password: config.mysql_pass,
@@ -24,7 +24,7 @@ let P = new pokedex();
 
 fs.readdir("./events/", (err, files) => {
   if (err) return console.error(err);
-  files.forEach(file => {
+  files.forEach((file) => {
     if (!file.endsWith(".js")) return;
     const event = require(`./events/${file}`);
     let eventName = file.split(".")[0];
@@ -36,7 +36,7 @@ client.commands = new Enmap();
 
 fs.readdir("./commands/", (err, files) => {
   if (err) return console.error(err);
-  files.forEach(file => {
+  files.forEach((file) => {
     if (!file.endsWith(".js")) return;
     let props = require(`./commands/${file}`);
     let commandName = file.split(".")[0];
@@ -45,9 +45,12 @@ fs.readdir("./commands/", (err, files) => {
   });
 });
 
-connection.connect(function (err) {
+connection.getConnection(function (err) {
   if (err) return console.error(err);
   console.log('Connection to mySQL database successful! Connected as id ' + connection.threadId);
 });
 
 client.login(config.token);
+
+
+
