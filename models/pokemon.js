@@ -734,11 +734,11 @@ Pokemon.prototype.loadFromSQL = function (P, sqlObject) {
                     this.shiny = sqlObject.shiny;
                   }
 
-                  let i = 1;
+                  let i = 6;
                   this.pokemonData["stats"].forEach((element) => {
                     this.statBlock.baseStats[STAT_ARRAY_MAX - i] =
                       element["base_stat"];
-                    i++;
+                    i--;
                   });
 
                   console.log("Calculating Stats of " + this.name);
