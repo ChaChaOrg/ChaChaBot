@@ -46,12 +46,7 @@ const CODE_FORMAT_END = "\n```"
 module.exports.run = (client, connection, P, message, args) => {
     let Pokemon = require('../models/pokemon.js');
     try {
-        //Check if enough args
-        if(args.length < 3) {
-            message.reply(FEWARGS_MESSAGE);
-            console.log(FEWARGS_MESSAGE);
-            return;
-        }
+
 
         // if asking for help, print the help message
         if (args[0].includes('help')) {
@@ -65,6 +60,12 @@ module.exports.run = (client, connection, P, message, args) => {
             return;
         }
 
+        //Check if enough args
+        if(args.length < 3) {
+            message.reply(FEWARGS_MESSAGE);
+            console.log(FEWARGS_MESSAGE);
+            return;
+        }
         // otherwise, lets find our poke and add those updates!
 
         // grab the pokemon's name
