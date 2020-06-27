@@ -1,5 +1,17 @@
 // Damage Calculator
 
+// help message
+const HELP_MESSAGE = "The \"manual\" damage calculator. Variables in order:\n" +
+	"[Attacker (A) Name] [Defender (D) Name] [A's Level (1-20)] [A's Attack Stat] " +
+	"[D's Defense Stat] [Dice Roll] [STAB] [Effectiveness] [Critical Hit] [Misc Modifiers] [Stages of Attack] [Stages of Defense]\n\n" +
+	">**Value Explanations:**\n" +
+	"**Dice Roll:** Xd8, where X is the power of the move used divided by 5.\n" +
+	"**STAB:** Same-Type Attack Bonus; 1.5 if the move used is the same type as the attacker, 1 otherwise\n" +
+	"**Effectiveness:** The effectiveness of the move on the foe, as a percentage. Ie, a super-effective move would have an effectiveness of 2, while a not very effective move would have an effectiveness of .5.\n" +
+	"**Critical Hit:** 1.5 if a critical hit, 1 otherwise\n" +
+	"**Misc Modifiers:** Any other modifiers to the stat, as a percentage. Default = 1\n" +
+	"**Stages of Attack/Defense:** 0 by default, can be -6 to 6";
+
 exports.run = (client, connection, P, message, args) => {
 	try {
 			//variables required
@@ -17,8 +29,8 @@ exports.run = (client, connection, P, message, args) => {
 			let bonusDef = parseInt(args[11]);
 			
 			//clause for helping!
-			if (attackName.includes('help')) {
-				message.reply('Damage Calculator. Variables in order:\n [Attacker (A) Name] [Defender (D) Name] [A\'s Level] [A\'s Attack Stat] [D\'s Defense Stat] [Dice Roll] [STAB] [Effectiveness] [Critical Hit] [Misc Modifiers] [Stages of Attack] [Stages of Defense]').catch(console.error);
+			if (args[0].toUpperCase() === 'HELP') {
+				message.reply(HELP_MESSAGE).catch(console.error);
 				return;
 			}
 

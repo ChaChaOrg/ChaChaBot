@@ -1,6 +1,3 @@
 config.json
-/ChaChaBot/.idea/workspace.xml
-/ChaChaBot/.idea/modules.xml
-/ChaChaBot/.idea/ChaChaBot.iml
-/ChaChaBot/.idea/misc.xml
-/ChaChaBot/
+.idea/
+node_modules/
