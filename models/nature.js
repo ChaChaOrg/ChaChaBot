@@ -24,10 +24,10 @@ function Nature()
 Nature.prototype.calculateNatureStats = function(pokemon) {
     if (this.natureXCoord !== this.natureYCoord) {
         for (let i = 0; i < STAT_ARRAY_MAX; i++) {
-            if (this.natureXCoord === i) {
+            if (this.natureYCoord === i) {
                 pokemon.statBlock.nMultiStats[i + 1] = NATURE_POSITIVE_MULTIPLIER;
             }
-            if (this.natureYCoord === i) {
+            if (this.natureXCoord === i) {
                 pokemon.statBlock.nMultiStats[i + 1] = NATURE_NEGATIVE_MULTIPLIER;
             }
         }

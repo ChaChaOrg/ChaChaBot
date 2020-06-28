@@ -734,21 +734,21 @@ Pokemon.prototype.loadFromSQL = function (P, sqlObject) {
                     this.shiny = sqlObject.shiny;
                   }
 
-                  let i = 1;
+                  let i = 6;
                   this.pokemonData["stats"].forEach((element) => {
                     this.statBlock.baseStats[STAT_ARRAY_MAX - i] =
                       element["base_stat"];
-                    i++;
+                    i--;
                   });
 
                   console.log("Calculating Stats of " + this.name);
 
-                  this.statBlock.finalStats[HP_ARRAY_INDEX] = sqlObject.hp;
-                  this.statBlock.finalStats[ATK_ARRAY_INDEX] = sqlObject.atk;
-                  this.statBlock.finalStats[DEF_ARRAY_INDEX] = sqlObject.def;
-                  this.statBlock.finalStats[SPA_ARRAY_INDEX] = sqlObject.spa;
-                  this.statBlock.finalStats[SPD_ARRAY_INDEX] = sqlObject.spd;
-                  this.statBlock.finalStats[SPE_ARRAY_INDEX] = sqlObject.spe;
+                  //this.statBlock.finalStats[HP_ARRAY_INDEX] = sqlObject.hp;
+                  //this.statBlock.finalStats[ATK_ARRAY_INDEX] = sqlObject.atk;
+                  //this.statBlock.finalStats[DEF_ARRAY_INDEX] = sqlObject.def;
+                  //this.statBlock.finalStats[SPA_ARRAY_INDEX] = sqlObject.spa;
+                  //this.statBlock.finalStats[SPD_ARRAY_INDEX] = sqlObject.spd;
+                  //this.statBlock.finalStats[SPE_ARRAY_INDEX] = sqlObject.spe;
 
                   // calculate stats and saves before re-assigning actual stats
                   this.statBlock.calculateStats(this);
