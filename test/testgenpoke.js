@@ -1,7 +1,6 @@
 var assert = require('assert');
 var genpoke = require('../commands/genpoke.js');
 var pokedex = require('pokedex-promise-v2');
-const { doesNotMatch } = require('assert');
 
 describe('+genpoke', function () {
     describe('help', function () {
@@ -62,16 +61,19 @@ describe('+genpoke', function () {
         it('should generate the pokemon properly', function () {
             class dum_channel {
                 send = function (obj) {
-                    assert.strictEqual(obj, 'ChaCha machine :b:roke while attempting to generate a Pokemon, please try again later')
-                    return Promise.resolve()
+                    assert.strictEqual(obj.embed.title, 'Level 17 Gastly ~ fartcloud')
+                    assert.strictEqual(obj.embed.url, `https://bulbapedia.bulbagarden.net/wiki/gastly_(Pok%C3%A9mon)`)
+                    assert.strictEqual(obj.embed.description, "Click the link for the Bulbapedia page, or use !data to call info using the Pokedex bot.")
                 }
             }
 
             class dum_msg {
                 channel = new dum_channel();
+                author = {
+                    "id": 1
+                }
                 reply = function (obj) {
                     assert(obj, 'fartcloud has been added to the database\nTo remove it, use this command: `+rempoke fartcloud "`')
-                    return Promise.resolve()
                 }
             }
 
@@ -79,11 +81,19 @@ describe('+genpoke', function () {
                 query = function () { }
             }
 
+            class fake_client {
+                user = {
+                    "username": "natzberg",
+                    "avatarURL": "not.real"
+                }
+            }
+
             let dum_args = ['gastly', '17', 'fartcloud'];
             let dum_msg1 = new dum_msg();
             let dum_conn1 = new dum_conn();
             let my_pkdx = new pokedex();
-            genpoke.run('', dum_conn1, my_pkdx, dum_msg1, dum_args)
+            let dum_client = new fake_client();
+            genpoke.run(dum_client, dum_conn1, my_pkdx, dum_msg1, dum_args)
         })
     })
 });
