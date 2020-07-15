@@ -4,3 +4,4 @@ config.json
 /ChaChaBot/.idea/ChaChaBot.iml
 /ChaChaBot/.idea/misc.xml
 node_modules/
+.nyc_output/
