@@ -1,6 +1,5 @@
 var assert = require('assert');
 var gentrainer = require('../commands/gentrainer.js');
-var pokedex = require('pokedex-promise-v2');
 
 describe('+gentrainer', function () {
     describe('help', function () {
