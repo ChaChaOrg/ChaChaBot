@@ -1,5 +1,3 @@
-// lists all commands the chachabot has
-
 exports.run = (client, connection, P, message, args) => {
 
     if (args.length > 1) {
@@ -9,8 +7,8 @@ exports.run = (client, connection, P, message, args) => {
 
     //message.channel.send('Bang! <:gunspurr:356191158017196032>').catch(console.error);
     var score = args[0];
-    if (score % 2 !== 0) {score = score - 1;} //lower odd numbers by 1
-    var rawMod = ((score - 10)/2);
+    if (score % 2 !== 0) { score = score - 1; } //lower odd numbers by 1
+    var rawMod = ((score - 10) / 2);
     rawMod = rawMod.toFixed(0);
     var modString;
     if (rawMod > 0) {
