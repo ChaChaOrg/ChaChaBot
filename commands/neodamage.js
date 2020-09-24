@@ -9,15 +9,15 @@ const CRITICAL_HIT_MULTIPLIER = 1.5;
 
 // help message
 const HELP_MESSAGE = "A damage calculator that uses the Pokemon in the database. (★ = required)\n\n" +
-    "`+neodamage [Attacker Name★] [Move Used (with dashes for spaces)★] [Defender Name★] [Critical Hit (y/n)] [Stages of Attack] [Stages of Defense] [Additive Damage Bonus] [Multiplicative Damage Bonus]`\n\n" +
-    "**Attacker Name★** The name of the attacker, as listed in the database\n" +
-    "**Move Used★** The move used (gen 1-7 only sorry :<) lowercase with dashes instead of spaces. Ie, 'rock-smash'\n" +
-    "**Defender Name★** The name of the pokemon being hit by the attack, as listed in the database\n" +
-    "**Critical Hit** If the attacker struck a critical hit, as 'y' for yes and 'n' for no. Defaults to no. A critical hit multiplies the total damage done by 1.5\n" +
-    "**Stages of Attack** Stages of attack/special attack the attacker has. Minimum -6, maximum +6\n" +
-    "**Stages of Defense** Stages of defense/special defense (matching the attack) the defender has. Minimum -6, maximum +6\n" +
-    "**Additive Damage Bonus** Extra damage *added* to the base power. Usually done through ChaCha feats. Defaults to 0\n" +
-    "**Multiplicative Damage Bonus** Extra damage *multiplying* the base power. Usually done through abilities, such as Rivalry or Technician. Defaults to 1, add .X to multiply (ie 1.5 = Technician Boost)";
+  "`+neodamage [Attacker Name★] [Move Used (with dashes for spaces)★] [Defender Name★] [Critical Hit (y/n)] [Stages of Attack] [Stages of Defense] [Additive Damage Bonus] [Multiplicative Damage Bonus]`\n\n" +
+  "**Attacker Name★** The name of the attacker, as listed in the database\n" +
+  "**Move Used★** The move used (gen 1-7 only sorry :<) lowercase with dashes instead of spaces. Ie, 'rock-smash'\n" +
+  "**Defender Name★** The name of the pokemon being hit by the attack, as listed in the database\n" +
+  "**Critical Hit** If the attacker struck a critical hit, as 'y' for yes and 'n' for no. Defaults to no. A critical hit multiplies the total damage done by 1.5\n" +
+  "**Stages of Attack** Stages of attack/special attack the attacker has. Minimum -6, maximum +6\n" +
+  "**Stages of Defense** Stages of defense/special defense (matching the attack) the defender has. Minimum -6, maximum +6\n" +
+  "**Additive Damage Bonus** Extra damage *added* to the base power. Usually done through ChaCha feats. Defaults to 0\n" +
+  "**Multiplicative Damage Bonus** Extra damage *multiplying* the base power. Usually done through abilities, such as Rivalry or Technician. Defaults to 1, add .X to multiply (ie 1.5 = Technician Boost)";
 
 // OLD HELP MESSAGE - Damage Calculator. Variables in order:
 //  [Attacker (A) Name] [Attacker Move] [Defender (D) Name] [Stages of Attack] [Stages of Defense] [Extra Base Power (min 0)] [MultDamage (min 1)] [Critical Hit (y/n)]
@@ -28,10 +28,15 @@ module.exports.run = (client, connection, P, message, args) => {
     //clause for helping!
     if (args[0].includes("help")) {
       message
-          .reply(
-              HELP_MESSAGE
-          )
-          .catch(console.error);
+        .reply(
+          HELP_MESSAGE
+        )
+        .catch(console.error);
+      return;
+    }
+
+    if (args.length < 4) {
+      message.reply("You haven't provided enough parameters, please try again.").catch(console.error);
       return;
     }
 
@@ -128,20 +133,20 @@ module.exports.run = (client, connection, P, message, args) => {
       };
 
       if (response.length == 0) {
-        let errMsg= `Cannot find neither '${attackerName}' nor '${defenderName}'. Please check your spelling + case-sensitivity.`
+        let errMsg = `Cannot find neither '${attackerName}' nor '${defenderName}'. Please check your spelling + case-sensitivity.`
         console.log(errMsg);
         message.reply(errMsg);
         return;
       }
-      else if(response.length == 1) {
+      else if (response.length == 1) {
         let foundPokeName = response[0].name;
         let errMsg = '';
 
-        if(foundPokeName === attackerName)
+        if (foundPokeName === attackerName)
           errMsg = `I found the attacker '${attackerName}' but not the defender. Please check your spelling + case-sensitivity.`
-        else if(foundPokeName === defenderName)
+        else if (foundPokeName === defenderName)
           errMsg = `I found the defender '${attackerName}' but not the attacker. Please check your spelling + case-sensitivity.`
-      
+
         console.log(errMsg);
         message.reply(errMsg);
         return;
@@ -204,9 +209,9 @@ module.exports.run = (client, connection, P, message, args) => {
             //
             typeData.damage_relations.half_damage_to.forEach((typeElement) => {
               if (
-                  // Loops through the "typeData" api object for the types that this move deals half damage to.
-                  // It then multiplies the effectiveness accordingly.
-                  //
+                // Loops through the "typeData" api object for the types that this move deals half damage to.
+                // It then multiplies the effectiveness accordingly.
+                //
                 typeElement.name === defenderTypes[0] ||
                 typeElement.name === defenderTypes[1]
               )
@@ -216,9 +221,9 @@ module.exports.run = (client, connection, P, message, args) => {
             typeData.damage_relations.double_damage_to.forEach(
               (typeElement) => {
                 if (
-                    // Loops through the "typeData" api object for the types that this move deals double damage to.
-                    // It then multiplies the effectiveness accordingly.
-                    //
+                  // Loops through the "typeData" api object for the types that this move deals double damage to.
+                  // It then multiplies the effectiveness accordingly.
+                  //
                   typeElement.name === defenderTypes[0] ||
                   typeElement.name === defenderTypes[1]
                 )
@@ -228,9 +233,9 @@ module.exports.run = (client, connection, P, message, args) => {
 
             typeData.damage_relations.no_damage_to.forEach((typeElement) => {
               if (
-                  // Loops through the "typeData" api object for the types that this move deals no damage to.
-                  // It then sets the effectiveness accordingly.
-                  //
+                // Loops through the "typeData" api object for the types that this move deals no damage to.
+                // It then sets the effectiveness accordingly.
+                //
                 typeElement.name === defenderTypes[0] ||
                 typeElement.name === defenderTypes[1]
               )
@@ -270,11 +275,11 @@ module.exports.run = (client, connection, P, message, args) => {
             let tempDefense = 0;
 
             if (moveData.damage_class === "physical") {
-                tempAttack = attackPoke.statBlock.finalStats[ATK_ARRAY_INDEX];
-                tempDefense = defendPoke.statBlock.finalStats[DEF_ARRAY_INDEX];
+              tempAttack = attackPoke.statBlock.finalStats[ATK_ARRAY_INDEX];
+              tempDefense = defendPoke.statBlock.finalStats[DEF_ARRAY_INDEX];
             } else {
-                tempAttack = attackPoke.statBlock.finalStats[SPA_ARRAY_INDEX];
-                tempDefense = defendPoke.statBlock.finalStats[SPD_ARRAY_INDEX];
+              tempAttack = attackPoke.statBlock.finalStats[SPA_ARRAY_INDEX];
+              tempDefense = defendPoke.statBlock.finalStats[SPD_ARRAY_INDEX];
             }
 
             //
