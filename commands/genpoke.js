@@ -26,7 +26,7 @@ module.exports.run = (client, connection, P, message, args) => {
 		if (args[3] !== null) genPokemon.haChance = args[3];
 		// initialize the Pokemon
 		genPokemon.init(P, message)
-			.then( function(response){
+			.then(function (response) {
 				// upload pokemon to database
 				genPokemon.uploadPokemon(connection, message);
 				// post embed
@@ -34,13 +34,11 @@ module.exports.run = (client, connection, P, message, args) => {
 				// alert user that their poke has been added to the database
 				message.reply(genPokemon.name + " has been added to the database.\nTo remove it, use this command: `+rempoke " + genPokemon.name + "`");
 			})
-			.catch(function(error) {
+			.catch(function (error) {
 				message.reply(error);
 			});
-
 	}
 	catch (error) {
-		console.log(error);
 		message.channel.send('ChaCha machine :b:roke while attempting to generate a Pokemon, please try again later').catch(console.error);
 	}
 

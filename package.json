@@ -4,15 +4,17 @@
   "description": "A comprehensive compendium/tool for the Chambers and Charizard TRPG system.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "nyc mocha --exit"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "coverage": "^0.4.1",
     "discord.js": "^11.6.4",
     "enmap": "^4.8.7",
     "mysql": "^2.18.1",
+    "nyc": "^15.1.0",
     "pokedex-promise-v2": "^3.2.0"
   },
   "devDependencies": {
