@@ -277,6 +277,11 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
   let tempSpecies = this.species;
   tempSpecies = capitalizeWord(tempSpecies);
 
+  var thumbnail_url = `${this.pokemonData.sprites.front_default}`
+
+  if (thumbnail_url === null)
+    thumbnail_url = "https://e7.pngegg.com/pngimages/960/239/png-clipart-internet-archive-http-404-wayback-machine-error-miscellaneous-text-thumbnail.png"
+
   return {
     embed: {
       color: 3447003,
@@ -287,7 +292,7 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
       title: `Level ${this.level} ${tempSpecies} ~ ${this.name}`,
       url: `https://bulbapedia.bulbagarden.net/wiki/${this.species}_(Pok%C3%A9mon)`,
       thumbnail: {
-        url: `${this.pokemonData.sprites.front_default}`,
+        url: thumbnail_url,
       },
       description:
         "Click the link for the Bulbapedia page, or use !data to call info using the Pokedex bot.",
@@ -323,16 +328,11 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
         },
         {
           name: "Ability Scores",
-          value: `**STR: ** ${this.statBlock.strBase.toFixed(0)}(${
-            this.statBlock.strMod
-            }) | **DEX: ** ${this.statBlock.dexBase.toFixed(0)}(${
-            this.statBlock.dexMod
-            }) | **CON: ** ${this.statBlock.conBase.toFixed()}(${
-            this.statBlock.conMod
-            })\n**INT: ** ${this.statBlock.intBase.toFixed(0)}(${
-            this.statBlock.intMod
-            }) | **WIS: ** ${this.statBlock.wisBase.toFixed(0)}(${
-            this.statBlock.wisMod
+          value: `**STR: ** ${this.statBlock.strBase.toFixed(0)}(${this.statBlock.strMod
+            }) | **DEX: ** ${this.statBlock.dexBase.toFixed(0)}(${this.statBlock.dexMod
+            }) | **CON: ** ${this.statBlock.conBase.toFixed()}(${this.statBlock.conMod
+            })\n**INT: ** ${this.statBlock.intBase.toFixed(0)}(${this.statBlock.intMod
+            }) | **WIS: ** ${this.statBlock.wisBase.toFixed(0)}(${this.statBlock.wisMod
             }) | **CHA: ** :3c`,
         },
         {
