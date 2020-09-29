@@ -1,6 +1,6 @@
 var assert = require('assert');
 var neodmg = require('../commands/neodamage.js');
-var genpoke = require('../commands/genpoke.js');
+var pokedex = require('pokedex-promise-v2');
 
 describe('+neodamage', function () {
     describe('help', function () {
@@ -58,6 +58,54 @@ describe('+neodamage', function () {
             let dum_args = ['dum'];
             let dum_msg1 = new dum_msg()
             neodmg.run('', '', '', dum_msg1, dum_args)
+        })
+    });
+
+    describe("valid attack", function () {
+        it("should compute all that is necessary", function () {
+            class dum_channel {
+                send = function (obj) {
+                    assert.strictEqual(obj.embd.title, "sweet used Fire Blast on SteelyDan!");
+                    assert.match(obj.embed.fields['Damage Dealt'], /SteelyDan takes \d+.\d+ damage./);
+                    assert.match(obj.embed.fields['Attacker Info'], /\*\*sweet\*\*, Lv \d+ Vulpix/);
+                    assert.match(obj.embed.fields['Defender Info'], /\*\*SteelyDan\*\*, Lv \d+ Vulpix/);
+                    assert.match(obj.embed.fields['Fire Blast Info'], /\*\*Base Power\*\* \d+ pw\n\*\*Damage Roll\*\* \d+\n=================/);
+                    return Promise.resolve()
+                }
+            }
+
+            class dum_conn {
+                query = function () { }
+            }
+
+            class fake_client {
+                user = {
+                    "username": "natzberg",
+                    "avatarURL": "not.real"
+                }
+            }
+
+            class dum_msg {
+                channel = new dum_channel();
+
+                reply = function (obj) {
+                    assert.strictEqual(obj.embd.title, "sweet used Fire Blast on SteelyDan!");
+                    assert.match(obj.embed.fields['Damage Dealt'], /SteelyDan takes \d+.\d+ damage./);
+                    assert.match(obj.embed.fields['Attacker Info'], /\*\*sweet\*\*, Lv \d+ Vulpix/);
+                    assert.match(obj.embed.fields['Defender Info'], /\*\*SteelyDan\*\*, Lv \d+ Vulpix/);
+                    assert.match(obj.embed.fields['Fire Blast Info'], /\*\*Base Power\*\* \d+ pw\n\*\*Damage Roll\*\* \d+\n=================/);
+
+                    return Promise.resolve()
+                }
+            }
+
+
+            let dum_args = ['sweet', 'fire-blast', 'SteelyDan'];
+            let dum_msg1 = new dum_msg()
+            let dum_conn1 = new dum_conn();
+            let my_pkdx = new pokedex();
+            let dum_client = new fake_client();
+            neodmg.run(dum_client, dum_conn1, my_pkdx, dum_msg1, dum_args)
         })
     })
 });
