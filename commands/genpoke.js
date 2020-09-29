@@ -25,6 +25,7 @@ module.exports.run = (client, connection, P, message, args) => {
 		// assign hidden ability chance, if listed
 		if (args[3] !== null) genPokemon.haChance = args[3];
 		// initialize the Pokemon
+		/* istanbul ignore next */
 		genPokemon.init(P, message)
 			.then(function (response) {
 				// upload pokemon to database
@@ -38,6 +39,7 @@ module.exports.run = (client, connection, P, message, args) => {
 				message.reply(error);
 			});
 	}
+	/* istanbul ignore next */
 	catch (error) {
 		message.channel.send('ChaCha machine :b:roke while attempting to generate a Pokemon, please try again later').catch(console.error);
 	}

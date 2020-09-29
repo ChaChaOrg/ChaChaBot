@@ -120,10 +120,11 @@ module.exports.run = (client, connection, P, message, args) => {
     //
     let sql = `SELECT * FROM pokemon WHERE name = '${attackerName}' OR name = '${defenderName}';`;
 
-    console.log(sql);
+    //console.log(sql);
 
     let loadSQLPromise = [];
 
+    /* istanbul ignore next */
     connection.query(sql, function (err, response) {
       if (err) {
         let errMsg = `Error with SQL query: ${err}`;
