@@ -35,7 +35,7 @@ module.exports.run = (client, connection, P, message, args) => {
       return;
     }
 
-    if (args.length < 4) {
+    if (args.length < 3) {
       message.reply("You haven't provided enough parameters, please try again.").catch(console.error);
       return;
     }
