@@ -8,7 +8,7 @@ exports.run = (client, connection, P, message, args) => {
 	//get pokeball emoji
 	const shakey = client.emojis.find(emoji => emoji.name === "poke_shake");
 
-	if (args.length < 10) {
+	if (args.length < 9) {
 		if (args.length > 0 && args[0].includes('help')) {
 			//clause for helping!
 			message.reply(HELP_MESSAGE).catch(console.error);
@@ -130,7 +130,7 @@ exports.run = (client, connection, P, message, args) => {
 
 
 	} catch (error) {
-		message.channel.send(error.toString);
+		message.channel.send(error.toString());
 		message.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);
 	}
 };
