@@ -8,15 +8,15 @@ exports.run = (client, connection, P, message, args) => {
 	//get pokeball emoji
 	const shakey = client.emojis.find("name", "poke_shake");
 
-	if (args.length < 10) {
-		message.reply("You haven't provided enough arguments. If you'd like help with the command, here you go:\n"
-			+ HELP_MESSAGE)
-		return;
-	}
-
 	//clause for helping!
 	if (args[0].includes('help')) {
 		message.reply(HELP_MESSAGE).catch(console.error);
+		return;
+	}
+
+	if (args.length < 10) {
+		message.reply("You haven't provided enough arguments. If you'd like help with the command, here you go:\n"
+			+ HELP_MESSAGE)
 		return;
 	}
 
