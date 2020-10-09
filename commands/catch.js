@@ -6,11 +6,11 @@ const HELP_MESSAGE = "Catch Rate Calculator. Variables in order:\n "
 
 exports.run = (client, connection, P, message, args) => {
 	//get pokeball emoji
-	const shakey = client.emojis.find("name", "poke_shake");
+	const shakey = client.emojis.find(emoji => emoji.name === "poke_shake");
 
 	if (args.length < 10) {
-		//clause for helping!
-		if (args[0].includes('help')) {
+		if (args.length > 0 && args[0].includes('help')) {
+			//clause for helping!
 			message.reply(HELP_MESSAGE).catch(console.error);
 			return;
 		} else {
