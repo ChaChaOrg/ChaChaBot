@@ -1,11 +1,24 @@
 // Catch calculator
 
+const HELP_MESSAGE = "Catch Rate Calculator. Variables in order:\n [Pokemon Name] [Max HP] [Current HP] [Catch Rate] [Pokeball Bonus] [Status Bonus] [Capture Power Bonus] [Player Catch Bonus] [Pokemon Level]"
+
 exports.run = (client, connection, P, message, args) => {
 	//get pokeball emoji
 	const shakey = client.emojis.find("name", "poke_shake");
-	
+
+	if (args.length < 10) {
+		message.reply("You haven't provided enough arguments. If you'd like help with the command, here you go:\n"
+			+ HELP_MESSAGE)
+		return;
+	}
+
+	//clause for helping!
+	if (args[0].includes('help')) {
+		message.reply(HELP_MESSAGE).catch(console.error);
+		return;
+	}
+
 	try {
-		
 		//list out required variables
 		let pokeName = args[0];
 		let maxHP = args[1];
@@ -17,15 +30,9 @@ exports.run = (client, connection, P, message, args) => {
 		let catchbonus = args[7];
 		let level = args[8];
 		let troubleshoot = args[9];
-		
+
 		message.channel.send(`data received! loading... ${shakey}`).catch(console.error);
-		
-		//clause for helping!
-			if (pokeName.includes('help')) {
-				message.reply('Catch Rate Calculator. Variables in order:\n [Pokemon Name] [Max HP] [Current HP] [Catch Rate] [Pokeball Bonus] [Status Bonus] [Capture Power Bonus] [Player Catch Bonus] [Pokemon Level]').catch(console.error);
-				return;
-			}
-		
+
 		//  =========== CRITCATCH CALCULATOR ===========
 		var catchBonusMod = [0, 31, 151, 301, 451, 600];
 		var cMod = [0, 0.5, 1, 1.5, 2, 2.5];
@@ -33,14 +40,14 @@ exports.run = (client, connection, P, message, args) => {
 		var catchBonusFinal;
 		var catchBonusGen = [0, 0, 0, 0, 0, 0];
 		var trueCCatch = [false, false, false, false, false, false];
-		
+
 		//initialize true/falses
 		for (i = 0; i < 6; i++) {
 			if (fortyTimer > catchBonusMod[i]) {
 				trueCCatch[i] = true;
 			}
 		}
-		
+
 		//generate catchBonusGen
 		for (i = 0; i < 6; i++) {
 			if (i === 0) {
@@ -57,47 +64,47 @@ exports.run = (client, connection, P, message, args) => {
 				}
 			}
 		}
-		
+
 		//initializes final 
 		if (fortyTimer > (catchBonusMod[6] + 150)) {
-			catchBonusFinal = fortyTimer * 0.5/ 150 + 0.5;
+			catchBonusFinal = fortyTimer * 0.5 / 150 + 0.5;
 		} else {
 			catchBonusFinal = catchBonusGen[5];
 		}
-		
+
 		// =========== END CRITCATCH CALCULATOR ===========
-		
+
 		//values generated from initial vals
-		var a_plugValCombo = (3*maxHP-2*curHP)/(3*maxHP)*rate*bball*bstatus*cpfactor;
-		
+		var a_plugValCombo = (3 * maxHP - 2 * curHP) / (3 * maxHP) * rate * bball * bstatus * cpfactor;
+
 		//var b_shakeVal = (65536 / (255 / Math.pow(a_plugValCombo, 0.1875)));
-		var b_shakeVal = (65536 / Math.pow((255/a_plugValCombo), 0.1875));
+		var b_shakeVal = (65536 / Math.pow((255 / a_plugValCombo), 0.1875));
 		var b_randomShake = [
 			Math.floor((Math.random() * 65535) + 1),
 			Math.floor((Math.random() * 65535) + 1),
 			Math.floor((Math.random() * 65535) + 1),
 			Math.floor((Math.random() * 65535) + 1)
 		];
-		
+
 		var c_critCatch = a_plugValCombo / 6 * catchBonusFinal;
 		var c_randomCrit = Math.floor((Math.random() * 255)) + 1;
-									  
+
 		//calculate if it's a critical capture!
-		
+
 		if ((c_critCatch > c_randomCrit) && (level <= catchbonus)) {
 			message.channel.send(`:star2: **CLICK!** :star2:\nIt's a critical capture! ${pokeName} has been caught `).catch(console.error);
 			return;
 		}
-		
+
 		// ================================= TEST STUFF, DELETE LATER!!! =================================
 		if (troubleshoot != null) {
-			message.channel.send(`PokeName: ${pokeName}\n Max HP: ${maxHP}\nCurrent HP: ${curHP}\nCatch Rate: ${rate}\nBall Rate: ${bball}\nStatus Bonus: ${bstatus}\nCapture Power Factor: ${cpfactor}\nCatch Bonus: ${catchbonus}\nPokemon Level:${level}\ncatchBonusMod: ` + catchBonusMod + `\ncMod: ` + cMod + `\nfortyTimer: ` + fortyTimer + `\ncatchBonusFinal: ` + catchBonusFinal + `\ncatchBonusGen: `+ catchBonusGen + `\ntrueCCatch: ` + trueCCatch + `\na_plugValCombo: ` + a_plugValCombo + `\nb_shakeVal: ` + b_shakeVal + `\nb_randomShake: ` + b_randomShake + `\nc_critCatch: ` + c_critCatch + `\nc_randomCrit: ` + c_randomCrit).catch(console.error);
+			message.channel.send(`PokeName: ${pokeName}\n Max HP: ${maxHP}\nCurrent HP: ${curHP}\nCatch Rate: ${rate}\nBall Rate: ${bball}\nStatus Bonus: ${bstatus}\nCapture Power Factor: ${cpfactor}\nCatch Bonus: ${catchbonus}\nPokemon Level:${level}\ncatchBonusMod: ` + catchBonusMod + `\ncMod: ` + cMod + `\nfortyTimer: ` + fortyTimer + `\ncatchBonusFinal: ` + catchBonusFinal + `\ncatchBonusGen: ` + catchBonusGen + `\ntrueCCatch: ` + trueCCatch + `\na_plugValCombo: ` + a_plugValCombo + `\nb_shakeVal: ` + b_shakeVal + `\nb_randomShake: ` + b_randomShake + `\nc_critCatch: ` + c_critCatch + `\nc_randomCrit: ` + c_randomCrit).catch(console.error);
 		}
-		
-		
+
+
 		//if not, try for a normal capture
 		//TODO: try to have it post on a timer some day?
-		if (b_shakeVal > b_randomShake[0]){
+		if (b_shakeVal > b_randomShake[0]) {
 			message.channel.send(`The ball shakes once...`).catch(console.error);
 			if (b_shakeVal > b_randomShake[1]) {
 				message.channel.send(`...it shakes twice...`).catch(console.error);
@@ -117,8 +124,8 @@ exports.run = (client, connection, P, message, args) => {
 		} else {
 			message.channel.send(`Drat! ${pokeName} broke free!`).catch(console.error);
 		}
-		
-		
+
+
 	} catch (error) {
 		message.channel.send(error.toString);
 		message.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);
