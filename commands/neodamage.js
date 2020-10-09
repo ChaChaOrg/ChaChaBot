@@ -35,7 +35,7 @@ module.exports.run = (client, connection, P, message, args) => {
       return;
     }
 
-    if (args.length < 4) {
+    if (args.length < 3) {
       message.reply("You haven't provided enough parameters, please try again.").catch(console.error);
       return;
     }
@@ -120,10 +120,11 @@ module.exports.run = (client, connection, P, message, args) => {
     //
     let sql = `SELECT * FROM pokemon WHERE name = '${attackerName}' OR name = '${defenderName}';`;
 
-    console.log(sql);
+    //console.log(sql);
 
     let loadSQLPromise = [];
 
+    /* istanbul ignore next */
     connection.query(sql, function (err, response) {
       if (err) {
         let errMsg = `Error with SQL query: ${err}`;

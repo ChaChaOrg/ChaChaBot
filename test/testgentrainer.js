@@ -53,7 +53,7 @@ describe('+gentrainer', function () {
             class dum_channel {
                 send = function (obj) {
                     assert.ok(obj.length > 16)
-                    assert.equal(obj.substring(0, 16), "Watch out! It's ")
+                    assert.strictEqual(obj.substring(0, 16), "Watch out! It's ")
                     return Promise.resolve()
                 }
             }
@@ -71,7 +71,7 @@ describe('+gentrainer', function () {
             class dum_channel {
                 send = function (obj) {
                     assert.ok(obj.length > 24)
-                    assert.equal(obj.substring(0, 24), "Watch out! It's Trainer ")
+                    assert.strictEqual(obj.substring(0, 24), "Watch out! It's Trainer ")
                     return Promise.resolve()
                 }
             }
@@ -90,7 +90,7 @@ describe('+gentrainer', function () {
         it("should throw an error when not enough arguments are supplied", function () {
             class dum_channel {
                 send = function (obj) {
-                    assert.equal(obj.substring(0, obj.indexOf("(")), "ChaCha Machine :b:roke :^")
+                    assert.strictEqual(obj.substring(0, obj.indexOf("(")), "ChaCha Machine :b:roke :^")
                     return Promise.resolve()
                 }
             }
