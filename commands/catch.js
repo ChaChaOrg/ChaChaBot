@@ -2,7 +2,8 @@
 
 const HELP_MESSAGE = "Catch Rate Calculator. Variables in order:\n "
 	+ "[Pokemon Name] [Max HP] [Current HP] [Catch Rate] [Pokeball Bonus] [Status Bonus] "
-	+ "[Capture Power Bonus] [Player Catch Bonus] [Pokemon Level]"
+	+ "[Capture Power Bonus] [Player Catch Bonus] [Pokemon Level]\n"
+	+ "Default bonus values are: \n\tPokeball = 1\n\tStatus = 1\n\tCapture Power = 1\n\tPlayer Catch = 1"
 
 exports.run = (client, connection, P, message, args) => {
 	//get pokeball emoji
