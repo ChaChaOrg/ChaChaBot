@@ -26,17 +26,16 @@ describe('+showpoke', function () {
     });
 
     describe('valid name', function () {
-        it('should spit back the pokemon values', function () {
+        it('should send the correct SQL query', function () {
             class dum_conn {
                 query = function (obj) {
-                    return Promise.resolve()
+                    assert.strictEqual(obj, 'SELECT * FROM pokemon WHERE name = \'sweet\';');
                 }
             }
 
             class dum_channel {
                 send = function (obj) {
-                    assert.strictEqual(obj.length, 0)
-                    return Promise.resolve()
+
                 }
             }
 
@@ -56,7 +55,7 @@ describe('+showpoke', function () {
             let my_pkdx = new pokedex();
             let dum_client = new fake_client();
             let dum_args = ['sweet'];
-            showpoke.run(dum_client, '', my_pkdx, dum_msg1, dum_args);
+            showpoke.run(dum_client, dum_conn1, my_pkdx, dum_msg1, dum_args);
         })
     })
 });
