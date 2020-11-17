@@ -22,7 +22,7 @@ module.exports.run = (client, connection, P, message, args) => {
 
         let sql = `SELECT * FROM pokemon WHERE name = '${name}';`;
 
-        console.log(sql);
+        //console.log(sql);
         connection.query(sql, function (err, response) {
             if (err) throw err;
 
