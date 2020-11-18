@@ -1,3 +1,5 @@
+const logger = require('../logger.js');
+
 // Generates a new ChaCha Pokemon, given level & base stats
 
 //help message
@@ -11,11 +13,13 @@ module.exports.run = (client, connection, P, message, args) => {
 	let Pokemon = require('../models/pokemon.js');
 
 	if (args[0] === "help") {
+		logger.info("genpoke: Sending help message.");
 		message.reply('New Pokemon Generator. Variables in order:\n [Pokemon Species] [Level] [Pokemon Name] [Hidden Ability % (optional - CURRENTLY BROKEN)]').catch(console.error);
 		return;
 	}
 
 	if (args.length < 3) {
+		logger.info("genpoke: Sending not enough arguments warning.");
 		message.channel.send("You haven't provided enough arguments. Should be [Pokemon Species] [Level] [Pokemon Name] [Hidden Ability % (optional - CURRENTLY BROKEN)]")
 		return;
 	}
@@ -29,18 +33,25 @@ module.exports.run = (client, connection, P, message, args) => {
 		genPokemon.init(P, message)
 			.then(function (response) {
 				// upload pokemon to database
+				logger.info("genpoke: Uploading pokemon to database.");
 				genPokemon.uploadPokemon(connection, message);
+
 				// post embed
+				logger.info("genpoke: Sending summary message.");
 				message.channel.send(genPokemon.sendSummaryMessage(client));
+
 				// alert user that their poke has been added to the database
+				logger.info("genpoke: Sending upload confirmation and how to remove pokemon.");
 				message.reply(genPokemon.name + " has been added to the database.\nTo remove it, use this command: `+rempoke " + genPokemon.name + "`");
 			})
 			.catch(function (error) {
+				logger.error(error);
 				message.reply(error);
 			});
 	}
 	/* istanbul ignore next */
 	catch (error) {
+		logger.error(error);
 		message.channel.send('ChaCha machine :b:roke while attempting to generate a Pokemon, please try again later').catch(console.error);
 	}
 
