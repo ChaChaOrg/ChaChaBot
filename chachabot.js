@@ -3,6 +3,7 @@ const Enmap = require("enmap");
 const fs = require("fs");
 const mysql = require("mysql");
 const pokedex = require('pokedex-promise-v2');
+const logger = require('./logger.js');
 
 const client = new Discord.Client();
 const config = require("./config.json");
@@ -41,6 +42,7 @@ fs.readdir("./commands/", (err, files) => {
     let props = require(`./commands/${file}`);
     let commandName = file.split(".")[0];
     console.log(`Attempting to load command ${commandName}`);
+    logger.info(`Attempting to load command ${commandName}`);
     client.commands.set(commandName, props);
   });
 });
@@ -48,6 +50,7 @@ fs.readdir("./commands/", (err, files) => {
 connection.getConnection(function (err) {
   if (err) return console.error(err);
   console.log('Connection to mySQL database successful! Connected as id ' + connection.threadId);
+  logger.info('Connection to mySQL database successful! Connected as id ' + connection.threadId);
 });
 
 client.login(config.token);
