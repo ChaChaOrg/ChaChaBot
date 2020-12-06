@@ -1,4 +1,4 @@
-const logger = require('../logger.js');
+const logger = require('../logs/logger.js');
 
 // help message
 const HELP_MESSAGE = "\n`+modpoke [nickname] [fieldToChange] [newValue]`\n\nModifies an existing Pokemon in the database. \nUse `+modpoke list` to view all available changeable fields.)";

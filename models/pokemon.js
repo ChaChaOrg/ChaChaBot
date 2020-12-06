@@ -8,7 +8,7 @@ const SPD_ARRAY_INDEX = 4;
 const SPE_ARRAY_INDEX = 5;
 const SHINY_CHANCE = 4096;
 
-const logger = require('../logger.js');
+const logger = require('../logs/logger.js');
 let Nature = require("./nature.js");
 let Moveset = require("./moveset.js");
 let Statblock = require("./statblock.js");
