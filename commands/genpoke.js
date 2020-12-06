@@ -1,4 +1,4 @@
-const logger = require('../logger.js');
+const logger = require('../logs/logger.js');
 
 // Generates a new ChaCha Pokemon, given level & base stats
 

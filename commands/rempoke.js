@@ -4,7 +4,7 @@
  * This command removes a Pokemon from the SQL database
  */
 
-const logger = require('../logger.js');
+const logger = require('../logs/logger.js');
 
 // The help message provided when requested by the user.
 const helpMessage = "\n`+rempoke [nickname]`\n\nDeletes the listed Pokemon from the SQL database, if it exists.\n\n((If found, confirm deletion by reaction to the posted message.))";

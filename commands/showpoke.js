@@ -8,7 +8,7 @@ const SPE_ARRAY_INDEX = 5;
 
 const HELP_MESSAGE = "Displays a Pokemon as it appears in the database. Please do not name your Pokemon 'help'. \n+showpoke [Pokemon Name]"
 
-const logger = require('../logger.js');
+const logger = require('../logs/logger.js');
 
 module.exports.run = (client, connection, P, message, args) => {
     try {

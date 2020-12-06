@@ -1,4 +1,4 @@
-const logger = require('../logger.js');
+const logger = require('../logs/logger.js');
 
 const STAT_ARRAY_MAX = 6;
 const HP_ARRAY_INDEX = 0;
