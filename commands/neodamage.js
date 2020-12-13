@@ -29,14 +29,14 @@ module.exports.run = (client, connection, P, message, args) => {
 
     //clause for helping!
     if (args[0].includes("help")) {
-      logger.info("neodamage: Sending help message.");
+      logger.info("[neodamage] Sending help message.");
       message.reply(HELP_MESSAGE)
         .catch(console.error);
       return;
     }
 
     if (args.length < 3) {
-      logger.info("neodamage: Sending too few parameters message.");
+      logger.info("[neodamage] Sending too few parameters message.");
       message.reply("You haven't provided enough parameters, please try again.").catch(console.error);
       return;
     }
@@ -123,7 +123,7 @@ module.exports.run = (client, connection, P, message, args) => {
     // Grabs the SQL entry for both attacking and defending pokemon.
     //
     let sql = `SELECT * FROM pokemon WHERE name = '${attackerName}' OR name = '${defenderName}';`;
-    logger.info(`neodamage: SQL query: ${sql}`)
+    logger.info(`[neodamage] SQL query: ${sql}`)
     //console.log(sql);
 
     let loadSQLPromise = [];
@@ -157,8 +157,8 @@ module.exports.run = (client, connection, P, message, args) => {
         return;
       }
 
-      logger.info('neodamage: Attacker: ' + response[0].name + ' retrieved from SQL database.');
-      logger.info('neodamage: Defender: ' + response[1].name + ' retrieved from SQL database.');
+      logger.info('[neodamage] Attacker: ' + response[0].name + ' retrieved from SQL database.');
+      logger.info('[neodamage] Defender: ' + response[1].name + ' retrieved from SQL database.');
 
       //
       // Load the found pokemon into pokemon objects, then wait til they both complete before continuing.
@@ -378,7 +378,7 @@ module.exports.run = (client, connection, P, message, args) => {
             // comment out embed if necessary
 
             //embed message
-            logger.info("neodamage: Sending combat embed string.");
+            logger.info("[neodamage] Sending combat embed string.");
             message.channel.send(combatEmbedString).catch(console.error);
           });
         });
