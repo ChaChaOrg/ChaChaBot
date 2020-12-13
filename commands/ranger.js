@@ -1,3 +1,4 @@
+const logger = require('../logs/logger.js');
 // Calculates a Pokemon Ranger's DC to loop/catch a Pokemon is, given its dex and catch rate.
 
 exports.run = (client, connection, P, message, args) => {
@@ -7,6 +8,7 @@ exports.run = (client, connection, P, message, args) => {
 
     //check if asking for help
     if (args[0].includes('help')) {
+        logger.info("[ranger] Sending help message.")
         message.reply('Pokemon Ranger Catch/Loop command. Variables in order:\n [Pokemon Name] [Pokemon Dex Mod] [Catch Rate]').catch(console.error);
         return;
     }
@@ -24,6 +26,9 @@ exports.run = (client, connection, P, message, args) => {
 
     //print results
 
-    message.channel.send(`The DC to catch ${name} is ${catchDC}. The DC to put a loop around ${name} is ${loopDC}.\n\nDon't forget, a Nat 1 is an auto-fail, and a Nat 20 is an auto-success.`);
+    logger.info("[ranger] " + `The DC to catch ${name} is ${catchDC}. The DC to put a loop around ${name} is ${loopDC}.\
+        \n\nDon't forget, a Nat 1 is an auto-fail, and a Nat 20 is an auto-success.`)
+    message.channel.send(`The DC to catch ${name} is ${catchDC}. The DC to put a loop around ${name} is ${loopDC}.\
+        \n\nDon't forget, a Nat 1 is an auto-fail, and a Nat 20 is an auto-success.`);
 
 }
