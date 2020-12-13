@@ -16,20 +16,20 @@ module.exports.run = (client, connection, P, message, args) => {
 
         // If user is asking for help, provide help string and get outta here
         if (pokeName.includes('help')) {
-            logger.info("rempoke: Sending help message.");
+            logger.info("[rempoke] Sending help message.");
             message.reply(helpMessage);
             return;
         }
 
         //debug print to console
-        logger.info("rempoke: Attempting to remove " + pokeName + " from the database...");
+        logger.info("[rempoke] Attempting to remove " + pokeName + " from the database...");
 
         // create find/delete statements
         let findPoke = `SELECT * FROM pokemon WHERE name = '${pokeName}'`;
-        logger.info(`rempoke: Find pokemon SQL statement: ${findPoke}`);
+        logger.info(`[rempoke] Find pokemon SQL statement: ${findPoke}`);
 
         let deletePokeStatement = `DELETE FROM pokemon WHERE name = '${pokeName}'`
-        logger.info(`rempoke: Delete pokemon SQL statement: ${deletePokeStatement}`);
+        logger.info(`[rempoke] Delete pokemon SQL statement: ${deletePokeStatement}`);
 
         // Attempt to find the Pokemon in the database, ending everything if nothing found
         connection.query(findPoke, function (err, rows, fields) {
@@ -42,7 +42,7 @@ module.exports.run = (client, connection, P, message, args) => {
                 // check to see if it picked anything up
                 if (rows.length > 0) {
                     // let console know
-                    logger.info("rempoke: " + pokeName + " has been found. Awaiting user confirmation.");
+                    logger.info("[rempoke] " + pokeName + " has been found. Awaiting user confirmation.");
                     // if picked up, stow the response
                     message.channel.send(
                         'Pokemon found. Are you sure you want to release `' +
@@ -62,26 +62,26 @@ module.exports.run = (client, connection, P, message, args) => {
                                     //removePokemon(deletePokeStatement, pokeName, message);
                                     connection.query(deletePokeStatement, function (err, results) {
                                         if (err) {
-                                            logger.error("rempoke: Unable to properly delete " + pokeName);
+                                            logger.error("[rempoke] Unable to properly delete " + pokeName);
                                             message.reply("...But " + pokeName + " came back!\n((The Pokemon could not be deleted))");
                                             throw err;
                                         } else {
-                                            logger.info("rempoke: " + pokeName + " has been deleted successfully.");
+                                            logger.info("[rempoke] " + pokeName + " has been deleted successfully.");
                                         }
                                     });
                                 }
                                 else {
-                                    logger.info("rempoke: Action cancelled by user.");
+                                    logger.info("[rempoke] Action cancelled by user.");
                                     message.reply(pokeName + "'s release has been cancelled.");
                                 }
                             }).catch(() => {
-                                logger.info("rempoke: Action cancelled via timeout.");
+                                logger.info("[rempoke] Action cancelled via timeout.");
                                 message.reply("Timed out after 30 seconds, so " + pokeName + "'s release has been cancelled.");
                             })
                     });
                 } else {
                     // if you're in here, it didn't find anything
-                    logger.info("rempoke: Pokemon with name " + pokeName + " not found.");
+                    logger.info("[rempoke] Pokemon with name " + pokeName + " not found.");
                     message.reply(
                         "No Pokemon found with name `" + pokeName +
                         "`, please check spelling and try again.\n" +
@@ -92,7 +92,7 @@ module.exports.run = (client, connection, P, message, args) => {
         });
 
     } catch (error) {
-        logger.error(`rempoke: ${error}`);
+        logger.error(`[rempoke] ${error}`);
         message.channel.send(error.toString());
         message.channel.send('ChaCha Machine :b:roke whilst trying to remove a Pokemon :(').catch(console.error);
     }
