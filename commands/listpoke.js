@@ -1,3 +1,5 @@
+const logger = require('../logs/logger.js');
+
 const HELP_MESSAGE = "Lists all Pokemon you can see.\n\nYou can view these in more comprehensive detail at the **ChaCha Database Site:** http://34.226.119.6:7000/";
 
 // the first page that the user can be on
@@ -30,8 +32,10 @@ module.exports.run = (client, connection, P, message, args) => {
         // if there are arguments involved, check what they are
         if (args.length > 0) {
             if (args[0].includes('help')) {
+                logger.info("listpoke: Sending help message.");
                 message.reply(HELP_MESSAGE);
             } else {
+                logger.info("listpoke: Sending 'Whoops! Sorry, no filtering options available at this time.'");
                 message.reply("Whoops! Sorry, no filtering options available at this time.");
             }
         } else {
@@ -70,7 +74,7 @@ module.exports.run = (client, connection, P, message, args) => {
                 // an array of promises to be fulfilled before actually sending the message to the user
                 let promises = [];
                 // for each pokemon to be created, go through a promise
-                new Promise(function(resolve){
+                new Promise(function (resolve) {
                     // go through each pokemon, creating their summary string and adding it to the array of pokes to be displayed
                     result.forEach(pokemon => {
                         // only add the pokemon if they are private BUT belong to the user, or are public
@@ -89,14 +93,12 @@ module.exports.run = (client, connection, P, message, args) => {
                                 }));
                         }
                     });
-                    Promise.all(promises).then( function()
-                    {
+                    Promise.all(promises).then(function () {
                         // resolve the promise when the poke is done being processed!
                         resolve("Done");
                     });
                 })
-                    .then( function(response)
-                    {
+                    .then(function (response) {
                         //  === START PAGE COUNTERS ===
 
                         // the last page the user can be on
@@ -188,7 +190,7 @@ module.exports.run = (client, connection, P, message, args) => {
                             userCreator + " = Created by you\n" +
                             otherCreator + " = Created by someone else\n(p) = Private (only visible to you)");
                         pokeEmbedPages.forEach(pokePage => {
-                           message.author.send(pokePage);
+                            message.author.send(pokePage);
                         });
                         console.log("Sent all pages to user");
 
@@ -197,8 +199,7 @@ module.exports.run = (client, connection, P, message, args) => {
                         //message.author.send(printString);
                         message.channel.send("I've DM'd you the list!");
                     })
-                    .catch(error =>
-                    {
+                    .catch(error => {
                         // if you're here, there was an error while attempting to resolve the Big Promise
                         let errorMessage = "Error while attempting to create promises."
                         message.reply(errorMessage);

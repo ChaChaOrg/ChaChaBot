@@ -87,7 +87,10 @@ module.exports.run = (client, connection, P, message, args) => {
             defenderName = args[2];
             break;
           case 3:
-            critHit = args[3]; //critical hit
+            if (args[3])
+              critHit = args[3]; //critical hit
+            else
+              critHit = 'n'
             break;
           case 4:
             bonusAtk = Number(args[4]); //Stages Attack
