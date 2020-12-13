@@ -152,23 +152,27 @@ module.exports.run = (client, connection, P, message, args) => {
         return;
       }
 
-      console.log("attacker and defender read");
-      console.log('Attacker:' + response[0].name);
-      console.log('Defender: ' + response[1].name);
 
       //
       // Load the found pokemon into pokemon objects, then wait til they both complete before continuing.
       //
       response.forEach((element) => {
-        if (element["name"] === attackerName)
+        if (element["name"].toLowerCase() === attackerName.toLowerCase())
           loadSQLPromise.push(attackPoke.loadFromSQL(P, element));
         else loadSQLPromise.push(defendPoke.loadFromSQL(P, element));
       });
 
+//      console.log("attacker and defender read");
+//      console.log('Attacker:' + loadSQLPromise.attackPoke);
+//      console.log('Defender: ' + loadSQLPromise.defendPoke);
+      
       Promise.all(loadSQLPromise).then((response) => {
         //
         // Now that the pokemon have been found, grab the move information and the relevant type information.
         //
+    	  console.log("attacker and defender read");
+    	  console.log('Attacker:' + attackPoke.name);
+          console.log('Defender: ' + defendPoke.name);
         P.getMoveByName(attackerMove.toLowerCase()).then((moveData) => {
           P.getTypeByName(moveData.type.name).then((typeData) => {
 
@@ -193,7 +197,8 @@ module.exports.run = (client, connection, P, message, args) => {
             //
             let attackerTypes = [attackPoke.type1, attackPoke.type2];
             let defenderTypes = [defendPoke.type1, defendPoke.type2];
-
+            console.log("attack types: " + attackPoke.type1 + ", " + attackPoke.type2 + "\n" );
+            console.log("defend types: " + defendPoke.type1 + ", " + defendPoke.type2 + "\n" );
             //Set STAB bonus
             //If either of the Pokemon's types are the same as the move, stab is set to 1.5. Other wise it is 1.0
             //
