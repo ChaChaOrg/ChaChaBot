@@ -15,7 +15,7 @@ module.exports.run = (client, connection, P, message, args) => {
         let name = args[0];
 
         if (name === "help") {
-            logger.info("showpoke: Sending showpoke help message.");
+            logger.info("[showpoke] Sending showpoke help message.");
             message.channel.send(HELP_MESSAGE);
             return;
         }
@@ -24,27 +24,27 @@ module.exports.run = (client, connection, P, message, args) => {
         let tempPoke = new Pokemon;
 
         let sql = `SELECT * FROM pokemon WHERE name = '${name}';`;
-        logger.info(`showpoke: SQL query: ${sql}`);
+        logger.info(`[showpoke] SQL query: ${sql}`);
 
         //console.log(sql);
         connection.query(sql, function (err, response) {
             if (err) throw err;
 
             if (response.length == 0) {
-                logger.info("showpoke: Pokemon not found in database. Please check your spelling, or the Pokemon may not be there.")
+                logger.info("[showpoke] Pokemon not found in database. Please check your spelling, or the Pokemon may not be there.")
                 message.channel.send("Pokemon not found in database. Please check your spelling, or the Pokemon may not be there.")
             }
             else {
                 tempPoke.loadFromSQL(P, response[0])
                     .then(response => {
-                        logger.info("showpoke: Sending summary message to user.");
+                        logger.info("[showpoke] Sending summary message to user.");
                         message.channel.send(tempPoke.sendSummaryMessage(client));
                     });
             }
         });
 
     } catch (error) {
-        logger.error("showpoke: " + error.toString());
+        logger.error("[showpoke] " + error.toString());
         message.channel.send(error.toString());
         message.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);
     }
