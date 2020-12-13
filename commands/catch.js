@@ -1,3 +1,4 @@
+const logger = require('../logs/logger.js');
 // Catch calculator
 
 const HELP_MESSAGE = "Catch Rate Calculator. Variables in order:\n "
@@ -12,9 +13,11 @@ exports.run = (client, connection, P, message, args) => {
 	if (args.length < 9) {
 		if (args.length > 0 && args[0].includes('help')) {
 			//clause for helping!
+			logger.info("[catch] Sending help message.")
 			message.reply(HELP_MESSAGE).catch(console.error);
 			return;
 		} else {
+			logger.info("[catch] Sending too few arguments message.")
 			message.reply("You haven't provided enough arguments. If you'd like help with the command, here you go:\n"
 				+ HELP_MESSAGE)
 			return;
@@ -35,6 +38,7 @@ exports.run = (client, connection, P, message, args) => {
 		let level = args[8];
 		let troubleshoot = args[9];
 
+		logger.info("[catch] data received! loading...")
 		message.channel.send(`data received! loading... ${shakey}`).catch(console.error);
 
 		//  =========== CRITCATCH CALCULATOR ===========
@@ -96,6 +100,7 @@ exports.run = (client, connection, P, message, args) => {
 		//calculate if it's a critical capture!
 
 		if ((c_critCatch > c_randomCrit) && (level <= catchbonus)) {
+			logger.info("[catch] Critical capture! " + pokeName + " has been caught.")
 			message.channel.send(`:star2: **CLICK!** :star2:\nIt's a critical capture! ${pokeName} has been caught `).catch(console.error);
 			return;
 		}
@@ -109,28 +114,37 @@ exports.run = (client, connection, P, message, args) => {
 		//if not, try for a normal capture
 		//TODO: try to have it post on a timer some day?
 		if (b_shakeVal > b_randomShake[0]) {
+			logger.info("[catch] Ball shakes once.")
 			message.channel.send(`The ball shakes once...`).catch(console.error);
 			if (b_shakeVal > b_randomShake[1]) {
+				logger.info("[catch] Ball shakes twice.")
 				message.channel.send(`...it shakes twice...`).catch(console.error);
 				if (b_shakeVal > b_randomShake[2]) {
+					logger.info("[catch] Ball shakes three times.")
 					message.channel.send(`......it shakes three times... (so exciting!! :fingers_crossed:)`).catch(console.error);
 					if (b_shakeVal > b_randomShake[3]) {
+						logger.info("[catch] " + pokeName + " was caught!")
 						message.channel.send(`:star2: **CLICK** :star2:\nDadadada! The wild ${pokeName} was caught!`).catch(console.error);
 					} else {
+						logger.info("[catch] " + pokeName + " broke free!")
 						message.channel.send(`Nooo, the ${pokeName} broke free! It was so close, too...`).catch(console.error);
 					}
 				} else {
+					logger.info("[catch] " + pokeName + " broke free!")
 					message.channel.send(`Argh, the ${pokeName} got out!`).catch(console.error);
 				}
 			} else {
+				logger.info("[catch] " + pokeName + " broke free!")
 				message.channel.send(`Oh no, the ${pokeName} broke free!`).catch(console.error);
 			}
 		} else {
+			logger.info("[catch] " + pokeName + " broke free!")
 			message.channel.send(`Drat! ${pokeName} broke free!`).catch(console.error);
 		}
 
 
 	} catch (error) {
+		logger.error("[catch] " + error.toString())
 		message.channel.send(error.toString());
 		message.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);
 	}
