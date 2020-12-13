@@ -88,7 +88,7 @@ module.exports.run = (client, connection, P, message, args) => {
                                 .catch(error => {
                                     // if you're here, there was an issue pushing the pokemon into the list
                                     let pushPokeError = "Error while converting Pokemon into summary message.";
-                                    console.log(error + "\n" + pushPokeError);
+                                    logger.error("[listpoke] " + error + "\n" + pushPokeError);
                                     message.reply(pushPokeError);
                                 }));
                         }
@@ -192,7 +192,7 @@ module.exports.run = (client, connection, P, message, args) => {
                         pokeEmbedPages.forEach(pokePage => {
                             message.author.send(pokePage);
                         });
-                        console.log("Sent all pages to user");
+                        logger.info("[listpoke] Sent all pages to user");
 
                         // once all pokemon have been yoinked, print em as a list
                         //console.log(`String: ${printString}`);
@@ -203,7 +203,7 @@ module.exports.run = (client, connection, P, message, args) => {
                         // if you're here, there was an error while attempting to resolve the Big Promise
                         let errorMessage = "Error while attempting to create promises."
                         message.reply(errorMessage);
-                        console.log(errorMessage + "\n" + error);
+                        logger.info("[listpoke] " + errorMessage + "\n" + error);
                     });
 
             });
@@ -212,7 +212,7 @@ module.exports.run = (client, connection, P, message, args) => {
     } catch (err) {
         // if you're here, there was a broad error that wasn't caught by the other stuff!
         let broadErrMessage = "Error while attempting to execute the listpoke command.";
-        console.log(broadErrMessage + "\n" + err);
+        logger.info("[listpoke] " + broadErrMessage + "\n" + err);
         message.reply(broadErrMessage);
     }
 };
