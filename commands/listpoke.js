@@ -32,10 +32,10 @@ module.exports.run = (client, connection, P, message, args) => {
         // if there are arguments involved, check what they are
         if (args.length > 0) {
             if (args[0].includes('help')) {
-                logger.info("listpoke: Sending help message.");
+                logger.info("[listpoke] Sending help message.");
                 message.reply(HELP_MESSAGE);
             } else {
-                logger.info("listpoke: Sending 'Whoops! Sorry, no filtering options available at this time.'");
+                logger.info("[listpoke] Sending 'Whoops! Sorry, no filtering options available at this time.'");
                 message.reply("Whoops! Sorry, no filtering options available at this time.");
             }
         } else {
