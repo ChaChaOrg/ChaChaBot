@@ -1,3 +1,5 @@
+const logger = require('../logs/logger.js');
+
 // Generates a new ChaCha Pokemon, given level & base stats
 
 exports.run = (client, connection, P, message, args) => {
@@ -10,7 +12,7 @@ exports.run = (client, connection, P, message, args) => {
     //level
     let level = args[1];
     //stat arrays: HP, ATK, DEF, SPA, SPD, SPE
-    let baseStats = [ args[2], args[3], args[4], args[5], args[6], args[7] ];
+    let baseStats = [args[2], args[3], args[4], args[5], args[6], args[7]];
     //chance of being male
     let genderChance = args[8];
     //number of abilities available
@@ -57,8 +59,8 @@ exports.run = (client, connection, P, message, args) => {
     //modifier generator
     let modGen = function (a) {
         var mainScore = a;
-        if (a % 2 !== 0) {mainScore = mainScore - 1;}
-        var rawMod = ((mainScore - 10)/2);
+        if (a % 2 !== 0) { mainScore = mainScore - 1; }
+        var rawMod = ((mainScore - 10) / 2);
         rawMod = rawMod.toFixed(0);
         var modString;
         if (rawMod > 0) {
@@ -88,6 +90,7 @@ exports.run = (client, connection, P, message, args) => {
 
     //check if asking for help
     if (species === 'help') {
+        logger.info("[genpokelegacy] Sending help message.")
         message.reply('New Pokemon Generator. Variables in order:\n [Pokemon Name] [Level] [Base HP] [Base Atk] [Base Def] [Base SpA] [Base SpD] [Base Speed] [\% Male] [Number of Abilities Available (including hidden abilities)] [Size Bonus] [Hidden Ability % (optional)]').catch(console.error);
         return;
     }
@@ -115,7 +118,7 @@ exports.run = (client, connection, P, message, args) => {
         }
 
         //shiny generator!
-        if ((Math.floor((Math.random() * 4096) + 1)) >= 4093) { shiny = true;}
+        if ((Math.floor((Math.random() * 4096) + 1)) >= 4093) { shiny = true; }
 
         // ========================= STAT ARRAY GENERATOR!!! =========================
 
@@ -138,14 +141,14 @@ exports.run = (client, connection, P, message, args) => {
         //if xcoord = ycoord, no changes, otherwise adjusting...
         if (natureXCoord !== natureYCoord) {
             for (i = 0; i < 6; i++) {
-                if (natureXCoord === i) {nmultiStats1[i + 1] = 1.1;}
-                if (natureYCoord === i) {nmultiStats2[i + 1] = 0.9;}
+                if (natureXCoord === i) { nmultiStats1[i + 1] = 1.1; }
+                if (natureYCoord === i) { nmultiStats2[i + 1] = 0.9; }
             }
         }
 
         //get CON + hit points
         //calculate con + conmod
-        conBase = Math.round((parseFloat(baseStats[0]) + parseFloat(ivStats[0]))*0.15 + 1.5);
+        conBase = Math.round((parseFloat(baseStats[0]) + parseFloat(ivStats[0])) * 0.15 + 1.5);
 
         conMod = modGen(conBase);
 
@@ -153,14 +156,14 @@ exports.run = (client, connection, P, message, args) => {
         //formula for hp... 16 + Conmod, with an additional 2d10 + conmod per level.
         let diceRoll = 16;
         for (var i = 1; i < level; i++) {
-            diceRoll += Math.floor((Math.random() * 18) + 2) + ((conBase - 10)/2);
+            diceRoll += Math.floor((Math.random() * 18) + 2) + ((conBase - 10) / 2);
         }
-        finalStats[0] = 16 + ((conBase - 10)/2) + diceRoll;
+        finalStats[0] = 16 + ((conBase - 10) / 2) + diceRoll;
 
         //get all ability scores
         //go through base formula for stat creation
         for (var ii = 1; ii < 6; ii++) {
-            formStats[ii] = Math.floor((((2*baseStats[ii]+ivStats[ii]+(evStats[ii]/4))*level)/20)+5);
+            formStats[ii] = Math.floor((((2 * baseStats[ii] + ivStats[ii] + (evStats[ii] / 4)) * level) / 20) + 5);
             finalStats[ii] = Math.floor(formStats[ii] * nmultiStats1[ii] * nmultiStats2[ii]);
         }
 
@@ -186,17 +189,19 @@ exports.run = (client, connection, P, message, args) => {
 
         //get nat armor, ac
         //natArmor is based off defense stat
-        natArmor = (0.08*(parseFloat(finalStats[2])))-0.6;
+        natArmor = (0.08 * (parseFloat(finalStats[2]))) - 0.6;
 
         //armor class
         //message.channel.send(`Natural Armor: ${natArmor} || Size Bonus: ${sizeBonus} || Dex: ${dexMod}`);
-        armorClass = (10 + parseFloat(natArmor) + parseFloat(sizeBonus) + ((dexBase - 10)/2)).toFixed(0);
+        armorClass = (10 + parseFloat(natArmor) + parseFloat(sizeBonus) + ((dexBase - 10) / 2)).toFixed(0);
 
         //get move speed
-        moveSpeed = (0.38*finalStats[5]+4).toFixed(2);
+        moveSpeed = (0.38 * finalStats[5] + 4).toFixed(2);
 
         // Final Print
-        message.channel.send({embed: {
+        logger.info("[genpokelegacy] Sending embed message.")
+        message.channel.send({
+            embed: {
                 color: 3447003,
                 author: {
                     name: client.user.username,
@@ -247,7 +252,8 @@ exports.run = (client, connection, P, message, args) => {
             }
         });
 
-    } catch(error) {
+    } catch (error) {
+        logger.error("[genpokelegacy] " + error)
         message.channel.send(error.toString);
         message.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);
     }
