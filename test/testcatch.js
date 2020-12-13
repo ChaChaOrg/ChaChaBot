@@ -82,4 +82,36 @@ describe('catch', function () {
             catchCmd.run(dum_client, '', '', dum_msg1, dum_args)
         });
     });
+
+    describe('more arguments', function () {
+        it('should print the shake messages', function () {
+            class dum_channel {
+                send = function (obj) {
+                    assert.match(obj, /(data received! loading... :poke_shake:)|(The ball shakes once...)|(...it shakes twice...)|(......it shakes three times... \(so exciting!! :fingers_crossed:\))|(:star2: CLICK :star2:)|(Dadadada! The wild gastly was caught!)/);
+                    return Promise.resolve()
+                }
+            }
+
+            class dum_msg {
+                channel = new dum_channel();
+            }
+
+            class fake_client {
+                emojis = [
+                    {
+                        name: "poke_shake",
+                        value: ":poke_shake:",
+                        toString: function () {
+                            return this.value
+                        }
+                    }
+                ]
+            }
+
+            let dum_args = ["gastly", 15, 15, 15, 15, 15, 15, 15, 15];
+            let dum_msg1 = new dum_msg()
+            let dum_client = new fake_client()
+            catchCmd.run(dum_client, '', '', dum_msg1, dum_args)
+        });
+    });
 });

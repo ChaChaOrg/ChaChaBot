@@ -3,7 +3,7 @@ const Enmap = require("enmap");
 const fs = require("fs");
 const mysql = require("mysql");
 const pokedex = require('pokedex-promise-v2');
-const logger = require('./logger.js');
+const logger = require('./logs/logger.js');
 
 const client = new Discord.Client();
 const config = require("./config.json");

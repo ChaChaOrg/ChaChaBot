@@ -10,31 +10,114 @@ exports.run = (client, connection, P, message, args) => {
 	//get pokeball emoji
 	const shakey = client.emojis.find(emoji => emoji.name === "poke_shake");
 
-	if (args.length < 9) {
-		if (args.length > 0 && args[0].includes('help')) {
-			//clause for helping!
-			logger.info("[catch] Sending help message.")
-			message.reply(HELP_MESSAGE).catch(console.error);
-			return;
-		} else {
+	if (args.length > 0 && args[0].includes('help')) {
+		//clause for helping!
+		logger.info("[catch] Sending help message.")
+		message.reply(HELP_MESSAGE).catch(console.error);
+		return;
+	}
+	else {
+		if (args.length < 4) {
 			logger.info("[catch] Sending too few arguments message.")
 			message.reply("You haven't provided enough arguments. If you'd like help with the command, here you go:\n"
 				+ HELP_MESSAGE)
 			return;
+		} else {
+			/* Checks for pokeball bonus option
+			Accepts:
+				 -p [val]
+				 -pokeball [val]
+				 -ball [val]
+			 */
+			let pokeball_regex = /(-p \d+)|(-pokeball \d+)|(-ball \d+)/
+
+			/* Checks for pokeball bonus option
+			Accepts:
+				 -s [val]
+				 -status [val]
+			 */
+			let status_regex = /(-s \d+)|(-status \d+)/
+
+			/* Checks for pokeball bonus option
+			Accepts:
+				-cp [val]
+				-capturepower [val]
+				-capture_power [val]
+				-capture-power [val]
+				-capture power [val] 
+			 */
+			let capture_power_regex = /(-cp \d+)|(-capture(\s|-|_)?power \d+)/
+
+			/* Checks for player catch bonus
+			Accepts:
+				-pc [val]
+				-playercatch [val]
+				-player_catch [val]
+				-player-catch [val]
+				-player catch [val]
+			*/
+			let player_catch_regex = /(-pc \d+)|(-player(\s|-|_)?catch \d+)/
+			let args_string = args.splice(0).join(" ")
+
+			var bball;
+			pokeball_match = pokeball_regex.exec(args_string);
+			if (pokeball_match) {
+				bball = parseInt(pokeball_match[0].split(" ")[1])
+			} else {
+				bball = 1
+			}
+
+			var bstatus;
+			status_match = status_regex.exec(args_string);
+			if (status_match) {
+				bstatus = parseInt(status_match[0].split(" ")[1])
+			} else {
+				bstatus = 1
+			}
+
+			var cpfactor;
+			capture_power_match = capture_power_regex.exec(args_string);
+			if (capture_power_match) {
+				var cp_match_array = capture_power_match[0].split(" ");
+				if (cp_match_array.length == 2) {
+					cpfactor = parseInt(cp_match_array[1])
+				}
+				else if (cp_match_array.length == 3) {
+					cpfactor = parseInt(cp_match_array[2])
+				}
+			} else {
+				cpfactor = 1
+			}
+
+			var catchbonus;
+			player_catch_match = player_catch_regex.exec(args_string);
+			if (player_catch_match) {
+				var pc_match_array = capture_power_match[0].split(" ")
+				if (cp_match_array.length == 2)
+					catchbonus = parseInt(pc_match_array[1])
+				else if (cp_match_array.length == 3)
+					catchbonus = parseInt(cpc_match_array[2])
+			} else {
+				catchbonus = 1
+			}
 		}
+
+
 	}
 
 
 	try {
+		console.log(catchbonus)
+		console.log(cpfactor)
 		//list out required variables
 		let pokeName = args[0];
 		let maxHP = args[1];
 		let curHP = args[2];
 		let rate = args[3];
-		let bball = args[4];
-		let bstatus = args[5];
-		let cpfactor = args[6];
-		let catchbonus = args[7];
+		// let bball = args[4];
+		// let bstatus = args[5];
+		// let cpfactor = args[6];
+		// let catchbonus = args[7];
 		let level = args[8];
 		let troubleshoot = args[9];
 
@@ -114,6 +197,7 @@ exports.run = (client, connection, P, message, args) => {
 		//if not, try for a normal capture
 		//TODO: try to have it post on a timer some day?
 		if (b_shakeVal > b_randomShake[0]) {
+			console.log(b_shakeVal)
 			logger.info("[catch] Ball shakes once.")
 			message.channel.send(`The ball shakes once...`).catch(console.error);
 			if (b_shakeVal > b_randomShake[1]) {
