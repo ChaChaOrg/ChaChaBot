@@ -8,12 +8,19 @@ exports.run = (client, connection, P, message, args) => {
 		//default values for ball rate, status rate and capture power bonus
 		//base case assumes basic pokeball with no status or special circumstances
 		let name = args[0];
+		//clause for helping!
+		if (name.includes('help')) {
+			message.reply('Catch Rate Calculator. Variables in order:\n [Pokemon Name] [Current HP] [Max HP] [Catch Roll] [Pokeball Bonus] [Status Bonus] [Capture Power Bonus]').catch(console.error);
+			return;
+		}
 		let hp = args[1];
 		let max = args[2];
 		let roll = args[3];
 		let ball = 1;
 		let status = 1;
 		let bonus = 1;
+		let Pokemon = require("../models/pokemon.js");
+		let opponent = new Pokemon();
 		if(args.length >= 5){
 			ball = args[4];
 		}
@@ -23,13 +30,17 @@ exports.run = (client, connection, P, message, args) => {
 		if(args.length >= 7){
 			bonus = args[6];
 		}
-	
-		let sql = "SELECT * From pokemon WHERE name = '${name}';";
-		
+		message.channel.send(`data received! loading... <a:pokeball:790311645095919637>`).catch(console.error);
+		let sql = `SELECT * From pokemon WHERE name = '${name}';`;
+		console.log(sql);
 		let loadSQLPromise = [];
+		console.log("promises");
 		connection.query(sql, function(err, response){
 			if(err){
-		
+				let errMsg = `Error with SQL query: ${err}`;
+		        console.log(errMsg);
+		        message.reply(errMsg);
+		        return;
 			};
 	
 			if(response.length == 0){
@@ -40,11 +51,11 @@ exports.run = (client, connection, P, message, args) => {
 			}else{
 				
 				//First in line I choose you!
-				loadSQLPromise.push(response[0].loadFromSQL(P, response[0]));
+				loadSQLPromise.push(opponent.loadFromSQL(P, response[0]));
 				Promise.all(loadSQLPromise).then((response)=>{
-					let mon = response[0];
+					let species = opponent.speciesData;
 					//run calculation
-	
+					console.log("calcs start");
 					//  =========== CRITCATCH CALCULATOR ===========
 					var catchBonusMod = [0, 31, 151, 301, 451, 600];
 					var cMod = [0, 0.5, 1, 1.5, 2, 2.5];
@@ -87,11 +98,11 @@ exports.run = (client, connection, P, message, args) => {
 					// =========== END CRITCATCH CALCULATOR ===========
 	
 					//call up the catch rate
-					let rate = 1;
-				
+					let rate = species.capture_rate;
+					console.log("crit calcs");
 					//still need catch rate
 					let calcA = (3*max-2*hp)/(3*max)*rate*ball*status*bonus;
-					let calcB = (65536 / Math.pow(255/calcA), 0.1875);
+					let calcB = (65536 / Math.pow((255/calcA), 0.1875));
 					let b_randomShake = [
 						Math.floor((Math.random() * 65535) + 1),
 						Math.floor((Math.random() * 65535) + 1),
@@ -102,34 +113,40 @@ exports.run = (client, connection, P, message, args) => {
 					let critRando = Math.floor(Math.random() * 255) + 1;
 	
 					if((calcC > critRando) && (mon.level <= roll)){
-						message.channel.send(`:star2: **CLICK!** :star2:\nIt's a critical capture! ${pokeName} has been caught `).catch(console.error);
+						message.channel.send(`:star2: **CLICK!** :star2:\nIt's a critical capture! ${name} has been caught `).catch(console.error);
 						return;
 					}
 	
 					//moment of truth
+					console.log("moment of truth");
+					console.log("Catch rate: " + rate);
+					console.log("number: " + calcB + " target: " + b_randomShake[0]);
 					if (calcB > b_randomShake[0]){
 						message.channel.send(`The ball shakes once...`).catch(console.error);
+						console.log("number: " + calcB + " target: " + b_randomShake[1]);
 						if (calcB > b_randomShake[1]) {
 							message.channel.send(`...it shakes twice...`).catch(console.error);
+							console.log("number: " + calcB + " target: " + b_randomShake[2]);
 							if (calcB > b_randomShake[2]) {
 								message.channel.send(`......it shakes three times... (so exciting!! :fingers_crossed:)`).catch(console.error);
+								console.log("number: " + calcB + " target: " + b_randomShake[3]);
 								if (calcB > b_randomShake[3]) {
-									message.channel.send(`:star2: **CLICK** :star2:\nDadadada! The wild ${pokeName} was caught!`).catch(console.error);
+									message.channel.send(`:star2: **CLICK** :star2:\nDadadada! The wild ${name} was caught!`).catch(console.error);
 								} else {
-									message.channel.send(`Nooo, the ${pokeName} broke free! It was so close, too...`).catch(console.error);
+									message.channel.send(`Nooo, ${name} broke free! It was so close, too...`).catch(console.error);
 								}
 							} else {
-								message.channel.send(`Argh, the ${pokeName} got out!`).catch(console.error);
+								message.channel.send(`Argh, ${name} got out!`).catch(console.error);
 							}	
 						} else {
-							message.channel.send(`Oh no, the ${pokeName} broke free!`).catch(console.error);
+							message.channel.send(`Oh no, ${name} broke free!`).catch(console.error);
 						}
 					} else {
-						message.channel.send(`Drat! ${pokeName} broke free!`).catch(console.error);
+						message.channel.send(`Drat! ${name} broke free!`).catch(console.error);
 					}
-				}
-				});
 				
+				});
+			}
 				
 		});
 	
