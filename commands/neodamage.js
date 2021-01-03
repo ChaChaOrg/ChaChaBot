@@ -52,6 +52,8 @@ module.exports.run = (client, connection, P, message, args) => {
     // args[7] = multiplicative damage bonus [Defaults to 1]
     //
 
+    let args_string = args.slice(0).join(" ")
+
     let attackerName;
     let attackerMove;
     let defenderName;
@@ -59,7 +61,15 @@ module.exports.run = (client, connection, P, message, args) => {
     let bonusAtk = 0;
     let other = 0;
     let otherMult = 1;
-    let critHit = "n";
+
+    var critHit;
+    let critHit_regex = /(-ch \d+)|(-critical(\s|-|_)?hit \d+)/
+    let critHit_match = critHit_regex.exec(args_string);
+    if (critHit_match)
+      critHit = critHit[0].split(" ")[1]
+    else
+      critHit = "n"
+
 
     //variables required
     let Pokemon = require("../models/pokemon.js");
