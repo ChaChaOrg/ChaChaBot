@@ -751,7 +751,7 @@ Pokemon.prototype.loadFromSQL = function (P, sqlObject) {
 
                   this.originalTrainer = sqlObject.originalTrainer;
 
-                  if (sqlObject.shiny === null) {
+                  if (sqlObject.shiny != null) {
                     this.shiny = sqlObject.shiny;
                   }
 
