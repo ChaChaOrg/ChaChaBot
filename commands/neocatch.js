@@ -2,15 +2,17 @@
 exports.run = (client, connection, P, message, args) => {
 	//get pokeball emoji
 	const shakey = client.emojis.find("name", "poke_shake");
-	
+	const helpMessage = "Catch Rate Calculator. (★ = required field)\n\n `+neocatch [Pokemon Name★] [Current HP★] [Max HP★] [Catch Roll★] [Pokeball Bonus] [Status Bonus] [Capture Power Bonus]`\n\n" + 
+	"**Common Pokeball Bonuses:**\n Pokeball: 1\n Greatball: 1.5\n Ultraball: 2\n\n" + 
+	"**Common Status Bonuses:**\n Sleep: 2.5\n Freeze: 2\n Paralysis/Poison/Burn: 1.5\n Everything Else: 1";
 	try{
 	
 		//default values for ball rate, status rate and capture power bonus
 		//base case assumes basic pokeball with no status or special circumstances
 		let name = args[0];
 		//clause for helping!
-		if (name.includes('help')) {
-			message.reply('Catch Rate Calculator. Variables in order:\n [Pokemon Name] [Current HP] [Max HP] [Catch Roll] [Pokeball Bonus] [Status Bonus] [Capture Power Bonus]').catch(console.error);
+		if (args.length < 4 || name.includes('help')) {			
+			message.reply(helpMessage).catch(console.error);
 			return;
 		}
 		let hp = args[1];
