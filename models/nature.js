@@ -24,6 +24,7 @@ function Nature() {
 
 Nature.prototype.calculateNatureStats = function (pokemon) {
     logger.info("[nature] Calculating nature stats.")
+//    console.log("x " + this.natureXCoord + " Y: " + this.natureYCoord + " final: " + this.natureFinal);
     if (this.natureXCoord !== this.natureYCoord) {
         for (let i = 0; i < STAT_ARRAY_MAX; i++) {
             if (this.natureYCoord === i) {
@@ -34,6 +35,7 @@ Nature.prototype.calculateNatureStats = function (pokemon) {
             }
         }
     }
+    console.log("nmulti="+ pokemon.statBlock.nMultiStats);
 };
 /**
  * Assigns a nature to a Pokemon given both the Pokemon itself and the desired nature
