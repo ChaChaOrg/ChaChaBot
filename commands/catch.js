@@ -61,7 +61,7 @@ exports.run = (client, connection, P, message, args) => {
 		let args_string = args.slice(0).join(" ")
 
 		var bball;
-		pokeball_match = pokeball_regex.exec(args_string);
+		let pokeball_match = pokeball_regex.exec(args_string);
 		if (pokeball_match) {
 			bball = parseInt(pokeball_match[0].split(" ")[1])
 		} else {
@@ -69,7 +69,7 @@ exports.run = (client, connection, P, message, args) => {
 		}
 
 		var bstatus;
-		status_match = status_regex.exec(args_string);
+		let status_match = status_regex.exec(args_string);
 		if (status_match) {
 			bstatus = parseInt(status_match[0].split(" ")[1])
 		} else {
@@ -77,7 +77,7 @@ exports.run = (client, connection, P, message, args) => {
 		}
 
 		var cpfactor;
-		capture_power_match = capture_power_regex.exec(args_string);
+		let capture_power_match = capture_power_regex.exec(args_string);
 		if (capture_power_match) {
 			var cp_match_array = capture_power_match[0].split(" ");
 			if (cp_match_array.length == 2) {
@@ -91,7 +91,7 @@ exports.run = (client, connection, P, message, args) => {
 		}
 
 		var catchbonus;
-		player_catch_match = player_catch_regex.exec(args_string);
+		let player_catch_match = player_catch_regex.exec(args_string);
 		if (player_catch_match) {
 			var pc_match_array = capture_power_match[0].split(" ")
 			if (cp_match_array.length == 2)

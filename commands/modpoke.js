@@ -49,6 +49,12 @@ const CODE_FORMAT_END = "\n```"
 module.exports.run = (client, connection, P, message, args) => {
     let Pokemon = require('../models/pokemon.js');
     try {
+        if (args.join(" ").match(/[-\/\\^$*+?.()|[\]{}'"\s]/)) {
+            logger.warn("[showpoke] User put special character in pokemon name, sending warning.");
+            message.reply("Please do not use special characters when using renaming Pokemon.");
+            return;
+        }
+
         // if asking for help, print the help message
         if (args[0].includes('help')) {
             logger.info("[modpoke] Sending help message.");
@@ -89,7 +95,7 @@ module.exports.run = (client, connection, P, message, args) => {
         let sqlUpdateString = `UPDATE pokemon SET ${valName} = '${valString}' WHERE name = '${pokeName}'`;
         logger.info(`[modpoke] SQL update string: ${sqlUpdateString}`);
         // not found message
-        let notFoundMessage = pokeName + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `+listpoke` to view the Pokemon you can edit.";
+        let notFoundMessage = pokeName + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `+listpoke` to view the Pokemon you can edit.)";
 
         // try to find the poke in the array first
         connection.query(sqlFindPoke, function (err, rows, fields) {
@@ -98,14 +104,18 @@ module.exports.run = (client, connection, P, message, args) => {
                 let cantAccessSQLMessage = "SQL error, please try again later or contact a maintainer if the issue persists.";
                 logger.error("[modpoke]" + cantAccessSQLMessage + ` ${err}`)
                 message.reply(cantAccessSQLMessage);
+                return;
             } else if (rows.length === 0) {
                 // the pokemon was not found
                 logger.info(`[modpoke] ${pokeName} was not found.`)
                 message.reply(notFoundMessage);
+                return;
             } else {
 
                 // check if the user is allowed to edit the Pokemon. If a Pokemon is private, the user's discord ID must match the Pokemon's creator ID
-                if (rows[0].private > 0 && message.author.id !== rows[0].userID) {
+                if (rows[0].private > 0 && message.author.id !== rows[0].discordID) {
+                    console.log(message.author.id)
+                    console.log(rows[0].discordID)
                     logger.info("[modpoke] Detected user attempting to edit private Pokemon that isn't their own.")
                     // If user found a pokemon that was marked private and belongs to another user, act as if the pokemon doesn't exist in messages
                     message.reply(notFoundMessage);

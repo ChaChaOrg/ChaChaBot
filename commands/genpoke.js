@@ -30,6 +30,12 @@ module.exports.run = (client, connection, P, message, args) => {
 		return;
 	}
 
+	if (args[2].match(/[-\/\\^$*+?.()|[\]{}'"\s]/)) {
+		logger.warn("[showpoke] User put special character in pokemon name, sending warning.");
+		message.reply("Please do not use special characters when using generating Pokemon.");
+		return;
+	}
+
 	try {
 		let genPokemon = new Pokemon(args[0].toLowerCase(), args[1], args[2]);
 		// assign hidden ability chance, if listed
