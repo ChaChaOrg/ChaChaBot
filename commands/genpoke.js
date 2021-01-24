@@ -3,9 +3,11 @@ const logger = require('../logs/logger.js');
 // Generates a new ChaCha Pokemon, given level & base stats
 
 //help message
-const HELP_MESSAGE = '\n`+genpoke [species] [level (1-20)] [nickname] [hidden ability % (as a number, 0-100)]\n' +
-	'**FIELDS TO ADD LATER:**\n [trainerName] [private (optional: leave blank if public, put 1 if private]`' +
-	'\n\nCreates a new Pokemon when given the values above, printing it upon completion.\n\n' +
+const HELP_MESSAGE = '\n+genpoke [SPECIES] [LEVEL (1-20)] [NICKNAME - no spaces or special characters] [HIDDEN' +
+	' ABILITY % (as a number, 0-100)]\n\n' + 'examples - `+genpoke Pikachu 1 Pika` or `+genpoke Pikachu 1 Pika 30`' +
+	' (30% chance to have hidden ability)' +
+	'\n\nCreates a new Pokemon when given the values above, printing it upon completion. \n**Created as private by' +
+	' default** - use `+modpoke (name) private 0` to make publicly visible/editable\n\n' +
 	'(Hint: You can view an existing Pokemon with `+showpoke [nickname]`, or remove it using `+rempoke [nickname]`';
 
 module.exports.run = (client, connection, P, message, args) => {
@@ -14,7 +16,7 @@ module.exports.run = (client, connection, P, message, args) => {
 
 	if (args[0] === "help") {
 		logger.info("[genpoke] Sending help message.");
-		message.reply('New Pokemon Generator. Variables in order:\n [Pokemon Species] [Level] [Pokemon Name] [Hidden Ability % (optional - CURRENTLY BROKEN)]').catch(console.error);
+		message.reply(HELP_MESSAGE).catch(console.error);
 		return;
 	}
 
