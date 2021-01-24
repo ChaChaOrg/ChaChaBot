@@ -1,3 +1,6 @@
+var assert = require('assert');
+var genpoke = require('../commands/[command].js');
+
 describe('command', function () {
     describe('option', function () {
         it('should do something', function () {
