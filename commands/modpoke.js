@@ -5,7 +5,7 @@ const HELP_FIELDS_LIST = "Here's the list of all available fields on a Pokemon t
     "NOTE - Fields are **case-sensitive**" +
     "\n" +
     "**BASIC FEATURES**\n" +
-    "> `name` // Nickname (\"Sparky\", \"Blaze\")\n" +
+    "> `name` // Nickname (\"Sparky\", \"Blaze\"), cannot include spaces or special characters\n" +
     "> `species♢` // Species (\"Pikachu\", \"Vulpix\")\n" +
     "> `level♢` // ChaCha level, ranging from level 1-20. Each ChaCha level is equivalent to 5 in-videogame levels\n" +
     "> `gender` // Gender (*Male, Female, or Genderless*)\n" +
@@ -31,7 +31,8 @@ const HELP_FIELDS_LIST = "Here's the list of all available fields on a Pokemon t
     "**Other**\n" +
     "> `originalTrainer` // The Pokemon's trainer\n" +
     "> `shiny` // Shiny status (0 = false, 1 = true)\n" +
-    "> `private` // Private marker. (0 = false, 1 = true) (*Private Pokemon can only be seen by their creator*)";
+    "> `private` // Private marker, generated pokemon set to private (1) by default. (0 = false, 1 = true) (*Private" +
+    " Pokemon can only be seen by their creator*)";
 
 //message when there are too few arguments
 const FEWARGS_MESSAGE = "Too few arguments submitted. Check your submission for errors.";

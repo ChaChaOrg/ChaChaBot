@@ -31,7 +31,7 @@ exports.run = (client, connection, P, message, args) => {
 		var successes = parseInt(args[3]);
 
 		//base DCs for checks
-		var baseDC = [20, 17, 15, 15, 13, 10];
+		var baseDC = [20, 17, 15, 13, 10, 8];
 		//formula for checking DC
 		var formulaMod = 8 - Math.round(parseInt(movePP)/5);
 
