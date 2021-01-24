@@ -24,6 +24,12 @@ module.exports.run = (client, connection, P, message, args) => {
 		return;
 	}
 
+	if (args[2].includes('\'')) {
+		logger.warn("[showpoke] User put single quote in command, sending warning.");
+		message.reply("Please do not use quotes when using commands.");
+		return;
+	}
+
 	try {
 		let genPokemon = new Pokemon(args[0].toLowerCase(), args[1], args[2]);
 		// assign hidden ability chance, if listed
