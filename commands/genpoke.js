@@ -2,9 +2,13 @@ const logger = require('../logs/logger.js');
 
 // Generates a new ChaCha Pokemon, given level & base stats
 
+//message template
+const CMD_TEMPLATE = '+genpoke [SPECIES] [LEVEL (1-20)] [NICKNAME - no spaces or special characters] [HIDDEN' +
+	' ABILITY % (as a number, 0-100)]';
 //help message
-const HELP_MESSAGE = '\n+genpoke [SPECIES] [LEVEL (1-20)] [NICKNAME - no spaces or special characters] [HIDDEN' +
-	' ABILITY % (as a number, 0-100)]\n\n' + 'examples - `+genpoke Pikachu 1 Pika` or `+genpoke Pikachu 1 Pika 30`' +
+const HELP_MESSAGE = '\n' + CMD_TEMPLATE + '\n\n' + 'examples - `+genpoke Pikachu 1 Pika` or `+genpoke Pikachu 1' +
+	' Pika' +
+	' 30`' +
 	' (30% chance to have hidden ability)' +
 	'\n\nCreates a new Pokemon when given the values above, printing it upon completion. \n**Created as private by' +
 	' default** - use `+modpoke (name) private 0` to make publicly visible/editable\n\n' +
@@ -22,7 +26,7 @@ module.exports.run = (client, connection, P, message, args) => {
 
 	if (args.length < 3) {
 		logger.info("[genpoke] Sending not enough arguments warning.");
-		message.channel.send("You haven't provided enough arguments. Should be [Pokemon Species] [Level] [Pokemon Name] [Hidden Ability % (optional - CURRENTLY BROKEN)]")
+		message.channel.send("You haven't provided enough arguments. Should be " + CMD_TEMPLATE)
 		return;
 	}
 
