@@ -12,6 +12,12 @@ const logger = require('../logs/logger.js');
 
 module.exports.run = (client, connection, P, message, args) => {
     try {
+        if (args.join(" ").includes("\'")) {
+            logger.warn("[showpoke] User put single quote in command, sending warning.");
+            message.reply("Please do not use quotes when using commands.");
+            return;
+        }
+
         let name = args[0];
 
         if (name === "help") {
@@ -26,6 +32,8 @@ module.exports.run = (client, connection, P, message, args) => {
         let sql = `SELECT * FROM pokemon WHERE name = '${name}';`;
         logger.info(`[showpoke] SQL query: ${sql}`);
 
+        let notFoundMessage = name + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `+listpoke` to view the Pokemon you can edit.)";
+
         //console.log(sql);
         connection.query(sql, function (err, response) {
             if (err) throw err;
@@ -35,10 +43,21 @@ module.exports.run = (client, connection, P, message, args) => {
                 message.channel.send("Pokemon not found in database. Please check your spelling, or the Pokemon may not be there.")
             }
             else {
+                // check if the user is allowed to edit the Pokemon. If a Pokemon is private, the user's discord ID must match the Pokemon's creator ID
+                if (response[0].private > 0 && message.author.id !== response[0].discordID) {
+                    logger.info("[modpoke] Detected user attempting to edit private Pokemon that isn't their own.")
+                    // If user found a pokemon that was marked private and belongs to another user, act as if the pokemon doesn't exist in messages
+                    message.reply(notFoundMessage);
+                    return;
+                }
+
                 tempPoke.loadFromSQL(P, response[0])
                     .then(response => {
+
+
                         logger.info("[showpoke] Sending summary message to user.");
                         message.channel.send(tempPoke.sendSummaryMessage(client));
+
                     });
             }
         });
