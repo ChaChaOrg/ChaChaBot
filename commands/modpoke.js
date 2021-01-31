@@ -49,7 +49,7 @@ const CODE_FORMAT_END = "\n```"
 module.exports.run = (client, connection, P, message, args) => {
     let Pokemon = require('../models/pokemon.js');
     try {
-        if (args.join(" ").match(/[-\/\\^$*+?.()|[\]{}'"\s]/)) {
+        if (args[0].match(/[-\/\\^$*+?.()|[\]{}'"\s]/)) {
             logger.warn("[showpoke] User put special character in pokemon name, sending warning.");
             message.reply("Please do not use special characters when using renaming Pokemon.");
             return;
@@ -114,8 +114,6 @@ module.exports.run = (client, connection, P, message, args) => {
 
                 // check if the user is allowed to edit the Pokemon. If a Pokemon is private, the user's discord ID must match the Pokemon's creator ID
                 if (rows[0].private > 0 && message.author.id !== rows[0].discordID) {
-                    console.log(message.author.id)
-                    console.log(rows[0].discordID)
                     logger.info("[modpoke] Detected user attempting to edit private Pokemon that isn't their own.")
                     // If user found a pokemon that was marked private and belongs to another user, act as if the pokemon doesn't exist in messages
                     message.reply(notFoundMessage);
@@ -136,6 +134,7 @@ module.exports.run = (client, connection, P, message, args) => {
                                         logger.error(`[modpoke] ${errorMessage}\n\t${err.toString()}`);
                                         logger.error("[modpoke] " + err);
                                         message.reply(errorMessage);
+                                        reject();
                                     } else {
                                         let successMessage = "**" + pokeName + "'s** " + valName + " has been changed to " + valString + "!";
                                         logger.info(`[modpoke] ${successMessage}`)
@@ -148,6 +147,8 @@ module.exports.run = (client, connection, P, message, args) => {
                         });
                         resolve();
                     });
+
+
 
                     // await promise before attempting non-static update
                     staticCheck.then(() => {
