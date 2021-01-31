@@ -60,6 +60,9 @@ function Pokemon(tempSpecies, tempLevel, tempName) {
 
   this.nature = new Nature();
   this.shiny = false;
+
+  //make private by default
+  this.private = true;
 }
 
 Pokemon.prototype.init = function (P, message) {
