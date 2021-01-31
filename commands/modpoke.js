@@ -7,6 +7,7 @@ const HELP_FIELDS_LIST = "Here's the list of all available fields on a Pokemon t
     "**BASIC FEATURES**\n" +
     "> `name` // Nickname (\"Sparky\", \"Blaze\")\n" +
     "> `species♢` // Species (\"Pikachu\", \"Vulpix\")\n" +
+    "> `formName♢` // Current Form (\"meowth-galarian\", \"aegislash-shield\")\n" +
     "> `level♢` // ChaCha level, ranging from level 1-20. Each ChaCha level is equivalent to 5 in-videogame levels\n" +
     "> `gender` // Gender (*Male, Female, or Genderless*)\n" +
     "> `ability` // Ability (\"Static\", \"Flash Fire\")\n" +
@@ -71,7 +72,7 @@ module.exports.run = (client, connection, P, message, args) => {
         // grab the pokemon's name
         let pokeName = args[0];
         //grab the value to be changed
-        let valName = args[1];
+        let valName = args[1].toLowerCase();
         //grab the new value to be input, set properly in the following if statement
         let valString;
         if (typeof args[2] == "string") {
