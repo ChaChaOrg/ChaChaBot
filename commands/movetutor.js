@@ -43,7 +43,7 @@ exports.run = (client, connection, P, message, args) => {
 			var successes = parseInt(args[3]);
 
 			//base DCs for checks
-			var baseDC = [20, 17, 15, 15, 13, 10];
+			var baseDC = [20, 17, 15, 13, 10, 8];
 			//formula for checking DC
 			var formulaMod = 8 - Math.round(parseInt(movePP) / 5);
 
@@ -53,7 +53,7 @@ exports.run = (client, connection, P, message, args) => {
 			//get final DC
 			//if success = 0-2, out-of-battle, so (baseDC) + (2 * formMod)
 			if (successes < 3) {
-				finalDC = baseDC[successes] + (2 * formulaMod);
+				finalDC = baseDC[successes] + formulaMod;
 				logger.info("[movetutor] " + `The DC for ${pokeName} to learn ${moveName} is ${finalDC}.\
 					\n\nUse your normal Train Pokemon skill to practice this move outside of battle.`)
 				message.channel.send(`The DC for ${pokeName} to learn ${moveName} is ${finalDC}.\

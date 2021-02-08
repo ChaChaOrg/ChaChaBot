@@ -1,7 +1,8 @@
 const logger = require('../logs/logger.js');
 
 // help message
-const HELP_MESSAGE = "\n`+modpoke [nickname] [fieldToChange] [newValue]`\n\nModifies an existing Pokemon in the database. \nUse `+modpoke list` to view all available changeable fields.)";
+const HELP_MESSAGE = "\n`+modpoke  [nickname] [fieldToChange] [newValue]`\n\nModifies an existing Pokemon in the" +
+    " database. \nUse `+modpoke list` to view all available changeable fields.)";
 // list of editable fields
 const HELP_FIELDS_LIST = "Here's the list of all available fields on a Pokemon that can be manipulated. Fields marked with a ♢ will update other related stats upon being updated.\n" +
     "NOTE - Fields are **case-sensitive**" +
