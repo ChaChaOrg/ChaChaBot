@@ -60,8 +60,6 @@ function Pokemon(tempSpecies, tempLevel, tempName) {
 
   this.nature = new Nature();
   this.shiny = false;
-
-  //make private by default
   this.private = true;
 }
 
@@ -101,7 +99,6 @@ Pokemon.prototype.init = function (P, message) {
       throw error;
     })
     .finally(function () {
-      ;
     });
 };
 
@@ -373,7 +370,7 @@ Pokemon.prototype.uploadPokemon = function (connection, message) {
         hpIV, atkIV, defIV, spaIV, spdIV, speIV, 
         hpEV, atkEV, defEV, spaEV, spdEV, speEV, 
         move1, move2, move3, move4, move5, moveProgress, 
-        originalTrainer, discordID, dateCreated) 
+        originalTrainer, discordID, private, dateCreated) 
         VALUES (
         "${this.name}",
         "${this.species}",
@@ -410,6 +407,7 @@ Pokemon.prototype.uploadPokemon = function (connection, message) {
         ${this.moveSet.moveProgress},
         "${this.originalTrainer}",
         ${message.author.id},
+        ${this.private},
         '${this.dateCreated}');`;
   //console.log(sql);
   logger.info(`[pokemon] upload SQL query: ${sql}`);
