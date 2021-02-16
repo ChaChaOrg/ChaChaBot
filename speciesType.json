@@ -12,11 +12,11 @@
     }
   ],
   "evolution_chain": {
-    "url": "https://pokeapi.co/api/v2/evolution-chain/349/"
+    "url": null
   },
   "evolves_from_species": {
-    "name": null
-    "url": "https://pokeapi.co/api/v2/pokemon-species/680/"
+    "name": null,
+    "url": null
   },
   "flavor_text_entries": [
     {
@@ -821,210 +821,63 @@
       }
     }
   ],
-  "forms_switchable": true,
-  "gender_rate": 4,
+  "forms_switchable": null,
+  "gender_rate": null,
   "genera": [
     {
-      "genus": "おうけんポケモン",
+      "genus": null,
       "language": {
-        "name": "ja-Hrkt",
-        "url": "https://pokeapi.co/api/v2/language/1/"
-      }
-    },
-    {
-      "genus": "왕검포켓몬",
-      "language": {
-        "name": "ko",
-        "url": "https://pokeapi.co/api/v2/language/3/"
-      }
-    },
-    {
-      "genus": "王劍寶可夢",
-      "language": {
-        "name": "zh-Hant",
-        "url": "https://pokeapi.co/api/v2/language/4/"
-      }
-    },
-    {
-      "genus": "Pokémon Noble Lame",
-      "language": {
-        "name": "fr",
-        "url": "https://pokeapi.co/api/v2/language/5/"
-      }
-    },
-    {
-      "genus": "Königsklinge",
-      "language": {
-        "name": "de",
-        "url": "https://pokeapi.co/api/v2/language/6/"
-      }
-    },
-    {
-      "genus": "Pokémon Espada Real",
-      "language": {
-        "name": "es",
-        "url": "https://pokeapi.co/api/v2/language/7/"
-      }
-    },
-    {
-      "genus": "Pokémon Spadareale",
-      "language": {
-        "name": "it",
-        "url": "https://pokeapi.co/api/v2/language/8/"
-      }
-    },
-    {
-      "genus": "Royal Sword Pokémon",
-      "language": {
-        "name": "en",
-        "url": "https://pokeapi.co/api/v2/language/9/"
-      }
-    },
-    {
-      "genus": "おうけんポケモン",
-      "language": {
-        "name": "ja",
-        "url": "https://pokeapi.co/api/v2/language/11/"
-      }
-    },
-    {
-      "genus": "王剑宝可梦",
-      "language": {
-        "name": "zh-Hans",
-        "url": "https://pokeapi.co/api/v2/language/12/"
+        "name": null,
+        "url": null
       }
     }
   ],
   "generation": {
-    "name": "generation-vi",
-    "url": "https://pokeapi.co/api/v2/generation/6/"
+    "name": null,
+    "url": null
   },
   "growth_rate": {
-    "name": "medium",
-    "url": "https://pokeapi.co/api/v2/growth-rate/2/"
+    "name": null,
+    "url": null
   },
   "habitat": null,
-  "has_gender_differences": false,
-  "hatch_counter": 20,
-  "id": 681,
-  "is_baby": false,
-  "is_legendary": false,
-  "is_mythical": false,
-  "name": "aegislash",
+  "has_gender_differences": null,
+  "hatch_counter": null,
+  "id": null,
+  "is_baby": null,
+  "is_legendary": null,
+  "is_mythical": null,
+  "name": null,
   "names": [
     {
       "language": {
-        "name": "ja-Hrkt",
-        "url": "https://pokeapi.co/api/v2/language/1/"
+        "name": null,
+        "url": null
       },
-      "name": "ギルガルド"
-    },
-    {
-      "language": {
-        "name": "ko",
-        "url": "https://pokeapi.co/api/v2/language/3/"
-      },
-      "name": "킬가르도"
-    },
-    {
-      "language": {
-        "name": "zh-Hant",
-        "url": "https://pokeapi.co/api/v2/language/4/"
-      },
-      "name": "堅盾劍怪"
-    },
-    {
-      "language": {
-        "name": "fr",
-        "url": "https://pokeapi.co/api/v2/language/5/"
-      },
-      "name": "Exagide"
-    },
-    {
-      "language": {
-        "name": "de",
-        "url": "https://pokeapi.co/api/v2/language/6/"
-      },
-      "name": "Durengard"
-    },
-    {
-      "language": {
-        "name": "es",
-        "url": "https://pokeapi.co/api/v2/language/7/"
-      },
-      "name": "Aegislash"
-    },
-    {
-      "language": {
-        "name": "it",
-        "url": "https://pokeapi.co/api/v2/language/8/"
-      },
-      "name": "Aegislash"
-    },
-    {
-      "language": {
-        "name": "en",
-        "url": "https://pokeapi.co/api/v2/language/9/"
-      },
-      "name": "Aegislash"
-    },
-    {
-      "language": {
-        "name": "ja",
-        "url": "https://pokeapi.co/api/v2/language/11/"
-      },
-      "name": "ギルガルド"
-    },
-    {
-      "language": {
-        "name": "zh-Hans",
-        "url": "https://pokeapi.co/api/v2/language/12/"
-      },
-      "name": "坚盾剑怪"
+      "name": null
     }
   ],
-  "order": 682,
+  "order": null,
   "pal_park_encounters": [],
   "pokedex_numbers": [
     {
-      "entry_number": 681,
+      "entry_number": null,
       "pokedex": {
-        "name": "national",
-        "url": "https://pokeapi.co/api/v2/pokedex/1/"
-      }
-    },
-    {
-      "entry_number": 119,
-      "pokedex": {
-        "name": "kalos-central",
-        "url": "https://pokeapi.co/api/v2/pokedex/12/"
-      }
-    },
-    {
-      "entry_number": 332,
-      "pokedex": {
-        "name": "galar",
-        "url": "https://pokeapi.co/api/v2/pokedex/27/"
+        "name": null,
+        "url": null
       }
     }
   ],
   "shape": {
-    "name": "blob",
-    "url": "https://pokeapi.co/api/v2/pokemon-shape/5/"
+    "name": null,
+    "url": null
   },
   "varieties": [
     {
-      "is_default": true,
+      "is_default": null,
       "pokemon": {
-        "name": "aegislash-shield",
-        "url": "https://pokeapi.co/api/v2/pokemon/681/"
-      }
-    },
-    {
-      "is_default": false,
-      "pokemon": {
-        "name": "aegislash-blade",
-        "url": "https://pokeapi.co/api/v2/pokemon/10026/"
+        "name": null,
+        "url": null
       }
     }
   ]

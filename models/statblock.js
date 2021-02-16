@@ -173,7 +173,7 @@ Statblock.prototype.calculateStats = function (pokemon) {
 
   //get all ability scores
   //go through base formula for stat creation
-  for (let ii = 1; ii < STAT_ARRAY_MAX; ii++) {
+  for (let ii = 0; ii < STAT_ARRAY_MAX; ii++) {
     this.formStats[ii] = Math.floor(
       ((BASE_STAT_MULTIPLIER * this.baseStats[ii] +
         this.ivStats[ii] +

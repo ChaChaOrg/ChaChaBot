@@ -32,7 +32,7 @@ function Pokemon(tempSpecies, tempLevel, tempName, tempFormName) {
   //assign name and species
   this.name = tempName;
   this.species = tempSpecies;
-  this.formName = tempFormName;
+  this.formName = tempSpecies;
 
   //level
   if (tempLevel > 0 && tempLevel <= 100)
@@ -642,17 +642,36 @@ Pokemon.prototype.importPokemon = function (connection, P, importString) {
 Pokemon.prototype.getPokemonAndSpeciesData = function (P) {
   return new Promise(
     function (resolve, reject) {
-        let sqlFindPokeForm = `SELECT * FROM pokemonForms WHERE species = '${pokeName}'`;
+        let sqlFindPokeForm = `SELECT * FROM pokemonForms WHERE species = '${this.species}'`;
         connection.query(sqlFindPokeForm, function(response){
-           if (response.size() > 0){
+            //Check for all Pokemon Forms from that species
+            let found = 0;
+            if (response.size() > 0){
               response.forEach(function(pokeForm, pokeFormIndex)
               {
                 if(pokeForm.formName === this.formName)
                 {
-                    this.pokemonData.types[0].type.name = this.type1;
+                    found = 1;
+                    //Found the correct form and species in the SQL!
+                    require 
+                    this.pokemonData = JSON.parse(formtemplate.json)
+
+
+
+                    this.type1 = this.pokemonData.types[0].type.name;
+                    if (this.pokemonData.types.length === 2) {
+                        this.type2 = this.pokemonData.types[1].type.name;
+                    }
+                    this.pokemonData.types[0].type.name = pokeForm.type1;
+                    this.pokemonData.types[1].type.name
+                    //fill out the dummy json file-
+                    //you now have the "pokemon data"
+                    //
                 };
              })
+
            }
+            if(found === 0) {
             P.getPokemonSpeciesByName(this.species.toLowerCase())
                 .then(
                 function (response) {
