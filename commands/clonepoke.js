@@ -46,6 +46,11 @@ module.exports.run = (client, connection, P, message, args) => {
                           //  }
                         //});
                    // }
+                    let clonesql = `SELECT * FROM pokemon WHERE name LIKE '${cloneName}%';`;
+                    connection.query(clonesql, function (err, response) {
+                        iterations = response.length;
+
+                    });
                     let nameLine = "";
                     let ability = "Ability: ";
                     let level = "Level: ";
