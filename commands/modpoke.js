@@ -128,6 +128,7 @@ module.exports.run = (client, connection, P, message, args) => {
                         // check if the variable is a "static" one, and go straight to updating if so
                         STATIC_FIELDS.forEach(staticField => {
                             if (staticField === valName) {
+                                isStaticVal = true;
                                 // go ahead and run the update string right away
                                 connection.query(sqlUpdateString, function (err, results) {
                                     if (err) {
@@ -140,7 +141,6 @@ module.exports.run = (client, connection, P, message, args) => {
                                         let successMessage = "**" + pokeName + "'s** " + valName + " has been changed to " + valString + "!";
                                         logger.info(`[modpoke] ${successMessage}`)
                                         message.reply(successMessage + "\nNOTE: Any updates to base stats will be overwritten if related variables (such as IVs, EVs, and level) are changed.");
-                                        isStaticVal = true;
                                         resolve();
                                     }
                                 });
@@ -148,8 +148,6 @@ module.exports.run = (client, connection, P, message, args) => {
                         });
                         resolve();
                     });
-
-
 
                     // await promise before attempting non-static update
                     staticCheck.then(() => {

@@ -33,8 +33,38 @@ exports.run = (client, connection, P, message, args) => {
 				
 				response.on('end', () => {					
 					logs.info("[neomovetutor] Response recieved");
-					let moveName = args[0];
-					moveName = moveName.replace("_", " ");
+					let workingName = "";
+					let wordArray = args[0].split("_");
+					for (let i = 0; i < wordArray.length; i++) {
+						let word = wordArray[i].toLowerCase();
+						workingName += word.replace(word.charAt(0), word.charAt(0).toUpperCase());
+						workingName += " ";
+					}
+					console.log("End of Space manipulation: " + workingName.trim());
+					wordArray = workingName.trim().split("-");
+					workingName = "";
+					for (let i = 0; i < wordArray.length; i++) {
+						let word = wordArray[i];
+						workingName += word.replace(word.charAt(0), word.charAt(0).toUpperCase());
+						workingName += "-";
+					}
+					console.log("End of - manipulation: " + workingName);
+					let moveName = workingName.substring(0, workingName.length - 1);
+					if (moveName.indexOf("-") > 0) {
+						console.log("- move detected, checking special cases.");
+						console.log("Move: " + moveName);
+						if (moveName.toLowerCase() === "u-turn") {
+							console.log("U-turn detected.");
+							moveName = "U-turn";
+						}
+						if (moveName.toLowerCase() === "v-create") {
+							moveName = "V-create";
+						}
+						if (moveName.toLowerCase() === "trick-or-treat") {
+							moveName = "Trick-or-Treat";
+                        }
+                    }
+					//moveName = moveName.replace("_", " ");					
 					//var selectorString = ":contains('" + moveName + "')";
 					//console.log(response);
 					let dom = new jsdom.JSDOM(rawData);
@@ -43,7 +73,7 @@ exports.run = (client, connection, P, message, args) => {
 					let document = dom.window.document;
 					//console.log(document);
 					//console.log(response.data);
-					let cell = document.querySelectorAll("a[title*=\"" + moveName+"\"]");
+					let cell = document.querySelectorAll("a[title*=\"" + moveName + "\"]");
 					//var row = $(selectorString).parentNode;
 					if(cell && cell.length > 0){
 						let row = cell[0].parentNode.parentNode;
@@ -65,6 +95,8 @@ exports.run = (client, connection, P, message, args) => {
 							for(let i = 0; i < DCs.length; i++){
 								DCs[i] += dcAdjust;
 							}
+							logs.info("[neomovetutro] Displaying results");
+							output += "**" + moveName + " Training**\n\n";
 							logs.info("[neomovetutor] Displaying results");
 							output += "**Out of Combat Checks** (Checks 1-3)\n";
 							output += "Use your trainer's cha modifier for these checks.\n";
@@ -81,7 +113,7 @@ exports.run = (client, connection, P, message, args) => {
 						}		
 					}else{
 						logs.error("[neomovetutor] Unable to find the move " + moveName);
-						message.channel.send("Could not find move: " + moveName);
+						message.channel.send("Could not find move: " + moveName + "\n Please double check your spelling, especially if the move has a - in it.");
 					}
 				});
 				
