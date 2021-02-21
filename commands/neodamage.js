@@ -160,7 +160,7 @@ module.exports.run = (client, connection, P, message, args) => {
         if (foundPokeName === attackerName)
           errMsg = `I found the attacker '${attackerName}' but not the defender. Please check your spelling + case-sensitivity.`
         else if (foundPokeName === defenderName)
-          errMsg = `I found the defender '${attackerName}' but not the attacker. Please check your spelling + case-sensitivity.`
+          errMsg = `I found the defender '${defenderName}' but not the attacker. Please check your spelling + case-sensitivity.`
 
         logger.error(errMsg);
         message.reply(errMsg);
@@ -174,7 +174,7 @@ module.exports.run = (client, connection, P, message, args) => {
       // Load the found pokemon into pokemon objects, then wait til they both complete before continuing.
       //
       response.forEach((element) => {
-        if (element["name"] === attackerName)
+        if (element["name"].toLowerCase() === attackerName)
           loadSQLPromise.push(attackPoke.loadFromSQL(P, element));
         else loadSQLPromise.push(defendPoke.loadFromSQL(P, element));
       });
@@ -391,6 +391,16 @@ module.exports.run = (client, connection, P, message, args) => {
             logger.info("[neodamage] Sending combat embed string.");
             message.channel.send(combatEmbedString).catch(console.error);
           });
+        }).catch(function (error) {
+          if (error.response.status == 404) {
+            logger.error("[neodamage] Move not found. " + error)
+            message.reply("Move not found, check your spelling and whether dashes are needed or not!");
+            return;
+          } else {
+            logger.error('[neodamage] There was an error: ' + error);
+            message.reply("Error getting move!");
+            return;
+          }
         });
       });
     });
