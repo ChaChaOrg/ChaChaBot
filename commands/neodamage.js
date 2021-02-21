@@ -174,7 +174,7 @@ module.exports.run = (client, connection, P, message, args) => {
       // Load the found pokemon into pokemon objects, then wait til they both complete before continuing.
       //
       response.forEach((element) => {
-        if (element["name"].toLowerCase() === attackerName)
+        if (element["name"].toLowerCase() === attackerName.toLowerCase())
           loadSQLPromise.push(attackPoke.loadFromSQL(P, element));
         else loadSQLPromise.push(defendPoke.loadFromSQL(P, element));
       });
