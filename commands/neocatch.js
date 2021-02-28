@@ -72,7 +72,7 @@ exports.run = (client, connection, P, message, args) => {
 							trueCCatch[i] = true;
 						}
 					}
-		
+			
 					//generate catchBonusGen
 					for (i = 0; i < 6; i++) {
 						if (i === 0) {
@@ -91,7 +91,8 @@ exports.run = (client, connection, P, message, args) => {
 					}
 		
 					//initializes final 
-					if (fortyTimer > (catchBonusMod[6] + 150)) {
+					console.log("Timer: " + fortyTimer + "\ncatchMod: " + catchBonusMod[6]);
+					if (fortyTimer > (catchBonusMod[5] + 150)) {
 						catchBonusFinal = fortyTimer * 0.5/ 150 + 0.5;
 					} else {
 						catchBonusFinal = catchBonusGen[5];
@@ -103,7 +104,8 @@ exports.run = (client, connection, P, message, args) => {
 					let rate = species.capture_rate;
 					console.log("crit calcs");
 					//still need catch rate
-					let calcA = (3*max-2*hp)/(3*max)*rate*ball*status*bonus;
+					let calcA = (3 * max - 2 * hp) / (3 * max) * rate * ball * status * bonus;
+					console.log("Calc part A: " + calcA);
 					let calcB = (65536 / Math.pow((255/calcA), 0.1875));
 					let b_randomShake = [
 						Math.floor((Math.random() * 65535) + 1),
@@ -111,10 +113,13 @@ exports.run = (client, connection, P, message, args) => {
 						Math.floor((Math.random() * 65535) + 1),
 						Math.floor((Math.random() * 65535) + 1)
 					];
-					let calcC = calcA/6*catchBonusFinal;
+					console.log("Final bonus: " + catchBonusFinal);
+					let calcC = calcA / 6 * catchBonusFinal;
 					let critRando = Math.floor(Math.random() * 255) + 1;
-	
-					if((calcC > critRando) && (mon.level <= roll)){
+
+					console.log("Calculation: " + calcC + "\nRandom: " + critRando);
+					console.log("Level: " + opponent.level + "\nRoll: " + roll);
+					if ((calcC > critRando) && (opponent.level <= roll)) {
 						message.channel.send(`:star2: **CLICK!** :star2:\nIt's a critical capture! ${name} has been caught `).catch(console.error);
 						return;
 					}
