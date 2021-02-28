@@ -95,9 +95,8 @@ exports.run = (client, connection, P, message, args) => {
 							for(let i = 0; i < DCs.length; i++){
 								DCs[i] += dcAdjust;
 							}
-							logs.info("[neomovetutro] Displaying results");
-							output += "**" + moveName + " Training**\n\n";
 							logs.info("[neomovetutor] Displaying results");
+							output += "**" + moveName + " Training**\n\n";
 							output += "**Out of Combat Checks** (Checks 1-3)\n";
 							output += "Use your trainer's cha modifier for these checks.\n";
 							output += "```First DC: " + DCs[0] + ", " + "Second DC: " + DCs[1] + ", " + "Third DC: " + DCs[2] + "```\n\n";
