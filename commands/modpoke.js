@@ -41,7 +41,7 @@ const HELP_FIELDS_LIST = "Here's the list of all available fields on a Pokemon t
 const FEWARGS_MESSAGE = "Too few arguments submitted. Check your submission for errors.";
 
 // array of variables that can go straight to being updated
-const STATIC_FIELDS = ["name", "gender", "hp", "atk", "def", "spa", "spd", "spe", "move1", "move2", "move3", "move4", "move5", "moveProgress", "originalTrainer", "shiny", "private"];
+const STATIC_FIELDS = ["ability", "name", "gender", "hp", "atk", "def", "spa", "spd", "spe", "move1", "move2", "move3", "move4", "move5", "moveProgress", "originalTrainer", "shiny", "private"];
 
 // code formatting variables for the embed
 const CODE_FORMAT_START = "```diff\n";
@@ -112,7 +112,6 @@ module.exports.run = (client, connection, P, message, args) => {
                 message.reply(notFoundMessage);
                 return;
             } else {
-
                 // check if the user is allowed to edit the Pokemon. If a Pokemon is private, the user's discord ID must match the Pokemon's creator ID
                 if (rows[0].private > 0 && message.author.id !== rows[0].discordID) {
                     logger.info("[modpoke] Detected user attempting to edit private Pokemon that isn't their own.")
@@ -186,7 +185,6 @@ module.exports.run = (client, connection, P, message, args) => {
                                 // oldPoke - original Pokemon OBJECT, pre-updates
                                 // thisPoke - updated Pokemon data ARRAY, post-updates
                                 // tempPoke - updated Pokemon OBJECT, post-updates & calculated accordingly */
-
 
                                 //use Pokemon.loadFromSQL to convert SQL object into a complete Pokemon object
                                 tempPoke.loadFromSQL(P, thisPoke).then(function (results) {
@@ -324,7 +322,7 @@ module.exports.run = (client, connection, P, message, args) => {
                                                     name: "Static Fields",
                                                     value: `These should not change via dynamic field updates.\n`
                                                         + `**Name:** ${tempPoke.name}\n`
-                                                        + `**Ability:** ${formatAbility(tempPoke.ability.name)}\n`
+                                                        + `**Ability:** ${formatAbility(tempPoke.ability)}\n`
                                                         + `**Gender:** ${capitalize(tempPoke.gender)}\n`
                                                         + `**Shiny?** ${tempPoke.shiny}`,
                                                     inline: true
