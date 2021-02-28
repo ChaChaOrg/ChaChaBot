@@ -322,7 +322,7 @@ module.exports.run = (client, connection, P, message, args) => {
                                                     name: "Static Fields",
                                                     value: `These should not change via dynamic field updates.\n`
                                                         + `**Name:** ${tempPoke.name}\n`
-                                                        + `**Ability:** ${formatAbility(tempPoke.ability)}\n`
+                                                        + `**Ability:** ${formatAbility(tempPoke.ability.name)}\n`
                                                         + `**Gender:** ${capitalize(tempPoke.gender)}\n`
                                                         + `**Shiny?** ${tempPoke.shiny}`,
                                                     inline: true
