@@ -40,7 +40,7 @@ exports.run = (client, connection, P, message, args) => {
 						workingName += word.replace(word.charAt(0), word.charAt(0).toUpperCase());
 						workingName += " ";
 					}
-					console.log("End of Space manipulation: " + workingName.trim());
+					//console.log("End of Space manipulation: " + workingName.trim());
 					wordArray = workingName.trim().split("-");
 					workingName = "";
 					for (let i = 0; i < wordArray.length; i++) {
@@ -48,13 +48,13 @@ exports.run = (client, connection, P, message, args) => {
 						workingName += word.replace(word.charAt(0), word.charAt(0).toUpperCase());
 						workingName += "-";
 					}
-					console.log("End of - manipulation: " + workingName);
+					//console.log("End of - manipulation: " + workingName);
 					let moveName = workingName.substring(0, workingName.length - 1);
 					if (moveName.indexOf("-") > 0) {
-						console.log("- move detected, checking special cases.");
-						console.log("Move: " + moveName);
+						//console.log("- move detected, checking special cases.");
+						//console.log("Move: " + moveName);
 						if (moveName.toLowerCase() === "u-turn") {
-							console.log("U-turn detected.");
+							//console.log("U-turn detected.");
 							moveName = "U-turn";
 						}
 						if (moveName.toLowerCase() === "v-create") {
