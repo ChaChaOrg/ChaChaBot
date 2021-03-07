@@ -40,8 +40,12 @@ const HELP_FIELDS_LIST = "Here's the list of all available fields on a Pokemon t
 //message when there are too few arguments
 const FEWARGS_MESSAGE = "Too few arguments submitted. Check your submission for errors.";
 
+//message where the field they want to change does not exist
+const NONEXISTENT_FIELD_MESSAGE = "That isn't a valid field to change! Please check your spelling and try again."
+
 // array of variables that can go straight to being updated
 const STATIC_FIELDS = ["ability", "name", "gender", "hp", "atk", "def", "spa", "spd", "spe", "move1", "move2", "move3", "move4", "move5", "moveProgress", "originalTrainer", "shiny", "private"];
+const OTHER_FIELDS = ["species", "level", "nature", "type1", "type2", "hpIV", "hpEV", "atkIV", "atkEV", "defIV", "defEV", "spaIV", "spaEV", "spdIV", "spdEV", "speIV", "speEV"]
 
 // code formatting variables for the embed
 const CODE_FORMAT_START = "```diff\n";
@@ -82,6 +86,14 @@ module.exports.run = (client, connection, P, message, args) => {
         let pokeName = args[0];
         //grab the value to be changed
         let valName = args[1].toLowerCase();
+
+        // check whether the field they want to change exists
+        if (!STATIC_FIELDS.includes(valName) && !OTHER_FIELDS.includes(valName)) {
+            logger.warn("[modpoke] Can't change that field because of spelling or doesn't exist. Sending nonexistent field message.");
+            message.reply(NONEXISTENT_FIELD_MESSAGE);
+            return;
+        }
+
         //grab the new value to be input, set properly in the following if statement
         let valString;
         if (typeof args[2] == "string") {
