@@ -51,7 +51,7 @@ module.exports.run = (client, connection, P, message, args) => {
     let Pokemon = require('../models/pokemon.js');
     try {
         if (args[0].match(/[-\/\\^$*+?.()|[\]{}'"\s]/)) {
-            logger.warn("[showpoke] User put special character in pokemon name, sending warning.");
+            logger.warn("[modpoke] User put special character in pokemon name, sending warning.");
             message.reply("Please do not use special characters when using renaming Pokemon.");
             return;
         }
@@ -81,7 +81,7 @@ module.exports.run = (client, connection, P, message, args) => {
         // grab the pokemon's name
         let pokeName = args[0];
         //grab the value to be changed
-        let valName = args[1];
+        let valName = args[1].toLowerCase();
         //grab the new value to be input, set properly in the following if statement
         let valString;
         if (typeof args[2] == "string") {
