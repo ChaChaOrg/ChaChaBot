@@ -291,6 +291,8 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
     logger.error("[pokemon] Pokemon thumbnail URL was not found, using 404 image.");
   }
 
+  let shiny = this.shiny ? "yes" : "no";
+
   return {
     embed: {
       color: 3447003,
@@ -309,7 +311,7 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
       fields: [
         {
           name: "Basic Info",
-          value: `**Ability:** ${tempAbility} | **Gender:** ${this.gender} | **Nature: ** ${this.nature.natureFinal} | **Shiny: ** ${this.shiny}\n=================`,
+          value: `**Ability:** ${tempAbility} | **Gender:** ${this.gender} \n**Nature: ** ${this.nature.natureFinal} | **Shiny: ** ${shiny}\n**Type 1:** ${capitalizeWord(this.type1)} **Type 2:** ${capitalizeWord(this.type2)}\n=================`,
         },
         {
           name: "HP",
