@@ -1,3 +1,5 @@
+const logger = require('../logs/logger.js');
+
 module.exports = Nature;
 
 const NATURE_POSITIVE_MULTIPLIER = 1.1;
@@ -13,15 +15,16 @@ const NATURE_NAMES = [
     ["Timid", "Hasty", "Jolly", "Naive", "Serious"]
 ];
 
-function Nature()
-{
+function Nature() {
     this.natureFinal = "";
     this.natureXCoord = 0;
     this.natureYCoord = 0;
 
 }
 
-Nature.prototype.calculateNatureStats = function(pokemon) {
+Nature.prototype.calculateNatureStats = function (pokemon) {
+    logger.info("[nature] Calculating nature stats.")
+//    console.log("x " + this.natureXCoord + " Y: " + this.natureYCoord + " final: " + this.natureFinal);
     if (this.natureXCoord !== this.natureYCoord) {
         for (let i = 0; i < STAT_ARRAY_MAX; i++) {
             if (this.natureYCoord === i) {
@@ -32,21 +35,22 @@ Nature.prototype.calculateNatureStats = function(pokemon) {
             }
         }
     }
+    console.log("nmulti="+ pokemon.statBlock.nMultiStats);
 };
 /**
  * Assigns a nature to a Pokemon given both the Pokemon itself and the desired nature
  * @param pokemon the Pokemon to update
  * @param nature the desired new Nature
  */
-Nature.prototype.assignNature = function(pokemon, nature)
-{
+Nature.prototype.assignNature = function (pokemon, nature) {
+    logger.info("[nature] Assigning nature.")
     this.natureFinal = nature;
     this.natureXCoord = 0;
     this.natureYCoord = 0;
 
 
 
-    NATURE_NAMES.forEach( function(natureY, natureYIndex) {
+    NATURE_NAMES.forEach(function (natureY, natureYIndex) {
         let natureX = -1;
         natureX = natureY.findIndex(element => {
             return element === nature;
@@ -62,17 +66,18 @@ Nature.prototype.assignNature = function(pokemon, nature)
 };
 
 //generate nature
-Nature.prototype.assignRandNature = function(pokemon) {
-//x-coord for nature
+Nature.prototype.assignRandNature = function (pokemon) {
+    logger.info("[nature] Assigning random nature.")
+    //x-coord for nature
     let natureXCoord = Math.floor((Math.random() * NATURE_ARRAY_MAX)); //val between 0-4 for array
-//y-coord for nature
+    //y-coord for nature
     let natureYCoord = Math.floor((Math.random() * NATURE_ARRAY_MAX));
 
-//assign nature to final val
+    //assign nature to final val
     this.natureFinal = NATURE_NAMES[natureXCoord][natureYCoord];
 
-//update attributes based on nature
-//if xcoord = ycoord, no changes, otherwise adjusting...
+    //update attributes based on nature
+    //if xcoord = ycoord, no changes, otherwise adjusting...
     this.calculateNatureStats(pokemon, natureXCoord, natureYCoord);
 
 };
