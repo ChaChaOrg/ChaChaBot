@@ -45,46 +45,56 @@ module.exports.run = (client, connection, P, message, args) => {
                         //        iterations++;
                           //  }
                         //});
-                   // }
-                    let clonesql = `SELECT * FROM pokemon WHERE name LIKE '${cloneName}%';`;
-                    connection.query(clonesql, function (err, response) {
-                        iterations = response.length;
-
-                    });
-                    let nameLine = "";
-                    let ability = "Ability: ";
-                    let level = "Level: ";
-                    let evs = "EVs: ";
-                    let nature = "";
-                    let ivs = "IVs: ";
-                    let importString = "";
-                    message.reply("Extracting " + name + iterations + "'s DNA sequence....");
+                   // }                    
+                    
+                    message.reply("Extracting " + name + "'s DNA sequence....");
                     basePoke.loadFromSQL(P, response[0]).then(response => {
-                        nameLine += cloneName + " (" + basePoke.species + ") (" + basePoke.gender + ")\n";
-                        ability += basePoke.ability + "\n";
-                        level += basePoke.level + "\n";
 
-                        evs += basePoke.statBlock.evStats[HP_ARRAY_INDEX] + " HP / " + basePoke.statBlock.evStats[ATK_ARRAY_INDEX] + " Atk / " +
-                        basePoke.statBlock.evStats[DEF_ARRAY_INDEX] + " Def / " + basePoke.statBlock.evStats[SPA_ARRAY_INDEX] + " SpA / " +
-                        basePoke.statBlock.evStats[SPD_ARRAY_INDEX] + " SpD / " + basePoke.statBlock.evStats[SPE_ARRAY_INDEX] + " Spe\n";
+                        let clonesql = `SELECT * FROM pokemon WHERE name LIKE '${cloneName}%';`;
+                        connection.query(clonesql, function (err, response) {
+                            iterations = response.length + 1;
+                            console.log("Clone Count: " + iterations);
+                            if (iterations >= 2) {
+                                cloneName += iterations;
+                                console.log("Clone's name: " + cloneName);
+                            }
 
-                        nature += basePoke.nature.natureFinal + "\n";
+                            let nameLine = "";
+                            let ability = "Ability: ";
+                            let level = "Level: ";
+                            let evs = "EVs: ";
+                            let nature = "";
+                            let ivs = "IVs: ";
+                            let importString = "";
 
-                        ivs += basePoke.statBlock.ivStats[HP_ARRAY_INDEX] + " HP / " + basePoke.statBlock.ivStats[ATK_ARRAY_INDEX] + " Atk / " +
-                        basePoke.statBlock.ivStats[DEF_ARRAY_INDEX] + " Def / " + basePoke.statBlock.ivStats[SPA_ARRAY_INDEX] + " SpA / " +
-                        basePoke.statBlock.ivStats[SPD_ARRAY_INDEX] + " SpD / " + basePoke.statBlock.ivStats[SPE_ARRAY_INDEX] + " Spe\n";
+                            nameLine += cloneName + " (" + basePoke.species + ") (" + basePoke.gender + ")\n";
+                            ability += basePoke.ability + "\n";
+                            level += basePoke.level + "\n";
 
-                        importString += nameLine + ability + level + evs + nature + ivs;
-                        message.reply("DNA sequencing complete.");
-                        message.reply("Beginning incubation procedure....");
-                        logger.info("[clonepoke] Importing clone.");
-                        clonePoke.importPokemon(connection, P, importString).then(response => {
-                            clonePoke.uploadPokemon(connection, message);
+                            evs += basePoke.statBlock.evStats[HP_ARRAY_INDEX] + " HP / " + basePoke.statBlock.evStats[ATK_ARRAY_INDEX] + " Atk / " +
+                                basePoke.statBlock.evStats[DEF_ARRAY_INDEX] + " Def / " + basePoke.statBlock.evStats[SPA_ARRAY_INDEX] + " SpA / " +
+                                basePoke.statBlock.evStats[SPD_ARRAY_INDEX] + " SpD / " + basePoke.statBlock.evStats[SPE_ARRAY_INDEX] + " Spe\n";
+
+                            nature += basePoke.nature.natureFinal + "\n";
+
+                            ivs += basePoke.statBlock.ivStats[HP_ARRAY_INDEX] + " HP / " + basePoke.statBlock.ivStats[ATK_ARRAY_INDEX] + " Atk / " +
+                                basePoke.statBlock.ivStats[DEF_ARRAY_INDEX] + " Def / " + basePoke.statBlock.ivStats[SPA_ARRAY_INDEX] + " SpA / " +
+                                basePoke.statBlock.ivStats[SPD_ARRAY_INDEX] + " SpD / " + basePoke.statBlock.ivStats[SPE_ARRAY_INDEX] + " Spe\n";
+
+                            importString += nameLine + ability + level + evs + nature + ivs;
+                            //message.reply("DNA sequencing complete.");
+                            //message.reply("Beginning incubation procedure....");
+                            logger.info("[clonepoke] Importing clone.");
+                            clonePoke.importPokemon(connection, P, importString).then(response => {
+                                clonePoke.uploadPokemon(connection, message);
+                            });
+                            //message.reply("We tried to create a perfect copy of your pokemon.....");
+                            //message.reply("We suceeded.");
+                            message.reply("Cloning procedure complete. Use +showpoke " + cloneName + " to view your new old friend.");
+                            logger.info("[clonepoke] Cloning completed.");
                         });
-                        message.reply("We tried to create a perfect copy of your pokemon.....");
-                        message.reply("We suceeded.");
-                        message.reply("Use +showpoke " + name + " to view your new old friend.");
-                        logger.info("[clonepoke] Cloning completed.");
+
+                        
                     });
 
                 }
