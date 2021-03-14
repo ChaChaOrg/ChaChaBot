@@ -165,16 +165,17 @@ Statblock.prototype.calculateStats = function (pokemon) {
   );
   this.conMod = modPrint(this.conBase);
 
+  // OLD HP CALCULATOR
   //calculate = attribute max HP
   //formula for hp... 16 + Conmod, with an additional 2d10 + conmod per level.
-  let diceRoll = BASE_HP;
+  /*let diceRoll = BASE_HP;
   for (let i = 1; i < pokemon.level; i++) {
     diceRoll +=
       Math.floor(Math.random() * DTEN + 1) +
       Math.floor(Math.random() * DTEN + 1) +
       modGen(this.conBase);
   }
-  this.finalStats[0] = BASE_HP + (modGen(this.conBase) + diceRoll);
+  this.finalStats[0] = BASE_HP + (modGen(this.conBase) + diceRoll);*/
 
   //get all ability scores
   //go through base formula for stat creation
@@ -189,6 +190,10 @@ Statblock.prototype.calculateStats = function (pokemon) {
     );
     this.finalStats[ii] = Math.floor(this.formStats[ii] * this.nMultiStats[ii]);
   }
+
+  // update hp proper
+  this.finalStats[0] = math.floor(.01 (2this.baseStats[0] + this.ivStats[0] + math.floor(.25 * this.evStats[0])) * pokemon.level) + pokemon.level + 10;
+
 
   //get dnd stats
   //stat calculator
