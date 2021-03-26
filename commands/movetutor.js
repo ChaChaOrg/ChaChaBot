@@ -59,10 +59,7 @@ exports.run = (client, connection, P, message, args) => {
 				message.channel.send(`The DC for ${pokeName} to learn ${moveName} is ${finalDC}.\
 					\n\nUse your normal Train Pokemon skill to practice this move outside of battle.`).catch(console.error);
 				if (successes === 2) {
-					logger.info("[movetutor] Note: if you succeed on this check and your Pokemon already knows four moves, \
-					you must forget one to make space for this new one!")
-					message.channel.send("Note: if you succeed on this check and your Pokemon already knows four moves, \
-					you must forget one to make space for this new one!");
+					message.channel.send("Note: if you succeed on this check and your Pokemon already knows four moves, you must forget one to make space for this new one!");
 				}
 			} else { //if 3+, in-battle, so (baseDC + formMod)
 				finalDC = baseDC[successes] + formulaMod;
