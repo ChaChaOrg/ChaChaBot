@@ -190,6 +190,10 @@ Statblock.prototype.calculateStats = function (pokemon) {
     this.finalStats[ii] = Math.floor(this.formStats[ii] * this.nMultiStats[ii]);
   }
 
+  // update hp proper
+  this.finalStats[0] = Math.floor(.01 * (this.baseStats[0] + this.ivStats[0] + Math.floor(.25 * this.evStats[0])) * pokemon.level) + pokemon.level + 10;
+
+
   //get dnd stats
   //stat calculator
   const getAbility = function (a) {
