@@ -35,6 +35,7 @@ exports.run = (client, connection, P, message, args) => {
 					logs.info("[neomovetutor] Response recieved");
 					let workingName = "";
 					let wordArray = args[0].split("_");
+
 					for (let i = 0; i < wordArray.length; i++) {
 						let word = wordArray[i].toLowerCase();
 						workingName += word.replace(word.charAt(0), word.charAt(0).toUpperCase());
@@ -63,7 +64,12 @@ exports.run = (client, connection, P, message, args) => {
 						if (moveName.toLowerCase() === "trick-or-treat") {
 							moveName = "Trick-or-Treat";
                         }
-                    }
+					}
+					if (args.length > 1) {
+						for (let i = 1; i < args.length; i++) {
+							moveName += " " + args[i];
+						}
+					}
 					//moveName = moveName.replace("_", " ");					
 					//var selectorString = ":contains('" + moveName + "')";
 					//console.log(response);
