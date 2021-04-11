@@ -1,3 +1,5 @@
+const logger = require('../logs/logger.js');
+
 const STAT_ARRAY_MAX = 6;
 const HP_ARRAY_INDEX = 0;
 const ATK_ARRAY_INDEX = 1;
@@ -27,15 +29,14 @@ module.exports.run = (client, connection, P, message, args) => {
 
     //clause for helping!
     if (args[0].includes("help")) {
-      message
-        .reply(
-          HELP_MESSAGE
-        )
+      logger.info("[neodamage] Sending help message.");
+      message.reply(HELP_MESSAGE)
         .catch(console.error);
       return;
     }
 
-    if (args.length < 4) {
+    if (args.length < 3) {
+      logger.info("[neodamage] Sending too few parameters message.");
       message.reply("You haven't provided enough parameters, please try again.").catch(console.error);
       return;
     }
@@ -51,6 +52,8 @@ module.exports.run = (client, connection, P, message, args) => {
     // args[7] = multiplicative damage bonus [Defaults to 1]
     //
 
+    let args_string = args.slice(0).join(" ")
+
     let attackerName;
     let attackerMove;
     let defenderName;
@@ -58,7 +61,15 @@ module.exports.run = (client, connection, P, message, args) => {
     let bonusAtk = 0;
     let other = 0;
     let otherMult = 1;
-    let critHit = "n";
+
+    var critHit;
+    let critHit_regex = /(-ch \d+)|(-critical(\s|-|_)?hit \d+)/
+    let critHit_match = critHit_regex.exec(args_string);
+    if (critHit_match)
+      critHit = critHit[0].split(" ")[1]
+    else
+      critHit = "n"
+
 
     //variables required
     let Pokemon = require("../models/pokemon.js");
@@ -86,7 +97,10 @@ module.exports.run = (client, connection, P, message, args) => {
             defenderName = args[2];
             break;
           case 3:
-            critHit = args[3]; //critical hit
+            if (args[3])
+              critHit = args[3]; //critical hit
+            else
+              critHit = 'n'
             break;
           case 4:
             bonusAtk = Number(args[4]); //Stages Attack
@@ -119,22 +133,23 @@ module.exports.run = (client, connection, P, message, args) => {
     // Grabs the SQL entry for both attacking and defending pokemon.
     //
     let sql = `SELECT * FROM pokemon WHERE name = '${attackerName}' OR name = '${defenderName}';`;
-
-    console.log(sql);
+    logger.info(`[neodamage] SQL query: ${sql}`)
+    //console.log(sql);
 
     let loadSQLPromise = [];
 
+    /* istanbul ignore next */
     connection.query(sql, function (err, response) {
       if (err) {
         let errMsg = `Error with SQL query: ${err}`;
-        console.log(errMsg);
+        logger.error(errMsg);
         message.reply(errMsg);
         return;
       };
 
       if (response.length == 0) {
         let errMsg = `Cannot find neither '${attackerName}' nor '${defenderName}'. Please check your spelling + case-sensitivity.`
-        console.log(errMsg);
+        logger.error(errMsg);
         message.reply(errMsg);
         return;
       }
@@ -145,22 +160,21 @@ module.exports.run = (client, connection, P, message, args) => {
         if (foundPokeName === attackerName)
           errMsg = `I found the attacker '${attackerName}' but not the defender. Please check your spelling + case-sensitivity.`
         else if (foundPokeName === defenderName)
-          errMsg = `I found the defender '${attackerName}' but not the attacker. Please check your spelling + case-sensitivity.`
+          errMsg = `I found the defender '${defenderName}' but not the attacker. Please check your spelling + case-sensitivity.`
 
-        console.log(errMsg);
+        logger.error(errMsg);
         message.reply(errMsg);
         return;
       }
 
-      console.log("attacker and defender read");
-      console.log('Attacker:' + response[0].name);
-      console.log('Defender: ' + response[1].name);
+      logger.info('[neodamage] Attacker: ' + response[0].name + ' retrieved from SQL database.');
+      logger.info('[neodamage] Defender: ' + response[1].name + ' retrieved from SQL database.');
 
       //
       // Load the found pokemon into pokemon objects, then wait til they both complete before continuing.
       //
       response.forEach((element) => {
-        if (element["name"] === attackerName)
+        if (element["name"].toLowerCase() === attackerName.toLowerCase())
           loadSQLPromise.push(attackPoke.loadFromSQL(P, element));
         else loadSQLPromise.push(defendPoke.loadFromSQL(P, element));
       });
@@ -374,12 +388,24 @@ module.exports.run = (client, connection, P, message, args) => {
             // comment out embed if necessary
 
             //embed message
+            logger.info("[neodamage] Sending combat embed string.");
             message.channel.send(combatEmbedString).catch(console.error);
           });
+        }).catch(function (error) {
+          if (error.response.status == 404) {
+            logger.error("[neodamage] Move not found. " + error)
+            message.reply("Move not found, check your spelling and whether dashes are needed or not!");
+            return;
+          } else {
+            logger.error('[neodamage] There was an error: ' + error);
+            message.reply("Error getting move!");
+            return;
+          }
         });
       });
     });
   } catch (error) {
+    logger.error(error);
     message.channel.send(error.toString());
     message.channel
       .send("ChaCha machine :b:roke, please try again later")

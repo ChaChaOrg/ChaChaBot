@@ -1,3 +1,5 @@
+const logger = require('../logs/logger.js');
+
 module.exports = Statblock;
 
 const IV_MAX = 32;
@@ -100,6 +102,7 @@ let modGen = function (abilityScore) {
 
 //assign IVs
 Statblock.prototype.assignRandIVs = function () {
+  logger.info("[statblock] Assigning IVs.")
   for (let i = 0; i < STAT_ARRAY_MAX; i++) {
     this.ivStats[i] = Math.floor(Math.random() * IV_MAX); //assigns a value between 0 & 31 to all the IVs
   }
@@ -108,6 +111,7 @@ Statblock.prototype.assignRandIVs = function () {
 //takes an array of types and assigns Saves
 // calculate saving throws - RUN AFTER ABILITY SCORES ARE GENERATED
 Statblock.prototype.calculateSaves = function (pokemon) {
+  logger.info("[statblock] Calculating saves.")
   //temp values
   tempTypes = [pokemon.type1, pokemon.type2];
 
@@ -146,6 +150,7 @@ Statblock.prototype.calculateSaves = function (pokemon) {
 };
 
 Statblock.prototype.calculateStats = function (pokemon) {
+  logger.info("[statblock] Calculating stats.")
   // start by taking care of Nature
   //pokemon.nature.calculateNatureStats(pokemon);
   //pokemon.Nautre.calculateNatureStats(pokemon)
@@ -155,21 +160,10 @@ Statblock.prototype.calculateStats = function (pokemon) {
 
   this.conBase = Math.round(
     (this.baseStats[0] + this.ivStats[0] + this.evStats[0] / CON_CALC_DIVISOR) *
-      STAT_CALC_MULT +
-      STAT_CALC_BASE
+    STAT_CALC_MULT +
+    STAT_CALC_BASE
   );
   this.conMod = modPrint(this.conBase);
-
-  //calculate = attribute max HP
-  //formula for hp... 16 + Conmod, with an additional 2d10 + conmod per level.
-  let diceRoll = BASE_HP;
-  for (let i = 1; i < pokemon.level; i++) {
-    diceRoll +=
-      Math.floor(Math.random() * DTEN + 1) +
-      Math.floor(Math.random() * DTEN + 1) +
-      modGen(this.conBase);
-  }
-  this.finalStats[0] = BASE_HP + (modGen(this.conBase) + diceRoll);
 
   //get all ability scores
   //go through base formula for stat creation
@@ -179,11 +173,15 @@ Statblock.prototype.calculateStats = function (pokemon) {
         this.ivStats[ii] +
         this.evStats[ii] / EV_MULTIPLIER) *
         pokemon.level) /
-        FORM_DIVISOR +
-        FORM_SHIFT
+      FORM_DIVISOR +
+      FORM_SHIFT
     );
     this.finalStats[ii] = Math.floor(this.formStats[ii] * this.nMultiStats[ii]);
   }
+
+  //update
+  this.finalStats[0] = 5 + pokemon.level * (11 + modGen(this.conBase));
+
 
   //get dnd stats
   //stat calculator
@@ -234,6 +232,7 @@ Statblock.prototype.calculateStats = function (pokemon) {
 };
 
 Statblock.prototype.assignBaseStats = function (pokemon) {
+  logger.info("[statblock] Assigning base stats.")
   let i = 6;
   pokemon.pokemonData["stats"].forEach((element) => {
     this.baseStats[STAT_ARRAY_MAX - i] = element["base_stat"];
