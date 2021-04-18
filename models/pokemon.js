@@ -8,6 +8,7 @@ const SPD_ARRAY_INDEX = 4;
 const SPE_ARRAY_INDEX = 5;
 const SHINY_CHANCE = 4096;
 
+const logger = require('../logs/logger.js');
 let Nature = require("./nature.js");
 let Moveset = require("./moveset.js");
 let Statblock = require("./statblock.js");
@@ -63,6 +64,7 @@ function Pokemon(tempSpecies, tempLevel, tempName, tempFormName) {
 
   this.pokemonData = undefined;
     this.speciesData = undefined;
+  this.private = true;
 }
 
 Pokemon.prototype.init = function (P, message) {
@@ -71,6 +73,7 @@ Pokemon.prototype.init = function (P, message) {
       function (response) {
         //let the log know the poke is initializing
         console.log("Initializing " + this.name + "...");
+        logger.info("[pokemon] Initializing " + this.name + "...");
         //console.log("Retrieved Pokemon and Species Data!");
 
         //console.log("Reading Type(s)");
@@ -93,14 +96,13 @@ Pokemon.prototype.init = function (P, message) {
         this.statBlock.calculateSaves(this);
 
         console.log("Pokemon Initialization Sequence Complete!");
-
+        logger.info("[pokemon] Pokemon Initialization Sequence Complete!");
       }.bind(this)
     )
     .catch(function (error) {
       throw error;
     })
     .finally(function () {
-      ;
     });
 };
 
@@ -126,6 +128,7 @@ let modGen = function (abilityScore) {
 };
 
 // grab + stow types
+logger.info("[pokemon] Assigning types.");
 
 Pokemon.prototype.assignTypes = function () {
   this.type1 = this.pokemonData.types[0].type.name;
@@ -135,6 +138,7 @@ Pokemon.prototype.assignTypes = function () {
 };
 
 // Generates a random ability given the ability options from PokeAPI & the assigned hidden ability chance
+logger.info("[pokemon] Generating random ability.");
 Pokemon.prototype.genRandAbility = function () {
   // the total # of abilities the pokemon can have
   let abilityTotal = 0;
@@ -232,7 +236,9 @@ Pokemon.prototype.genRandAbility = function () {
           console.log("No HA chance detected, so assigned ability " + this.ability.name);
       }*/
 };
+
 //Assign gender
+logger.info("[pokemon] Assigning random gender.");
 Pokemon.prototype.assignRandGender = function () {
   //assign gender, default to genderless
   let gender;
@@ -250,6 +256,7 @@ Pokemon.prototype.assignRandGender = function () {
 };
 
 //shiny generator!
+logger.info("[pokemon] Assigning shiny value.");
 Pokemon.prototype.assignShiny = function () {
   this.shiny = Math.floor(Math.random() * SHINY_CHANCE + 1) >= SHINY_CHANCE;
 };
@@ -284,8 +291,12 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
 
   var thumbnail_url = `${this.pokemonData.sprites.front_default}`
 
-  if (thumbnail_url === null)
+  if (thumbnail_url === null) {
     thumbnail_url = "https://e7.pngegg.com/pngimages/960/239/png-clipart-internet-archive-http-404-wayback-machine-error-miscellaneous-text-thumbnail.png"
+    logger.error("[pokemon] Pokemon thumbnail URL was not found, using 404 image.");
+  }
+
+  let shiny = this.shiny ? "yes" : "no";
 
   return {
     embed: {
@@ -305,7 +316,7 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
       fields: [
         {
           name: "Basic Info",
-          value: `**Ability:** ${tempAbility} | **Gender:** ${this.gender} | **Nature: ** ${this.nature.natureFinal} | **Shiny: ** ${this.shiny}\n=================`,
+          value: `**Ability:** ${tempAbility} | **Gender:** ${this.gender} \n**Nature: ** ${this.nature.natureFinal} | **Shiny: ** ${shiny}\n**Type 1:** ${capitalizeWord(this.type1)} **Type 2:** ${capitalizeWord(this.type2)}\n=================`,
         },
         {
           name: "HP",
@@ -366,7 +377,7 @@ Pokemon.prototype.uploadPokemon = function (connection, message) {
         hpIV, atkIV, defIV, spaIV, spdIV, speIV, 
         hpEV, atkEV, defEV, spaEV, spdEV, speEV, 
         move1, move2, move3, move4, move5, moveProgress, 
-        originalTrainer, discordID, dateCreated) 
+        originalTrainer, discordID, private, dateCreated) 
         VALUES (
         "${this.name}",
         "${this.species}",
@@ -403,11 +414,17 @@ Pokemon.prototype.uploadPokemon = function (connection, message) {
         ${this.moveSet.moveProgress},
         "${this.originalTrainer}",
         ${message.author.id},
+        ${this.private},
         '${this.dateCreated}');`;
   //console.log(sql);
+  logger.info(`[pokemon] upload SQL query: ${sql}`);
   connection.query(sql, function (err, result) {
-    if (err) throw err;
+    if (err) {
+      logger.error(err);
+      throw err;
+    }
     console.log("1 record inserted");
+    logger.info("[pokemon] upload SQL was successful.")
   });
 };
 
@@ -458,9 +475,14 @@ Pokemon.prototype.updatePokemon = function (connection, message, pokePrivate) {
          WHERE name = "${this.name}";`;
 
   //console.log(sql);
+  logger.info(`[pokemon] update SQL query: ${sql}`);
   return new Promise((resolve, reject) => {
     connection.query(sql, function (err, result) {
-      if (err) return reject(err);
+      if (err) {
+        logger.error(`pokemon update SQL error: ${err}`)
+        return reject(err);
+      }
+      logger.info("[pokemon] update SQL query was successful.");
       console.log("1 record updated.");
       return resolve(result);
     });
@@ -470,6 +492,7 @@ Pokemon.prototype.updatePokemon = function (connection, message, pokePrivate) {
 // =========== Import (Showdown Style) ===========
 
 Pokemon.prototype.importPokemon = function (connection, P, importString) {
+  logger.info("[pokemon] Importing Pokemon.");
   //splits the message into lines then splits the lines into words separated by spaces.
   let lines = importString.split("\n");
   let nameLineVals = lines[0].split(" ");
@@ -640,177 +663,199 @@ Pokemon.prototype.importPokemon = function (connection, P, importString) {
 };
 
 Pokemon.prototype.getPokemonAndSpeciesData = function (P) {
-  return new Promise(
-    function (resolve, reject) {
-        let sqlFindPokeForm = `SELECT * FROM pokemonForms WHERE species = '${this.species}'`;
-        connection.query(sqlFindPokeForm, function(response){
-            //Check for all Pokemon Forms from that species
-            let found = 0;
-            if (response.size() > 0){
-              response.forEach(function(pokeForm, pokeFormIndex)
-              {
-                if(pokeForm.formName === this.formName)
-                {
-                    found = 1;
-                    //Found the correct form and species in the SQL!
-                    require 
-                    this.pokemonData = JSON.parse(formtemplate.json)
-
-
-
-                    this.type1 = this.pokemonData.types[0].type.name;
-                    if (this.pokemonData.types.length === 2) {
-                        this.type2 = this.pokemonData.types[1].type.name;
-                    }
-                    this.pokemonData.types[0].type.name = pokeForm.type1;
-                    this.pokemonData.types[1].type.name
-                    //fill out the dummy json file-
-                    //you now have the "pokemon data"
-                    //
-                };
-             })
-
-           }
-            if(found === 0) {
+    return new Promise(
+        function (resolve, reject) {
             P.getPokemonSpeciesByName(this.species.toLowerCase())
                 .then(
-                function (response) {
-                this.speciesData = response;
-                    P.getPokemonByName(this.speciesData.id)
-                        .then(
-                            function (response) {
-                                this.pokemonData = response;
-                                resolve("done");
-                            }.bind(this)
-                        )
-                        .catch(function (error) {
-                            console.log(
-                                "Error when retrieving pokemon species Data :C  ERROR: ",
-                                error
-                            );
-                            reject("Error when retrieving pokemon species Data :C  ERROR: " + error)
-                            //message.channel.send("Error when retrieving pokemon species Data :C  ERROR: ");
-                        });
-          }.bind(this)
-        )
-        .catch(function (error) {
-          console.log("Error when retrieving pokemon Data :C  ERROR: ", error.response.statusText);
-          if (error.response.status === 404) {
-            let errMsg = "Pokemon not found, please check your spelling."
-            reject(errMsg)
-          }
-          //message.channel.send("Error when retrieving pokemon Data :C");
-        });
-        }).bind(this)
-    }.bind(this)
-  );
-};
+                    function (response) {
+                        this.speciesData = response;
+                        P.getPokemonByName(this.speciesData.id)
+                            .then(
+                                function (response) {
+                                    this.pokemonData = response;
+                                    resolve("done");
+                                }.bind(this)
+                            )
+                            .catch(function (error) {
+                                console.log(
+                                    "Error when retrieving pokemon species Data :C  ERROR: ",
+                                    error
+                                );
+                                logger.error(`[pokemon] Error retrieving species data: ${error}`)
+                                reject("Error when retrieving pokemon species Data :C  ERROR: " + error);
+                            });
+                        let sqlFindPokeForm = `SELECT * FROM pokemonForms WHERE species = '${this.species}'`;
+                        connection.query(sqlFindPokeForm, function (response) {
+                            //Check for all Pokemon Forms from that species
+                            let found = 0;
+                            if (response.size() > 0) {
+                                response.forEach(function (pokeForm, pokeFormIndex) {
+                                    if (pokeForm.formName === this.formName) {
+                                        found = 1;
+                                        //Found the correct form and species in the SQL!
+                                        require
+                                        this.pokemonData = JSON.parse(formtemplate.json)
+
+
+                                        this.type1 = this.pokemonData.types[0].type.name;
+                                        if (this.pokemonData.types.length === 2) {
+                                            this.type2 = this.pokemonData.types[1].type.name;
+                                        }
+                                        this.pokemonData.types[0].type.name = pokeForm.type1;
+                                        this.pokemonData.types[1].type.name
+                                        //fill out the dummy json file-
+                                        //you now have the "pokemon data"
+                                        //
+                                    }
+                                    ;
+                                })
+
+                            }
+                            if (found === 0) {
+                                P.getPokemonSpeciesByName(this.species.toLowerCase())
+                                    .then(
+                                        function (response) {
+                                            this.speciesData = response;
+                                            P.getPokemonByName(this.speciesData.id)
+                                                .then(
+                                                    function (response) {
+                                                        this.pokemonData = response;
+                                                        resolve("done");
+                                                    }.bind(this)
+                                                )
+                                                .catch(function (error) {
+                                                    console.log(
+                                                        "Error when retrieving pokemon species Data :C  ERROR: ",
+                                                        error
+                                                    );
+                                                    reject("Error when retrieving pokemon species Data :C  ERROR: " + error)
+                                                    //message.channel.send("Error when retrieving pokemon species Data :C  ERROR: ");
+                                                });
+                                        }.bind(this)
+                                    )
+                                    .catch(function (error) {
+                                        console.log("Error when retrieving pokemon Data :C  ERROR: ", error.response.statusText);
+                                        if (error.response.status === 404) {
+                                            let errMsg = "Pokemon not found, please check your spelling.";
+                                            logger.error(errMsg);
+                                            reject(errMsg)
+                                            //message.channel.send("Error when retrieving pokemon Data :C");
+                                        }
+                                    });
+                            }
+                        }).bind(this);
+                    }).bind(this);
+        }).bind(this);
+}
+
+
+
 
 Pokemon.prototype.loadFromSQL = function (P, sqlObject) {
-  return new Promise(
-    function (resolve, reject) {
-        this.name = sqlObject.name;
-        this.species = sqlObject.species;
-        this.formName = sqlObject.formName;
+    return new Promise(
+        function (resolve, reject) {
+            this.name = sqlObject.name;
+            this.species = sqlObject.species;
+            this.formName = sqlObject.formName;
 
-      this.getPokemonAndSpeciesData(P).then(
+            this.getPokemonAndSpeciesData(P).then(
                 function (response) {
-                  this.pokemonData = response;
-                  //type(s)
-                  this.type1 = sqlObject.type1;
-                  this.type2 = sqlObject.type2;
+                    this.pokemonData = response;
+                    //type(s)
+                    this.type1 = sqlObject.type1;
+                    this.type2 = sqlObject.type2;
 
-                  this.gender = sqlObject.gender;
-                  this.ability.name = sqlObject.ability;
+                    this.gender = sqlObject.gender;
+                    this.ability.name = sqlObject.ability;
 
-                  // roll through abilities and check if this one is hidden
-                  response.abilities.forEach((ability) => {
-                    if (ability.ability.name === this.ability.name) {
-                      this.ability.isHiddenAbility = ability["is_hidden"];
+                    // roll through abilities and check if this one is hidden
+                    response.abilities.forEach((ability) => {
+                        if (ability.ability.name === this.ability.name) {
+                            this.ability.isHiddenAbility = ability["is_hidden"];
+                        }
+                    });
+
+                    this.nature.assignNature(this, sqlObject.nature);
+
+                    //level
+                    this.level = sqlObject.level;
+
+                    this.statBlock.evStats = [
+                        sqlObject.hpEV,
+                        sqlObject.atkEV,
+                        sqlObject.defEV,
+                        sqlObject.spaEV,
+                        sqlObject.spdEV,
+                        sqlObject.speEV,
+                    ];
+                    this.statBlock.ivStats = [
+                        sqlObject.hpIV,
+                        sqlObject.atkIV,
+                        sqlObject.defIV,
+                        sqlObject.spaIV,
+                        sqlObject.spdIV,
+                        sqlObject.speIV,
+                    ];
+
+                    this.moveSet.move1 = sqlObject.move1;
+                    this.moveSet.move2 = sqlObject.move2;
+                    this.moveSet.move3 = sqlObject.move3;
+                    this.moveSet.move4 = sqlObject.move4;
+                    this.moveSet.move5 = sqlObject.move5;
+                    this.moveSet.moveProgress = sqlObject.moveProgress;
+
+                    this.originalTrainer = sqlObject.originalTrainer;
+
+                    if (sqlObject.shiny != null) {
+                        this.shiny = sqlObject.shiny;
                     }
-                  });
 
-                  this.nature.assignNature(this, sqlObject.nature);
+                    let i = 6;
+                    this.pokemonData["stats"].forEach((element) => {
+                        this.statBlock.baseStats[STAT_ARRAY_MAX - i] =
+                            element["base_stat"];
+                        i--;
+                    });
 
-                  //level
-                  this.level = sqlObject.level;
+                    console.log("Calculating Stats of " + this.name);
+                    logger.info("[pokemon] Calculating stats of " + this.name);
 
-                  this.statBlock.evStats = [
-                    sqlObject.hpEV,
-                    sqlObject.atkEV,
-                    sqlObject.defEV,
-                    sqlObject.spaEV,
-                    sqlObject.spdEV,
-                    sqlObject.speEV,
-                  ];
-                  this.statBlock.ivStats = [
-                    sqlObject.hpIV,
-                    sqlObject.atkIV,
-                    sqlObject.defIV,
-                    sqlObject.spaIV,
-                    sqlObject.spdIV,
-                    sqlObject.speIV,
-                  ];
+                    //this.statBlock.finalStats[HP_ARRAY_INDEX] = sqlObject.hp;
+                    //this.statBlock.finalStats[ATK_ARRAY_INDEX] = sqlObject.atk;
+                    //this.statBlock.finalStats[DEF_ARRAY_INDEX] = sqlObject.def;
+                    //this.statBlock.finalStats[SPA_ARRAY_INDEX] = sqlObject.spa;
+                    //this.statBlock.finalStats[SPD_ARRAY_INDEX] = sqlObject.spd;
+                    //this.statBlock.finalStats[SPE_ARRAY_INDEX] = sqlObject.spe;
 
-                  this.moveSet.move1 = sqlObject.move1;
-                  this.moveSet.move2 = sqlObject.move2;
-                  this.moveSet.move3 = sqlObject.move3;
-                  this.moveSet.move4 = sqlObject.move4;
-                  this.moveSet.move5 = sqlObject.move5;
-                  this.moveSet.moveProgress = sqlObject.moveProgress;
+                    // calculate stats and saves before re-assigning actual stats
+                    this.statBlock.calculateStats(this);
+                    this.statBlock.calculateSaves(this);
 
-                  this.originalTrainer = sqlObject.originalTrainer;
+                    // We WANT the stats to be recalculated. This was originally used to keep track of health.
+                    //
+                    //assign again to make sure you have true inside-sql values
+                    //this.statBlock.finalStats[HP_ARRAY_INDEX] = sqlObject.hp;
+                    //this.statBlock.finalStats[ATK_ARRAY_INDEX] = sqlObject.atk;
+                    //this.statBlock.finalStats[DEF_ARRAY_INDEX] = sqlObject.def;
+                    //this.statBlock.finalStats[SPA_ARRAY_INDEX] = sqlObject.spa;
+                    //this.statBlock.finalStats[SPD_ARRAY_INDEX] = sqlObject.spd;
+                    //this.statBlock.finalStats[SPE_ARRAY_INDEX] = sqlObject.spe;
 
-                  if (sqlObject.shiny != null) {
-                    this.shiny = sqlObject.shiny;
-                  }
-
-                  let i = 6;
-                  this.pokemonData["stats"].forEach((element) => {
-                    this.statBlock.baseStats[STAT_ARRAY_MAX - i] =
-                      element["base_stat"];
-                    i--;
-                  });
-
-                  console.log("Calculating Stats of " + this.name);
-
-                  //this.statBlock.finalStats[HP_ARRAY_INDEX] = sqlObject.hp;
-                  //this.statBlock.finalStats[ATK_ARRAY_INDEX] = sqlObject.atk;
-                  //this.statBlock.finalStats[DEF_ARRAY_INDEX] = sqlObject.def;
-                  //this.statBlock.finalStats[SPA_ARRAY_INDEX] = sqlObject.spa;
-                  //this.statBlock.finalStats[SPD_ARRAY_INDEX] = sqlObject.spd;
-                  //this.statBlock.finalStats[SPE_ARRAY_INDEX] = sqlObject.spe;
-
-                  // calculate stats and saves before re-assigning actual stats
-                  this.statBlock.calculateStats(this);
-                  this.statBlock.calculateSaves(this);
-
-                  // We WANT the stats to be recalculated. This was originally used to keep track of health.
-                  //
-                  //assign again to make sure you have true inside-sql values
-                  //this.statBlock.finalStats[HP_ARRAY_INDEX] = sqlObject.hp;
-                  //this.statBlock.finalStats[ATK_ARRAY_INDEX] = sqlObject.atk;
-                  //this.statBlock.finalStats[DEF_ARRAY_INDEX] = sqlObject.def;
-                  //this.statBlock.finalStats[SPA_ARRAY_INDEX] = sqlObject.spa;
-                  //this.statBlock.finalStats[SPD_ARRAY_INDEX] = sqlObject.spd;
-                  //this.statBlock.finalStats[SPE_ARRAY_INDEX] = sqlObject.spe;
-
-                  resolve("done");
+                    resolve("Stats calculated.");
                 }.bind(this)
-              )
-              .catch(function (error) {
-                console.log(
-                  "Error when retrieving pokemon species Data :C  ERROR: ",
-                  error
-                );
-                //message.channel.send("Error when retrieving pokemon species Data :C  ERROR: ");
-              });
-          }.bind(this)
-        )
+            )
+                .catch(function (error) {
+                    logger.error(`[pokemon] Error retrieving pokemon species data: ${error}`)
+                    console.log(
+                        "Error when retrieving pokemon species Data :C  ERROR: ",
+                        error
+                    );
+                    //message.channel.send("Error when retrieving pokemon species Data :C  ERROR: ");
+                });
+        }.bind(this)
+    )
         .catch(function (error) {
-          console.log("Error when retrieving pokemon Data :C  ERROR: ", error);
-          //message.channel.send("Error when retrieving pokemon Data :C");
+            console.log("Error when retrieving pokemon Data :C  ERROR: ", error);
+            //message.channel.send("Error when retrieving pokemon Data :C");
         });
-    }.bind(this)
-  );
-};
+}.bind(this)

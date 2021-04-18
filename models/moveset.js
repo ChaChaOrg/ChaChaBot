@@ -1,13 +1,12 @@
-
+const logger = require('../logs/logger.js');
 
 module.exports =
-    {
-        MoveSet,
-        Move
-    };
-
-function MoveSet()
 {
+    MoveSet,
+    Move
+};
+
+function MoveSet() {
     this.move1 = new Move();
     this.move2 = new Move();
     this.move3 = new Move();
@@ -22,14 +21,13 @@ function MoveSet()
 
 //When given an array of names, grabs all relevent data and makes a move object.
 //Then it creates a new Moveset from the Moves.
-MoveSet.prototype.createMovesetByName = function(moveNamesArray, P){
-    return new Promise(function() {
+MoveSet.prototype.createMovesetByName = function (moveNamesArray, P) {
+    return new Promise(function () {
         moveNamesArray.forEach(function (element, index) {
             if (typeof element == "number") {
                 this.moveProgress = element
             }
-            else
-            {
+            else {
                 let tempMove = new Move();
                 tempMove.createFromName(element, P)
                     .then(function (moveElement) {
@@ -41,8 +39,7 @@ MoveSet.prototype.createMovesetByName = function(moveNamesArray, P){
 };
 
 //A generic move object
-function Move ()
-{
+function Move() {
     this.name = "";
     this.basePower = 0;
     this.effectChance = 0;
@@ -54,12 +51,13 @@ function Move ()
 }
 
 //Creates a move object from a name from the Pokedex.
-Move.prototype.createFromName = function(moveName, P)
-{
+Move.prototype.createFromName = function (moveName, P) {
     //takes pokedex P and grabs move data from the name;
-    return new Promise(function() {
+    return new Promise(function () {
+        logger.info("[moveset] Getting move by name.")
         return P.getMoveByName(moveName)
             .then(function (response) {
+                logger.info("[moveset] Got move by name, setting fields.")
                 moveData = response;
                 this.name = moveData["name"];
                 this.basePower = moveData["power"];
@@ -68,6 +66,8 @@ Move.prototype.createFromName = function(moveName, P)
                 this.type = moveData["type"]["name"];
                 this.contestType = moveData["contest_type"]["name"];
                 this.description = moveData["effect_entries"][0]["effect"];
+            }).catch(function (error) {
+                logger.error("[moveset] Error: " + error)
             });
     });
 };
