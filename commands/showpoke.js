@@ -51,7 +51,7 @@ module.exports.run = (client, connection, P, message, args) => {
                     return;
                 }
 
-                tempPoke.loadFromSQL(P, response[0])
+                tempPoke.loadFromSQL(connection, P, response[0])
                     .then(response => {
 
 

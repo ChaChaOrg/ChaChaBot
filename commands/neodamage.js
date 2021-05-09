@@ -117,7 +117,7 @@ module.exports.run = (client, connection, P, message, args) => {
 
         }
       }
-      else if (index < 3) throwError(`ARG at ${index} not found! Check your input`);
+      else if (index < 3) throw Error(`ARG at ${index} not found! Check your input`);
     });
 
     //values used for calculation
@@ -147,13 +147,13 @@ module.exports.run = (client, connection, P, message, args) => {
         return;
       };
 
-      if (response.length == 0) {
+      if (response.length === 0) {
         let errMsg = `Cannot find neither '${attackerName}' nor '${defenderName}'. Please check your spelling + case-sensitivity.`
         logger.error(errMsg);
         message.reply(errMsg);
         return;
       }
-      else if (response.length == 1) {
+      else if (response.length === 1) {
         let foundPokeName = response[0].name;
         let errMsg = '';
 
@@ -175,8 +175,8 @@ module.exports.run = (client, connection, P, message, args) => {
       //
       response.forEach((element) => {
         if (element["name"].toLowerCase() === attackerName.toLowerCase())
-          loadSQLPromise.push(attackPoke.loadFromSQL(P, element));
-        else loadSQLPromise.push(defendPoke.loadFromSQL(P, element));
+          loadSQLPromise.push(attackPoke.loadFromSQL(connection, P, element));
+        else loadSQLPromise.push(defendPoke.loadFromSQL(connection, P, element));
       });
 
       Promise.all(loadSQLPromise).then((response) => {
