@@ -46,7 +46,7 @@ const NONEXISTENT_FIELD_MESSAGE = "That isn't a valid field to change! Please ch
 
 // array of variables that can go straight to being updated
 const STATIC_FIELDS = ["ability", "name", "gender", "hp", "atk", "def", "spa", "spd", "spe", "move1", "move2", "move3", "move4", "move5", "moveProgress", "originalTrainer", "shiny", "private"];
-const OTHER_FIELDS = ["species", "level", "nature", "type1", "type2", "hpIV", "hpEV", "atkIV", "atkEV", "defIV", "defEV", "spaIV", "spaEV", "spdIV", "spdEV", "speIV", "speEV"]
+const OTHER_FIELDS = ["species", "form", "level", "nature", "type1", "type2", "hpIV", "hpEV", "atkIV", "atkEV", "defIV", "defEV", "spaIV", "spaEV", "spdIV", "spdEV", "speIV", "speEV"]
 
 // code formatting variables for the embed
 const CODE_FORMAT_START = "```diff\n";
@@ -86,13 +86,36 @@ module.exports.run = (client, connection, P, message, args) => {
         // grab the pokemon's name
         let pokeName = args[0];
         //grab the value to be changed
-        let valName = args[1].toLowerCase();
+        /*let valName = args[1].toLowerCase();
 
         // check whether the field they want to change exists
         if (!STATIC_FIELDS.includes(valName) && !OTHER_FIELDS.includes(valName)) {
             logger.warn("[modpoke] Can't change that field because of spelling or doesn't exist. Sending nonexistent field message.");
             message.reply(NONEXISTENT_FIELD_MESSAGE);
             return;
+        }
+*/
+        //grab the value to be changed
+        let valName = args[1];
+        let lowerCase_OTHERFIELDS = OTHER_FIELDS.map(field => field.toLowerCase()); //copy of OTHER_FIELDS all lowercase
+
+        // check whether the field they want to change exists
+        if (!STATIC_FIELDS.includes(valName) && !OTHER_FIELDS.includes(valName) &&
+            !STATIC_FIELDS.includes(valName.toLowerCase()) && !lowerCase_OTHERFIELDS.includes(valName.toLowerCase())) {
+            logger.warn("[modpoke] Can't change that field because of spelling or doesn't exist. Sending nonexistent field message.");
+            message.reply(NONEXISTENT_FIELD_MESSAGE);
+            return;
+        }
+
+        // make value all lowercase if it's in the STATIC_FIELDS array and not already matching
+        if (!STATIC_FIELDS.includes(valName) && STATIC_FIELDS.includes(valName.toLowerCase())) {
+            valName = args[1].toLowerCase();
+        }
+
+        // make value the correct case by setting it to matching value in OTHER_FIELDS in order to match the DB schema
+        if (!OTHER_FIELDS.includes(valName) && lowerCase_OTHERFIELDS.includes(valName.toLowerCase())) {
+            let idx = lowerCase_OTHERFIELDS.indexOf(valName.toLowerCase());
+            valName = OTHER_FIELDS[idx];
         }
 
         //grab the new value to be input, set properly in the following if statement
@@ -182,13 +205,13 @@ module.exports.run = (client, connection, P, message, args) => {
                             let oldPoke = new Pokemon();
 
                             // create oldPoke object
-                            oldPoke.loadFromSQL(P, rows[0]).then(function (results) {
+                            oldPoke.loadFromSQL(connection, P, rows[0]).then(function (results) {
 
                                 // grab the row and stow it
                                 let thisPoke = rows[0];
 
                                 // if the valName is species, assign directly, otherwise convert it into a number
-                                if (valName === "species") thisPoke[valName] = valString.toLowerCase();
+                                if (valName === "species" || valName === "form" || valName === "nature") thisPoke[valName] = valString.toLowerCase();
                                 else thisPoke[valName] = parseInt(valString);
 
                                 //Make new empty Pokemon object
@@ -200,7 +223,7 @@ module.exports.run = (client, connection, P, message, args) => {
                                 // tempPoke - updated Pokemon OBJECT, post-updates & calculated accordingly */
 
                                 //use Pokemon.loadFromSQL to convert SQL object into a complete Pokemon object
-                                tempPoke.loadFromSQL(P, thisPoke).then(function (results) {
+                                tempPoke.loadFromSQL(connection, P, thisPoke).then(function (results) {
                                     logger.info("SQL has been converted to a Pokemon Object\nAll values recalculated as necessary\nProviding user with comparison embed & awaiting change confirmation...")
 
                                     // DEBUG display old and new pokes

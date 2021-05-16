@@ -10,7 +10,7 @@ describe('catch', function () {
     describe('help', function () {
         it('should print the help message', function () {
             class dum_msg {
-                reply = function(obj) {
+                reply(obj) {
                     assert.strictEqual(obj, HELP_MESSAGE);
                     return Promise.resolve()
                 }

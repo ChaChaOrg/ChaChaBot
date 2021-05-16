@@ -31,13 +31,13 @@ function Ability(abilityName, isHiddenAbility) {
 }
 
 // ======================= POKEMON OBJECT =======================
-function Pokemon(tempSpecies, tempLevel, tempName, tempFormName) {
+function Pokemon(tempSpecies, tempLevel, tempName, tempform) {
   // ======================= VARIABLES =======================
 
   //assign name and species
   this.name = tempName;
   this.species = tempSpecies;
-  this.formName = tempFormName;
+  this.form = tempform;
 
   //level
   if (tempLevel > 0 && tempLevel <= 100)
@@ -296,8 +296,8 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
 
   let tempSpecies = this.species;
 
-  if(this.formName != null)
-      tempSpecies = this.formName;
+  if(this.form != null)
+      tempSpecies = this.form;
   tempSpecies = capitalizeWord(tempSpecies);
 
   var thumbnail_url = `${this.pokemonData.sprites.front_default}`
@@ -383,7 +383,7 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
 // =========== Upload ===========
 
 Pokemon.prototype.uploadPokemon = function (connection, message) {
-  let sql = `INSERT INTO pokemon (name, species, formName, level, nature, gender, ability, type1, type2, shiny, 
+  let sql = `INSERT INTO pokemon (name, species, form, level, nature, gender, ability, type1, type2, shiny, 
         hp, atk, def, spa, spd, spe, 
         hpIV, atkIV, defIV, spaIV, spdIV, speIV, 
         hpEV, atkEV, defEV, spaEV, spdEV, speEV, 
@@ -392,7 +392,7 @@ Pokemon.prototype.uploadPokemon = function (connection, message) {
         VALUES (
         "${this.name}",
         "${this.species}",
-        "${this.formName}",
+        "${this.form}",
         ${this.level},
         "${this.nature.natureFinal}",
         "${this.gender}",
@@ -677,14 +677,13 @@ Pokemon.prototype.importPokemon = function (connection, P, importString) {
 Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
     return new Promise(
         function (resolve, reject) {
-
             let sqlFindPokeForm = `SELECT * FROM pokeForms WHERE species = '${this.species}'`;
             connection.query(sqlFindPokeForm, function (err, response) {
                 //Check for all Pokemon Forms from that species
                 let found = 0;
                 if (response.length > 0) {
                     response.forEach(function (pokeForm, pokeFormIndex) {
-                        if (pokeForm.formName === this.formName) {
+                        if (pokeForm.form === this.form) {
                             found = 1;
                             //Found the correct form and species in the SQL!
                             let formtemplate
@@ -768,7 +767,7 @@ Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
                         .then(
                             function (response) {
                                 this.pokemonData = response;
-                                resolve("done");
+                                resolve(this.pokemonData);
                             }.bind(this)
                         )
                         .catch(function (error) {
@@ -793,7 +792,7 @@ Pokemon.prototype.loadFromSQL = function (connection, P, sqlObject) {
         function (resolve, reject) {
             this.name = sqlObject.name;
             this.species = sqlObject.species;
-            this.formName = sqlObject.formName;
+            this.form = sqlObject.form;
 
             this.getPokemonAndSpeciesData(connection, P).then(
                 function (response) {

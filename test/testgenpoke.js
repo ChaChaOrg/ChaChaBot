@@ -1,18 +1,8 @@
 var assert = require('assert');
 var genpoke = require('../commands/genpoke.js');
-var rempoke = require('../commands/rempoke.js');
 var pokedex = require('pokedex-promise-v2');
 
-let mysql = require("mysql");
-let connection = mysql.createPool({
-    host: config.mysql_host,
-    user: config.mysql_user,
-    password: config.mysql_pass,
-    database: config.mysql_db,
-    port: config.mysql_port,
-    supportBigNumbers: true,
-    bigNumberStrings: true
-})
+
 
 describe('+genpoke', function () {
     describe('help', function () {
