@@ -10,7 +10,7 @@ const HELP_FIELDS_LIST = "Here's the list of all available fields on a Pokemon t
     "**BASIC FEATURES**\n" +
     "> `name` // Nickname (\"Sparky\", \"Blaze\"), cannot include spaces or special characters\n" +
     "> `species♢` // Species (\"Pikachu\", \"Vulpix\")\n" +
-    "> `formName♢` // Current Form (\"meowth-galarian\", \"aegislash-shield\")\n" +
+    "> `form♢` // Current Form (\"meowth-galarian\", \"aegislash-shield\")\n" +
     "> `level♢` // ChaCha level, ranging from level 1-20. Each ChaCha level is equivalent to 5 in-videogame levels\n" +
     "> `gender` // Gender (*Male, Female, or Genderless*)\n" +
     "> `ability` // Ability (\"Static\", \"Flash Fire\")\n" +
@@ -207,30 +207,48 @@ module.exports.run = (client, connection, P, message, args) => {
                             // create oldPoke object
                             oldPoke.loadFromSQL(connection, P, rows[0]).then(function (results) {
 
+                                console.log("oldPoke:");
+                                console.log(`"${oldPoke.pokemonData.stats[0].stat.name}": "${oldPoke.pokemonData.stats[0].base_stat}"`);
+                                console.log(`"${oldPoke.pokemonData.stats[1].stat.name}": "${oldPoke.pokemonData.stats[1].base_stat}"`);
+                                console.log(`"${oldPoke.pokemonData.stats[2].stat.name}": "${oldPoke.pokemonData.stats[2].base_stat}"`);
+                                console.log(`"${oldPoke.pokemonData.stats[3].stat.name}": "${oldPoke.pokemonData.stats[3].base_stat}"`);
+                                console.log(`"${oldPoke.pokemonData.stats[4].stat.name}": "${oldPoke.pokemonData.stats[4].base_stat}"`);
+                                console.log(`"${oldPoke.pokemonData.stats[5].stat.name}": "${oldPoke.pokemonData.stats[5].base_stat}"`);
                                 // grab the row and stow it
                                 let thisPoke = rows[0];
 
                                 // if the valName is species, assign directly, otherwise convert it into a number
-                                if (valName === "species" || valName === "form" || valName === "nature") thisPoke[valName] = valString.toLowerCase();
+                                if (typeof valName === "string") thisPoke[valName] = valString.toLowerCase();
                                 else thisPoke[valName] = parseInt(valString);
 
                                 //Make new empty Pokemon object
-                                let tempPoke = new Pokemon();
+                                let newPoke = new Pokemon();
 
                                 /* ======== FOR REFERENCE ========
                                 // oldPoke - original Pokemon OBJECT, pre-updates
                                 // thisPoke - updated Pokemon data ARRAY, post-updates
-                                // tempPoke - updated Pokemon OBJECT, post-updates & calculated accordingly */
+                                // newPoke - updated Pokemon OBJECT, post-updates & calculated accordingly */
 
                                 //use Pokemon.loadFromSQL to convert SQL object into a complete Pokemon object
-                                tempPoke.loadFromSQL(connection, P, thisPoke).then(function (results) {
+                                newPoke.loadFromSQL(connection, P, thisPoke).then(function (results) {
+
+                                    console.log("new Pokemon:");
+                                    console.log(`"${newPoke.pokemonData.stats[0].stat.name}": "${newPoke.pokemonData.stats[0].base_stat}"`);
+                                    console.log(`"${newPoke.pokemonData.stats[1].stat.name}": "${newPoke.pokemonData.stats[1].base_stat}"`);
+                                    console.log(`"${newPoke.pokemonData.stats[2].stat.name}": "${newPoke.pokemonData.stats[2].base_stat}"`);
+                                    console.log(`"${newPoke.pokemonData.stats[3].stat.name}": "${newPoke.pokemonData.stats[3].base_stat}"`);
+                                    console.log(`"${newPoke.pokemonData.stats[4].stat.name}": "${newPoke.pokemonData.stats[4].base_stat}"`);
+                                    console.log(`"${newPoke.pokemonData.stats[5].stat.name}": "${newPoke.pokemonData.stats[5].base_stat}"`);
+
+
+
                                     logger.info("SQL has been converted to a Pokemon Object\nAll values recalculated as necessary\nProviding user with comparison embed & awaiting change confirmation...")
 
                                     // DEBUG display old and new pokes
                                     //message.channel.send("Old Pokemon Below (debug)");
                                     //message.channel.send(oldPoke.sendSummaryMessage(client));
                                     //message.channel.send("New Pokemon Below (debug)");
-                                    //message.channel.send(tempPoke.sendSummaryMessage(client));
+                                    //message.channel.send(newPoke.sendSummaryMessage(client));
 
                                     // ======== FORMATTED VARIABLES & STRINGS & EMBED ========
 
@@ -256,7 +274,7 @@ module.exports.run = (client, connection, P, message, args) => {
 
                                     // formatted species names (old + new) for formatting purposes
                                     let oldSpecies = capitalize(oldPoke.species);
-                                    let newSpecies = capitalize(tempPoke.species);
+                                    let newSpecies = capitalize(newPoke.species);
 
                                     /**
                                      * This function compares two values, an original and "updated",
@@ -306,32 +324,32 @@ module.exports.run = (client, connection, P, message, args) => {
                                     // formatted ability score strings. STR(0) DEX(1) CON(2) INT(3) WIS(4) CHA(5)
                                     let abilityScoreString = [
                                         CODE_FORMAT_START
-                                        + "SCORE:" + fieldChanged(oldPoke.statBlock.strBase.toFixed(0), tempPoke.statBlock.strBase.toFixed(0), true)
-                                        + "MODIFIER:" + fieldChanged(oldPoke.statBlock.strMod, tempPoke.statBlock.strMod, true)
+                                        + "SCORE:" + fieldChanged(oldPoke.statBlock.strBase.toFixed(0), newPoke.statBlock.strBase.toFixed(0), true)
+                                        + "MODIFIER:" + fieldChanged(oldPoke.statBlock.strMod, newPoke.statBlock.strMod, true)
                                         + CODE_FORMAT_END,
 
 
                                         CODE_FORMAT_START
-                                        + "SCORE:" + fieldChanged(oldPoke.statBlock.dexBase.toFixed(0), tempPoke.statBlock.dexBase.toFixed(0), true)
-                                        + "MODIFIER:" + fieldChanged(oldPoke.statBlock.dexMod, tempPoke.statBlock.dexMod, true)
+                                        + "SCORE:" + fieldChanged(oldPoke.statBlock.dexBase.toFixed(0), newPoke.statBlock.dexBase.toFixed(0), true)
+                                        + "MODIFIER:" + fieldChanged(oldPoke.statBlock.dexMod, newPoke.statBlock.dexMod, true)
                                         + CODE_FORMAT_END,
 
 
                                         CODE_FORMAT_START
-                                        + "SCORE:" + fieldChanged(oldPoke.statBlock.conBase.toFixed(0), tempPoke.statBlock.conBase.toFixed(0), true)
-                                        + "MODIFIER:" + fieldChanged(oldPoke.statBlock.conMod, tempPoke.statBlock.conMod, true)
+                                        + "SCORE:" + fieldChanged(oldPoke.statBlock.conBase.toFixed(0), newPoke.statBlock.conBase.toFixed(0), true)
+                                        + "MODIFIER:" + fieldChanged(oldPoke.statBlock.conMod, newPoke.statBlock.conMod, true)
                                         + CODE_FORMAT_END,
 
 
                                         CODE_FORMAT_START
-                                        + "SCORE:" + fieldChanged(oldPoke.statBlock.intBase.toFixed(0), tempPoke.statBlock.intBase.toFixed(0), true)
-                                        + "MODIFIER:" + fieldChanged(oldPoke.statBlock.intMod, tempPoke.statBlock.intMod, true)
+                                        + "SCORE:" + fieldChanged(oldPoke.statBlock.intBase.toFixed(0), newPoke.statBlock.intBase.toFixed(0), true)
+                                        + "MODIFIER:" + fieldChanged(oldPoke.statBlock.intMod, newPoke.statBlock.intMod, true)
                                         + CODE_FORMAT_END,
 
 
                                         CODE_FORMAT_START
-                                        + "SCORE:" + fieldChanged(oldPoke.statBlock.wisBase.toFixed(0), tempPoke.statBlock.wisBase.toFixed(0), true)
-                                        + "MODIFIER:" + fieldChanged(oldPoke.statBlock.wisMod, tempPoke.statBlock.wisMod, true)
+                                        + "SCORE:" + fieldChanged(oldPoke.statBlock.wisBase.toFixed(0), newPoke.statBlock.wisBase.toFixed(0), true)
+                                        + "MODIFIER:" + fieldChanged(oldPoke.statBlock.wisMod, newPoke.statBlock.wisMod, true)
                                         + CODE_FORMAT_END,
 
 
@@ -348,24 +366,24 @@ module.exports.run = (client, connection, P, message, args) => {
                                                 name: client.user.username,
                                                 icon_url: client.user.avatarURL
                                             },
-                                            title: `Review & Confirm Changes to ${tempPoke.name}`,
+                                            title: `Review & Confirm Changes to ${newPoke.name}`,
                                             thumbnail: {
-                                                url: `${tempPoke.pokemonData.sprites.front_default}`,
+                                                url: `${newPoke.pokemonData.sprites.front_default}`,
                                             },
                                             description: `Please review the Pokemon's updated stats, highlighted in color below. If the updates are correct, confirm the changes to the Pokemon by reacting to the message beneath this embed.`,
                                             fields: [
                                                 {
                                                     name: "Static Fields",
                                                     value: `These should not change via dynamic field updates.\n`
-                                                        + `**Name:** ${tempPoke.name}\n`
-                                                        + `**Ability:** ${formatAbility(tempPoke.ability.name)}\n`
-                                                        + `**Gender:** ${capitalize(tempPoke.gender)}\n`
-                                                        + `**Shiny?** ${tempPoke.shiny}`,
+                                                        + `**Name:** ${newPoke.name}\n`
+                                                        + `**Ability:** ${formatAbility(newPoke.ability.name)}\n`
+                                                        + `**Gender:** ${capitalize(newPoke.gender)}\n`
+                                                        + `**Shiny?** ${newPoke.shiny}`,
                                                     inline: true
                                                 },
                                                 {
                                                     name: "Core Fields",
-                                                    value: `${CODE_FORMAT_START}Level${fieldChanged(oldPoke.level, tempPoke.level, true)}Species${fieldChanged(oldSpecies, newSpecies, false)}${CODE_FORMAT_END}`,
+                                                    value: `${CODE_FORMAT_START}Level${fieldChanged(oldPoke.level, newPoke.level, true)}Species${fieldChanged(oldSpecies, newSpecies, false)}${CODE_FORMAT_END}`,
                                                     inline: true
                                                 },
                                                 {
@@ -374,32 +392,32 @@ module.exports.run = (client, connection, P, message, args) => {
                                                 },
                                                 {
                                                     name: "Hit Points (HP)",
-                                                    value: `${CODE_FORMAT_START}IV: ${fieldChanged(oldPoke.statBlock.ivStats[0], tempPoke.statBlock.ivStats[0], true)}EV: ${fieldChanged(oldPoke.statBlock.evStats[0], tempPoke.statBlock.evStats[0], true)}FINAL: ${fieldChanged(oldPoke.statBlock.finalStats[0], tempPoke.statBlock.finalStats[0], true)}${CODE_FORMAT_END}`,
+                                                    value: `${CODE_FORMAT_START}IV: ${fieldChanged(oldPoke.statBlock.ivStats[0], newPoke.statBlock.ivStats[0], true)}EV: ${fieldChanged(oldPoke.statBlock.evStats[0], newPoke.statBlock.evStats[0], true)}FINAL: ${fieldChanged(oldPoke.statBlock.finalStats[0], newPoke.statBlock.finalStats[0], true)}${CODE_FORMAT_END}`,
                                                     inline: true
                                                 },
                                                 {
                                                     name: "Attack (ATK)",
-                                                    value: `${CODE_FORMAT_START}IV: ${fieldChanged(oldPoke.statBlock.ivStats[1], tempPoke.statBlock.ivStats[1], true)}EV: ${fieldChanged(oldPoke.statBlock.evStats[1], tempPoke.statBlock.evStats[1], true)}FINAL: ${fieldChanged(oldPoke.statBlock.finalStats[1], tempPoke.statBlock.finalStats[1], true)}${CODE_FORMAT_END}`,
+                                                    value: `${CODE_FORMAT_START}IV: ${fieldChanged(oldPoke.statBlock.ivStats[1], newPoke.statBlock.ivStats[1], true)}EV: ${fieldChanged(oldPoke.statBlock.evStats[1], newPoke.statBlock.evStats[1], true)}FINAL: ${fieldChanged(oldPoke.statBlock.finalStats[1], newPoke.statBlock.finalStats[1], true)}${CODE_FORMAT_END}`,
                                                     inline: true
                                                 },
                                                 {
                                                     name: "Defense (DEF)",
-                                                    value: `${CODE_FORMAT_START}IV: ${fieldChanged(oldPoke.statBlock.ivStats[2], tempPoke.statBlock.ivStats[2], true)}EV: ${fieldChanged(oldPoke.statBlock.evStats[2], tempPoke.statBlock.evStats[2], true)}FINAL: ${fieldChanged(oldPoke.statBlock.finalStats[2], tempPoke.statBlock.finalStats[2], true)}${CODE_FORMAT_END}`,
+                                                    value: `${CODE_FORMAT_START}IV: ${fieldChanged(oldPoke.statBlock.ivStats[2], newPoke.statBlock.ivStats[2], true)}EV: ${fieldChanged(oldPoke.statBlock.evStats[2], newPoke.statBlock.evStats[2], true)}FINAL: ${fieldChanged(oldPoke.statBlock.finalStats[2], newPoke.statBlock.finalStats[2], true)}${CODE_FORMAT_END}`,
                                                     inline: true
                                                 },
                                                 {
                                                     name: "Spec. Attack (SPA)",
-                                                    value: `${CODE_FORMAT_START}IV: ${fieldChanged(oldPoke.statBlock.ivStats[3], tempPoke.statBlock.ivStats[3], true)}EV: ${fieldChanged(oldPoke.statBlock.evStats[3], tempPoke.statBlock.evStats[3], true)}FINAL: ${fieldChanged(oldPoke.statBlock.finalStats[3], tempPoke.statBlock.finalStats[3], true)}${CODE_FORMAT_END}`,
+                                                    value: `${CODE_FORMAT_START}IV: ${fieldChanged(oldPoke.statBlock.ivStats[3], newPoke.statBlock.ivStats[3], true)}EV: ${fieldChanged(oldPoke.statBlock.evStats[3], newPoke.statBlock.evStats[3], true)}FINAL: ${fieldChanged(oldPoke.statBlock.finalStats[3], newPoke.statBlock.finalStats[3], true)}${CODE_FORMAT_END}`,
                                                     inline: true
                                                 },
                                                 {
                                                     name: "Spec. Defense (SPD)",
-                                                    value: `${CODE_FORMAT_START}IV: ${fieldChanged(oldPoke.statBlock.ivStats[4], tempPoke.statBlock.ivStats[4], true)}EV: ${fieldChanged(oldPoke.statBlock.evStats[4], tempPoke.statBlock.evStats[4], true)}FINAL: ${fieldChanged(oldPoke.statBlock.finalStats[4], tempPoke.statBlock.finalStats[4], true)}${CODE_FORMAT_END}`,
+                                                    value: `${CODE_FORMAT_START}IV: ${fieldChanged(oldPoke.statBlock.ivStats[4], newPoke.statBlock.ivStats[4], true)}EV: ${fieldChanged(oldPoke.statBlock.evStats[4], newPoke.statBlock.evStats[4], true)}FINAL: ${fieldChanged(oldPoke.statBlock.finalStats[4], newPoke.statBlock.finalStats[4], true)}${CODE_FORMAT_END}`,
                                                     inline: true
                                                 },
                                                 {
                                                     name: "Speed (SPE)",
-                                                    value: `${CODE_FORMAT_START}IV: ${fieldChanged(oldPoke.statBlock.ivStats[5], tempPoke.statBlock.ivStats[5], true)}EV: ${fieldChanged(oldPoke.statBlock.evStats[5], tempPoke.statBlock.evStats[5], true)}FINAL: ${fieldChanged(oldPoke.statBlock.finalStats[5], tempPoke.statBlock.finalStats[5], true)}${CODE_FORMAT_END}`,
+                                                    value: `${CODE_FORMAT_START}IV: ${fieldChanged(oldPoke.statBlock.ivStats[5], newPoke.statBlock.ivStats[5], true)}EV: ${fieldChanged(oldPoke.statBlock.evStats[5], newPoke.statBlock.evStats[5], true)}FINAL: ${fieldChanged(oldPoke.statBlock.finalStats[5], newPoke.statBlock.finalStats[5], true)}${CODE_FORMAT_END}`,
                                                     inline: true
                                                 },
                                                 {
@@ -442,17 +460,17 @@ module.exports.run = (client, connection, P, message, args) => {
                                                 },
                                                 {
                                                     name: "Fortitude (FORT)\nBased on CON",
-                                                    value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.statBlock.fortSave, tempPoke.statBlock.fortSave, true)}${CODE_FORMAT_END}`,
+                                                    value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.statBlock.fortSave, newPoke.statBlock.fortSave, true)}${CODE_FORMAT_END}`,
                                                     inline: true
                                                 },
                                                 {
                                                     name: "Reflex (REF)\nBased on DEX",
-                                                    value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.statBlock.refSave, tempPoke.statBlock.refSave, true)}${CODE_FORMAT_END}`,
+                                                    value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.statBlock.refSave, newPoke.statBlock.refSave, true)}${CODE_FORMAT_END}`,
                                                     inline: true
                                                 },
                                                 {
                                                     name: "Will (WILL)\nBased on WIS",
-                                                    value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.statBlock.willSave, tempPoke.statBlock.willSave, true)}${CODE_FORMAT_END}`,
+                                                    value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.statBlock.willSave, newPoke.statBlock.willSave, true)}${CODE_FORMAT_END}`,
                                                     inline: true
                                                 },
                                                 {
@@ -461,12 +479,12 @@ module.exports.run = (client, connection, P, message, args) => {
                                                 },
                                                 {
                                                     name: "Armor Class (AC)",
-                                                    value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.statBlock.armorClass, tempPoke.statBlock.armorClass, true)}${CODE_FORMAT_END}`,
+                                                    value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.statBlock.armorClass, newPoke.statBlock.armorClass, true)}${CODE_FORMAT_END}`,
                                                     inline: true
                                                 },
                                                 {
                                                     name: "Move Speed (measured in feet)",
-                                                    value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.statBlock.armorClass, tempPoke.statBlock.armorClass, true)}${CODE_FORMAT_END}`,
+                                                    value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.statBlock.armorClass, newPoke.statBlock.armorClass, true)}${CODE_FORMAT_END}`,
                                                     inline: true
                                                 },
                                             ],
@@ -499,7 +517,7 @@ module.exports.run = (client, connection, P, message, args) => {
                                             // if confirmed, update the poke and alert the user to such
                                             if (collected.first().emoji.name === '✅') {
                                                 // update the pokemon and print confirmation
-                                                tempPoke.updatePokemon(connection, message, rows[0].private).then(function (results) {
+                                                newPoke.updatePokemon(connection, message, rows[0].private).then(function (results) {
                                                     let successString = "Success! " + pokeName + "'s " + valName + " has been changed to " + valString + " and all related stats have been updated.\n\nHint: View Pokemon's stat's using `+showpoke [nickname]`";
                                                     logger.info(`[modpoke] ${successString}`)
                                                     message.reply(successString);

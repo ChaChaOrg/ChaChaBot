@@ -450,6 +450,7 @@ Pokemon.prototype.updatePokemon = function (connection, message, pokePrivate) {
   let sql = `UPDATE pokemon
         SET 
             name = "${this.name}",
+            form = "${this.form}",
             species = "${this.species}",
             level =  ${this.level},
             nature = "${this.nature.natureFinal}",
@@ -675,6 +676,7 @@ Pokemon.prototype.importPokemon = function (connection, P, importString) {
 };
 
 Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
+    console.log("starting getPokemonAndSpeciesData.\n");
     return new Promise(
         function (resolve, reject) {
             let sqlFindPokeForm = `SELECT * FROM pokeForms WHERE species = '${this.species}'`;
@@ -724,29 +726,30 @@ Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
                             resolve(this.pokemonData);
                         }
                     }.bind(this))
-
                 }
+                //
+                // List Forms, including default
+                //
                 if (found === 0) {
                     P.getPokemonSpeciesByName(this.species.toLowerCase())
                         .then(function (response) {
-                                this.speciesData = response;
-                                P.getPokemonByName(this.speciesData.id)
-                                    .then(
-                                        function (response) {
-                                            this.pokemonData = response;
-                                            resolve(this.pokemonData);
-                                        }.bind(this)
-                                    )
-                                    .catch(function (error) {
-                                        console.log(
-                                            "Error when retrieving pokemon species Data :C  ERROR: ",
-                                            error
-                                        );
-                                        reject("Error when retrieving pokemon species Data :C  ERROR: " + error)
-                                        //message.channel.send("Error when retrieving pokemon species Data :C  ERROR: ");
-                                    });
-                            }.bind(this)
-                        )
+                            this.speciesData = response;
+                            P.getPokemonByName(this.speciesData.id)
+                                .then(
+                                    function (response) {
+                                        this.pokemonData = response;
+                                        resolve(this.pokemonData);
+                                    }.bind(this)
+                                )
+                                .catch(function (error) {
+                                    console.log(
+                                        "Error when retrieving pokemon species Data :C  ERROR: ",
+                                        error
+                                    );
+                                    reject("Error when retrieving pokemon species Data :C  ERROR: " + error)
+                                    //message.channel.send("Error when retrieving pokemon species Data :C  ERROR: ");
+                                });
+                        }.bind(this))
                         .catch(function (error) {
                             console.log("Error when retrieving pokemon Data :C  ERROR: ", error.response.statusText);
                             if (error.response.status === 404) {
@@ -757,31 +760,7 @@ Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
                         });
                 }
             }.bind(this));
-
-
-
-            P.getPokemonSpeciesByName(this.species.toLowerCase())
-                .then(function (response) {
-                    this.speciesData = response;
-                    P.getPokemonByName(this.speciesData.id)
-                        .then(
-                            function (response) {
-                                this.pokemonData = response;
-                                resolve(this.pokemonData);
-                            }.bind(this)
-                        )
-                        .catch(function (error) {
-                            console.log(
-                                "Error when retrieving pokemon species Data :C  ERROR: ",
-                                error
-                            );
-                            logger.error(`[pokemon] Error retrieving species data: ${error}`)
-                            reject("Error when retrieving pokemon species Data :C  ERROR: " + error);
-                        });
-
-                }.bind(this))
-        }.bind(this)
-    )
+        }.bind(this))
 }
 
 
@@ -797,6 +776,7 @@ Pokemon.prototype.loadFromSQL = function (connection, P, sqlObject) {
             this.getPokemonAndSpeciesData(connection, P).then(
                 function (response) {
                     this.pokemonData = response;
+
                     //type(s)
                     this.type1 = sqlObject.type1;
                     this.type2 = sqlObject.type2;
