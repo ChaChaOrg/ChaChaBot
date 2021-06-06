@@ -151,8 +151,8 @@ exports.run = (client, connection, P, message, args) => {
 		}
 
 		//initializes final 
-		if (fortyTimer > (catchBonusMod[6] + 150)) {
-			catchBonusFinal = fortyTimer * 0.5 / 150 + 0.5;
+		if (fortyTimer > (catchBonusMod[5] + 150)) {
+			catchBonusFinal = fortyTimer * 0.5/ 150 + 0.5;
 		} else {
 			catchBonusFinal = catchBonusGen[5];
 		}
