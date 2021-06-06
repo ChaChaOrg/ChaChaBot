@@ -5,7 +5,6 @@ const HELP_MESSAGE = "\n`+modpoke  [nickname] [fieldToChange] [newValue]`\n\nMod
     " database. \nUse `+modpoke list` to view all available changeable fields.)";
 // list of editable fields
 const HELP_FIELDS_LIST = "Here's the list of all available fields on a Pokemon that can be manipulated. Fields marked with a ♢ will update other related stats upon being updated.\n" +
-    "NOTE - Fields are **case-sensitive**" +
     "\n" +
     "**BASIC FEATURES**\n" +
     "> `name` // Nickname (\"Sparky\", \"Blaze\"), cannot include spaces or special characters\n" +
@@ -86,10 +85,13 @@ module.exports.run = (client, connection, P, message, args) => {
         // grab the pokemon's name
         let pokeName = args[0];
         //grab the value to be changed
-        /*let valName = args[1].toLowerCase();
+/*
+        let valName = args[1];
+        let lowerCase_OTHERFIELDS = OTHER_FIELDS.map(field => field.toLowerCase()); //copy of OTHER_FIELDS all lowercase
 
         // check whether the field they want to change exists
-        if (!STATIC_FIELDS.includes(valName) && !OTHER_FIELDS.includes(valName)) {
+        if (!STATIC_FIELDS.includes(valName) && !OTHER_FIELDS.includes(valName) &&
+            !STATIC_FIELDS.includes(valName.toLowerCase()) && !lowerCase_OTHERFIELDS.includes(valName.toLowerCase())) {
             logger.warn("[modpoke] Can't change that field because of spelling or doesn't exist. Sending nonexistent field message.");
             message.reply(NONEXISTENT_FIELD_MESSAGE);
             return;
@@ -105,6 +107,17 @@ module.exports.run = (client, connection, P, message, args) => {
             logger.warn("[modpoke] Can't change that field because of spelling or doesn't exist. Sending nonexistent field message.");
             message.reply(NONEXISTENT_FIELD_MESSAGE);
             return;
+        }
+
+        // make value all lowercase if it's in the STATIC_FIELDS array and not already matching
+        if (!STATIC_FIELDS.includes(valName) && STATIC_FIELDS.includes(valName.toLowerCase())) {
+            valName = args[1].toLowerCase();
+        }
+
+        // make value the correct case by setting it to matching value in OTHER_FIELDS in order to match the DB schema
+        if (!OTHER_FIELDS.includes(valName) && lowerCase_OTHERFIELDS.includes(valName.toLowerCase())) {
+            let idx = lowerCase_OTHERFIELDS.indexOf(valName.toLowerCase());
+            valName = OTHER_FIELDS[idx];
         }
 
         // make value all lowercase if it's in the STATIC_FIELDS array and not already matching
