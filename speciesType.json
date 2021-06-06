@@ -1,0 +1,884 @@
+{
+  "base_happiness": null,
+  "capture_rate": null,
+  "color": {
+    "name": null,
+    "url": null
+  },
+  "egg_groups": [
+    {
+      "name": null,
+      "url": null
+    }
+  ],
+  "evolution_chain": {
+    "url": null
+  },
+  "evolves_from_species": {
+    "name": null,
+    "url": null
+  },
+  "flavor_text_entries": [
+    {
+      "flavor_text": "堅盾劍怪曾經用強大的靈力\n控制人和寶可夢，建立了\n適合自己生活的國家。",
+      "language": {
+        "name": "zh-Hant",
+        "url": "https://pokeapi.co/api/v2/language/4/"
+      },
+      "version": {
+        "name": "shield",
+        "url": "https://pokeapi.co/api/v2/version/34/"
+      }
+    },
+    {
+      "flavor_text": "れきだいの　おうが　つれていた。\nれいりょくで　ひとや　ポケモンの\nこころを　あやつり　したがわせる。",
+      "language": {
+        "name": "ja-Hrkt",
+        "url": "https://pokeapi.co/api/v2/language/1/"
+      },
+      "version": {
+        "name": "x",
+        "url": "https://pokeapi.co/api/v2/version/23/"
+      }
+    },
+    {
+      "flavor_text": "역대 왕들이 데리고 있었다.\n영험한 힘으로 사람이나 포켓몬의\n마음을 조종하여 복종하게 한다.",
+      "language": {
+        "name": "ko",
+        "url": "https://pokeapi.co/api/v2/language/3/"
+      },
+      "version": {
+        "name": "x",
+        "url": "https://pokeapi.co/api/v2/version/23/"
+      }
+    },
+    {
+      "flavor_text": "Ils ont fait le bonheur de générations de rois.\nLeurs pouvoirs psychiques leur permettent de\ncontrôler hommes et Pokémon.",
+      "language": {
+        "name": "fr",
+        "url": "https://pokeapi.co/api/v2/language/5/"
+      },
+      "version": {
+        "name": "x",
+        "url": "https://pokeapi.co/api/v2/version/23/"
+      }
+    },
+    {
+      "flavor_text": "Generationen von Königen hatten dieses Pokémon\nan ihrer Seite. Mit seiner mysteriösen Kraft kann es\nMenschen und Pokémon gleichermaßen kontrollieren.",
+      "language": {
+        "name": "de",
+        "url": "https://pokeapi.co/api/v2/language/6/"
+      },
+      "version": {
+        "name": "x",
+        "url": "https://pokeapi.co/api/v2/version/23/"
+      }
+    },
+    {
+      "flavor_text": "Han permanecido junto a estirpes de reyes durante\ngeneraciones. Mediante su poder espectral pueden\ncontrolar a humanos y a Pokémon.",
+      "language": {
+        "name": "es",
+        "url": "https://pokeapi.co/api/v2/language/7/"
+      },
+      "version": {
+        "name": "x",
+        "url": "https://pokeapi.co/api/v2/version/23/"
+      }
+    },
+    {
+      "flavor_text": "Ha accompagnato generazioni di re. È in grado di\ncontrollare e manipolare esseri umani e Pokémon col\nsuo potere spettrale.",
+      "language": {
+        "name": "it",
+        "url": "https://pokeapi.co/api/v2/language/8/"
+      },
+      "version": {
+        "name": "x",
+        "url": "https://pokeapi.co/api/v2/version/23/"
+      }
+    },
+    {
+      "flavor_text": "Generations of kings were attended by these\nPokémon, which used their spectral power to\nmanipulate and control people and Pokémon.",
+      "language": {
+        "name": "en",
+        "url": "https://pokeapi.co/api/v2/language/9/"
+      },
+      "version": {
+        "name": "x",
+        "url": "https://pokeapi.co/api/v2/version/23/"
+      }
+    },
+    {
+      "flavor_text": "歴代の　王が　連れていた。\n霊力で　人や　ポケモンの\n心を　操り　従わせる。",
+      "language": {
+        "name": "ja",
+        "url": "https://pokeapi.co/api/v2/language/11/"
+      },
+      "version": {
+        "name": "x",
+        "url": "https://pokeapi.co/api/v2/version/23/"
+      }
+    },
+    {
+      "flavor_text": "おうの　そしつを　もつ　にんげんを\nみぬくらしい。みとめられた　ひとは\nやがて　おうになると　いわれている。",
+      "language": {
+        "name": "ja-Hrkt",
+        "url": "https://pokeapi.co/api/v2/language/1/"
+      },
+      "version": {
+        "name": "y",
+        "url": "https://pokeapi.co/api/v2/version/24/"
+      }
+    },
+    {
+      "flavor_text": "왕의 기질을 가진 인간을\n간파하는 듯하다. 인정받은 자는\n이윽고 왕이 된다고 한다.",
+      "language": {
+        "name": "ko",
+        "url": "https://pokeapi.co/api/v2/language/3/"
+      },
+      "version": {
+        "name": "y",
+        "url": "https://pokeapi.co/api/v2/version/24/"
+      }
+    },
+    {
+      "flavor_text": "Il peut déceler les qualités régaliennes dans les âmes\nhumaines. On raconte que celui ou celle qui obtient\nsa faveur deviendra à coup sûr roi ou reine.",
+      "language": {
+        "name": "fr",
+        "url": "https://pokeapi.co/api/v2/language/5/"
+      },
+      "version": {
+        "name": "y",
+        "url": "https://pokeapi.co/api/v2/version/24/"
+      }
+    },
+    {
+      "flavor_text": "Angeblich erkennt es jene Menschen, die Potenzial\nzum Herrscher haben. Es heißt, von ihm anerkannte\nPersonen seien bald darauf Könige geworden.",
+      "language": {
+        "name": "de",
+        "url": "https://pokeapi.co/api/v2/language/6/"
+      },
+      "version": {
+        "name": "y",
+        "url": "https://pokeapi.co/api/v2/version/24/"
+      }
+    },
+    {
+      "flavor_text": "Al parecer, puede intuir si un humano tiene madera\nde rey. Según se dice, las personas que obtuvieron\nsu reconocimiento acabaron siendo reyes.",
+      "language": {
+        "name": "es",
+        "url": "https://pokeapi.co/api/v2/language/7/"
+      },
+      "version": {
+        "name": "y",
+        "url": "https://pokeapi.co/api/v2/version/24/"
+      }
+    },
+    {
+      "flavor_text": "Si dice che sia in grado di riconoscere chi possiede le\nqualità per diventare re e che le persone da lui\nindicate siano effettivamente destinate al trono.",
+      "language": {
+        "name": "it",
+        "url": "https://pokeapi.co/api/v2/language/8/"
+      },
+      "version": {
+        "name": "y",
+        "url": "https://pokeapi.co/api/v2/version/24/"
+      }
+    },
+    {
+      "flavor_text": "Apparently, it can detect the innate qualities\nof leadership. According to legend, whoever it\nrecognizes is destined to become king.",
+      "language": {
+        "name": "en",
+        "url": "https://pokeapi.co/api/v2/language/9/"
+      },
+      "version": {
+        "name": "y",
+        "url": "https://pokeapi.co/api/v2/version/24/"
+      }
+    },
+    {
+      "flavor_text": "王の　素質を　持つ　人間を\n見抜くらしい。認められた　人は\nやがて　王になると　言われている。",
+      "language": {
+        "name": "ja",
+        "url": "https://pokeapi.co/api/v2/language/11/"
+      },
+      "version": {
+        "name": "y",
+        "url": "https://pokeapi.co/api/v2/version/24/"
+      }
+    },
+    {
+      "flavor_text": "れきだいの　おうが　つれていた。\nれいりょくで　ひとや　ポケモンの\nこころを　あやつり　したがわせる。",
+      "language": {
+        "name": "ja-Hrkt",
+        "url": "https://pokeapi.co/api/v2/language/1/"
+      },
+      "version": {
+        "name": "omega-ruby",
+        "url": "https://pokeapi.co/api/v2/version/25/"
+      }
+    },
+    {
+      "flavor_text": "역대 왕들이 데리고 있었다.\n영험한 힘으로 사람이나 포켓몬의\n마음을 조종하여 복종하게 한다.",
+      "language": {
+        "name": "ko",
+        "url": "https://pokeapi.co/api/v2/language/3/"
+      },
+      "version": {
+        "name": "omega-ruby",
+        "url": "https://pokeapi.co/api/v2/version/25/"
+      }
+    },
+    {
+      "flavor_text": "Ils ont fait le bonheur de générations de rois. Leurs pouvoirs\npsychiques leur permettent de contrôler hommes et Pokémon.",
+      "language": {
+        "name": "fr",
+        "url": "https://pokeapi.co/api/v2/language/5/"
+      },
+      "version": {
+        "name": "omega-ruby",
+        "url": "https://pokeapi.co/api/v2/version/25/"
+      }
+    },
+    {
+      "flavor_text": "Generationen von Königen hatten dieses Pokémon an ihrer\nSeite. Mit seiner mysteriösen Kraft kann es Menschen und\nPokémon gleichermaßen kontrollieren.",
+      "language": {
+        "name": "de",
+        "url": "https://pokeapi.co/api/v2/language/6/"
+      },
+      "version": {
+        "name": "omega-ruby",
+        "url": "https://pokeapi.co/api/v2/version/25/"
+      }
+    },
+    {
+      "flavor_text": "Han permanecido junto a estirpes de reyes durante\ngeneraciones. Mediante su poder espectral pueden controlar\na humanos y a Pokémon.",
+      "language": {
+        "name": "es",
+        "url": "https://pokeapi.co/api/v2/language/7/"
+      },
+      "version": {
+        "name": "omega-ruby",
+        "url": "https://pokeapi.co/api/v2/version/25/"
+      }
+    },
+    {
+      "flavor_text": "Ha accompagnato generazioni di re. È in grado di controllare\ne manipolare esseri umani e Pokémon col suo potere spettrale.",
+      "language": {
+        "name": "it",
+        "url": "https://pokeapi.co/api/v2/language/8/"
+      },
+      "version": {
+        "name": "omega-ruby",
+        "url": "https://pokeapi.co/api/v2/version/25/"
+      }
+    },
+    {
+      "flavor_text": "Generations of kings were attended by these\nPokémon, which used their spectral power to\nmanipulate and control people and Pokémon.",
+      "language": {
+        "name": "en",
+        "url": "https://pokeapi.co/api/v2/language/9/"
+      },
+      "version": {
+        "name": "omega-ruby",
+        "url": "https://pokeapi.co/api/v2/version/25/"
+      }
+    },
+    {
+      "flavor_text": "歴代の　王が　連れていた。\n霊力で　人や　ポケモンの\n心を　操り　従わせる。",
+      "language": {
+        "name": "ja",
+        "url": "https://pokeapi.co/api/v2/language/11/"
+      },
+      "version": {
+        "name": "omega-ruby",
+        "url": "https://pokeapi.co/api/v2/version/25/"
+      }
+    },
+    {
+      "flavor_text": "おうの　そしつを　もつ　にんげんを\nみぬくらしい。みとめられた　ひとは\nやがて　おうになると　いわれている。",
+      "language": {
+        "name": "ja-Hrkt",
+        "url": "https://pokeapi.co/api/v2/language/1/"
+      },
+      "version": {
+        "name": "alpha-sapphire",
+        "url": "https://pokeapi.co/api/v2/version/26/"
+      }
+    },
+    {
+      "flavor_text": "왕의 기질을 가진 인간을\n간파하는 듯하다. 인정받은 자는\n이윽고 왕이 된다고 한다.",
+      "language": {
+        "name": "ko",
+        "url": "https://pokeapi.co/api/v2/language/3/"
+      },
+      "version": {
+        "name": "alpha-sapphire",
+        "url": "https://pokeapi.co/api/v2/version/26/"
+      }
+    },
+    {
+      "flavor_text": "Il peut déceler les qualités régaliennes dans les âmes\nhumaines. On raconte que celui ou celle qui obtient\nsa faveur deviendra à coup sûr roi ou reine.",
+      "language": {
+        "name": "fr",
+        "url": "https://pokeapi.co/api/v2/language/5/"
+      },
+      "version": {
+        "name": "alpha-sapphire",
+        "url": "https://pokeapi.co/api/v2/version/26/"
+      }
+    },
+    {
+      "flavor_text": "Angeblich erkennt es jene Menschen, die Potenzial zum\nHerrscher haben. Es heißt, von ihm anerkannte Personen\nseien bald darauf Könige geworden.",
+      "language": {
+        "name": "de",
+        "url": "https://pokeapi.co/api/v2/language/6/"
+      },
+      "version": {
+        "name": "alpha-sapphire",
+        "url": "https://pokeapi.co/api/v2/version/26/"
+      }
+    },
+    {
+      "flavor_text": "Al parecer, puede intuir si un humano tiene madera de rey.\nSegún se dice, las personas que obtuvieron su reconocimiento\nacabaron siendo reyes.",
+      "language": {
+        "name": "es",
+        "url": "https://pokeapi.co/api/v2/language/7/"
+      },
+      "version": {
+        "name": "alpha-sapphire",
+        "url": "https://pokeapi.co/api/v2/version/26/"
+      }
+    },
+    {
+      "flavor_text": "Si dice che sia in grado di riconoscere chi possiede le\nqualità per diventare re e che le persone da lui indicate\nsiano effettivamente destinate al trono.",
+      "language": {
+        "name": "it",
+        "url": "https://pokeapi.co/api/v2/language/8/"
+      },
+      "version": {
+        "name": "alpha-sapphire",
+        "url": "https://pokeapi.co/api/v2/version/26/"
+      }
+    },
+    {
+      "flavor_text": "Apparently, it can detect the innate qualities\nof leadership. According to legend, whoever it\nrecognizes is destined to become king.",
+      "language": {
+        "name": "en",
+        "url": "https://pokeapi.co/api/v2/language/9/"
+      },
+      "version": {
+        "name": "alpha-sapphire",
+        "url": "https://pokeapi.co/api/v2/version/26/"
+      }
+    },
+    {
+      "flavor_text": "王の　素質を　持つ　人間を\n見抜くらしい。認められた　人は\nやがて　王になると　言われている。",
+      "language": {
+        "name": "ja",
+        "url": "https://pokeapi.co/api/v2/language/11/"
+      },
+      "version": {
+        "name": "alpha-sapphire",
+        "url": "https://pokeapi.co/api/v2/version/26/"
+      }
+    },
+    {
+      "flavor_text": "こうげきに　とっかした　たいせい。\nはがねの　おもさと　きょうどを\nいかして　あいてを　たたきわる。",
+      "language": {
+        "name": "ja-Hrkt",
+        "url": "https://pokeapi.co/api/v2/language/1/"
+      },
+      "version": {
+        "name": "sword",
+        "url": "https://pokeapi.co/api/v2/version/33/"
+      }
+    },
+    {
+      "flavor_text": "はがねの　からだと　れいりょくの\nバリアで　あらゆる　こうげきを\nよわめる　ぼうぎょの　たいせい。",
+      "language": {
+        "name": "ja-Hrkt",
+        "url": "https://pokeapi.co/api/v2/language/1/"
+      },
+      "version": {
+        "name": "sword",
+        "url": "https://pokeapi.co/api/v2/version/33/"
+      }
+    },
+    {
+      "flavor_text": "강철로 된 몸과 영험한 힘을 가진\n배리어로 모든 공격을\n약하게 만드는 방어적인 태세.",
+      "language": {
+        "name": "ko",
+        "url": "https://pokeapi.co/api/v2/language/3/"
+      },
+      "version": {
+        "name": "sword",
+        "url": "https://pokeapi.co/api/v2/version/33/"
+      }
+    },
+    {
+      "flavor_text": "공격에 특화된 태세.\n강철의 무게와 강도를\n살려서 상대를 가른다.",
+      "language": {
+        "name": "ko",
+        "url": "https://pokeapi.co/api/v2/language/3/"
+      },
+      "version": {
+        "name": "sword",
+        "url": "https://pokeapi.co/api/v2/version/33/"
+      }
+    },
+    {
+      "flavor_text": "特別強化了攻擊的狀態。\n會運用鋼鐵的重量和強度\n來擊碎對手。",
+      "language": {
+        "name": "zh-Hant",
+        "url": "https://pokeapi.co/api/v2/language/4/"
+      },
+      "version": {
+        "name": "sword",
+        "url": "https://pokeapi.co/api/v2/version/33/"
+      }
+    },
+    {
+      "flavor_text": "處於防禦狀態時，\n會用鋼之身體和靈力的屏障\n來減弱一切的攻擊。",
+      "language": {
+        "name": "zh-Hant",
+        "url": "https://pokeapi.co/api/v2/language/4/"
+      },
+      "version": {
+        "name": "sword",
+        "url": "https://pokeapi.co/api/v2/version/33/"
+      }
+    },
+    {
+      "flavor_text": "Grâce à son corps en acier et à sa barrière\npsychique, il peut se défendre en affaiblissant\ntoutes sortes d’attaques.",
+      "language": {
+        "name": "fr",
+        "url": "https://pokeapi.co/api/v2/language/5/"
+      },
+      "version": {
+        "name": "sword",
+        "url": "https://pokeapi.co/api/v2/version/33/"
+      }
+    },
+    {
+      "flavor_text": "Sous cette forme, il excelle en attaque.\nIl utilise le poids et la puissance de l’acier\npour détruire ses adversaires.",
+      "language": {
+        "name": "fr",
+        "url": "https://pokeapi.co/api/v2/language/5/"
+      },
+      "version": {
+        "name": "sword",
+        "url": "https://pokeapi.co/api/v2/version/33/"
+      }
+    },
+    {
+      "flavor_text": "In dieser Form ist es auf Offensive spezialisiert.\nEs nutzt das Gewicht und die Härte von Stahl,\num seine Gegner zu vernichten.",
+      "language": {
+        "name": "de",
+        "url": "https://pokeapi.co/api/v2/language/6/"
+      },
+      "version": {
+        "name": "sword",
+        "url": "https://pokeapi.co/api/v2/version/33/"
+      }
+    },
+    {
+      "flavor_text": "Mit seinem stählernen Körper und der Barriere,\ndie es durch eine mysteriöse Kraft erzeugt,\nvermag es jegliche Angriffe abzuschwächen.",
+      "language": {
+        "name": "de",
+        "url": "https://pokeapi.co/api/v2/language/6/"
+      },
+      "version": {
+        "name": "sword",
+        "url": "https://pokeapi.co/api/v2/version/33/"
+      }
+    },
+    {
+      "flavor_text": "Al adoptar esta forma, centra su estrategia en la\nofensiva, aprovechando todo el peso y la fuerza\ndel acero para atacar al rival.",
+      "language": {
+        "name": "es",
+        "url": "https://pokeapi.co/api/v2/language/7/"
+      },
+      "version": {
+        "name": "sword",
+        "url": "https://pokeapi.co/api/v2/version/33/"
+      }
+    },
+    {
+      "flavor_text": "Gracias a su cuerpo de acero y a una barrera de\npoder espectral, crea una defensa que le permite\nmitigar prácticamente cualquier ataque.",
+      "language": {
+        "name": "es",
+        "url": "https://pokeapi.co/api/v2/language/7/"
+      },
+      "version": {
+        "name": "sword",
+        "url": "https://pokeapi.co/api/v2/version/33/"
+      }
+    },
+    {
+      "flavor_text": "Con il suo corpo metallico e la sua barriera\npsichica può opporre una difesa in grado di\nindebolire qualsiasi tipo di attacco.",
+      "language": {
+        "name": "it",
+        "url": "https://pokeapi.co/api/v2/language/8/"
+      },
+      "version": {
+        "name": "sword",
+        "url": "https://pokeapi.co/api/v2/version/33/"
+      }
+    },
+    {
+      "flavor_text": "Questa forma è specializzata nell’attacco.\nSfrutta il peso e la durezza dell’acciaio\nper fare a pezzi il nemico.",
+      "language": {
+        "name": "it",
+        "url": "https://pokeapi.co/api/v2/language/8/"
+      },
+      "version": {
+        "name": "sword",
+        "url": "https://pokeapi.co/api/v2/version/33/"
+      }
+    },
+    {
+      "flavor_text": "In this defensive stance, Aegislash uses its steel\nbody and a force field of spectral power to\nreduce the damage of any attack.",
+      "language": {
+        "name": "en",
+        "url": "https://pokeapi.co/api/v2/language/9/"
+      },
+      "version": {
+        "name": "sword",
+        "url": "https://pokeapi.co/api/v2/version/33/"
+      }
+    },
+    {
+      "flavor_text": "This stance is dedicated to offense. It can cleave\nany opponent with the strength and weight of its\nsteel blade.",
+      "language": {
+        "name": "en",
+        "url": "https://pokeapi.co/api/v2/language/9/"
+      },
+      "version": {
+        "name": "sword",
+        "url": "https://pokeapi.co/api/v2/version/33/"
+      }
+    },
+    {
+      "flavor_text": "攻撃に　特化した　体勢。\n鋼の　重さと　強度を\n活かして　相手を　叩き割る。",
+      "language": {
+        "name": "ja",
+        "url": "https://pokeapi.co/api/v2/language/11/"
+      },
+      "version": {
+        "name": "sword",
+        "url": "https://pokeapi.co/api/v2/version/33/"
+      }
+    },
+    {
+      "flavor_text": "鋼の　体と　霊力の\nバリアで　あらゆる　攻撃を\n弱める　防御の　体勢。",
+      "language": {
+        "name": "ja",
+        "url": "https://pokeapi.co/api/v2/language/11/"
+      },
+      "version": {
+        "name": "sword",
+        "url": "https://pokeapi.co/api/v2/version/33/"
+      }
+    },
+    {
+      "flavor_text": "处于防御状态时，\n会用钢之身体和灵力的屏障\n来减弱一切的攻击。",
+      "language": {
+        "name": "zh-Hans",
+        "url": "https://pokeapi.co/api/v2/language/12/"
+      },
+      "version": {
+        "name": "sword",
+        "url": "https://pokeapi.co/api/v2/version/33/"
+      }
+    },
+    {
+      "flavor_text": "特别强化了攻击的状态。\n会运用钢铁的重量和强度\n来击碎对手。",
+      "language": {
+        "name": "zh-Hans",
+        "url": "https://pokeapi.co/api/v2/language/12/"
+      },
+      "version": {
+        "name": "sword",
+        "url": "https://pokeapi.co/api/v2/version/33/"
+      }
+    },
+    {
+      "flavor_text": "きょうりょくな　れいりょくで　ひとや\nポケモンを　あやつり　ギルガルドに\nつごうの　よい　くにを　つくらせた。",
+      "language": {
+        "name": "ja-Hrkt",
+        "url": "https://pokeapi.co/api/v2/language/1/"
+      },
+      "version": {
+        "name": "shield",
+        "url": "https://pokeapi.co/api/v2/version/34/"
+      }
+    },
+    {
+      "flavor_text": "むかし　ギルガルドを　つれた　おうが\nくにを　しはい　していたが　やがて\nせいきを　すわれ　くにも　ほろびた。",
+      "language": {
+        "name": "ja-Hrkt",
+        "url": "https://pokeapi.co/api/v2/language/1/"
+      },
+      "version": {
+        "name": "shield",
+        "url": "https://pokeapi.co/api/v2/version/34/"
+      }
+    },
+    {
+      "flavor_text": "강력한 영력으로 사람과\n포켓몬을 조종해 킬가르도의\n입맛에 맞는 나라를 만들게 했다.",
+      "language": {
+        "name": "ko",
+        "url": "https://pokeapi.co/api/v2/language/3/"
+      },
+      "version": {
+        "name": "shield",
+        "url": "https://pokeapi.co/api/v2/version/34/"
+      }
+    },
+    {
+      "flavor_text": "옛날에 킬가르도를 거느린 왕이\n나라를 지배했지만 머지않아\n생기를 뺏겨 나라도 멸망했다.",
+      "language": {
+        "name": "ko",
+        "url": "https://pokeapi.co/api/v2/language/3/"
+      },
+      "version": {
+        "name": "shield",
+        "url": "https://pokeapi.co/api/v2/version/34/"
+      }
+    },
+    {
+      "flavor_text": "雖然帶著堅盾劍怪的國王曾經\n支配了整個國家，最後卻被牠\n吸走了精氣，國家也滅亡了。",
+      "language": {
+        "name": "zh-Hant",
+        "url": "https://pokeapi.co/api/v2/language/4/"
+      },
+      "version": {
+        "name": "shield",
+        "url": "https://pokeapi.co/api/v2/version/34/"
+      }
+    },
+    {
+      "flavor_text": "Grâce à ses puissants pouvoirs spirituels,\nil a contrôlé des humains et des Pokémon\npour créer un pays conforme à ses idéaux.",
+      "language": {
+        "name": "fr",
+        "url": "https://pokeapi.co/api/v2/language/5/"
+      },
+      "version": {
+        "name": "shield",
+        "url": "https://pokeapi.co/api/v2/version/34/"
+      }
+    },
+    {
+      "flavor_text": "Un roi régnait jadis, un Exagide à ses côtés.\nL’absorption de l’énergie vitale du souverain\ncausa sa perte, ainsi que celle de son royaume.",
+      "language": {
+        "name": "fr",
+        "url": "https://pokeapi.co/api/v2/language/5/"
+      },
+      "version": {
+        "name": "shield",
+        "url": "https://pokeapi.co/api/v2/version/34/"
+      }
+    },
+    {
+      "flavor_text": "Einst regierte ein König mit einem Durengard an\nseiner Seite. Er und sein Königreich fielen jedoch,\nals ihm das Pokémon die Lebensenergie entzog.",
+      "language": {
+        "name": "de",
+        "url": "https://pokeapi.co/api/v2/language/6/"
+      },
+      "version": {
+        "name": "shield",
+        "url": "https://pokeapi.co/api/v2/version/34/"
+      }
+    },
+    {
+      "flavor_text": "Mithilfe seiner mysteriösen Kräfte kontrollierte es\nMenschen und Pokémon und ließ sie ein Land\nnach seinen Vorstellungen erschaffen.",
+      "language": {
+        "name": "de",
+        "url": "https://pokeapi.co/api/v2/language/6/"
+      },
+      "version": {
+        "name": "shield",
+        "url": "https://pokeapi.co/api/v2/version/34/"
+      }
+    },
+    {
+      "flavor_text": "Antiguamente, un rey logró conquistar un país\ncon la ayuda de este Pokémon, pero le costó\nla vida y condenó su nación a la ruina.",
+      "language": {
+        "name": "es",
+        "url": "https://pokeapi.co/api/v2/language/7/"
+      },
+      "version": {
+        "name": "shield",
+        "url": "https://pokeapi.co/api/v2/version/34/"
+      }
+    },
+    {
+      "flavor_text": "Mediante el control ejercido con su inmenso\npoder espectral, logró que humanos y Pokémon\nle forjaran un país a medida de sus necesidades.",
+      "language": {
+        "name": "es",
+        "url": "https://pokeapi.co/api/v2/language/7/"
+      },
+      "version": {
+        "name": "shield",
+        "url": "https://pokeapi.co/api/v2/version/34/"
+      }
+    },
+    {
+      "flavor_text": "Ha manipolato il pensiero di esseri umani e\nPokémon con il suo potere spettrale facendogli\ncostruire un paese adatto alle sue esigenze.",
+      "language": {
+        "name": "it",
+        "url": "https://pokeapi.co/api/v2/language/8/"
+      },
+      "version": {
+        "name": "shield",
+        "url": "https://pokeapi.co/api/v2/version/34/"
+      }
+    },
+    {
+      "flavor_text": "In passato, un re conquistò un paese affiancato\nda un Aegislash, ma la sua energia vitale\nvenne assorbita e il regno cadde in rovina.",
+      "language": {
+        "name": "it",
+        "url": "https://pokeapi.co/api/v2/language/8/"
+      },
+      "version": {
+        "name": "shield",
+        "url": "https://pokeapi.co/api/v2/version/34/"
+      }
+    },
+    {
+      "flavor_text": "Its potent spectral powers allow it to manipulate\nothers. It once used its powers to force people\nand Pokémon to build a kingdom to its liking.",
+      "language": {
+        "name": "en",
+        "url": "https://pokeapi.co/api/v2/language/9/"
+      },
+      "version": {
+        "name": "shield",
+        "url": "https://pokeapi.co/api/v2/version/34/"
+      }
+    },
+    {
+      "flavor_text": "Once upon a time, a king with an Aegislash\nreigned over the land. His Pokémon eventually\ndrained him of life, and his kingdom fell with him.",
+      "language": {
+        "name": "en",
+        "url": "https://pokeapi.co/api/v2/language/9/"
+      },
+      "version": {
+        "name": "shield",
+        "url": "https://pokeapi.co/api/v2/version/34/"
+      }
+    },
+    {
+      "flavor_text": "強力な　霊力で　人や\nポケモンを　操り　ギルガルドに\n都合の　良い　国を　つくらせた。",
+      "language": {
+        "name": "ja",
+        "url": "https://pokeapi.co/api/v2/language/11/"
+      },
+      "version": {
+        "name": "shield",
+        "url": "https://pokeapi.co/api/v2/version/34/"
+      }
+    },
+    {
+      "flavor_text": "昔　ギルガルドを　連れた　王が\n国を　支配　していたが　やがて\n生気を　吸われ　国も　滅びた。",
+      "language": {
+        "name": "ja",
+        "url": "https://pokeapi.co/api/v2/language/11/"
+      },
+      "version": {
+        "name": "shield",
+        "url": "https://pokeapi.co/api/v2/version/34/"
+      }
+    },
+    {
+      "flavor_text": "坚盾剑怪曾经用强大的灵力\n控制人和宝可梦，建立了\n适合自己生活的国家。",
+      "language": {
+        "name": "zh-Hans",
+        "url": "https://pokeapi.co/api/v2/language/12/"
+      },
+      "version": {
+        "name": "shield",
+        "url": "https://pokeapi.co/api/v2/version/34/"
+      }
+    },
+    {
+      "flavor_text": "虽然带着坚盾剑怪的国王曾经\n支配了整个国家，最后却被它\n吸走了精气，国家也灭亡了。",
+      "language": {
+        "name": "zh-Hans",
+        "url": "https://pokeapi.co/api/v2/language/12/"
+      },
+      "version": {
+        "name": "shield",
+        "url": "https://pokeapi.co/api/v2/version/34/"
+      }
+    }
+  ],
+  "form_descriptions": [
+    {
+      "description": "Forms have different stats.  If Aegislash's ability is stance change, it changes to Blade Forme before using a damaging move, and reverts to Shield Forme before using King's Shield or upon leaving the field.",
+      "language": {
+        "name": "en",
+        "url": "https://pokeapi.co/api/v2/language/9/"
+      }
+    }
+  ],
+  "forms_switchable": null,
+  "gender_rate": null,
+  "genera": [
+    {
+      "genus": null,
+      "language": {
+        "name": null,
+        "url": null
+      }
+    }
+  ],
+  "generation": {
+    "name": null,
+    "url": null
+  },
+  "growth_rate": {
+    "name": null,
+    "url": null
+  },
+  "habitat": null,
+  "has_gender_differences": null,
+  "hatch_counter": null,
+  "id": null,
+  "is_baby": null,
+  "is_legendary": null,
+  "is_mythical": null,
+  "name": null,
+  "names": [
+    {
+      "language": {
+        "name": null,
+        "url": null
+      },
+      "name": null
+    }
+  ],
+  "order": null,
+  "pal_park_encounters": [],
+  "pokedex_numbers": [
+    {
+      "entry_number": null,
+      "pokedex": {
+        "name": null,
+        "url": null
+      }
+    }
+  ],
+  "shape": {
+    "name": null,
+    "url": null
+  },
+  "varieties": [
+    {
+      "is_default": null,
+      "pokemon": {
+        "name": null,
+        "url": null
+      }
+    }
+  ]
+}
