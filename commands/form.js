@@ -1,7 +1,7 @@
 const logger = require('../logs/logger.js');
 const helpMessage = "Form is a command for managing the various forms of a pokemon, such as regional variants or alternate forms. This command has the list and add subcommands.\n";
 const listMessage = "The list subcommand lists all forms avaiable to a given pokemon species. Use: form list <speciesName>\n";
-const addMessage = "The add subcommand adds a form to the list of available forms for a pokemon species. Use: form add <speciesName> <formName> <ability1> <ability2> <abilitly3> <hpBaseStat> <attackBaseStat> <specialAttackBaseStat> <defenseBaseStat> <specialDefenseBaseStat> <speedBaseStat> <firstType> <secondType> <genderRatio> <captureRate> <eggGroup1> <eggGroup2> <private>\n";
+const addMessage = "The add subcommand adds a form to the list of available forms for a pokemon species. Use: form add <speciesName> <formName> <ability1> <ability2> <abilitly3> <hpBaseStat> <attackBaseStat> <defenseBaseStat> <specialAttackBaseStat> <specialDefenseBaseStat> <speedBaseStat> <firstType> <secondType> <genderRatio> <captureRate> <eggGroup1> <eggGroup2> <private>\n";
 exports.run = (client, connection, P, message, args) => {
 
     try {
@@ -29,11 +29,11 @@ exports.run = (client, connection, P, message, args) => {
                 }
             });
         } else if (args[0].includes("add")) {
-            if (args.length != 20) {
+            if (args.length != 19) {
                 throw "Incorrect number of arguments to add the form.";
             }
             logger.info("[form] Adding new form");
-            let sql = `INSERT INTO pokeForms (species, form, ability1, ability2, ability3, hpBST, atkBST, spaBST, defBST, spdBST, speBST, type1, type2, genderRate, captureRate, eggGroup1, eggGroup2, discordID, private) 
+            let sql = `INSERT INTO pokeForms (species, form, ability1, ability2, ability3, hpBST, atkBST, defBST, spaBST, spdBST, speBST, type1, type2, genderRate, captureRate, eggGroup1, eggGroup2, discordID, private) 
             VALUES (
             "${args[1]}",
             "${args[2]}",
@@ -53,8 +53,7 @@ exports.run = (client, connection, P, message, args) => {
             "${args[16]}",
             "${args[17]}",
             ${message.author.id},
-            ${args[19]}
-            ');`;
+            ${args[18]});`;
             //console.log(sql);
             logger.info(`[form] upload SQL query: ${sql}`);
             connection.query(sql, function (err, result) {
