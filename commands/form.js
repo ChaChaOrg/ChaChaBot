@@ -6,25 +6,29 @@ exports.run = (client, connection, P, message, args) => {
 
     try {
         if (args[0].includes("list")) {
-            throw "Work in Progress";
+            //throw "Work in Progress";
             logger.info("[form] Listing forms for " + args[1]);
-            let sql = 'SELECT form FROM pokeForms WHERE species = ' + args[1];
+            let sql = 'SELECT form FROM pokeForms WHERE species = \'' + args[1] + '\'';
             logger.info("[form] List sql query");
             connection.query(sql, function (err, result) {
                 if (err) {
                     logger.error(err);
+                    console.log("list error");
                     throw err;
                 }
                 logger.info("[form] sql query successful");
                 if (result.length <= 0) {
                     logger.info("[form] no forms found");
+                    console.log("no forms");
                     message.reply("No forms were found for that species.");
                 } else {
                     logger.info("[form] forms found");
+                    console.log("forms found");
                     let output = "The " + args[1] + "species has the following forms: ";
                     for (let i = 0; i < result.length; i++) {
                         output += result[i];
                     }
+                    console.log("Forms: " + results);
                     message.reply(output);
                 }
             });
@@ -71,6 +75,8 @@ exports.run = (client, connection, P, message, args) => {
         }
     } catch (error){
         logger.error("[form] " + error.message);
+        console.log(error);
+        console.log(error.message);
         message.channel.send(error.message);
 	}
     
