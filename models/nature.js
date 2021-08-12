@@ -69,15 +69,19 @@ Nature.prototype.assignNature = function (pokemon, nature) {
 Nature.prototype.assignRandNature = function (pokemon) {
     logger.info("[nature] Assigning random nature.")
     //x-coord for nature
+    //these temp vars are the reason genpoke was messing up the nature
     let natureXCoord = Math.floor((Math.random() * NATURE_ARRAY_MAX)); //val between 0-4 for array
     //y-coord for nature
     let natureYCoord = Math.floor((Math.random() * NATURE_ARRAY_MAX));
-
+    console.log(natureXCoord + ", " + natureYCoord);
+    //assign selected nature
+    //temp var issue can be corrected by going through assignNature like this
+    this.assignNature(pokemon, NATURE_NAMES[natureXCoord][natureYCoord]);
     //assign nature to final val
-    this.natureFinal = NATURE_NAMES[natureXCoord][natureYCoord];
-
+    //this.natureFinal = NATURE_NAMES[natureXCoord][natureYCoord];
+    //console.log(this.natureFinal);
     //update attributes based on nature
     //if xcoord = ycoord, no changes, otherwise adjusting...
-    this.calculateNatureStats(pokemon, natureXCoord, natureYCoord);
-
+    //this.calculateNatureStats(pokemon, natureXCoord, natureYCoord);
+    //this.calculateNatureStats(pokemon);
 };
