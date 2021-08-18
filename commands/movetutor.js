@@ -1,80 +1,154 @@
-const logger = require('../logs/logger.js');
-// JavaScript Document
+//take in move name, print out all dc's , probably need to skim a database for pp count
+//maybe take evolution stage into account
+
+const databaseURL = "https://bulbapedia.bulbagarden.net/wiki/List_of_moves";
+const PPINDEX = 11;
+const logs = require('../logs/logger.js');
+
+//help messages
+const MOVETUTOR_HELP = "" +
+	"The command to check the Train Pokemon DC to learn a new move." +
+	"\n\nTo learn a move: `+movetutor [Move_Name (Use _'s for spaces)]`" +
+	"\n\nTo learn a skill: `+movetutor Skillpoint [PokeName] [IntMod] [SkillName]`";
 
 exports.run = (client, connection, P, message, args) => {
-	//message.channel.send('Bang! <:gunspurr:356191158017196032>').catch(console.error);
 
-	//+movetutor [PokemonName] [EvoLeft (2 for 3-stage, 1 for 2-stage, 0 for no more evo)] [Move Name] [Move PP] [Successes (1-5)]
+	let https = require('https');
+	let jsdom = require('jsdom');
 
-	//if asking for help, gib help
-	if (args[0].includes('help')) {
-		logger.info("[movetutor] Sending help message.")
-		message.channel.send("The command to check the Train Pokemon DC to learn a new move.\n\n+movetutor [PokeName] [MoveName (with no spaces plz)] [MovePP] [Successes(0-5)]\n\nTo learn a skill: +movetutor [PokeName] [IntMod] Skill [SkillName]\n\nTo get evo bonuses: +movetutor evolution").catch(console.error);
+	if (args.length < 1) {
+		logs.info("[movetutor] Blank message sent, alerting user");
+		message.reply("Not enough arguments given. Please try again- make sure to use _ for spaces in moves!");
 		return;
-	} else if (args[0].includes('evolution')) {
-		logger.info("[movetutor] Sending evolution tip message.")
-		message.channel.send("A Pokémon that has never evolved gains a +5 bonus to this check, \
-			and a Pokémon that has evolved once gains a +2 bonus, since it is easier to learn moves at earlier stages. \
-			However, this only applies if the evolutions can learn the same moves. \
-			If a Pokémon is a middle stage and its previous stage does not learn the move, \
-			it still gains a +5 bonus. The same applies if it is fully evolved. \
-			If it is in a final stage and only the middle stage can learn the moves, \
-			it gains a +2 bonus but not the +5. If it is in its final stage and neither previous stage learned the move, \
-			the +5 bonus is still retained. This bonus also applies when a Pokémon is trying to use a move in battle, \
-			as do all other bonuses except the change in ability modifier and user of the move.").catch(console.error);
+	} else if(args[0].includes('help')) {
+		logs.info("[movetutor] Sending help message");
+		message.reply(MOVETUTOR_HELP);
 		return;
-	} else if (args[2].toLowerCase().includes('skill')) { //check if asking for a skill; if so, return skill dc
-		var skillDC = 20 - args[1];
-		logger.info("[movetutor] " + `The DC for ${args[0]} to learn the ${args[3]} skill is ${skillDC}.`)
-		message.channel.send(`The DC for ${args[0]} to learn the ${args[3]} skill is ${skillDC}.`).catch(console.error);
+	} else if ( args[0].toLowerCase().includes('skillpoint')) { //check if asking for a skill; if so, return skill dc
+		logs.info("[movetutor] Skill tutor calculations");
+		var skillDC = 20 - args[2];
+		message.reply(`The DC for ${args[1]} to learn the ${args[3]} skill is ${skillDC}.`).catch(console.error);
 		return;
 	} else {
-
-		//otherwise get ready to rumble
-
-		try {
-			//pokemon name
-			var pokeName = args[0];
-			//pokemon evolutionary stage; 2 = 3 forms to max, 1 = 2 forms to max, 0 = does not evolve/ one-stage
-			var moveName = args[1];
-			//move pp
-			var movePP = args[2];
-			//number of successes on learning the move
-			var successes = parseInt(args[3]);
-
-			//base DCs for checks
-			var baseDC = [20, 17, 15, 13, 10, 8];
-			//formula for checking DC
-			var formulaMod = 8 - Math.round(parseInt(movePP) / 5);
-
-			//final DC
-			var finalDC = 0;
-
-			//get final DC
-			//if success = 0-2, out-of-battle, so (baseDC) + (2 * formMod)
-			if (successes < 3) {
-				finalDC = baseDC[successes] + formulaMod;
-				logger.info("[movetutor] " + `The DC for ${pokeName} to learn ${moveName} is ${finalDC}.\
-					\n\nUse your normal Train Pokemon skill to practice this move outside of battle.`)
-				message.channel.send(`The DC for ${pokeName} to learn ${moveName} is ${finalDC}.\
-					\n\nUse your normal Train Pokemon skill to practice this move outside of battle.`).catch(console.error);
-				if (successes === 2) {
-					message.channel.send("Note: if you succeed on this check and your Pokemon already knows four moves, you must forget one to make space for this new one!");
-				}
-			} else { //if 3+, in-battle, so (baseDC + formMod)
-				finalDC = baseDC[successes] + formulaMod;
-				logger.info("[movetutor] " + `The DC for ${pokeName} to learn ${moveName} is ${finalDC}.\
-					\n\nWhen rolling, use a Train Pokemon check, but utilizing the Pokemon's INT mod instead of your CHA mod.\
-					This check must be attempted while in a battle.`)
-				message.channel.send(`The DC for ${pokeName} to learn ${moveName} is ${finalDC}.\
-				\n\nWhen rolling, use a Train Pokemon check, but utilizing the Pokemon's INT mod instead of your CHA mod.\
-				 This check must be attempted while in a battle.`);
+		logs.info("[movetutor] Move tutor calculations");
+		//var request = new XMLHttpRequest();
+		logs.info("[movetutor] Sending https request");
+		https.get(databaseURL, (response) =>{
+			if(response.statusCode == 200){
+				
+				var rawData = '';
+				response.on('data', (incdat) => {
+					rawData += incdat;
+				});
+				
+				response.on('end', () => {					
+					logs.info("[movetutor] Response recieved");
+					let workingName = "";
+					let wordArray = args[0].split("_");
+					for (let i = 0; i < wordArray.length; i++) {
+						let word = wordArray[i].toLowerCase();
+						workingName += word.replace(word.charAt(0), word.charAt(0).toUpperCase());
+						workingName += " ";
+					}
+					console.log("End of Space manipulation: " + workingName.trim());
+					wordArray = workingName.trim().split("-");
+					workingName = "";
+					for (let i = 0; i < wordArray.length; i++) {
+						let word = wordArray[i];
+						workingName += word.replace(word.charAt(0), word.charAt(0).toUpperCase());
+						workingName += "-";
+					}
+					console.log("End of - manipulation: " + workingName);
+					let moveName = workingName.substring(0, workingName.length - 1);
+					if (moveName.indexOf("-") > 0) {
+						console.log("- move detected, checking special cases.");
+						console.log("Move: " + moveName);
+						if (moveName.toLowerCase() === "u-turn") {
+							console.log("U-turn detected.");
+							moveName = "U-turn";
+						}
+						if (moveName.toLowerCase() === "v-create") {
+							moveName = "V-create";
+						}
+						if (moveName.toLowerCase() === "trick-or-treat") {
+							moveName = "Trick-or-Treat";
+                        }
+                    }
+					//moveName = moveName.replace("_", " ");					
+					//var selectorString = ":contains('" + moveName + "')";
+					//console.log(response);
+					let dom = new jsdom.JSDOM(rawData);
+					//let parser = new DOMParser();
+					//let document = parser.parseFromString(rawData, "text/html");//some DOM thing to access the page
+					let document = dom.window.document;
+					//console.log(document);
+					//console.log(response.data);
+					let cell = document.querySelectorAll("a[title*=\"" + moveName + "\"]");
+					//var row = $(selectorString).parentNode;
+					if(cell && cell.length > 0){
+						let row = cell[0].parentNode.parentNode;
+						//console.log(row + "\n");
+						//console.log("Number of Children in row: " + row.childNodes.length);
+						let ppCell = row.childNodes[PPINDEX];
+						let pp = ppCell.innerHTML;//read pp from
+						if(pp && !Number.isNaN(pp)){
+							logs.info("[movetutor] Calculating DC");
+							let DCs = [20, 17, 15, 13, 10, 8];
+							pp = parseInt(pp);
+							let dcAdjust = 8-Math.round(pp/5);
+							let output = "";
+							if(args.length >= 2 && args[1].includes("origin")){
+								logs.info("[movetutor] Adjusting to original formula");
+								DCs = [20 + dcAdjust, 17 + dcAdjust, 15 + dcAdjust, 15, 13, 10]; 
+							}
+							
+							for(let i = 0; i < DCs.length; i++){
+								DCs[i] += dcAdjust;
+							}
+							logs.info("[movetutor] Displaying results");
+							output += "**" + moveName + " Training**\n\n";
+							logs.info("[movetutor] Displaying results");
+							output += "**Out of Combat Checks** (Checks 1-3)\n";
+							output += "Use your trainer's CHA modifier for these checks.\n";
+							output += "```First DC: " + DCs[0] + " // " + "Second DC: " + DCs[1] + " // " + "Third" +
+								" DC:" +
+								" " + DCs[2] + "```\n";
+							output += "**In Combat Checks** (Checks 4-6)\n";
+							output += "Replace your trainer's CHA modifier with your pokemon's INT modifier (*or 0 if" +
+								" it's negative*) for these checks.\n";
+							output += "```First DC: " + DCs[3] + " // " + "Second DC: " + DCs[4] + " // " + "Third" +
+								" DC:" +
+								" " + DCs[5] + "```\n";
+							output += ":small_blue_diamond: **First Evolutionary Stage** gets **+5** to the check if" +
+								" it's the first stage that can learn the move\n";
+							output += ":small_orange_diamond: **Second Evolutionary Stage** gets **+2** to the check" +
+								" if it's the second evolution" +
+								" stage that can learn" +
+								" the move.\n";
+							message.reply(output);
+						}else{
+							logs.error("[movetutor] " + moveName + " found, could not locate pp value");
+							message.reply("Could not find pp of move: " + moveName);
+						}		
+					}else{
+						logs.error("[movetutor] Unable to find the move " + moveName);
+						message.reply("Could not find move: " + moveName + "\n Please double check your spelling," +
+							" especially if the move has a - in it.");
+					}
+				});
+				
+							
+			}else{
+				//message.channel.send("Couldn't connect to move list(" + databaseURL + ").");
+				logs.error("[movetutor] Couldn't connect to move database on bulbapedia, response code: " + response);
+				message.reply("Couldn't connect to move list.");
+				//console.log("response code: " + response);
 			}
-
-		} catch (error) {
-			logger.error("[movetutor] " + error.message)
-			message.channel.send("ChaCha machine :b:roke :^(").catch(console.error);
-			message.channel.send(error.message);
-		}
+		});
+		//request.open('GET', "https://bulbapedia.bulbagarden.net/wiki/List_of_moves", false);
+		//request.send(null);
+		
+		
 	}
+
 }
