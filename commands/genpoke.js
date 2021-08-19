@@ -55,7 +55,7 @@ module.exports.run = (client, connection, P, message, args) => {
 	}
 
 	// if no fourth argument was given, set the species to the form
-	if (args[3] === undefined) {
+	if (args[3] === undefined || args[3] === null) {
 		args.splice(3, 0, args[0]);
 	}
 

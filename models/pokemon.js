@@ -283,16 +283,37 @@ Pokemon.prototype.assignMoves = function () {
     // make a blank move for use later if needed
     let blankMove = new Moveset.Move();
 
+    // function to verify that a move is learned via level-up & at the pokemon's level or lower
+    let verifyLevelUp = function (move) {
+        // grab two newest appearances
+        let newestAppearance = move.version_group_details.length - 1;
+        let secondNewestAppearance = move.version_group_details.length -2;
+        // variables for checking em out
+        let learnMethod = "";
+        let levelLearned = 101;
+        let secondLearnMethod = "";
+        let secondLevelLearned = 101;
+
+        if (secondNewestAppearance < 0) { // if there's only one appearance, use that
+            learnMethod = move.version_group_details[newestAppearance].move_learn_method.name;
+            levelLearned = move.version_group_details[newestAppearance].level_learned_at;
+            if (learnMethod === "level-up" && levelLearned <= vgLevel) { legalMoves.push(move) }
+
+        } else { // otherwise, use both!
+            learnMethod = move.version_group_details[newestAppearance].move_learn_method.name;
+            levelLearned = move.version_group_details[newestAppearance].level_learned_at;
+            secondLearnMethod = move.version_group_details[secondNewestAppearance].move_learn_method.name;
+            secondLevelLearned = move.version_group_details[secondNewestAppearance].level_learned_at;
+            if ((learnMethod === "level-up" && levelLearned <= vgLevel) || (secondLearnMethod === "level-up" && secondLevelLearned <= vgLevel)) { legalMoves.push(move) }
+        }
+    }
+
     // find all moves that can legally be learned by the pokemon
     this.pokemonData.moves.forEach(nextMove =>
     {
-        let newestAppearance = nextMove.version_group_details.length - 1;
-        let secondNewestAppearance = nextMove.version_group_details.length -2;
-        let learnMethod = nextMove.version_group_details[newestAppearance].move_learn_method.name;
-        let levelLearned = nextMove.version_group_details[newestAppearance].level_learned_at;
-        let secondLearnMethod = nextMove.version_group_details[secondNewestAppearance].move_learn_method.name;
-        let secondLevelLearned = nextMove.version_group_details[secondNewestAppearance].level_learned_at;
-        if ((learnMethod === "level-up" && levelLearned <= vgLevel) || (secondLearnMethod === "level-up" && secondLevelLearned <= vgLevel)) { legalMoves.push(nextMove) }
+        // use the verifyMove function to stow the move if it's gucci
+        verifyLevelUp(nextMove);
+
     })
 
     // if there aren't enough moves to fill out the known moves, grab the ones that do exist
@@ -326,10 +347,19 @@ Pokemon.prototype.assignMoves = function () {
 }
 
 // capitalize words
-
 let capitalizeWord = function (tempWord) {
   return tempWord.charAt(0).toUpperCase() + tempWord.substr(1);
 };
+
+// camel case function
+// convert the input array to title case
+function toTitleCase(str) {
+    return str.replace(
+        /\w\S*/g,
+        function(txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        });
+}
 
 // format dashed stuff nicely
 let fixAbilityOrMoveFormatting = function (tempWord, middle) {
@@ -338,28 +368,16 @@ let fixAbilityOrMoveFormatting = function (tempWord, middle) {
         if (~tempWord.indexOf("-")) {
             // if the word is only a dash, return it
             if (tempWord === "-") return tempWord;
-            let tempA = tempWord.slice(0, tempWord.indexOf("-"));
-            let tempB = tempWord.slice(
-                tempWord.indexOf("-") + 1,
-                tempWord.length
-            );
-            tempA = capitalizeWord(tempA);
-            tempB = capitalizeWord(tempB);
-            tempWord = tempA + middle + tempB;
+            // otherwise replace the dashes with the requested middle!
+            tempWord = tempWord.replace("-", middle);
         } else if (~tempWord.indexOf(" ")) {
-            let tempA = tempWord.slice(0, tempWord.indexOf(" "));
-            let tempB = tempWord.slice(
-                tempWord.indexOf(" ") + 1,
-                tempWord.length
-            );
-            tempA = capitalizeWord(tempA);
-            tempB = capitalizeWord(tempB);
-            tempWord = tempA + middle + tempB;
+            tempWord = tempWord.replace(" ", middle)
         } else tempWord = capitalizeWord(tempWord);
     } catch (oops) {
         return tempWord;
     }
-    return tempWord;
+    //camel case the word before going out
+    return toTitleCase(tempWord);
 }
 
 // assign four moves at random based on given level

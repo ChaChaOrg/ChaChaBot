@@ -20,6 +20,18 @@ exports.run = (client, connection, P, message, args) => {
     // check if asking for manual (2 args)
 
     if (args.length === 2) {
+
+        // function to verify that given args are numbers
+        function isNumber(n) { return /^-?[\d.]+(?:e-?\d+)?$/.test(n); }
+
+        // check if either arguments are not numbers; if they put non-numbers in then get outta here
+        if (!isNumber(args[0]) || !isNumber(args[1])) {
+            logger.info("[ranger] Non-number arguments given. Sending error message.");
+            message.reply("Please provide number arguments only: the Pokemon's Dex mod, followed by their catch" +
+                " rate.").catch (console.error);
+            return;
+        }
+
         //the Pokemon's dex mod
         let dexmod = parseFloat(args[0]);
         //the Pokemon's catch rate
@@ -66,7 +78,7 @@ exports.run = (client, connection, P, message, args) => {
         else {
             // check if the user is allowed to edit the Pokemon. If a Pokemon is private, the user's discord ID must match the Pokemon's creator ID
             if (response[0].private > 0 && message.author.id !== response[0].discordID) {
-                logger.info("[modpoke] Detected user attempting to edit private Pokemon that isn't their own.")
+                logger.info("[modpoke] Detected user attempting to access private Pokemon.")
                 // If user found a pokemon that was marked private and belongs to another user, act as if the pokemon doesn't exist in messages
                 message.reply(notFoundMessage);
                 return;
