@@ -1,6 +1,21 @@
 const logger = require('../logs/logger.js');
 
-const HELP_MESSAGE = "Lists all Pokemon you can see.\n\nYou can view these in more comprehensive detail at the **ChaCha Database Site:** http://34.226.119.6:7000/";
+// emotes to put at start of each string
+// created by someone else
+const otherCreator = ":small_blue_diamond:";
+// created by you
+const userCreator = ":large_orange_diamond:";
+
+//chacha database site
+const CHACHA_SITE = " **ChaCha Database Site:** http://34.226.119.6:7000/";
+
+const HELP_MESSAGE = "Lists all Pokemon you can see. `+listpoke` lists all Pokemon that are public or visible only" +
+    " to you , while you can add a filter word & keyword afterwords to filter specific Pokemon.\n\n" +
+    "**Current Filters:** \n - Species (*ie Talonflame, meowth-af*)\n - Type (*ie Fire, Flying*)\n - DiscordID" +
+    "*(unique number for user- use `+myid` to get your ID if you don't know it)*" +
+    "\n\nSample: `+listpoke species Talonflame`" +
+    "\n\nYou can view these in more comprehensive detail" +
+    " at the" + CHACHA_SITE;
 
 // the first page that the user can be on
 const FIRST_PAGE_NUM = 1;
@@ -8,12 +23,10 @@ const FIRST_PAGE_NUM = 1;
 // the max number of pokemon that can be on one page
 const MAX_POKES = 15;
 
-// emotes to put at start of each string
 
-// created by someone else
-const otherCreator = ":small_blue_diamond:";
-// created by you
-const userCreator = ":large_orange_diamond:";
+const filterOptions = ["species", "type", "discordid"];
+const FILTER_NOT_FOUND = "Whoops! Either you didn't give enough arguments, or that filter wasn't found.\n**Current" +
+    " Filters:** Species, Type, DiscordID";
 
 /**
  * listpoke looks at the user's discord ID and displays all pokemon in the SQL they can see
@@ -29,14 +42,14 @@ module.exports.run = (client, connection, P, message, args) => {
 
     try {
 
-        // if there are arguments involved, check what they are
-        if (args.length > 0) {
+        // if there are less than 2 args, they either need help or didn't put enough info in
+        if (args.length < 2 && args.length > 0) {
             if (args[0].includes('help')) {
                 logger.info("[listpoke] Sending help message.");
                 message.reply(HELP_MESSAGE);
             } else {
-                logger.info("[listpoke] Sending 'Whoops! Sorry, no filtering options available at this time.'");
-                message.reply("Whoops! Sorry, no filtering options available at this time.");
+                logger.info("[listpoke] Filter option not found or not enough args. Sending error message");
+                message.reply(FILTER_NOT_FOUND);
             }
         } else {
             // if you're here, it's time to create an array/pages to hold and display pokemon
@@ -75,22 +88,78 @@ module.exports.run = (client, connection, P, message, args) => {
                 let promises = [];
                 // for each pokemon to be created, go through a promise
                 new Promise(function (resolve) {
+
+                    // lock in whatever filter was entered, if any
+                    let filterChoice = "none";
+                    if (args[0]) filterChoice = args[0].toLowerCase();
+                    let filterCriteria = "none";
+                    if (args[1]) filterCriteria = args[1].toLowerCase();
+
                     // go through each pokemon, creating their summary string and adding it to the array of pokes to be displayed
                     result.forEach(pokemon => {
                         // only add the pokemon if they are private BUT belong to the user, or are public
                         if (pokemon.discordID === message.author.id || pokemon.private === 0) {
-                            // push the promise of fetching the user to the outside promise array
-                            promises.push(client.fetchUser(pokemon.discordID)
-                                .then(function (response) {
-                                    // create the pokestring and add it to the array
-                                    pokeArray.push(getPokeString(pokemon));
-                                })
-                                .catch(error => {
-                                    // if you're here, there was an issue pushing the pokemon into the list
-                                    let pushPokeError = "Error while converting Pokemon into summary message.";
-                                    logger.error("[listpoke] " + error + "\n" + pushPokeError);
-                                    message.reply(pushPokeError);
-                                }));
+                            // walk through each filter
+                            if (filterChoice === filterOptions[0]) { // filter by species
+                                // only grab the pokemon IF either species or form matches
+                                if (pokemon.species.toLowerCase() === filterCriteria || pokemon.form.name === filterCriteria) {
+                                    // push the promise of fetching the user to the outside promise array
+                                    promises.push(client.fetchUser(pokemon.discordID)
+                                        .then(function (response) {
+                                            // create the pokestring and add it to the array
+                                            pokeArray.push(getPokeString(pokemon));
+                                        })
+                                        .catch(error => {
+                                            // if you're here, there was an issue pushing the pokemon into the list
+                                            let pushPokeError = "Error while converting Pokemon into summary message.";
+                                            logger.error("[listpoke] " + error + "\n" + pushPokeError);
+                                            message.reply(pushPokeError);
+                                        }));
+                                }
+                            } else if (filterChoice === filterOptions[1]) { // filter by type
+                                if (pokemon.type1.toLowerCase() === filterCriteria || pokemon.type2.toLowerCase() === filterCriteria) {
+                                    // push the promise of fetching the user to the outside promise array
+                                    promises.push(client.fetchUser(pokemon.discordID)
+                                        .then(function (response) {
+                                            // create the pokestring and add it to the array
+                                            pokeArray.push(getPokeString(pokemon));
+                                        })
+                                        .catch(error => {
+                                            // if you're here, there was an issue pushing the pokemon into the list
+                                            let pushPokeError = "Error while converting Pokemon into summary message.";
+                                            logger.error("[listpoke] " + error + "\n" + pushPokeError);
+                                            message.reply(pushPokeError);
+                                        }));
+                                }
+                            } else if (filterChoice === filterOptions[2]) { // filter by discord id
+                                if (pokemon.discordID === filterCriteria) {
+                                    // push the promise of fetching the user to the outside promise array
+                                    promises.push(client.fetchUser(pokemon.discordID)
+                                        .then(function (response) {
+                                            // create the pokestring and add it to the array
+                                            pokeArray.push(getPokeString(pokemon));
+                                        })
+                                        .catch(error => {
+                                            // if you're here, there was an issue pushing the pokemon into the list
+                                            let pushPokeError = "Error while converting Pokemon into summary message.";
+                                            logger.error("[listpoke] " + error + "\n" + pushPokeError);
+                                            message.reply(pushPokeError);
+                                        }));
+                                }
+                            } else { // if you're here, they didn't request any filters
+                                // push the promise of fetching the user to the outside promise array
+                                promises.push(client.fetchUser(pokemon.discordID)
+                                    .then(function (response) {
+                                        // create the pokestring and add it to the array
+                                        pokeArray.push(getPokeString(pokemon));
+                                    })
+                                    .catch(error => {
+                                        // if you're here, there was an issue pushing the pokemon into the list
+                                        let pushPokeError = "Error while converting Pokemon into summary message.";
+                                        logger.error("[listpoke] " + error + "\n" + pushPokeError);
+                                        message.reply(pushPokeError);
+                                    }));
+                            }
                         }
                     });
                     Promise.all(promises).then(function () {
@@ -162,27 +231,6 @@ module.exports.run = (client, connection, P, message, args) => {
                             pokeEmbedPages.push(embedPage(pokeTempArray, currentPageNum));
                             pokeTempArray = [];
                         }
-
-                        // post pages
-                        /*
-                        message.channel.send(embedPage[0]).then(currentPage => {
-                            // add front/back reactions
-                            currentPage.react('⬅️').then(r => {
-                               currentPage.react('➡️');
-                            });
-
-                            // ================ BACKWARDS FILTER / LISTENER ================
-                            const backFilter = (reaction, user) => reaction.emoji.name === '⬅️' && user.id === message.author.id;
-                            const backwards = currentPage.createReactionCollector(backFilter, {timer: 10000});
-
-                            // ================ FORWARDS FILTER / LISTENER ================
-                            const forwardFilter = (reaction, user) => reaction.emoji.name === '➡️️' && user.id === message.author.id;
-                            const forwards = currentPage.createReactionCollector(forwardFilter, {timer: 10000});
-
-
-
-                        });
-                        */
 
                         // TODO turn this into page flipping variant later
                         message.author.send("Here are the Pokemon you can view." +

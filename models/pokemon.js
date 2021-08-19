@@ -287,9 +287,12 @@ Pokemon.prototype.assignMoves = function () {
     this.pokemonData.moves.forEach(nextMove =>
     {
         let newestAppearance = nextMove.version_group_details.length - 1;
+        let secondNewestAppearance = nextMove.version_group_details.length -2;
         let learnMethod = nextMove.version_group_details[newestAppearance].move_learn_method.name;
         let levelLearned = nextMove.version_group_details[newestAppearance].level_learned_at;
-        if (learnMethod === "level-up" && levelLearned <= vgLevel) { legalMoves.push(nextMove) }
+        let secondLearnMethod = nextMove.version_group_details[secondNewestAppearance].move_learn_method.name;
+        let secondLevelLearned = nextMove.version_group_details[secondNewestAppearance].level_learned_at;
+        if ((learnMethod === "level-up" && levelLearned <= vgLevel) || (secondLearnMethod === "level-up" && secondLevelLearned <= vgLevel)) { legalMoves.push(nextMove) }
     })
 
     // if there aren't enough moves to fill out the known moves, grab the ones that do exist
