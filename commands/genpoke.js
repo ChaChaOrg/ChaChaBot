@@ -42,7 +42,7 @@ module.exports.run = (client, connection, P, message, args) => {
 		return;
 	}
 
-	if (args.length < 4) {
+	if (args.length < 3) {
 		logger.info("[genpoke] Sending not enough arguments warning.");
 		message.channel.send("You haven't provided enough arguments. Should be " + CMD_TEMPLATE)
 		return;
@@ -52,6 +52,11 @@ module.exports.run = (client, connection, P, message, args) => {
 		logger.warn("[showpoke] User put special character in pokemon name, sending warning.");
 		message.reply("Please do not use special characters when using generating Pokemon.");
 		return;
+	}
+
+	// if no fourth argument was given, set the species to the form
+	if (args[3] === undefined || args[3] === null) {
+		args.splice(3, 0, args[0]);
 	}
 
 	try {

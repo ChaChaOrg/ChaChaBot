@@ -16,7 +16,6 @@ let fs = require('fs');
 
 
 
-
 module.exports = Pokemon;
 
 /**
@@ -101,6 +100,9 @@ Pokemon.prototype.init = function (connection, P) {
         this.statBlock.calculateStats(this);
         //console.log("Calculating Saves");
         this.statBlock.calculateSaves(this);
+
+        // calculate random moves
+          this.assignMoves();
 
         console.log("Pokemon Initialization Sequence Complete!");
         logger.info("[pokemon] Pokemon Initialization Sequence Complete!");
@@ -269,18 +271,125 @@ Pokemon.prototype.assignShiny = function () {
   this.shiny = Math.floor(Math.random() * SHINY_CHANCE + 1) >= SHINY_CHANCE;
 };
 
-// capitalize words
+// assign random moves based on level
+logger.info("[pokemon] Assigning random moves based on level");
+Pokemon.prototype.assignMoves = function () {
 
+    // video game level
+    let vgLevel = this.level * 5;
+
+    //moves the pokemon can legally learn
+    let legalMoves = [];
+    // make a blank move for use later if needed
+    let blankMove = new Moveset.Move();
+
+    // function to verify that a move is learned via level-up & at the pokemon's level or lower
+    let verifyLevelUp = function (move) {
+        // grab two newest appearances
+        let newestAppearance = move.version_group_details.length - 1;
+        let secondNewestAppearance = move.version_group_details.length -2;
+        // variables for checking em out
+        let learnMethod = "";
+        let levelLearned = 101;
+        let secondLearnMethod = "";
+        let secondLevelLearned = 101;
+
+        if (secondNewestAppearance < 0) { // if there's only one appearance, use that
+            learnMethod = move.version_group_details[newestAppearance].move_learn_method.name;
+            levelLearned = move.version_group_details[newestAppearance].level_learned_at;
+            if (learnMethod === "level-up" && levelLearned <= vgLevel) { legalMoves.push(move) }
+
+        } else { // otherwise, use both!
+            learnMethod = move.version_group_details[newestAppearance].move_learn_method.name;
+            levelLearned = move.version_group_details[newestAppearance].level_learned_at;
+            secondLearnMethod = move.version_group_details[secondNewestAppearance].move_learn_method.name;
+            secondLevelLearned = move.version_group_details[secondNewestAppearance].level_learned_at;
+            if ((learnMethod === "level-up" && levelLearned <= vgLevel) || (secondLearnMethod === "level-up" && secondLevelLearned <= vgLevel)) { legalMoves.push(move) }
+        }
+    }
+
+    // find all moves that can legally be learned by the pokemon
+    this.pokemonData.moves.forEach(nextMove =>
+    {
+        // use the verifyMove function to stow the move if it's gucci
+        verifyLevelUp(nextMove);
+
+    })
+
+    // if there aren't enough moves to fill out the known moves, grab the ones that do exist
+    if (legalMoves.length < 4) {
+        try {
+            console.log("moveloop");
+            this.moveSet.move1 = legalMoves[0];
+            this.moveSet.move2 = legalMoves[1];
+            this.moveSet.move3 = legalMoves[2];
+            this.moveSet.move4 = legalMoves[3];
+        } catch (e) {
+            if (!this.moveSet.move2) this.moveSet.move2 = blankMove;
+            if (!this.moveSet.move3) this.moveSet.move3 = blankMove;
+            if (!this.moveSet.move4) this.moveSet.move4 = blankMove;
+        }
+    } else{//roll four random numbers between 0 & # of moves found
+        let moveRoller = [];
+
+        //
+        while (moveRoller.length < 4) {
+            let randMove = Math.floor(Math.random() * legalMoves.length);
+            if (moveRoller.indexOf(randMove) === -1) moveRoller.push(randMove);
+        }
+
+        // for each random number picked, assign!
+        this.moveSet.move1 = legalMoves[moveRoller[0]];
+        this.moveSet.move2 = legalMoves[moveRoller[1]];
+        this.moveSet.move3 = legalMoves[moveRoller[2]];
+        this.moveSet.move4 = legalMoves[moveRoller[3]];
+    }
+}
+
+// capitalize words
 let capitalizeWord = function (tempWord) {
   return tempWord.charAt(0).toUpperCase() + tempWord.substr(1);
 };
+
+// camel case function
+// convert the input array to title case
+function toTitleCase(str) {
+    return str.replace(
+        /\w\S*/g,
+        function(txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        });
+}
+
+// format dashed stuff nicely
+let fixAbilityOrMoveFormatting = function (tempWord, middle) {
+    // set up formatted ability name
+    try {
+        if (~tempWord.indexOf("-")) {
+            // if the word is only a dash, return it
+            if (tempWord === "-") return tempWord;
+            // otherwise replace the dashes with the requested middle!
+            tempWord = tempWord.replace("-", middle);
+        } else if (~tempWord.indexOf(" ")) {
+            tempWord = tempWord.replace(" ", middle)
+        } else tempWord = capitalizeWord(tempWord);
+    } catch (oops) {
+        return tempWord;
+    }
+    //camel case the word before going out
+    return toTitleCase(tempWord);
+}
+
+// assign four moves at random based on given level
+
 
 // =========== EMBED ===========
 
 Pokemon.prototype.sendSummaryMessage = function (client) {
   // set up formatted ability name
   let tempAbility = this.ability.name;
-  if (~tempAbility.indexOf("-")) {
+  let tempAbilityURL = this.ability.name;
+  /* if (~tempAbility.indexOf("-")) {
     let tempA = tempAbility.slice(0, tempAbility.indexOf("-"));
     let tempB = tempAbility.slice(
       tempAbility.indexOf("-") + 1,
@@ -289,7 +398,9 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
     tempA = capitalizeWord(tempA);
     tempB = capitalizeWord(tempB);
     tempAbility = tempA + " " + tempB;
-  } else tempAbility = capitalizeWord(tempAbility);
+  } else tempAbility = capitalizeWord(tempAbility);*/
+    tempAbility = fixAbilityOrMoveFormatting(tempAbility, " ");
+    tempAbilityURL = "https://bulbapedia.bulbagarden.net/wiki/" + fixAbilityOrMoveFormatting(tempAbility, "_");
 
   // if the ability is hidden, append a lil O to it
   if (this.ability.isHiddenAbility) tempAbility = tempAbility.concat(" (HA)");
@@ -307,7 +418,55 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
     logger.error("[pokemon] Pokemon thumbnail URL was not found, using 404 image.");
   }
 
+  // set shiny to yes or no based on the boolean
   let shiny = this.shiny ? "yes" : "no";
+
+  // grab all the stored moves
+  let moves = [this.moveSet.move1,this.moveSet.move2,this.moveSet.move3,this.moveSet.move4,this.moveSet.move5];
+  let movesURL = [this.moveSet.move1,this.moveSet.move2,this.moveSet.move3,this.moveSet.move4,this.moveSet.move5];
+
+  for (let i = 0; i < moves.length; i++) {
+      if (!moves[i] || moves[i] === "undefined") {
+        moves[i] = "-";
+      } else if ((typeof moves[i] === 'object' && moves[i] !== null) || moves[i] === undefined) {
+          try {moves[i] = fixAbilityOrMoveFormatting(moves[i].move.name, " ");
+          } catch (e) {
+              moves[i] = '-';
+          }
+      } else {
+          try {moves[i] = fixAbilityOrMoveFormatting(moves[i], " ");
+          } catch (e) {
+              moves[i] = '-';
+          }
+      }
+  }
+
+    for (let i = 0; i < movesURL.length; i++) {
+        if (!movesURL[i] || movesURL[i] === "undefined") {
+            movesURL[i] = "-";
+        } else if ((typeof movesURL[i] === 'object' && movesURL[i] !== null) || movesURL[i] === undefined) {
+            try {movesURL[i] = fixAbilityOrMoveFormatting(movesURL[i].move.name, "_");
+            } catch (e) {
+                movesURL[i] = '-';
+            }
+        } else {
+            try {movesURL[i] = fixAbilityOrMoveFormatting(movesURL[i], "_");
+            } catch (e) {
+                movesURL[i] = '-';
+            }
+        }
+        movesURL[i] = "https://bulbapedia.bulbagarden.net/wiki/" + movesURL[i];
+    }
+
+
+  let fullName = "";
+
+  // check if species and name are the same; don't display twice if not
+    if (this.species.toLowerCase() === this.form.toLowerCase()) {
+        fullName = capitalizeWord(this.species);
+    } else {
+        fullName = capitalizeWord(this.species) + " (" + capitalizeWord(this.form) + ")";
+    }
 
   return {
     embed: {
@@ -316,7 +475,7 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
         name: client.user.username,
         icon_url: client.user.avatarURL,
       },
-      title: `Level ${this.level} ${tempSpecies} ~ ${this.name}`,
+      title: `Level ${this.level} ${fullName} ~ ${this.name}`,
       url: `https://bulbapedia.bulbagarden.net/wiki/${this.species}_(Pok%C3%A9mon)`,
       thumbnail: {
         url: thumbnail_url,
@@ -327,7 +486,8 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
       fields: [
         {
           name: "Basic Info",
-          value: `**Ability:** ${tempAbility} | **Gender:** ${this.gender} \n**Nature: ** ${this.nature.natureFinal} | **Shiny: ** ${shiny}\n**Type 1:** ${capitalizeWord(this.type1)} **Type 2:** ${capitalizeWord(this.type2)}\n=================`,
+          value: `**Ability:** [${tempAbility}](${tempAbilityURL}) | **Gender:** ${this.gender} \n**Nature: ** ${this.nature.natureFinal} | ` +
+              `**Shiny: ** ${shiny}\n**Type 1:** [${capitalizeWord(this.type1)}](https://bulbapedia.bulbagarden.net/wiki/${this.type1}_(type)) **Type 2:** [${capitalizeWord(this.type2)}](https://bulbapedia.bulbagarden.net/wiki/${this.type2}_(type))\n=================`,
         },
         {
           name: "HP",
@@ -353,6 +513,14 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
           name: "Speed",
           value: `**IV: ** ${this.statBlock.ivStats[5]} |  **EV: ** ${this.statBlock.evStats[5]} | **Final: ** ${this.statBlock.finalStats[5]}\n=================`,
         },
+          {
+              name: "Moves",
+              value: `[${moves[0]}](${movesURL[0]}) | ` +
+                  `[${moves[1]}](${movesURL[1]}) | ` +
+                  `[${moves[2]}](${movesURL[2]}) | ` +
+                  `[${moves[3]}](${movesURL[3]}) ` +
+                  `\n **In Progress: ** [${moves[4]}](${movesURL[4]}), ${this.moveSet.moveProgress}/6\n=================`,
+          },
         {
           name: "Ability Scores",
           value: `**STR: ** ${this.statBlock.strBase.toFixed(0)}(${this.statBlock.strMod
@@ -368,7 +536,7 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
         },
         {
           name: "AC & Move Speed",
-          value: `**AC: ** ${this.statBlock.armorClass} | **Move Speed: ** ${this.statBlock.moveSpeed} ft\n\n((NOTE - AC does *not* include Size Bonus, which you can find based on the Pokemon's height and [this chart](https://www.d20pfsrd.com/BASICS-ABILITY-SCORES/GLOSSARY/#Size)`,
+          value: `**AC: ** ${this.statBlock.armorClass} | **Move Speed: ** ${this.statBlock.moveSpeed} ft\n\n((NOTE - AC does *not* include Size Bonus, which you can find based on the Pokemon's height and [this chart](https://www.d20pfsrd.com/BASICS-ABILITY-SCORES/GLOSSARY/#Size) ))`,
         },
       ],
       timestamp: new Date(),
@@ -383,7 +551,20 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
 // =========== Upload ===========
 
 Pokemon.prototype.uploadPokemon = function (connection, message) {
-  let sql = `INSERT INTO pokemon (name, species, form, level, nature, gender, ability, type1, type2, shiny, 
+  let finalMoveList = [this.moveSet.move1,this.moveSet.move2,this.moveSet.move3,this.moveSet.move4,this.moveSet.move5];
+  for (i = 0; i < 5; i++) {
+      try {
+          if (!finalMoveList[i]) {
+              finalMoveList[i] = "-"
+          } else {
+              finalMoveList[i] = finalMoveList[i].move.name;
+          }
+      } catch (e) {
+          finalMoveList[i] = "-";
+      }
+  }
+
+    let sql = `INSERT INTO pokemon (name, species, form, level, nature, gender, ability, type1, type2, shiny, 
         hp, atk, def, spa, spd, spe, 
         hpIV, atkIV, defIV, spaIV, spdIV, speIV, 
         hpEV, atkEV, defEV, spaEV, spdEV, speEV, 
@@ -418,11 +599,11 @@ Pokemon.prototype.uploadPokemon = function (connection, message) {
         ${this.statBlock.evStats[SPA_ARRAY_INDEX]},
         ${this.statBlock.evStats[SPD_ARRAY_INDEX]},
         ${this.statBlock.evStats[SPE_ARRAY_INDEX]},
-        "${this.moveSet.move1.name}",
-        "${this.moveSet.move2.name}",
-        "${this.moveSet.move3.name}",
-        "${this.moveSet.move4.name}",
-        "${this.moveSet.move5.name}",
+        "${finalMoveList[0]}",
+        "${finalMoveList[1]}",
+        "${finalMoveList[2]}",
+        "${finalMoveList[3]}",
+        "${finalMoveList[4]}",
         ${this.moveSet.moveProgress},
         "${this.originalTrainer}",
         ${message.author.id},
@@ -762,9 +943,6 @@ Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
             }.bind(this));
         }.bind(this))
 }
-
-
-
 
 Pokemon.prototype.loadFromSQL = function (connection, P, sqlObject) {
     return new Promise(
