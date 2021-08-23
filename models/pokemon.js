@@ -14,6 +14,8 @@ let Moveset = require("./moveset.js");
 let Statblock = require("./statblock.js");
 let fs = require('fs');
 
+const MIN_EXP = 0;
+
 
 
 module.exports = Pokemon;
@@ -52,12 +54,15 @@ function Pokemon(tempSpecies, tempLevel, tempName, tempform) {
   //Pokemon's Statblock
   this.statBlock = new Statblock();
 
+  // pokemon's exp
+    this.exp = MIN_EXP;
+
   //hidden ability percentile
   this.haChance = 0;
 
   this.moveSet = new Moveset.MoveSet();
 
-  this.originalTrainer = "";
+  this.originalTrainer = "Wild";
 
   let date = new Date();
   this.dateCreated = date.toISOString().slice(0, 19).replace("T", " ");
@@ -69,6 +74,8 @@ function Pokemon(tempSpecies, tempLevel, tempName, tempform) {
     this.speciesData = undefined;
   this.private = true;
   this.speciesData = undefined;
+
+  this.campaign = "None";
 
 
 }
@@ -389,16 +396,6 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
   // set up formatted ability name
   let tempAbility = this.ability.name;
   let tempAbilityURL = this.ability.name;
-  /* if (~tempAbility.indexOf("-")) {
-    let tempA = tempAbility.slice(0, tempAbility.indexOf("-"));
-    let tempB = tempAbility.slice(
-      tempAbility.indexOf("-") + 1,
-      tempAbility.length
-    );
-    tempA = capitalizeWord(tempA);
-    tempB = capitalizeWord(tempB);
-    tempAbility = tempA + " " + tempB;
-  } else tempAbility = capitalizeWord(tempAbility);*/
     tempAbility = fixAbilityOrMoveFormatting(tempAbility, " ");
     tempAbilityURL = "https://bulbapedia.bulbagarden.net/wiki/" + fixAbilityOrMoveFormatting(tempAbility, "_");
 
@@ -468,6 +465,18 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
         fullName = capitalizeWord(this.species) + " (" + capitalizeWord(this.form) + ")";
     }
 
+    //add + to stat list if positive, do nothing if negative
+    let addPlusOrNah = function (num) {
+        if (num > 0) return "+" + num;
+        else return num;
+    }
+
+    let saveStats = [
+        addPlusOrNah(this.statBlock.fortSave),
+        addPlusOrNah(this.statBlock.refSave),
+        addPlusOrNah(this.statBlock.willSave)
+    ]
+
   return {
     embed: {
       color: 3447003,
@@ -487,7 +496,9 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
         {
           name: "Basic Info",
           value: `**Ability:** [${tempAbility}](${tempAbilityURL}) | **Gender:** ${this.gender} \n**Nature: ** ${this.nature.natureFinal} | ` +
-              `**Shiny: ** ${shiny}\n**Type 1:** [${capitalizeWord(this.type1)}](https://bulbapedia.bulbagarden.net/wiki/${this.type1}_(type)) **Type 2:** [${capitalizeWord(this.type2)}](https://bulbapedia.bulbagarden.net/wiki/${this.type2}_(type))\n=================`,
+              `**Shiny: ** ${shiny} ` + `\n**OT:** ${this.originalTrainer} | **Campaign:** ${this.campaign}` +
+              `\n**Type 1:** [${capitalizeWord(this.type1)}](https://bulbapedia.bulbagarden.net/wiki/${this.type1}_(type))` +
+              `**Type 2:** [${capitalizeWord(this.type2)}](https://bulbapedia.bulbagarden.net/wiki/${this.type2}_(type))\n=================`,
         },
         {
           name: "HP",
@@ -532,7 +543,7 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
         },
         {
           name: "Saving Throws",
-          value: `**FORT: ** +${this.statBlock.fortSave} | **REF: ** +${this.statBlock.refSave} | **WILL: ** +${this.statBlock.willSave}`,
+          value: `**FORT: ** ${saveStats[0]} | **REF: ** ${saveStats[1]} | **WILL: ** ${saveStats[2]}`,
         },
         {
           name: "AC & Move Speed",
@@ -567,9 +578,9 @@ Pokemon.prototype.uploadPokemon = function (connection, message) {
     let sql = `INSERT INTO pokemon (name, species, form, level, nature, gender, ability, type1, type2, shiny, 
         hp, atk, def, spa, spd, spe, 
         hpIV, atkIV, defIV, spaIV, spdIV, speIV, 
-        hpEV, atkEV, defEV, spaEV, spdEV, speEV, 
+        hpEV, atkEV, defEV, spaEV, spdEV, speEV, exp,
         move1, move2, move3, move4, move5, moveProgress, 
-        originalTrainer, discordID, private, dateCreated) 
+        originalTrainer, discordID, private, dateCreated,campaign) 
         VALUES (
         "${this.name}",
         "${this.species}",
@@ -599,6 +610,7 @@ Pokemon.prototype.uploadPokemon = function (connection, message) {
         ${this.statBlock.evStats[SPA_ARRAY_INDEX]},
         ${this.statBlock.evStats[SPD_ARRAY_INDEX]},
         ${this.statBlock.evStats[SPE_ARRAY_INDEX]},
+        ${this.exp},
         "${finalMoveList[0]}",
         "${finalMoveList[1]}",
         "${finalMoveList[2]}",
@@ -608,7 +620,8 @@ Pokemon.prototype.uploadPokemon = function (connection, message) {
         "${this.originalTrainer}",
         ${message.author.id},
         ${this.private},
-        '${this.dateCreated}');`;
+        '${this.dateCreated}',
+        "${this.campaign}")`
   //console.log(sql);
   logger.info(`[pokemon] upload SQL query: ${sql}`);
   connection.query(sql, function (err, result) {
@@ -659,13 +672,17 @@ Pokemon.prototype.updatePokemon = function (connection, message, pokePrivate) {
             spaEV = ${this.statBlock.evStats[SPA_ARRAY_INDEX]},
             spdEV = ${this.statBlock.evStats[SPD_ARRAY_INDEX]},
             speEV = ${this.statBlock.evStats[SPE_ARRAY_INDEX]},
+            exp = ${this.exp},
+            
             move1 = "${this.moveSet.move1.name}",
             move2 = "${this.moveSet.move2.name}",
             move3 = "${this.moveSet.move3.name}",
             move4 = "${this.moveSet.move4.name}",
             move5 = "${this.moveSet.move5.name}",
             moveProgress = ${this.moveSet.moveProgress},
-            private = ${pokePrivate}
+            private = ${pokePrivate},
+            
+            campaign = ${this.campaign}
          WHERE name = "${this.name}";`;
 
   //console.log(sql);
@@ -991,6 +1008,8 @@ Pokemon.prototype.loadFromSQL = function (connection, P, sqlObject) {
                         sqlObject.speIV,
                     ];
 
+                    this.exp = sqlObject.exp;
+
                     this.moveSet.move1 = sqlObject.move1;
                     this.moveSet.move2 = sqlObject.move2;
                     this.moveSet.move3 = sqlObject.move3;
@@ -999,6 +1018,8 @@ Pokemon.prototype.loadFromSQL = function (connection, P, sqlObject) {
                     this.moveSet.moveProgress = sqlObject.moveProgress;
 
                     this.originalTrainer = sqlObject.originalTrainer;
+
+                    this.campaign = sqlObject.campaign;
 
                     if (sqlObject.shiny != null) {
                         this.shiny = sqlObject.shiny;
@@ -1014,26 +1035,9 @@ Pokemon.prototype.loadFromSQL = function (connection, P, sqlObject) {
                     console.log("Calculating Stats of " + this.name);
                     logger.info("[pokemon] Calculating stats of " + this.name);
 
-                    //this.statBlock.finalStats[HP_ARRAY_INDEX] = sqlObject.hp;
-                    //this.statBlock.finalStats[ATK_ARRAY_INDEX] = sqlObject.atk;
-                    //this.statBlock.finalStats[DEF_ARRAY_INDEX] = sqlObject.def;
-                    //this.statBlock.finalStats[SPA_ARRAY_INDEX] = sqlObject.spa;
-                    //this.statBlock.finalStats[SPD_ARRAY_INDEX] = sqlObject.spd;
-                    //this.statBlock.finalStats[SPE_ARRAY_INDEX] = sqlObject.spe;
-
                     // calculate stats and saves before re-assigning actual stats
                     this.statBlock.calculateStats(this);
                     this.statBlock.calculateSaves(this);
-
-                    // We WANT the stats to be recalculated. This was originally used to keep track of health.
-                    //
-                    //assign again to make sure you have true inside-sql values
-                    //this.statBlock.finalStats[HP_ARRAY_INDEX] = sqlObject.hp;
-                    //this.statBlock.finalStats[ATK_ARRAY_INDEX] = sqlObject.atk;
-                    //this.statBlock.finalStats[DEF_ARRAY_INDEX] = sqlObject.def;
-                    //this.statBlock.finalStats[SPA_ARRAY_INDEX] = sqlObject.spa;
-                    //this.statBlock.finalStats[SPD_ARRAY_INDEX] = sqlObject.spd;
-                    //this.statBlock.finalStats[SPE_ARRAY_INDEX] = sqlObject.spe;
 
                     resolve("Stats calculated.");
                 }.bind(this)
