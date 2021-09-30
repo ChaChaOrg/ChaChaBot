@@ -10,6 +10,8 @@ exports.run = (client, connection, P, message, args) => {
             logger.info("[form] Listing forms for " + args[1]);
             let sql = 'SELECT form FROM pokeForms WHERE species = \'' + args[1] + '\'';
             logger.info("[form] List sql query");
+            //insert api search here
+            //javascript node.js promise
             connection.query(sql, function (err, result) {
                 if (err) {
                     logger.error(err);
@@ -66,9 +68,30 @@ exports.run = (client, connection, P, message, args) => {
                     throw err;
                 }
                 console.log("1 record inserted");
-                logger.info("[form] upload SQL was successful.")
+                logger.info("[form] upload SQL was successful.");
+                message.reply("Your new form for " + args[1] +" was successfully added.");
             });
-        } else {
+        } else if(args[0].includes("remove")){
+            //in future, may want to add a confirmation step to the deletion process
+            if (args.length != 3) {
+                throw "Please include the species the form belongs to and the name of the form to remove.";
+            }
+            logger.info("[form] Removing form");
+            let sql = `DELETE FROM pokeForms WHERE species='` + args[1] + `' AND form=` + args[2] + `;`;
+            connection.query(sql, function (err, result) {
+                if (err) {
+                    logger.error(err);
+                    throw err;
+                }
+                if (result.affectedRows == 0) {
+                    logger.info("[form] No form to delete");
+                    message.reply("There were no forms matching your selection.");
+                } else {
+                    logger.info("[form] " + result.affectedRows + " form(s) removed.");
+                    message.reply(result.affectedRows + " forms were removed from the database.");
+                }
+            });
+        }else{
             //help command
             logger.info("[form] Help message");
             message.reply(helpMessage + listMessage + addMessage);
