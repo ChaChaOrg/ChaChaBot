@@ -36,7 +36,9 @@ function Pokemon(tempSpecies, tempLevel, tempName, tempform) {
   //assign name and species
   this.name = tempName;
   this.species = tempSpecies;
-  this.form = tempform;
+  if(tempform === null)
+      this.form = this.species;
+  else this.form = tempform;
 
   //level
   if (tempLevel > 0 && tempLevel <= 100)
@@ -701,6 +703,10 @@ Pokemon.prototype.importPokemon = function (connection, P, importString) {
   this.name = nameLineVals[0]; //First word is always the name or the species;
   nameLineVals.forEach((element) => {
     if (element.charAt(0) === "(") {
+        if (nameLineVals.length < 3)
+        {
+            throw error;
+        }
       nameArgs.push(element.substr(1, element.length - 2));
     }
   });
@@ -837,15 +843,16 @@ Pokemon.prototype.importPokemon = function (connection, P, importString) {
         case "Jolly":
         case "Naive":
         case "Serious": {
-          natureLineVals = element.split(" ");
-          this.nature.assignNature(this, natureLineVals[0]);
-          break;
+            natureLineVals = element.split(" ");
+            this.nature.assignNature(this, natureLineVals[0]);
+            break;
         }
+
       }
     }.bind(this)
   );
 
-  return this.getPokemonAndSpeciesData(P).then(
+  return this.getPokemonAndSpeciesData(connection, P).then(
     //assign types, base states and then calculate those Stats
     function (response) {
       this.assignTypes();
@@ -912,6 +919,7 @@ Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
                 // List Forms, including default
                 //
                 if (found === 0) {
+                    this.form = this.species;
                     P.getPokemonSpeciesByName(this.species.toLowerCase())
                         .then(function (response) {
                             this.speciesData = response;
