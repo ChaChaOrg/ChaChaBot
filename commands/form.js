@@ -82,39 +82,54 @@ exports.run = (client, connection, P, message, args) => {
                 throw "Incorrect number of arguments to add the form.";
             }
             let species = args[1].toLowerCase();
-            logger.info("[form] Adding new form");
-            let sql = `INSERT INTO pokeForms (species, form, ability1, ability2, ability3, hpBST, atkBST, defBST, spaBST, spdBST, speBST, type1, type2, genderRate, captureRate, eggGroup1, eggGroup2, discordID, private) 
-            VALUES (
-            "${species}",
-            "${args[2]}",
-            "${args[3]}",
-            "${args[4]}",
-            "${args[5]}",
-            ${args[6]},
-            ${args[7]},
-            ${args[8]},
-            ${args[9]},
-            ${args[10]},
-            ${args[11]},
-            "${args[12]}",
-            "${args[13]}",
-            ${args[14]},
-            ${args[15]},
-            "${args[16]}",
-            "${args[17]}",
-            ${message.author.id},
-            ${args[18]});`;
-            //console.log(sql);
-            logger.info(`[form] upload SQL query: ${sql}`);
-            connection.query(sql, function (err, result) {
+            let check = `SELECT * from pokeForms WHERE species = \'` + species + `\' AND form = \'` + args[2] + `\'`;
+            logger.info('[from] Checking database for new form.');
+            connection.query(check, function (err, result) {
                 if (err) {
                     logger.error(err);
                     throw err;
                 }
-                console.log("1 record inserted");
-                logger.info("[form] upload SQL was successful.");
-                message.reply("Your new form for " + args[1] +" was successfully added.");
+                if (result.length == 0) {
+                    //proceed normally
+                    logger.info("[form] Adding new form");
+                    let sql = `INSERT INTO pokeForms (species, form, ability1, ability2, ability3, hpBST, atkBST, defBST, spaBST, spdBST, speBST, type1, type2, genderRate, captureRate, eggGroup1, eggGroup2, discordID, private) 
+                    VALUES (
+                    "${species}",
+                    "${args[2]}",
+                    "${args[3]}",
+                    "${args[4]}",
+                    "${args[5]}",
+                    ${args[6]},
+                    ${args[7]},
+                    ${args[8]},
+                    ${args[9]},
+                    ${args[10]},
+                    ${args[11]},
+                    "${args[12]}",
+                    "${args[13]}",
+                    ${args[14]},
+                    ${args[15]},
+                    "${args[16]}",
+                    "${args[17]}",
+                    ${message.author.id},
+                    ${args[18]});`;
+                    //console.log(sql);
+                    logger.info(`[form] upload SQL query: ${sql}`);
+                    connection.query(sql, function (err, result) {
+                        if (err) {
+                            logger.error(err);
+                            throw err;
+                        }
+                        console.log("1 record inserted");
+                        logger.info("[form] upload SQL was successful.");
+                        message.reply("Your new form for " + args[1] + " was successfully added.");
+                    });
+                } else {
+                    logger.info('[form] New form already exists.');
+                    message.reply("That form already exists.");
+                }
             });
+            
         } else if(args[0].includes("remove")){
             //in future, may want to add a confirmation step to the deletion process
             if (args.length != 3) {
