@@ -862,7 +862,7 @@ Pokemon.prototype.importPokemon = function (connection, P, importString) {
     }.bind(this)
   );
 
-  return this.getPokemonAndSpeciesData(P).then(
+  return this.getPokemonAndSpeciesData(connection, P).then(
     //assign types, base states and then calculate those Stats
     function (response) {
       this.assignTypes();
