@@ -348,6 +348,8 @@ module.exports.run = (client, connection, P, message, args) => {
             } else
               tempMove = tempMove.charAt(0).toUpperCase() + tempMove.slice(1);
 
+            let moveHungerCost = (8 - moveData.pp / 5) + 1;
+            
             let combatEmbedString = {
               embed: {
                 color: 3447003,
@@ -379,7 +381,7 @@ module.exports.run = (client, connection, P, message, args) => {
                   {
                     name: `${tempMove} Info`,
                     value: `**Move Info:** ${capitalizeWord(moveData.damage_class.name)} ${capitalizeWord(moveData.type.name)} Attack` +
-                        `\n**Base Power:** ${moveData.power} pw\n**Damage Roll:** ${dice} (${diceRolled})`,
+                        `\n**Base Power:** ${moveData.power} pw\n**Damage Roll:** ${dice} (${diceRolled})\n**Hunger Cost:** ${moveHungerCost}`,
                   },
                 ],
                 timestamp: new Date(),
