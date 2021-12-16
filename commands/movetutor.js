@@ -77,7 +77,8 @@ exports.run = (client, connection, P, message, args) => {
 					}
 					if (args.length > 1) {
 						for (let i = 1; i < args.length; i++) {
-							moveName += " " + args[i];
+							let word = args[i];
+							moveName += " " + word.replace(word.charAt(0), word.charAt(0).toUpperCase());
 						}
 					}
 
@@ -132,14 +133,14 @@ exports.run = (client, connection, P, message, args) => {
 								" if it's the second evolution" +
 								" stage that can learn" +
 								" the move.\n";
-							message.reply(output);
+							message.channel.send(output);
 						}else{
 							logs.error("[movetutor] " + moveName + " found, could not locate pp value");
-							message.reply("Could not find pp of move: " + moveName);
+							message.channel.send("Could not find pp of move: " + moveName);
 						}		
 					}else{
 						logs.error("[movetutor] Unable to find the move " + moveName);
-						message.reply("Could not find move: " + moveName + "\n Please double check your spelling," +
+						message.channel.send("Could not find move: " + moveName + "\n Please double check your spelling," +
 							" especially if the move has a - in it.");
 					}
 				});
@@ -148,7 +149,7 @@ exports.run = (client, connection, P, message, args) => {
 			}else{
 				//message.channel.send("Couldn't connect to move list(" + databaseURL + ").");
 				logs.error("[movetutor] Couldn't connect to move database on bulbapedia, response code: " + response);
-				message.reply("Couldn't connect to move list.");
+				message.channel.send("Couldn't connect to move list.");
 				//console.log("response code: " + response);
 			}
 		});
