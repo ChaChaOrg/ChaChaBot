@@ -5,24 +5,34 @@ const databaseURL = "https://bulbapedia.bulbagarden.net/wiki/List_of_moves";
 const PPINDEX = 11;
 const logs = require('../logs/logger.js');
 
+//help messages
+const MOVETUTOR_HELP = "" +
+	"The command to check the Train Pokemon DC to learn a new move." +
+	"\n\nTo learn a move: `+movetutor [Move_Name (Use _'s for spaces)]`" +
+	"\n\nTo learn a skill: `+movetutor Skillpoint [PokeName] [IntMod] [SkillName]`";
+
 exports.run = (client, connection, P, message, args) => {
 
 	let https = require('https');
 	let jsdom = require('jsdom');
-	
-	if(args[0].includes('help')){
-		logs.info("[neomovetutor] Sending help message");
-		message.channel.send("The command to check the Train Pokemon DC to learn a new move.\n\n+neomovetutor [MoveName (Use _'s for spaces plz)]\n\nTo learn a skill: +neomovetutor Skillpoint [PokeName] [IntMod] [SkillName]\n")
+
+	if (args.length < 1) {
+		logs.info("[movetutor] Blank message sent, alerting user");
+		message.reply("Not enough arguments given. Please try again- make sure to use _ for spaces in moves!");
 		return;
-	}if ( args[0].toLowerCase().includes('skillpoint')) { //check if asking for a skill; if so, return skill dc
-		logs.info("[neomovetutor] Skill tutor calculations");
+	} else if(args[0].includes('help')) {
+		logs.info("[movetutor] Sending help message");
+		message.reply(MOVETUTOR_HELP);
+		return;
+	} else if ( args[0].toLowerCase().includes('skillpoint')) { //check if asking for a skill; if so, return skill dc
+		logs.info("[movetutor] Skill tutor calculations");
 		var skillDC = 20 - args[2];
-		message.channel.send(`The DC for ${args[1]} to learn the ${args[3]} skill is ${skillDC}.`).catch(console.error);
+		message.reply(`The DC for ${args[1]} to learn the ${args[3]} skill is ${skillDC}.`).catch(console.error);
 		return;
 	} else {
-		logs.info("[neomovetutor] Move tutor calculations");
+		logs.info("[movetutor] Move tutor calculations");
 		//var request = new XMLHttpRequest();
-		logs.info("[neomovetutor] Sending https request");
+		logs.info("[movetutor] Sending https request");
 		https.get(databaseURL, (response) =>{
 			if(response.statusCode == 200){
 				
@@ -32,10 +42,10 @@ exports.run = (client, connection, P, message, args) => {
 				});
 				
 				response.on('end', () => {					
-					logs.info("[neomovetutor] Response recieved");
+
+					logs.info("[movetutor] Response recieved");
 					let workingName = "";
 					let wordArray = args[0].split("_");
-
 					for (let i = 0; i < wordArray.length; i++) {
 						let word = wordArray[i].toLowerCase();
 						workingName += word.replace(word.charAt(0), word.charAt(0).toUpperCase());
@@ -70,6 +80,7 @@ exports.run = (client, connection, P, message, args) => {
 							moveName += " " + args[i];
 						}
 					}
+
 					//moveName = moveName.replace("_", " ");					
 					//var selectorString = ":contains('" + moveName + "')";
 					//console.log(response);
@@ -88,45 +99,56 @@ exports.run = (client, connection, P, message, args) => {
 						let ppCell = row.childNodes[PPINDEX];
 						let pp = ppCell.innerHTML;//read pp from
 						if(pp && !Number.isNaN(pp)){
-							logs.info("[neomovetutor] Calculating DC");
+							logs.info("[movetutor] Calculating DC");
 							let DCs = [20, 17, 15, 13, 10, 8];
 							pp = parseInt(pp);
 							let dcAdjust = 8-Math.round(pp/5);
 							let output = "";
 							if(args.length >= 2 && args[1].includes("origin")){
-								logs.info("[neomovetutor] Adjusting to original formula");
+								logs.info("[movetutor] Adjusting to original formula");
 								DCs = [20 + dcAdjust, 17 + dcAdjust, 15 + dcAdjust, 15, 13, 10]; 
 							}
 							
 							for(let i = 0; i < DCs.length; i++){
 								DCs[i] += dcAdjust;
 							}
-							logs.info("[neomovetutor] Displaying results");
+							logs.info("[movetutor] Displaying results");
 							output += "**" + moveName + " Training**\n\n";
+							logs.info("[movetutor] Displaying results");
 							output += "**Out of Combat Checks** (Checks 1-3)\n";
-							output += "Use your trainer's cha modifier for these checks.\n";
-							output += "```First DC: " + DCs[0] + ", " + "Second DC: " + DCs[1] + ", " + "Third DC: " + DCs[2] + "```\n\n";
+							output += "Use your trainer's CHA modifier for these checks.\n";
+							output += "```First DC: " + DCs[0] + " // " + "Second DC: " + DCs[1] + " // " + "Third" +
+								" DC:" +
+								" " + DCs[2] + "```\n";
 							output += "**In Combat Checks** (Checks 4-6)\n";
-							output += "Replace your trainer's cha modifier with your pokemon's int modifier (or 0 if it's negative) for these checks.\n";
-							output += "```First DC: " + DCs[3] + ", " + "Second DC: " + DCs[4] + ", " + "Third DC: " + DCs[5] + "```\n\n";
-							output += "You get a +5 to the check if it's the first evolution stage that can learn the move.\n";
-							output += "You get a +2 to the check if it's the second evolution stage that can learn the move.\n";
-							message.channel.send(output);
+							output += "Replace your trainer's CHA modifier with your pokemon's INT modifier (*or 0 if" +
+								" it's negative*) for these checks.\n";
+							output += "```First DC: " + DCs[3] + " // " + "Second DC: " + DCs[4] + " // " + "Third" +
+								" DC:" +
+								" " + DCs[5] + "```\n";
+							output += ":small_blue_diamond: **First Evolutionary Stage** gets **+5** to the check if" +
+								" it's the first stage that can learn the move\n";
+							output += ":small_orange_diamond: **Second Evolutionary Stage** gets **+2** to the check" +
+								" if it's the second evolution" +
+								" stage that can learn" +
+								" the move.\n";
+							message.reply(output);
 						}else{
-							logs.error("[neomovetutor] " + moveName + " found, could not locate pp value");
-							message.channel.send("Could not find pp of move: " + moveName);
+							logs.error("[movetutor] " + moveName + " found, could not locate pp value");
+							message.reply("Could not find pp of move: " + moveName);
 						}		
 					}else{
-						logs.error("[neomovetutor] Unable to find the move " + moveName);
-						message.channel.send("Could not find move: " + moveName + "\n Please double check your spelling, especially if the move has a - in it.");
+						logs.error("[movetutor] Unable to find the move " + moveName);
+						message.reply("Could not find move: " + moveName + "\n Please double check your spelling," +
+							" especially if the move has a - in it.");
 					}
 				});
 				
 							
 			}else{
 				//message.channel.send("Couldn't connect to move list(" + databaseURL + ").");
-				logs.error("[neomovetutor] Couldn't connect to move database on bulbapedia, response code: " + response);
-				message.channel.send("Couldn't connect to move list.");
+				logs.error("[movetutor] Couldn't connect to move database on bulbapedia, response code: " + response);
+				message.reply("Couldn't connect to move list.");
 				//console.log("response code: " + response);
 			}
 		});

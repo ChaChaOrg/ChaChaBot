@@ -58,7 +58,7 @@ Move.prototype.createFromName = function (moveName, P) {
         return P.getMoveByName(moveName)
             .then(function (response) {
                 logger.info("[moveset] Got move by name, setting fields.")
-                moveData = response;
+                let moveData = response;
                 this.name = moveData["name"];
                 this.basePower = moveData["power"];
                 this.accuracy = moveData["accuracy"];

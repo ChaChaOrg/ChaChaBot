@@ -91,7 +91,16 @@ exports.run = (client, connection, P, message, args) => {
     //check if asking for help
     if (species === 'help') {
         logger.info("[genpokelegacy] Sending help message.")
-        message.reply('New Pokemon Generator. Variables in order:\n [Pokemon Name] [Level] [Base HP] [Base Atk] [Base Def] [Base SpA] [Base SpD] [Base Speed] [\% Male] [Number of Abilities Available (including hidden abilities)] [Size Bonus] [Hidden Ability % (optional)]').catch(console.error);
+        message.reply(':warning: HEY, THIS IS OLD! USE `+genpoke` to create a pokemon way easier.:warning:\n\n New' +
+            ' Pokemon' +
+            ' Generator.' +
+            ' Variables in order:\n' +
+            ' [Pokemon' +
+            ' Name]' +
+            ' [Level]' +
+            ' [Base' +
+            ' HP] [Base' +
+            ' Atk] [Base Def] [Base SpA] [Base SpD] [Base Speed] [\% Male] [Number of Abilities Available (including hidden abilities)] [Size Bonus] [Hidden Ability % (optional)]').catch(console.error);
         return;
     }
 

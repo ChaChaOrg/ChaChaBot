@@ -1,5 +1,5 @@
 var assert = require('assert');
-var neodmg = require('../commands/neodamage.js');
+var neodmg = require('../commands/damage.js');
 var pokedex = require('pokedex-promise-v2');
 
 describe('+neodamage', function () {
