@@ -135,15 +135,15 @@ exports.run = (client, connection, P, message, args) => {
             if (args.length != 3) {
                 throw "Please include the species the form belongs to and the name of the form to remove.";
             }
-            message.reply("Are you sure you want to delete this form? Confrim with  or cancel with .").then(function (response) {
-                response.react('');
-                response.react('');
+            message.reply("Are you sure you want to delete this form? Confrim with ✅ or cancel with ❌.").then(function (response) {
+                response.react('✅');
+                response.react('❌');
 
-                const filter = (reaction, user) => user.id === message.author.id && (reaction.emoji.name === '' || reaction.emoji.name === '');
+                const filter = (reaction, user) => user.id === message.author.id && (reaction.emoji.name === '✅' || reaction.emoji.name === '❌');
 
                 response.awaitReactions(filter, { max: 1, time: 100000 }).then(collected => {
 
-                    if (collected.first().emoji.name === '') {
+                    if (collected.first().emoji.name === '✅') {
                         logger.info("[form] Removing form");
                         let sql = `DELETE FROM pokeForms WHERE species='` + args[1] + `' AND form=` + args[2] + `;`;
                         connection.query(sql, function (err, result) {
