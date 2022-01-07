@@ -133,7 +133,7 @@ exports.run = (client, connection, P, message, args) => {
         } else if(args[0].includes("remove")){
             //in future, may want to add a confirmation step to the deletion process
             if (args.length != 3) {
-                throw "Please include the species the form belongs to and the name of the form to remove.";
+                throw { message: "Please include the species the form belongs to and the name of the form to remove." };
             }
             message.reply("Are you sure you want to delete this form? Confrim with ✅ or cancel with ❌.").then(function (response) {
                 response.react('✅');
@@ -145,7 +145,7 @@ exports.run = (client, connection, P, message, args) => {
 
                     if (collected.first().emoji.name === '✅') {
                         logger.info("[form] Removing form");
-                        let sql = `DELETE FROM pokeForms WHERE species='` + args[1] + `' AND form=` + args[2] + `;`;
+                        let sql = `DELETE FROM pokeForms WHERE species='` + args[1] + `' AND form='` + args[2] + `';`;
                         connection.query(sql, function (err, result) {
                             if (err) {
                                 logger.error(err);
