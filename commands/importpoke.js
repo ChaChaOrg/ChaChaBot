@@ -1,9 +1,11 @@
+//Discord Command Handler
+//Passes all information into the pokemon object
+
 const logger = require('../logs/logger.js');
 
 module.exports.run = (client, connection, P, message, args) => {
     let Pokemon = require('../models/pokemon.js');
     let importPoke = new Pokemon();
-
     let importContent = message.content.substr("+pokeimport ".length, message.content.length - "+pokeimport ".length);
 
     if (args.length == 0 || args[0] === "help") {

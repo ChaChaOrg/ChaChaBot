@@ -712,6 +712,7 @@ Pokemon.prototype.importPokemon = function (connection, P, importString) {
   let ivLineVals;
   let nameArgs = [];
 
+
   //
   //Interprets the name line
   //
@@ -749,6 +750,8 @@ Pokemon.prototype.importPokemon = function (connection, P, importString) {
   } else if (nameArgs.length === 0) {
     this.species = nameLineVals[0];
   }
+
+  this.form = this.species
 
   lines.forEach(
     function (element) {
