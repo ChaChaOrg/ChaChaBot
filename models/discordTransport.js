@@ -7,20 +7,18 @@ const util = require('util');
 //
 
 
-module.exports = class YourCustomTransport extends Transport {
+module.exports = class DiscordResponse extends Transport {
     constructor(opts) {
         super(opts);
-        this.level = opts["level"];
-        this.message = opts["message"];
         this.client = opts["client"];
     }
 
     log(info, callback) {
         setImmediate(() => {
             this.emit('logged', info);
+            client.channels.get("504089094331039764").send(`ERROR:  + ${info}`);
+            if(message != null) message.send("");
         });
-
-        client.channels.get("504089094331039764").send("");
         callback();
     }
 };

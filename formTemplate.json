@@ -1,0 +1,294 @@
+{
+  "abilities": [
+    {
+      "ability": {
+        "name": null,
+        "url": null
+      },
+      "is_hidden": false,
+      "slot": 1
+    },
+    {
+      "ability": {
+        "name": null,
+        "url": null
+      },
+      "is_hidden": false,
+      "slot": 2
+    },
+    {
+      "ability": {
+        "name": null,
+        "url": null
+      },
+      "is_hidden": false,
+      "slot": 3
+    }
+  ],
+  "base_experience": 234,
+  "forms": [
+    {
+      "name": null,
+      "url": null
+    }
+  ],
+  "game_indices": [],
+  "height": null,
+  "held_items": [],
+  "id": null,
+  "is_default": null,
+  "location_area_encounters": null,
+  "moves": [
+    {
+      "move": {
+        "name": null,
+        "url": null
+      },
+      "version_group_details": [
+        {
+          "level_learned_at": null,
+          "move_learn_method": {
+            "name": null,
+            "url": null
+          },
+          "version_group": {
+            "name": null,
+            "url": null
+          }
+        }
+      ]
+    }
+  ],
+  "name": null,
+  "order": null,
+  "species": {
+    "name": null,
+    "url": null
+  },
+  "sprites": {
+    "back_default": "https://wiki.p-insurgence.com/images/0/09/722.png",
+    "back_female": "https://wiki.p-insurgence.com/images/0/09/722.png",
+    "back_shiny": "https://wiki.p-insurgence.com/images/0/09/722.png",
+    "back_shiny_female": "https://wiki.p-insurgence.com/images/0/09/722.png",
+    "front_default": "https://wiki.p-insurgence.com/images/0/09/722.png",
+    "front_female": "https://wiki.p-insurgence.com/images/0/09/722.png",
+    "front_shiny": "https://wiki.p-insurgence.com/images/0/09/722.png",
+    "front_shiny_female": "https://wiki.p-insurgence.com/images/0/09/722.png",
+    "other": {
+      "dream_world": {
+        "front_default": null,
+        "front_female": null
+      },
+      "official-artwork": {
+        "front_default": null
+      }
+    },
+    "versions": {
+      "generation-i": {
+        "red-blue": {
+          "back_default": null,
+          "back_gray": null,
+          "front_default": null,
+          "front_gray": null
+        },
+        "yellow": {
+          "back_default": null,
+          "back_gray": null,
+          "front_default": null,
+          "front_gray": null
+        }
+      },
+      "generation-ii": {
+        "crystal": {
+          "back_default": null,
+          "back_shiny": null,
+          "front_default": null,
+          "front_shiny": null
+        },
+        "gold": {
+          "back_default": null,
+          "back_shiny": null,
+          "front_default": null,
+          "front_shiny": null
+        },
+        "silver": {
+          "back_default": null,
+          "back_shiny": null,
+          "front_default": null,
+          "front_shiny": null
+        }
+      },
+      "generation-iii": {
+        "emerald": {
+          "front_default": null,
+          "front_shiny": null
+        },
+        "firered-leafgreen": {
+          "back_default": null,
+          "back_shiny": null,
+          "front_default": null,
+          "front_shiny": null
+        },
+        "ruby-sapphire": {
+          "back_default": null,
+          "back_shiny": null,
+          "front_default": null,
+          "front_shiny": null
+        }
+      },
+      "generation-iv": {
+        "diamond-pearl": {
+          "back_default": null,
+          "back_female": null,
+          "back_shiny": null,
+          "back_shiny_female": null,
+          "front_default": null,
+          "front_female": null,
+          "front_shiny": null,
+          "front_shiny_female": null
+        },
+        "heartgold-soulsilver": {
+          "back_default": null,
+          "back_female": null,
+          "back_shiny": null,
+          "back_shiny_female": null,
+          "front_default": null,
+          "front_female": null,
+          "front_shiny": null,
+          "front_shiny_female": null
+        },
+        "platinum": {
+          "back_default": null,
+          "back_female": null,
+          "back_shiny": null,
+          "back_shiny_female": null,
+          "front_default": null,
+          "front_female": null,
+          "front_shiny": null,
+          "front_shiny_female": null
+        }
+      },
+      "generation-v": {
+        "black-white": {
+          "animated": {
+            "back_default": null,
+            "back_female": null,
+            "back_shiny": null,
+            "back_shiny_female": null,
+            "front_default": null,
+            "front_female": null,
+            "front_shiny": null,
+            "front_shiny_female": null
+          },
+          "back_default": null,
+          "back_female": null,
+          "back_shiny": null,
+          "back_shiny_female": null,
+          "front_default": null,
+          "front_female": null,
+          "front_shiny": null,
+          "front_shiny_female": null
+        }
+      },
+      "generation-vi": {
+        "omegaruby-alphasapphire": {
+          "front_default": null,
+          "front_female": null,
+          "front_shiny": null,
+          "front_shiny_female": null
+        },
+        "x-y": {
+          "front_default": null,
+          "front_female": null,
+          "front_shiny": null,
+          "front_shiny_female": null
+        }
+      },
+      "generation-vii": {
+        "icons": {
+          "front_default": null,
+          "front_female": null
+        },
+        "ultra-sun-ultra-moon": {
+          "front_default": null,
+          "front_female": null,
+          "front_shiny": null,
+          "front_shiny_female": null
+        }
+      },
+      "generation-viii": {
+        "icons": {
+          "front_default": null,
+          "front_female": null
+        }
+      }
+    }
+  },
+  "stats": [
+    {
+      "base_stat": 0,
+      "effort": 0,
+      "stat": {
+        "name": "hp",
+        "url": "https://pokeapi.co/api/v2/stat/1/"
+      }
+    },
+    {
+      "base_stat": 0,
+      "effort": 0,
+      "stat": {
+        "name": "attack",
+        "url": "https://pokeapi.co/api/v2/stat/2/"
+      }
+    },
+    {
+      "base_stat": 0,
+      "effort": 0,
+      "stat": {
+        "name": "defense",
+        "url": "https://pokeapi.co/api/v2/stat/3/"
+      }
+    },
+    {
+      "base_stat": 0,
+      "effort": 0,
+      "stat": {
+        "name": "special-attack",
+        "url": "https://pokeapi.co/api/v2/stat/4/"
+      }
+    },
+    {
+      "base_stat": 0,
+      "effort": 0,
+      "stat": {
+        "name": "special-defense",
+        "url": "https://pokeapi.co/api/v2/stat/5/"
+      }
+    },
+    {
+      "base_stat": 0,
+      "effort": 0,
+      "stat": {
+        "name": "speed",
+        "url": "https://pokeapi.co/api/v2/stat/6/"
+      }
+    }
+  ],
+  "types": [
+    {
+      "slot": 1,
+      "type": {
+        "name": null,
+        "url": null
+      }
+    },
+    {
+      "slot": 2,
+      "type": {
+        "name": null,
+        "url": null
+      }
+    }
+  ],
+  "weight": null
+}

@@ -8,7 +8,7 @@ Catch Rate Calculator. Variables in order:\n [Pokemon Name] [Max HP] [Current HP
 A pretty simple command (with a lot of args) that handles pokeball catching.
 It doesn't do anything with the DB so you have to plug in all of the variables manually.
 (might come back to this when/if we start storing PC data)
-## damage.js
+## damagelegacy.js
 ```
 'Damage Calculator. Variables in order:
 [Attacker (A) Name] [Defender (D) Name] [A\'s Level] [A\'s Attack Stat] [D\'s Defense Stat] [Dice Roll] [STAB] [Effectiveness] [Critical Hit] [Misc Modifiers] [Stages of Attack] [Stages of Defense]'
@@ -97,7 +97,7 @@ For example, if you change a pokemon's level this should let you know which stat
 Also allows you to confirm or reject a change with a reaction interface.
 
 Pokemon HP is handled wonky in ChaCha in comparison with other stats so health is rerolled and handled incorrectly as of right now.
-## movetutor.js
+## movetutorlegacy.js
 ```
 The command to check the Train Pokemon DC to learn a new move.
 
@@ -110,12 +110,12 @@ To get evo bonuses: +movetutor evolution
 ChaCha has a system of DC's for learning moves, and this takes in input and tells you the DC accordingly.
 There are plans to have a movesystem handle some of this.
 
-## neodamage.js
+## damage.js
 ```
 Damage Calculator. Variables in order:
  [Attacker (A) Name] [Attacker Move] [Defender (D) Name] [Stages of Attack] [Stages of Defense] [Extra Base Power] [MultDamage (min 1)] [Critical Hit (y/n)]
 ```
-a command that calculates the damage of an attack given two pokemon and a few necessary fields. Will soon be moved to just be 'damage.js'.
+a command that calculates the damage of an attack given two pokemon and a few necessary fields. Will soon be moved to just be 'damagelegacy.js'.
 
 First scans the DB for each pokemon named and stores each in a pokemon object. This makes sure we grab all the necessary stats, and is made really easy by the pokemon object.
 

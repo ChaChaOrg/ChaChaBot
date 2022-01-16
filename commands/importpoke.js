@@ -6,7 +6,7 @@ module.exports.run = (client, connection, P, message, args) => {
 
     let importContent = message.content.substr("+pokeimport ".length, message.content.length - "+pokeimport ".length);
 
-    if (args[0] === "help") {
+    if (args.length == 0 || args[0] === "help") {
         logger.info("[importpoke] Sending help message.")
         message.reply('Pokemon importer. Paste showdown export string or fill in as follows.\nNote that you can omit individual EVs or the entire EV line if they all equal 0.\nReplace any instances of [] with the desired Pokemon\'s info (without the brackets themselves), and make sure that each piece of info is on its own line.\n' +
             '```+importpoke [Nickname] ([Species]) ([M/F/N])\n' +
