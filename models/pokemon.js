@@ -497,7 +497,7 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
           name: "Basic Info",
           value: `**Ability:** [${tempAbility}](${tempAbilityURL}) | **Gender:** ${this.gender} \n**Nature: ** ${this.nature.natureFinal} | ` +
               `**Shiny: ** ${shiny} ` + `\n**OT:** ${this.originalTrainer} | **Campaign:** ${this.campaign}` +
-              `\n**Type 1:** [${capitalizeWord(this.type1)}](https://bulbapedia.bulbagarden.net/wiki/${this.type1}_(type))` +
+              `\n**Type 1:** [${capitalizeWord(this.type1)}](https://bulbapedia.bulbagarden.net/wiki/${this.type1}_(type)) ` +
               `**Type 2:** [${capitalizeWord(this.type2)}](https://bulbapedia.bulbagarden.net/wiki/${this.type2}_(type))\n=================`,
         },
         {
@@ -580,7 +580,7 @@ Pokemon.prototype.uploadPokemon = function (connection, message) {
         hpIV, atkIV, defIV, spaIV, spdIV, speIV, 
         hpEV, atkEV, defEV, spaEV, spdEV, speEV, exp,
         move1, move2, move3, move4, move5, moveProgress, 
-        originalTrainer, discordID, private, dateCreated,campaign) 
+        originalTrainer, discordID, private, dateCreated, campaign) 
         VALUES (
         "${this.name}",
         "${this.species}",
@@ -682,7 +682,7 @@ Pokemon.prototype.updatePokemon = function (connection, message, pokePrivate) {
             moveProgress = ${this.moveSet.moveProgress},
             private = ${pokePrivate},
             
-            campaign = ${this.campaign}
+            campaign = "${this.campaign}"
          WHERE name = "${this.name}";`;
 
   //console.log(sql);
@@ -862,7 +862,7 @@ Pokemon.prototype.importPokemon = function (connection, P, importString) {
     }.bind(this)
   );
 
-  return this.getPokemonAndSpeciesData(P).then(
+  return this.getPokemonAndSpeciesData(connection, P).then(
     //assign types, base states and then calculate those Stats
     function (response) {
       this.assignTypes();
