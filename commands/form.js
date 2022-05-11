@@ -99,6 +99,7 @@ exports.run = (client, connection, P, message, args) => {
                     "${args[3]}",
                     "${((args[4].toLowerCase() == 'none') ? '-' : args[4])}",
                     "${((args[5].toLowerCase() == 'none') ? '-' : args[5])}",
+
                     ${args[6]},
                     ${args[7]},
                     ${args[8]},
