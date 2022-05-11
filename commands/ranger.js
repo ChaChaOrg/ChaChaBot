@@ -61,7 +61,7 @@ exports.run = (client, connection, P, message, args) => {
     let tempPoke = new Pokemon;
 
     let sql = `SELECT * FROM pokemon WHERE name = '${name}';`;
-    logger.info(`[showpoke] SQL query: ${sql}`);
+    logger.info(`[ranger] SQL query: ${sql}`);
 
     let notFoundMessage = name + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `+listpoke` to view the Pokemon you can edit.)";
 

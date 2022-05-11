@@ -48,8 +48,6 @@ module.exports.run = (client, connection, P, message, args) => {
 
     try {
 
-        message.reply("Looking for that now!");
-
         // if there are less than 2 args, they either need help or didn't put enough info in
         if (args.length < 2 && args.length > 0) {
             if (args[0].includes('help')) {
@@ -60,6 +58,9 @@ module.exports.run = (client, connection, P, message, args) => {
                 message.reply(FILTER_NOT_FOUND);
             }
         } else {
+
+            message.reply("Looking for that now!");
+
             // if you're here, it's time to create an array/pages to hold and display pokemon
 
             // the array of strings of Pokemon to be presented.

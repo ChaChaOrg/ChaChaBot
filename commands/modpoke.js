@@ -46,6 +46,8 @@ const NONEXISTENT_FIELD_MESSAGE = "That isn't a valid field to change! Please ch
 // array of variables that can go straight to being updated
 const STATIC_FIELDS = ["ability", "name", "gender", "hp", "atk", "def", "spa", "spd", "spe", "move1", "move2", "move3", "move4", "move5", "moveProgress", "originalTrainer", "shiny", "private"];
 const OTHER_FIELDS = ["species", "form", "level", "nature", "type1", "type2", "hpIV", "hpEV", "atkIV", "atkEV", "defIV", "defEV", "spaIV", "spaEV", "spdIV", "spdEV", "speIV", "speEV"]
+const ALL_NATURES = ["adamant", "bashful", "bold", "brave", "calm", "careful", "docile", "gentle", "hardy", "hasty", "impish", "jolly", 
+                        "lax", "lonely", "mild", "modest", "naive", "naughty", "quiet", "quirky", "rash", "relaxed", "sassy", "serious", "timid"]
 
 // code formatting variables for the embed
 const CODE_FORMAT_START = "```diff\n";
@@ -136,6 +138,16 @@ module.exports.run = (client, connection, P, message, args) => {
         if (typeof args[2] == "string") {
             valString = `${args[2]}`;
         } else valString = args[2];
+
+        if (valName == "nature") {
+            if (!ALL_NATURES.includes(valString)) {
+                logger.error("[modpoke] User tried to put in invalid nature.")
+                message.reply("That is not a valid pokemon nature, please check your spelling.")
+                return;
+            }
+
+            valString = args[2].charAt(0).toUpperCase() + args[2].slice(1);
+        }
 
         // ================= SQL statements  =================
         // sql statement to check if the Pokemon exists
@@ -231,9 +243,10 @@ module.exports.run = (client, connection, P, message, args) => {
                                 let thisPoke = rows[0];
 
                                 // if the valName is species, assign directly, otherwise convert it into a number
-                                testString = parseInt(valString)
-                                if (isNaN(testString)) thisPoke[valName] = valString.toLowerCase();
-                                else thisPoke[valName] = testString;
+
+                                if (valName === "species") thisPoke[valName] = valString.toLowerCase();
+                                else if (valName === "nature") thisPoke[valName] = valString;
+                                else thisPoke[valName] = parseInt(valString);
 
                                 //Make new empty Pokemon object
                                 let newPoke = new Pokemon();
