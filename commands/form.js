@@ -97,8 +97,9 @@ exports.run = (client, connection, P, message, args) => {
                     "${species}",
                     "${args[2]}",
                     "${args[3]}",
-                    "${args[4]}",
-                    "${args[5]}",
+                    "${((args[4].toLowerCase() == 'none') ? '-' : args[4])}",
+                    "${((args[5].toLowerCase() == 'none') ? '-' : args[5])}",
+
                     ${args[6]},
                     ${args[7]},
                     ${args[8]},
@@ -106,11 +107,11 @@ exports.run = (client, connection, P, message, args) => {
                     ${args[10]},
                     ${args[11]},
                     "${args[12]}",
-                    "${args[13]}",
+                    "${((args[13].toLowerCase() == 'none') ? '-' : args[13])}",
                     ${args[14]},
                     ${args[15]},
                     "${args[16]}",
-                    "${args[17]}",
+                    "${((args[17].toLowerCase() == 'none') ? '-' : args[13])}",
                     ${message.author.id},
                     ${args[18]});`;
                     //console.log(sql);

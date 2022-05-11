@@ -890,7 +890,7 @@ Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
                 let found = 0;
                 if (response.length > 0) {
                     response.forEach(function (pokeForm, pokeFormIndex) {
-                        if (pokeForm.form === this.form) {
+                        if (pokeForm.form.toLowerCase() === this.form.toLowerCase()) {
                             found = 1;
                             //Found the correct form and species in the SQL!
                             let formtemplate
