@@ -78,7 +78,7 @@ function Pokemon(tempSpecies, tempLevel, tempName, tempform) {
   this.speciesData = undefined;
 
   this.campaign = "None";
-
+  this.discordID = "0";
 
 }
 
@@ -395,6 +395,7 @@ let fixAbilityOrMoveFormatting = function (tempWord, middle) {
 // =========== EMBED ===========
 
 Pokemon.prototype.sendSummaryMessage = function (client) {
+  console.log(this)
   // set up formatted ability name
   let tempAbility = this.ability.name;
   let tempAbilityURL = this.ability.name;
@@ -479,6 +480,7 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
         addPlusOrNah(this.statBlock.willSave)
     ]
 
+  
   return {
     embed: {
       color: 3447003,
@@ -498,7 +500,7 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
         {
           name: "Basic Info",
           value: `**Ability:** [${tempAbility}](${tempAbilityURL}) | **Gender:** ${this.gender} \n**Nature: ** ${this.nature.natureFinal} | ` +
-              `**Shiny: ** ${shiny} ` + `\n**OT:** ${this.originalTrainer} | **Campaign:** ${this.campaign}` +
+              `**Shiny: ** ${shiny} ` + `\n**Owner:** <@${this.discordID}> | **Campaign:** ${this.campaign}` +
               `\n**Type 1:** [${capitalizeWord(this.type1)}](https://bulbapedia.bulbagarden.net/wiki/${this.type1}_(type)) ` +
               `**Type 2:** [${capitalizeWord(this.type2)}](https://bulbapedia.bulbagarden.net/wiki/${this.type2}_(type))\n=================`,
         },
@@ -979,6 +981,8 @@ Pokemon.prototype.loadFromSQL = function (connection, P, sqlObject) {
             this.getPokemonAndSpeciesData(connection, P).then(
                 function (response) {
                     this.pokemonData = response;
+
+                    this.discordID = sqlObject.discordID;
 
                     //type(s)
                     this.type1 = sqlObject.type1;
