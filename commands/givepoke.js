@@ -58,7 +58,7 @@ module.exports.run = (client, connection, P, message, args) => {
         
 
     } catch (error) {
-        logger.error("[showpoke] " + error.toString());
+        logger.error("[givepoke] " + error.toString());
         message.channel.send(error.toString());
         message.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);
     }
