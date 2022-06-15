@@ -395,7 +395,6 @@ let fixAbilityOrMoveFormatting = function (tempWord, middle) {
 // =========== EMBED ===========
 
 Pokemon.prototype.sendSummaryMessage = function (client) {
-  console.log(this)
   // set up formatted ability name
   let tempAbility = this.ability.name;
   let tempAbilityURL = this.ability.name;
