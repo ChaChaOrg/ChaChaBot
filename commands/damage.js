@@ -112,7 +112,11 @@ module.exports.run = (client, connection, P, message, args) => {
             other = Number(args[6]);
             break;
           case 7:
-            otherMult = Number(args[7]);
+                otherMult = Number(args[7]);
+                if (otherMult < 0) {
+                    otherMult = 1;
+                    message.reply("Negative multipliers not supported. Skipping multiplyer.");
+                }
             break;
 
         }
@@ -331,7 +335,7 @@ module.exports.run = (client, connection, P, message, args) => {
               defendPoke.form.slice(1);
 
             // get # of dice rolled
-            let diceRolled = moveData.power / 5;
+            let diceRolled = (moveData.power + other)/ 5;
             diceRolled += "d8";
 
             //format move
@@ -348,6 +352,8 @@ module.exports.run = (client, connection, P, message, args) => {
             } else
               tempMove = tempMove.charAt(0).toUpperCase() + tempMove.slice(1);
 
+            let moveHungerCost = (8 - moveData.pp / 5) + 1;
+            
             let combatEmbedString = {
               embed: {
                 color: 3447003,
@@ -379,7 +385,7 @@ module.exports.run = (client, connection, P, message, args) => {
                   {
                     name: `${tempMove} Info`,
                     value: `**Move Info:** ${capitalizeWord(moveData.damage_class.name)} ${capitalizeWord(moveData.type.name)} Attack` +
-                        `\n**Base Power:** ${moveData.power} pw\n**Damage Roll:** ${dice} (${diceRolled})`,
+                        `\n**Base Power:** ${moveData.power} pw\n**Damage Roll:** ${dice} (${diceRolled})\n**Hunger Cost:** ${moveHungerCost}`,
                   },
                 ],
                 timestamp: new Date(),
