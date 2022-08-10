@@ -1,20 +1,21 @@
 const HELP_MESSAGE = "Allows a player to transfer ownership of a pokemon with another trainer. \
-                     \n+givepoke [pokeName] @[natzberg]"
+                     \n+givepoke [pokeName] @[username]"
 
 const logger = require('../logs/logger.js');
 
 module.exports.run = (client, connection, P, message, args) => {
     try {
-        if (args.length < 2) {
-            logger.warn("[givepoke] User did not enter a user to trade with.");
-            message.reply("You forgot to pick someone to give your pokemon to with. You can't give it to me! ;)");
-            return;
-        }
-
+        
         let pokeName = args[0];
         if (pokeName === "help" ) {
             logger.info("[givepoke] Sending trade help message.");
             message.channel.send(HELP_MESSAGE);
+            return;
+        }
+
+        if (args.length < 2) {
+            logger.warn("[givepoke] User did not enter a user to trade with.");
+            message.reply("You forgot to pick someone to give your pokemon to with. You can't give it to me! ;)");
             return;
         }
 
