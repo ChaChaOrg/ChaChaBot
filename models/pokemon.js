@@ -10,7 +10,7 @@ const SHINY_CHANCE = 4096;
 
 const logger = require('../logs/logger.js');
 let Nature = require("./nature.js");
-let Moveset = require("./moveset.js");
+let { MoveSet, Move } = require("./moveset.js");
 let Statblock = require("./statblock.js");
 let fs = require('fs');
 
@@ -62,7 +62,13 @@ function Pokemon(tempSpecies, tempLevel, tempName, tempform) {
   //hidden ability percentile
   this.haChance = 0;
 
-  this.moveSet = new Moveset.MoveSet();
+  this.moveSet = new MoveSet();
+  this.move1 = "";
+  this.move2 = "";
+  this.move3 = "";
+  this.move4 = "";
+  this.move5 = "";
+
 
   this.originalTrainer = "Wild";
 
@@ -73,7 +79,7 @@ function Pokemon(tempSpecies, tempLevel, tempName, tempform) {
   this.shiny = false;
 
   this.pokemonData = undefined;
-    this.speciesData = undefined;
+  this.speciesData = undefined;
   this.private = true;
   this.speciesData = undefined;
 
@@ -111,7 +117,7 @@ Pokemon.prototype.init = function (connection, P) {
         this.statBlock.calculateSaves(this);
 
         // calculate random moves
-          this.assignMoves();
+        this.assignMoves();
 
         console.log("Pokemon Initialization Sequence Complete!");
         logger.info("[pokemon] Pokemon Initialization Sequence Complete!");
@@ -421,7 +427,7 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
   let shiny = this.shiny ? "yes" : "no";
 
   // grab all the stored moves
-  let moves = [this.moveSet.move1,this.moveSet.move2,this.moveSet.move3,this.moveSet.move4,this.moveSet.move5];
+  let moves = [this.moveSetmove1,this.move2,this.move3,this.move4,this.move5];
   let movesURL = [this.moveSet.move1,this.moveSet.move2,this.moveSet.move3,this.moveSet.move4,this.moveSet.move5];
 
   for (let i = 0; i < moves.length; i++) {
@@ -529,11 +535,11 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
         },
           {
               name: "Moves",
-              value: `[${moves[0]}](${movesURL[0]}) | ` +
-                  `[${moves[1]}](${movesURL[1]}) | ` +
-                  `[${moves[2]}](${movesURL[2]}) | ` +
-                  `[${moves[3]}](${movesURL[3]}) ` +
-                  `\n **In Progress: ** [${moves[4]}](${movesURL[4]}), ${this.moveSet.moveProgress}/6\n=================`,
+              value: `${this.move1 === undefined || this.move1 === "undefined" ? "" : this.move1} | ` +
+                  `${this.move2 === undefined || this.move2 === "undefined" ? "" : this.move2}  | ` +
+                  `${this.move3 === undefined || this.move3 === "undefined" ? "" : this.move3} | ` +
+                  `${this.move4 === undefined || this.move4 === "undefined"? "" : this.move4} ` +
+                  `\n **In Progress: ** ${this.move5 === undefined || this.move5 === "undefined" ? "" : this.move5}, ${this.moveSet.moveProgress}/6\n=================`,
           },
         {
           name: "Ability Scores",
@@ -677,11 +683,11 @@ Pokemon.prototype.updatePokemon = function (connection, message, pokePrivate) {
             speEV = ${this.statBlock.evStats[SPE_ARRAY_INDEX]},
             exp = ${this.exp},
             
-            move1 = "${this.moveSet.move1.name}",
-            move2 = "${this.moveSet.move2.name}",
-            move3 = "${this.moveSet.move3.name}",
-            move4 = "${this.moveSet.move4.name}",
-            move5 = "${this.moveSet.move5.name}",
+            move1 = "${this.move1}",
+            move2 = "${this.move2}",
+            move3 = "${this.move3}",
+            move4 = "${this.move4}",
+            move5 = "${this.move5}",
             moveProgress = ${this.moveSet.moveProgress},
             private = ${pokePrivate},
             
@@ -1020,13 +1026,21 @@ Pokemon.prototype.loadFromSQL = function (connection, P, sqlObject) {
                     ];
 
                     this.exp = sqlObject.exp;
-
-                    this.moveSet.move1 = sqlObject.move1;
-                    this.moveSet.move2 = sqlObject.move2;
-                    this.moveSet.move3 = sqlObject.move3;
-                    this.moveSet.move4 = sqlObject.move4;
-                    this.moveSet.move5 = sqlObject.move5;
-                    this.moveSet.moveProgress = sqlObject.moveProgress;
+                    // this.moveSet = {};
+                    // this.moveSet = new Array(5);
+                    // this.moveSet.move1.createFromName(sqlObject.move1, P);
+                    // this.moveSet.move2 = move.createFromName(sqlObject.move2, P);
+                    // this.moveSet.move3 = move.createFromName(sqlObject.move3, P);
+                    // this.moveSet.move4 = move.createFromName(sqlObject.move4, P);
+                    // this.moveSet.move5 = move.createFromName(sqlObject.move5, P);
+                    // this.moveSet.moveProgress = sqlObject.moveProgress;
+                    // console.log(sqlObject.move1)
+                    this.move1 = sqlObject.move1;
+                    this.move2 = sqlObject.move2;
+                    this.move3 = sqlObject.move3;
+                    this.move4 = sqlObject.move4;
+                    this.move5 = sqlObject.move5;
+                    this.moveProgress = sqlObject.moveProgress;
 
                     this.originalTrainer = sqlObject.originalTrainer;
 
