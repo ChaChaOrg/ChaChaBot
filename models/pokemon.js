@@ -428,7 +428,7 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
 
   // grab all the stored moves
   let moves = [this.moveSetmove1,this.move2,this.move3,this.move4,this.move5];
-  let movesURL = [this.moveSet.move1,this.moveSet.move2,this.moveSet.move3,this.moveSet.move4,this.moveSet.move5];
+  let movesURL = [this.move1,this.move2,this.move3,this.move4,this.move5];
 
   for (let i = 0; i < moves.length; i++) {
       if (!moves[i] || moves[i] === "undefined") {
