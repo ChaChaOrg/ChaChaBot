@@ -62,12 +62,13 @@ function Pokemon(tempSpecies, tempLevel, tempName, tempform) {
   //hidden ability percentile
   this.haChance = 0;
 
-  this.moveSet = new MoveSet();
+  // this.moveSet = new MoveSet();
   this.move1 = "";
   this.move2 = "";
   this.move3 = "";
   this.move4 = "";
   this.move5 = "";
+  this.moveProgress = 0;
 
 
   this.originalTrainer = "Wild";
@@ -296,7 +297,7 @@ Pokemon.prototype.assignMoves = function () {
     //moves the pokemon can legally learn
     let legalMoves = [];
     // make a blank move for use later if needed
-    let blankMove = new Moveset.Move();
+    let blankMove = "";
 
     // function to verify that a move is learned via level-up & at the pokemon's level or lower
     let verifyLevelUp = function (move) {
@@ -330,19 +331,20 @@ Pokemon.prototype.assignMoves = function () {
         verifyLevelUp(nextMove);
 
     })
+    console.log(this.pokemonData.moves)
 
     // if there aren't enough moves to fill out the known moves, grab the ones that do exist
     if (legalMoves.length < 4) {
         try {
             console.log("moveloop");
-            this.moveSet.move1 = legalMoves[0];
-            this.moveSet.move2 = legalMoves[1];
-            this.moveSet.move3 = legalMoves[2];
-            this.moveSet.move4 = legalMoves[3];
+            this.move1 = legalMoves[0].move.name;
+            this.move2 = legalMoves[1].move.name;
+            this.move3 = legalMoves[2].move.name;
+            this.move4 = legalMoves[3].move.name;
         } catch (e) {
-            if (!this.moveSet.move2) this.moveSet.move2 = blankMove;
-            if (!this.moveSet.move3) this.moveSet.move3 = blankMove;
-            if (!this.moveSet.move4) this.moveSet.move4 = blankMove;
+            if (!this.move2) this.move2 = blankMove.move.name;
+            if (!this.move3) this.move3 = blankMove.move.name;
+            if (!this.move4) this.move4 = blankMove.move.name;
         }
     } else{//roll four random numbers between 0 & # of moves found
         let moveRoller = [];
@@ -354,10 +356,10 @@ Pokemon.prototype.assignMoves = function () {
         }
 
         // for each random number picked, assign!
-        this.moveSet.move1 = legalMoves[moveRoller[0]];
-        this.moveSet.move2 = legalMoves[moveRoller[1]];
-        this.moveSet.move3 = legalMoves[moveRoller[2]];
-        this.moveSet.move4 = legalMoves[moveRoller[3]];
+        this.move1 = legalMoves[moveRoller[0]].move.name;
+        this.move2 = legalMoves[moveRoller[1]].move.name;
+        this.move3 = legalMoves[moveRoller[2]].move.name;
+        this.move4 = legalMoves[moveRoller[3]].move.name;
     }
 }
 
@@ -427,7 +429,7 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
   let shiny = this.shiny ? "yes" : "no";
 
   // grab all the stored moves
-  let moves = [this.moveSetmove1,this.move2,this.move3,this.move4,this.move5];
+  let moves = [this.move1,this.move2,this.move3,this.move4,this.move5];
   let movesURL = [this.move1,this.move2,this.move3,this.move4,this.move5];
 
   for (let i = 0; i < moves.length; i++) {
@@ -539,7 +541,7 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
                   `${this.move2 === undefined || this.move2 === "undefined" ? "" : this.move2}  | ` +
                   `${this.move3 === undefined || this.move3 === "undefined" ? "" : this.move3} | ` +
                   `${this.move4 === undefined || this.move4 === "undefined"? "" : this.move4} ` +
-                  `\n **In Progress: ** ${this.move5 === undefined || this.move5 === "undefined" ? "" : this.move5}, ${this.moveSet.moveProgress}/6\n=================`,
+                  `\n **In Progress: ** ${this.move5 === undefined || this.move5 === "undefined" ? "" : this.move5}, ${this.moveProgress}/6\n=================`,
           },
         {
           name: "Ability Scores",
@@ -571,7 +573,7 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
 // =========== Upload ===========
 
 Pokemon.prototype.uploadPokemon = function (connection, message) {
-  let finalMoveList = [this.moveSet.move1,this.moveSet.move2,this.moveSet.move3,this.moveSet.move4,this.moveSet.move5];
+  let finalMoveList = [this.move1,this.move2,this.move3,this.move4,this.move5];
   for (i = 0; i < 5; i++) {
       try {
           if (!finalMoveList[i]) {
@@ -625,7 +627,7 @@ Pokemon.prototype.uploadPokemon = function (connection, message) {
         "${finalMoveList[2]}",
         "${finalMoveList[3]}",
         "${finalMoveList[4]}",
-        ${this.moveSet.moveProgress},
+        ${this.moveProgress},
         "${this.originalTrainer}",
         ${message.author.id},
         ${this.private},
@@ -688,7 +690,7 @@ Pokemon.prototype.updatePokemon = function (connection, message, pokePrivate) {
             move3 = "${this.move3}",
             move4 = "${this.move4}",
             move5 = "${this.move5}",
-            moveProgress = ${this.moveSet.moveProgress},
+            moveProgress = ${this.moveProgress},
             private = ${pokePrivate},
             
             campaign = "${this.campaign}"
