@@ -2,7 +2,7 @@
   "name": "ChaChaBot",
   "version": "1.0.0",
   "description": "A comprehensive compendium/tool for the Chambers and Charizard TRPG system.",
-  "main": "index.js",
+  "main": "chachabot.js",
   "scripts": {
     "test": "nyc mocha --exit"
   },
@@ -10,7 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@discordjs/builders": "^1.0.0",
+    "@discordjs/rest": "^1.0.0",
     "coverage": "^0.4.1",
+    "discord-api-types": "^0.36.2",
     "discord.js": "^11.6.4",
     "enmap": "^4.8.7",
     "jsdom": "^16.4.0",
@@ -19,9 +22,9 @@
     "pokedex-promise-v2": "^3.2.0"
   },
   "devDependencies": {
+    "mocha": "^7.1.2",
     "prettier": "2.0.4",
-    "winston": "^3.2.1",
-    "mocha": "^7.1.2"
+    "winston": "^3.2.1"
   },
   "repository": {
     "type": "git",

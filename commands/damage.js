@@ -24,7 +24,19 @@ const HELP_MESSAGE = "A damage calculator that uses the Pokemon in the database.
 // OLD HELP MESSAGE - Damage Calculator. Variables in order:
 //  [Attacker (A) Name] [Attacker Move] [Defender (D) Name] [Stages of Attack] [Stages of Defense] [Extra Base Power (min 0)] [MultDamage (min 1)] [Critical Hit (y/n)]
 
-module.exports.run = (client, connection, P, message, args) => {
+module.exports = {
+  data: new SlashCommandBuilder()
+      .setName('damage')
+      .setDescription('A damage calculator that uses the Pokemon in the database.'),
+    async execute(interaction){
+      damage(client, connection, P, message, args)
+    }
+}
+
+module.exports.run = damage(client, connection, P, message, args);
+
+
+function damage(client, connection, P, message, args) {
   try {
 
     //clause for helping!
