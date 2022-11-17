@@ -23,7 +23,7 @@ const addMessage = "The \"add\" subcommand adds a form to the list of available 
     " <genderRatio> <captureRate> <eggGroup1> <eggGroup2> <private>\n\n" +
     "Sample Pokemon (Alolan Ninetales): +form add Vulpix vulpix-alola Snow-Cloak null Snow-Warning 38" +
     " 41 40 50 65 65 Ice null" +
-    " <genderRatio> 190 Field null 0\n";
+    " 6 190 Field null 0\n";
 exports.run = (client, connection, P, message, args) => {
 
     try {
