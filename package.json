@@ -21,7 +21,7 @@
   "devDependencies": {
     "prettier": "2.0.4",
     "winston": "^3.2.1",
-    "mocha": "^7.1.2"
+    "mocha": "^10.2.0"
   },
   "repository": {
     "type": "git",
