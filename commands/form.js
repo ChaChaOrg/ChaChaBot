@@ -2,7 +2,7 @@ const logger = require('../logs/logger.js');
 const helpMessage = "Form is a command for managing the various forms of a pokemon, such as regional variants or alternate forms. This command has the list and add subcommands.\n";
 const listMessage = "The list subcommand lists all forms avaiable to a given pokemon species. Use: form list <speciesName>\n";
 const addMessage = "The add subcommand adds a form to the list of available forms for a pokemon species. Use: form add <speciesName> <formName> <ability1> <ability2> <abilitly3> <hpBaseStat> <attackBaseStat> <defenseBaseStat> <specialAttackBaseStat> <specialDefenseBaseStat> <speedBaseStat> <firstType> <secondType> <genderRatio> <captureRate> <eggGroup1> <eggGroup2> <private>\n";
-exports.run = (client, connection, P, message, args) => {
+exports.run = (interaction) => {
 
     try {
         if (args[0].includes("list")) {
@@ -14,7 +14,7 @@ exports.run = (client, connection, P, message, args) => {
             
             //insert api search here
             //javascript node.js promise
-            let promise = P.getPokemonSpeciesByName(species);
+            let promise = interaction.pokedex.getPokemonSpeciesByName(species);
             promise.then(function (response) {
                 console.log(response.varieties);
                 logger.info("[form] Searching api");
@@ -28,11 +28,11 @@ exports.run = (client, connection, P, message, args) => {
                             names += ", ";
                         }
                     }
-                    //message.reply("The " + args[1] + " species has the following forms in game: " + names);
+                    //interaction.reply("The " + args[1] + " species has the following forms in game: " + names);
                     output += "The " + args[1] + " species has the following forms in game: " + names;
                 } else { 
                     logger.info("[form] No main forms found");
-                    //message.reply("No main game forms found.");
+                    //interaction.reply("No main game forms found.");
                     output += "No main game forms found";
                 }
                 output += "\n";
@@ -49,7 +49,7 @@ exports.run = (client, connection, P, message, args) => {
                     if (result.length <= 0) {
                         logger.info("[form] no custom forms found");
                         console.log("no custom forms");
-                        //message.reply("No custom forms were found for that species.");
+                        //interaction.reply("No custom forms were found for that species.");
                         out += "No custom forms were found for that species.";
                     } else {
                         logger.info("[form] custom forms found");
@@ -65,16 +65,16 @@ exports.run = (client, connection, P, message, args) => {
                             cust += result[i].form;
                         }
                         console.log("Forms: " + cust);
-                        //message.reply(output);
+                        //interaction.reply(output);
                         out += cust;
                     }
-                    message.reply(out);
+                    interaction.reply(out);
                 });
             }).catch(function (error) {
                 logger.error("[form] " + error.message);
                 //console.log(error);
                 console.log(error.message);
-                //message.channel.send(error.message);
+                //interaction.channel.send(error.message);
             });
             
         } else if (args[0].includes("add")) {
@@ -112,7 +112,7 @@ exports.run = (client, connection, P, message, args) => {
                     ${args[15]},
                     "${args[16]}",
                     "${((args[17].toLowerCase() == 'none') ? '-' : args[13])}",
-                    ${message.author.id},
+                    ${interaction.author.id},
                     ${args[18]});`;
                     //console.log(sql);
                     logger.info(`[form] upload SQL query: ${sql}`);
@@ -123,11 +123,11 @@ exports.run = (client, connection, P, message, args) => {
                         }
                         console.log("1 record inserted");
                         logger.info("[form] upload SQL was successful.");
-                        message.reply("Your new form for " + args[1] + " was successfully added.");
+                        interaction.reply("Your new form for " + args[1] + " was successfully added.");
                     });
                 } else {
                     logger.info('[form] New form already exists.');
-                    message.reply("That form already exists.");
+                    interaction.reply("That form already exists.");
                 }
             });
             
@@ -136,11 +136,11 @@ exports.run = (client, connection, P, message, args) => {
             if (args.length != 3) {
                 throw { message: "Please include the species the form belongs to and the name of the form to remove." };
             }
-            message.reply("Are you sure you want to delete this form? Confrim with ✅ or cancel with ❌.").then(function (response) {
+            interaction.reply("Are you sure you want to delete this form? Confrim with ✅ or cancel with ❌.").then(function (response) {
                 response.react('✅');
                 response.react('❌');
 
-                const filter = (reaction, user) => user.id === message.author.id && (reaction.emoji.name === '✅' || reaction.emoji.name === '❌');
+                const filter = (reaction, user) => user.id === interaction.author.id && (reaction.emoji.name === '✅' || reaction.emoji.name === '❌');
 
                 response.awaitReactions(filter, { max: 1, time: 100000 }).then(collected => {
 
@@ -154,32 +154,32 @@ exports.run = (client, connection, P, message, args) => {
                             }
                             if (result.affectedRows == 0) {
                                 logger.info("[form] No form to delete");
-                                message.reply("There were no forms matching your selection.");
+                                interaction.reply("There were no forms matching your selection.");
                             } else {
                                 logger.info("[form] " + result.affectedRows + " form(s) removed.");
-                                message.reply(result.affectedRows + " forms were removed from the database.");
+                                interaction.reply(result.affectedRows + " forms were removed from the database.");
                             }
                         });
                     } else {
                         logger.info("[form] Deletion manually cancelled");
-                        message.reply("Deletion cancelled.");
+                        interaction.reply("Deletion cancelled.");
                     }
                 }).catch((err) => {
                     logger.error("[form] Deletion cancelled due to timeout.");
-                    message.reply("Form deletion cancelled due to timeout.");
+                    interaction.reply("Form deletion cancelled due to timeout.");
                 });
             });
             
         }else{
             //help command
             logger.info("[form] Help message");
-            message.reply(helpMessage + listMessage + addMessage);
+            interaction.reply(helpMessage + listMessage + addMessage);
         }
     } catch (error){
         logger.error("[form] " + error.message);
         console.log(error);
         console.log(error.message);
-        message.channel.send(error.message);
+        interaction.channel.send(error.message);
 	}
     
 }

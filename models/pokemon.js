@@ -620,7 +620,7 @@ Pokemon.prototype.uploadPokemon = function (connection, message) {
         "${finalMoveList[4]}",
         ${this.moveSet.moveProgress},
         "${this.originalTrainer}",
-        ${message.author.id},
+        ${interaction.author.id},
         ${this.private},
         '${this.dateCreated}',
         "${this.campaign}")`
@@ -937,10 +937,10 @@ Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
                 //
                 if (found === 0) {
                     this.form = this.species;
-                    P.getPokemonSpeciesByName(this.species.toLowerCase())
+                    interaction.pokedex.getPokemonSpeciesByName(this.species.toLowerCase())
                         .then(function (response) {
                             this.speciesData = response;
-                            P.getPokemonByName(this.speciesData.id)
+                            interaction.pokedex.getPokemonByName(this.speciesData.id)
                                 .then(
                                     function (response) {
                                         this.pokemonData = response;
@@ -953,7 +953,7 @@ Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
                                         error
                                     );
                                     reject("Error when retrieving pokemon species Data :C  ERROR: " + error)
-                                    //message.channel.send("Error when retrieving pokemon species Data :C  ERROR: ");
+                                    //interaction.channel.send("Error when retrieving pokemon species Data :C  ERROR: ");
                                 });
                         }.bind(this))
                         .catch(function (error) {
@@ -962,7 +962,7 @@ Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
                                 let errMsg = "Pokemon not found, please check your spelling."
                                 reject(errMsg)
                             }
-                            //message.channel.send("Error when retrieving pokemon Data :C");
+                            //interaction.channel.send("Error when retrieving pokemon Data :C");
                         });
                 }
             }.bind(this));
@@ -1056,12 +1056,12 @@ Pokemon.prototype.loadFromSQL = function (connection, P, sqlObject) {
                         "Error when retrieving pokemon species Data :C  ERROR: ",
                         error
                     );
-                    //message.channel.send("Error when retrieving pokemon species Data :C  ERROR: ");
+                    //interaction.channel.send("Error when retrieving pokemon species Data :C  ERROR: ");
                 });
         }.bind(this)
     )
         .catch(function (error) {
             console.log("Error when Loading from SQL :C  ERROR: ", error);
-            //message.channel.send("Error when retrieving pokemon Data :C");
+            //interaction.channel.send("Error when retrieving pokemon Data :C");
         });
 }

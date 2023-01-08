@@ -1,3 +1,6 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
+const { waitForDebugger } = require('inspector');
+const { delay } = require('lodash');
 const logger = require('../logs/logger.js');
 // Catch calculator
 
@@ -6,117 +9,114 @@ const HELP_MESSAGE = "Catch Rate Calculator. Variables in order:\n "
 	+ "[Capture Power Bonus] [Player Catch Bonus] [Pokemon Level]\n"
 	+ "Default bonus values are: \n\tPokeball = 1\n\tStatus = 1\n\tCapture Power = 1\n\tPlayer Catch = 1"
 
-exports.run = (client, connection, P, message, args) => {
+
+
+module.exports.data = new SlashCommandBuilder()
+		.setName('catch')
+		.setDescription('Pokemon Catch Rate Calculator')
+		.addStringOption(option =>
+			option.setName('pokemon-name')
+				.setDescription('Name of the Pokemon being caught')
+				.setRequired(true))
+		.addIntegerOption(option =>
+			option.setName('max-hp')
+				.setDescription('Max HP of the Pokemon being caught')
+				.setRequired(true))
+		.addIntegerOption(option =>
+			option.setName('current-hp')
+				.setDescription('Current HP of the Pokemon being caught')
+				.setRequired(true))
+		.addIntegerOption(option =>
+			option.setName('capture-rate')
+				.setDescription('Capture Rate of the Pokemon being caught')
+				.setRequired(true))
+		.addIntegerOption(option =>
+			option.setName('level')
+				.setDescription('Level of the Pokemon being caught')
+				.setRequired(true))
+		.addIntegerOption(option =>
+			option.setName('ball-bonus')
+				.setDescription('Bonus from Pokeball'))								
+		.addIntegerOption(option =>
+			option.setName('player-bonus')
+				.setDescription('Bonus from Player'))
+		.addIntegerOption(option =>
+			option.setName('cp-bonus')
+				.setDescription('Bonus from Capture Power'))
+		.addIntegerOption(option =>
+			option.setName('status-bonus')
+				.setDescription('Bonus from Status'));
+
+module.exports.run = async (interaction) => {
 	//get pokeball emoji
-	const shakey = client.emojis.find(emoji => emoji.name === "poke_shake");
+	await interaction.deferReply();
 
-	try {
+	//const shakey = interaction.client.emojis.find(emoji => emoji.name === "poke_shake");
+	const shakey = '[PokeBall Emoji]'
+	logger.info('found emoji');
 
-		if (args.length > 0 && args[0].includes('help')) {
-			//clause for helping!
-			logger.info("[catch] Sending help message.")
-			message.reply(HELP_MESSAGE).catch(console.error);
-			return;
-		}
-		if (args.length < 4) {
-			logger.info("[catch] Sending too few arguments message.")
-			message.reply("You haven't provided enough arguments. If you'd like help with the command, here you go:\n"
-				+ HELP_MESSAGE)
-			return;
-		}
-		/* Checks for pokeball bonus option
-		Accepts:
-			 -p [val]
-			 -pokeball [val]
-			 -ball [val]
-		 */
-		let pokeball_regex = /(-p \d+)|(-pokeball \d+)|(-ball \d+)/
 
-		/* Checks for pokeball bonus option
-		Accepts:
-			 -s [val]
-			 -status [val]
-		 */
-		let status_regex = /(-s \d+)|(-status \d+)/
-
-		/* Checks for pokeball bonus option
-		Accepts:
-			-cp [val]
-			-capturepower [val]
-			-capture_power [val]
-			-capture-power [val]
-			-capture power [val] 
-		 */
-		let capture_power_regex = /(-cp \d+)|(-capture(\s|-|_)?power \d+)/
-
-		/* Checks for player catch bonus
-		Accepts:
-			-pc [val]
-			-playercatch [val]
-			-player_catch [val]
-			-player-catch [val]
-			-player catch [val]
-		*/
-		let player_catch_regex = /(-pc \d+)|(-player(\s|-|_)?catch \d+)/
-		let args_string = args.slice(0).join(" ")
-
+	try {		
 		var bball;
-		let pokeball_match = pokeball_regex.exec(args_string);
+		let pokeball_match = interaction.options.getInteger('ball-bonus');
 		if (pokeball_match) {
-			bball = parseInt(pokeball_match[0].split(" ")[1])
+			bball = pokeball_match;
 		} else {
-			bball = 1
+			bball = 1;
 		}
 
 		var bstatus;
-		let status_match = status_regex.exec(args_string);
+		let status_match = interaction.options.getInteger('status-bonus');
 		if (status_match) {
-			bstatus = parseInt(status_match[0].split(" ")[1])
+			bstatus = status_match;
 		} else {
-			bstatus = 1
+			bstatus = 1;
 		}
 
 		var cpfactor;
-		let capture_power_match = capture_power_regex.exec(args_string);
+		let capture_power_match = interaction.options.getInteger('cp-bonus');
 		if (capture_power_match) {
-			var cp_match_array = capture_power_match[0].split(" ");
-			if (cp_match_array.length == 2) {
-				cpfactor = parseInt(cp_match_array[1])
-			}
-			else if (cp_match_array.length == 3) {
-				cpfactor = parseInt(cp_match_array[2])
-			}
+			cpfactor = capture_power_match;
 		} else {
-			cpfactor = 1
+			cpfactor = 1;
 		}
 
 		var catchbonus;
-		let player_catch_match = player_catch_regex.exec(args_string);
+		let player_catch_match = interaction.options.getInteger('player-bonus');
 		if (player_catch_match) {
-			var pc_match_array = capture_power_match[0].split(" ")
-			if (cp_match_array.length == 2)
-				catchbonus = parseInt(pc_match_array[1])
-			else if (cp_match_array.length == 3)
-				catchbonus = parseInt(cpc_match_array[2])
+			catchbonus = player_catch_match;
 		} else {
-			catchbonus = 1
+			catchbonus = 1;
 		}
 
-
 		//list out required variables
-		let pokeName = args[0];
-		let maxHP = args[1];
-		let curHP = args[2];
-		let rate = args[3];
+		let pokeName = interaction.options.getString('pokemon-name');
+		let maxHP = interaction.options.getInteger('max-hp');
+		let curHP = interaction.options.getInteger('current-hp');
+		let rate = interaction.options.getInteger('capture-rate');
 		// let bball = args[4];
 		// let bstatus = args[5];
 		// let cpfactor = args[6];
 		// let catchbonus = args[7];
-		let level = args[8];
-		let troubleshoot = args[9];
+		let level = interaction.options.getInteger('level');
+		let troubleshoot = null;
 
+		const LINE_ONE_STRING = `data received! loading... ${shakey}\n`;
+		const CRIT_CAPTURE_STRING = `:star2: **CLICK!** :star2:\nIt's a critical capture! ${pokeName} has been caught `
+		const SHAKES_ONCE_STRING = `The ball shakes once...\n`;
+		const SHAKES_TWICE_STRING = `...it shakes twice...\n`;
+		const SHAKES_THREE_STRING = `......it shakes three times... (so exciting!! :fingers_crossed:)\n`;
+		const CAUGHT_STRING = `:star2: **CLICK** :star2:\nDadadada! The wild ${pokeName} was caught!`;
+		const SO_CLOSE_STRING = `Nooo, the ${pokeName} broke free! It was so close, too...`;
+		const GOT_OUT_STRING = `Argh, the ${pokeName} got out!`;
+		const OH_NO_STRING = `Oh no, the ${pokeName} broke free!`;
+		const DRAT_STRING = `Drat! ${pokeName} broke free!`;
+		
 		logger.info("[catch] data received! loading...")
-		message.channel.send(`data received! loading... ${shakey}`).catch(console.error);
+
+		let CumulativeString = LINE_ONE_STRING;
+
+		await interaction.followUp(CumulativeString).catch(console.error);
 
 		//  =========== CRITCATCH CALCULATOR ===========
 		var catchBonusMod = [0, 31, 151, 301, 451, 600];
@@ -178,13 +178,13 @@ exports.run = (client, connection, P, message, args) => {
 
 		if ((c_critCatch > c_randomCrit) && (level <= catchbonus)) {
 			logger.info("[catch] Critical capture! " + pokeName + " has been caught.")
-			message.channel.send(`:star2: **CLICK!** :star2:\nIt's a critical capture! ${pokeName} has been caught `).catch(console.error);
+			await interaction.followUp(CRIT_CAPTURE_STRING).catch(console.error);
 			return;
 		}
 
 		// ================================= TEST STUFF, DELETE LATER!!! =================================
 		if (troubleshoot != null) {
-			message.channel.send(`PokeName: ${pokeName}\n Max HP: ${maxHP}\nCurrent HP: ${curHP}\nCatch Rate: ${rate}\nBall Rate: ${bball}\nStatus Bonus: ${bstatus}\nCapture Power Factor: ${cpfactor}\nCatch Bonus: ${catchbonus}\nPokemon Level:${level}\ncatchBonusMod: ` + catchBonusMod + `\ncMod: ` + cMod + `\nfortyTimer: ` + fortyTimer + `\ncatchBonusFinal: ` + catchBonusFinal + `\ncatchBonusGen: ` + catchBonusGen + `\ntrueCCatch: ` + trueCCatch + `\na_plugValCombo: ` + a_plugValCombo + `\nb_shakeVal: ` + b_shakeVal + `\nb_randomShake: ` + b_randomShake + `\nc_critCatch: ` + c_critCatch + `\nc_randomCrit: ` + c_randomCrit).catch(console.error);
+			await interaction.followUp(`PokeName: ${pokeName}\n Max HP: ${maxHP}\nCurrent HP: ${curHP}\nCatch Rate: ${rate}\nBall Rate: ${bball}\nStatus Bonus: ${bstatus}\nCapture Power Factor: ${cpfactor}\nCatch Bonus: ${catchbonus}\nPokemon Level:${level}\ncatchBonusMod: ` + catchBonusMod + `\ncMod: ` + cMod + `\nfortyTimer: ` + fortyTimer + `\ncatchBonusFinal: ` + catchBonusFinal + `\ncatchBonusGen: ` + catchBonusGen + `\ntrueCCatch: ` + trueCCatch + `\na_plugValCombo: ` + a_plugValCombo + `\nb_shakeVal: ` + b_shakeVal + `\nb_randomShake: ` + b_randomShake + `\nc_critCatch: ` + c_critCatch + `\nc_randomCrit: ` + c_randomCrit).catch(console.error);
 		}
 
 
@@ -192,37 +192,58 @@ exports.run = (client, connection, P, message, args) => {
 		//TODO: try to have it post on a timer some day?
 		if (b_shakeVal > b_randomShake[0]) {
 			logger.info("[catch] Ball shakes once.")
-			message.channel.send(`The ball shakes once...`).catch(console.error);
+			CumulativeString += SHAKES_ONCE_STRING;
+			await interaction.editReply(CumulativeString).catch(console.error);
+			await sleep(2000);
 			if (b_shakeVal > b_randomShake[1]) {
 				logger.info("[catch] Ball shakes twice.")
-				message.channel.send(`...it shakes twice...`).catch(console.error);
+				CumulativeString += SHAKES_TWICE_STRING;
+				await interaction.editReply(CumulativeString).catch(console.error);
+				await sleep(2000);
+
 				if (b_shakeVal > b_randomShake[2]) {
 					logger.info("[catch] Ball shakes three times.")
-					message.channel.send(`......it shakes three times... (so exciting!! :fingers_crossed:)`).catch(console.error);
+					CumulativeString += SHAKES_THREE_STRING;
+					await interaction.editReply(CumulativeString).catch(console.error);
+					await sleep(2000);
+
 					if (b_shakeVal > b_randomShake[3]) {
 						logger.info("[catch] " + pokeName + " was caught!")
-						message.channel.send(`:star2: **CLICK** :star2:\nDadadada! The wild ${pokeName} was caught!`).catch(console.error);
+						CumulativeString += CAUGHT_STRING;
+						await interaction.editReply(CumulativeString).catch(console.error);
 					} else {
 						logger.info("[catch] " + pokeName + " broke free!")
-						message.channel.send(`Nooo, the ${pokeName} broke free! It was so close, too...`).catch(console.error);
+						CumulativeString += SO_CLOSE_STRING;
+						await interaction.followUp(CumulativeString).catch(console.error);
 					}
+				
 				} else {
 					logger.info("[catch] " + pokeName + " broke free!")
-					message.channel.send(`Argh, the ${pokeName} got out!`).catch(console.error);
+					CumulativeString += GOT_OUT_STRING;
+					await interaction.followUp(CumulativeString).catch(console.error);
 				}
+			
 			} else {
 				logger.info("[catch] " + pokeName + " broke free!")
-				message.channel.send(`Oh no, the ${pokeName} broke free!`).catch(console.error);
+				CumulativeString += OH_NO_STRING;
+				await interaction.followUp(CumulativeString).catch(console.error);
 			}
 		} else {
 			logger.info("[catch] " + pokeName + " broke free!")
-			message.channel.send(`Drat! ${pokeName} broke free!`).catch(console.error);
+			CumulativeString += DRAT_STRING;
+			await interaction.followUp(CumulativeString).catch(console.error);
 		}
 
 
 	} catch (error) {
 		logger.error("[catch] " + error.toString())
-		message.channel.send(error.toString());
-		message.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);
+		//await interaction.followUp(error.toString());
+		//await interaction.followUp('ChaCha machine :b:roke, please try again later').catch(console.error);
 	}
 };
+
+function sleep(ms) {
+	return new Promise((resolve) => {
+	  setTimeout(resolve, ms);
+	});
+  }

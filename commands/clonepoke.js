@@ -7,11 +7,11 @@ const SPA_ARRAY_INDEX = 3;
 const SPD_ARRAY_INDEX = 4;
 const SPE_ARRAY_INDEX = 5;
 
-module.exports.run = (client, connection, P, message, args) => {
+module.exports.run = (interaction) => {
     try{
         if (args[0] === "help") {
-            logger.info("[clonepoke] Displaying help message.");
-            message.reply("Creates a copy of a pokemon in the bot. Just give the command the pokemon's name.");
+            logger.info("[clonepoke] Displaying help interaction.");
+            interaction.reply("Creates a copy of a pokemon in the bot. Just give the command the pokemon's name.");
         } else {
             let name = args[0];
             logger.info("Searching database for " + name);
@@ -27,7 +27,7 @@ module.exports.run = (client, connection, P, message, args) => {
 
                 if (response.length == 0) {
                     logger.info("[clonepoke] " + name + " not found.");
-                    message.reply("Your pokemon wasn't found. Can't clone something that isn't there.");
+                    interaction.reply("Your pokemon wasn't found. Can't clone something that isn't there.");
                 } else {
                     logger.info("[clonepoke] Pokemon found.");
                     let cloneName = name + "Clone";
@@ -47,7 +47,7 @@ module.exports.run = (client, connection, P, message, args) => {
                         //});
                    // }                    
                     
-                    message.reply("Extracting " + name + "'s DNA sequence....");
+                    interaction.reply("Extracting " + name + "'s DNA sequence....");
                     basePoke.loadFromSQL(P, response[0]).then(response => {
 
                         let clonesql = `SELECT * FROM pokemon WHERE name LIKE '${cloneName}%';`;
@@ -82,15 +82,15 @@ module.exports.run = (client, connection, P, message, args) => {
                                 basePoke.statBlock.ivStats[SPD_ARRAY_INDEX] + " SpD / " + basePoke.statBlock.ivStats[SPE_ARRAY_INDEX] + " Spe\n";
 
                             importString += nameLine + ability + level + evs + nature + ivs;
-                            //message.reply("DNA sequencing complete.");
-                            //message.reply("Beginning incubation procedure....");
+                            //interaction.reply("DNA sequencing complete.");
+                            //interaction.reply("Beginning incubation procedure....");
                             logger.info("[clonepoke] Importing clone.");
                             clonePoke.importPokemon(connection, P, importString).then(response => {
                                 clonePoke.uploadPokemon(connection, message);
                             });
-                            //message.reply("We tried to create a perfect copy of your pokemon.....");
-                            //message.reply("We suceeded.");
-                            message.reply("Cloning procedure complete. Use +showpoke " + cloneName + " to view your new old friend.");
+                            //interaction.reply("We tried to create a perfect copy of your pokemon.....");
+                            //interaction.reply("We suceeded.");
+                            interaction.reply("Cloning procedure complete. Use +showpoke " + cloneName + " to view your new old friend.");
                             logger.info("[clonepoke] Cloning completed.");
                         });
 
@@ -102,8 +102,8 @@ module.exports.run = (client, connection, P, message, args) => {
         }
     }catch (error) {
         logger.error("[clonepoke] Error: " + error.toString());
-        message.channel.send(error.toString());
-        message.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);
+        interaction.channel.send(error.toString());
+        interaction.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);
     }
     
 }

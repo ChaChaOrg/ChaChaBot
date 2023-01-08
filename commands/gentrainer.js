@@ -2,12 +2,12 @@ const logger = require('../logs/logger.js');
 
 // JavaScript Document
 
-exports.run = (client, connection, P, message, args) => {
+exports.run = (interaction) => {
 
 	//help statement
 	if (args[0].includes('help')) {
-		logger.info("[gentrainer] Sending help message.")
-		message.channel.send("Generates a random trainer. For Arceus Only!\n\n+gentrainer [TrainerType (no spaces)] [# of feats (up to 4)] [min trainer level] [max trainer level] [# of pokemon] [min poke level] [max poke level] [pokeoption1] [pokeoption2] ...\n\nTo list types: +gentrainer types\nTo get a random trainer name/ttype: +gentrainer random").catch(console.error);
+		logger.info("[gentrainer] Sending help interaction.")
+		interaction.channel.send("Generates a random trainer. For Arceus Only!\n\n+gentrainer [TrainerType (no spaces)] [# of feats (up to 4)] [min trainer level] [max trainer level] [# of pokemon] [min poke level] [max poke level] [pokeoption1] [pokeoption2] ...\n\nTo list types: +gentrainer types\nTo get a random trainer name/ttype: +gentrainer random").catch(console.error);
 		return;
 	}
 
@@ -1637,7 +1637,7 @@ exports.run = (client, connection, P, message, args) => {
 		}
 
 		logger.info("[gentrainer] Sending all trainer types.")
-		message.channel.send(`All trainer types: \n${allTypes}`).catch(console.error);
+		interaction.channel.send(`All trainer types: \n${allTypes}`).catch(console.error);
 		return;
 	}
 
@@ -1648,7 +1648,7 @@ exports.run = (client, connection, P, message, args) => {
 		var randT2 = Math.floor(Math.random() * trainerTypes[randT1].length);
 
 		logger.info("[gentrainer] " + `Watch out! It's ${trainerTypes[randT1][randT2]} ${nameOptions[randName]}!`)
-		message.channel.send(`Watch out! It's ${trainerTypes[randT1][randT2]} ${nameOptions[randName]}!`);
+		interaction.channel.send(`Watch out! It's ${trainerTypes[randT1][randT2]} ${nameOptions[randName]}!`);
 		return;
 	}
 
@@ -1656,7 +1656,7 @@ exports.run = (client, connection, P, message, args) => {
 	if (args[0].includes("name")) {
 		var randName = Math.floor(Math.random() * nameOptions.length);
 		logger.info("[gentrainer] " + `Watch out! It's Trainer ${nameOptions[randName]}!`)
-		message.channel.send(`Watch out! It's Trainer ${nameOptions[randName]}!`);
+		interaction.channel.send(`Watch out! It's Trainer ${nameOptions[randName]}!`);
 		return;
 	}
 
@@ -1792,8 +1792,8 @@ exports.run = (client, connection, P, message, args) => {
 
 		//print the trainer out.
 
-		logger.info("[gentrainer] Sending embed message.")
-		message.channel.send({
+		logger.info("[gentrainer] Sending embed interaction.")
+		interaction.channel.send({
 			embed: {
 				color: 3447003,
 				author: {
@@ -1837,6 +1837,6 @@ exports.run = (client, connection, P, message, args) => {
 		});
 	} catch (error) {
 		logger.error("[gentrainer] " + error)
-		message.channel.send(`ChaCha Machine :b:roke :^(. ${error.message}`).catch(console.error);
+		interaction.channel.send(`ChaCha Machine :b:roke :^(. ${error.message}`).catch(console.error);
 	}
 };

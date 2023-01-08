@@ -1,8 +1,8 @@
 const logger = require('../logs/logger.js');
 // charisma calculator
 
-exports.run = (client, connection, P, message, args) => {
-	//message.channel.send('Bang! <:gunspurr:356191158017196032>').catch(console.error);
+exports.run = (interaction) => {
+	//interaction.channel.send('Bang! <:gunspurr:356191158017196032>').catch(console.error);
 
 	//variables
 
@@ -16,8 +16,8 @@ exports.run = (client, connection, P, message, args) => {
 
 	//check if asking for help
 	if (name.includes('help')) {
-		logger.info("[charisma] Sending help message.")
-		message.reply('Charisma Generator. Variables in order:\n [Pokemon Name] [Beauty Moves] [Clever Moves] [Cool Moves] [Cute Moves] [Tough Moves]').catch(console.error);
+		logger.info("[charisma] Sending help interaction.")
+		interaction.reply('Charisma Generator. Variables in order:\n [Pokemon Name] [Beauty Moves] [Clever Moves] [Cool Moves] [Cute Moves] [Tough Moves]').catch(console.error);
 		return;
 	}
 
@@ -52,6 +52,6 @@ exports.run = (client, connection, P, message, args) => {
 	//print results!
 
 	logger.info("[charisma] " + `${name}'s Charisma is ${finalCha}(${finalChaModString})`)
-	message.channel.send(`${name}'s Charisma is ${finalCha}(${finalChaModString})`);
+	interaction.channel.send(`${name}'s Charisma is ${finalCha}(${finalChaModString})`);
 
 }

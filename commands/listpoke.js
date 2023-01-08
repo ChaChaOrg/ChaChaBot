@@ -44,22 +44,22 @@ const FILTER_NOT_FOUND = "Whoops! Either you didn't give enough arguments, or th
  */
 // TODO fill out comment info above
 //TODO split printed string by creator/ ensure it doesn't break discord character limit
-module.exports.run = (client, connection, P, message, args) => {
+module.exports.run = (interaction) => {
 
     try {
 
         // if there are less than 2 args, they either need help or didn't put enough info in
         if (args.length < 2 && args.length > 0) {
             if (args[0].includes('help')) {
-                logger.info("[listpoke] Sending help message.");
-                message.reply(HELP_MESSAGE);
+                logger.info("[listpoke] Sending help interaction.");
+                interaction.reply(HELP_MESSAGE);
             } else {
                 logger.info("[listpoke] Filter option not found or not enough args. Sending error message");
-                message.reply(FILTER_NOT_FOUND);
+                interaction.reply(FILTER_NOT_FOUND);
             }
         } else {
 
-            message.reply("Looking for that now!");
+            interaction.reply("Looking for that now!");
 
             // if you're here, it's time to create an array/pages to hold and display pokemon
 
@@ -123,7 +123,7 @@ module.exports.run = (client, connection, P, message, args) => {
                 let pokeString = "";
 
                 // if discord id matches message sender, start with userCreator; otherwise start with otherCreator
-                if (pokemon.discordID == message.author.id) {
+                if (pokemon.discordID == interaction.author.id) {
                     if (pokemon.private) pokeString += userCreatorPrivate;
                     else pokeString += userCreator;
                 } else {
@@ -158,7 +158,7 @@ module.exports.run = (client, connection, P, message, args) => {
                     // go through each pokemon, creating their summary string and adding it to the array of pokes to be displayed
                     result.forEach(pokemon => {
                         // only add the pokemon if they are private BUT belong to the user, or are public
-                        if (pokemon.discordID === message.author.id || pokemon.private === 0) {
+                        if (pokemon.discordID === interaction.author.id || pokemon.private === 0) {
                             // true/false checks for grabbing the pokemon; if any are false, don't process it
                             let filterSpeciesSwitch = true;
                             let filterFormSwitch = true;
@@ -219,7 +219,7 @@ module.exports.run = (client, connection, P, message, args) => {
                                             }
                                         }
                                     } catch (oopsie) {
-                                        message.reply("Error while attempting to find level range");
+                                        interaction.reply("Error while attempting to find level range");
                                     }
                                 }
                             }
@@ -236,9 +236,9 @@ module.exports.run = (client, connection, P, message, args) => {
                                         })
                                         .catch(error => {
                                             // if you're here, there was an issue pushing the pokemon into the list
-                                            let pushPokeError = "Error while converting Pokemon into summary message.";
+                                            let pushPokeError = "Error while converting Pokemon into summary interaction.";
                                             logger.error("[listpoke] " + error + "\n" + pushPokeError);
-                                            message.reply(pushPokeError);
+                                            interaction.reply(pushPokeError);
                                         }));
                                 }
                             } else if (filterChoice === filterOptions[1]) { // filter by type
@@ -251,9 +251,9 @@ module.exports.run = (client, connection, P, message, args) => {
                                         })
                                         .catch(error => {
                                             // if you're here, there was an issue pushing the pokemon into the list
-                                            let pushPokeError = "Error while converting Pokemon into summary message.";
+                                            let pushPokeError = "Error while converting Pokemon into summary interaction.";
                                             logger.error("[listpoke] " + error + "\n" + pushPokeError);
-                                            message.reply(pushPokeError);
+                                            interaction.reply(pushPokeError);
                                         }));
                                 }
                             } else if (filterChoice === filterOptions[2]) { // filter by discord id
@@ -266,9 +266,9 @@ module.exports.run = (client, connection, P, message, args) => {
                                         })
                                         .catch(error => {
                                             // if you're here, there was an issue pushing the pokemon into the list
-                                            let pushPokeError = "Error while converting Pokemon into summary message.";
+                                            let pushPokeError = "Error while converting Pokemon into summary interaction.";
                                             logger.error("[listpoke] " + error + "\n" + pushPokeError);
-                                            message.reply(pushPokeError);
+                                            interaction.reply(pushPokeError);
                                         }));
                                 }*/
                             console.log("test");
@@ -284,9 +284,9 @@ module.exports.run = (client, connection, P, message, args) => {
                                     })
                                     .catch(error => {
                                         // if you're here, there was an issue pushing the pokemon into the list
-                                        let pushPokeError = "Error while converting Pokemon into summary message.";
+                                        let pushPokeError = "Error while converting Pokemon into summary interaction.";
                                         logger.error("[listpoke] " + error + "\n" + pushPokeError);
-                                        message.reply(pushPokeError);
+                                        interaction.reply(pushPokeError);
                                     }));
                             }
                         }
@@ -363,28 +363,28 @@ module.exports.run = (client, connection, P, message, args) => {
 
                         // TODO turn this into page flipping variant later
                         if (pokeEmbedPages.length > 0) {
-                            message.author.send("Here are the Pokemon you can view." +
+                            interaction.author.send("Here are the Pokemon you can view." +
                                 "\n\nYou can also view them on the site at http://34.226.119.6:7000/\n\n" +
                                 userCreatorPrivate + " = Created by you, private/visible only to you\n" +
                                 userCreator + " = Created by you, but public\n" +
                                 otherCreator + " = Created by someone else");
                             pokeEmbedPages.forEach(pokePage => {
-                                message.author.send(pokePage);
+                                interaction.author.send(pokePage);
                             });
-                            message.channel.send("I've DM'd you the list!");
+                            interaction.channel.send("I've DM'd you the list!");
                         } else {
-                            message.reply("No results found.");
+                            interaction.reply("No results found.");
                         }
                         logger.info("[listpoke] Sent all pages to user");
 
                         // once all pokemon have been yoinked, print em as a list
                         //console.log(`String: ${printString}`);
-                        //message.author.send(printString);
+                        //interaction.author.send(printString);
                     })
                     .catch(error => {
                         // if you're here, there was an error while attempting to resolve the Big Promise
                         let errorMessage = "Error while attempting to create promises."
-                        message.reply(errorMessage);
+                        interaction.reply(errorMessage);
                         logger.info("[listpoke] " + errorMessage + "\n" + error);
                     });
 
@@ -395,6 +395,6 @@ module.exports.run = (client, connection, P, message, args) => {
         // if you're here, there was a broad error that wasn't caught by the other stuff!
         let broadErrMessage = "Error while attempting to execute the listpoke command.";
         logger.info("[listpoke] " + broadErrMessage + "\n" + err);
-        message.reply(broadErrMessage);
+        interaction.reply(broadErrMessage);
     }
 };

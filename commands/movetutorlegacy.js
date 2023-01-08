@@ -1,15 +1,15 @@
 const logger = require('../logs/logger.js');
 // JavaScript Document
 
-exports.run = (client, connection, P, message, args) => {
-	//message.channel.send('Bang! <:gunspurr:356191158017196032>').catch(console.error);
+exports.run = (interaction) => {
+	//interaction.channel.send('Bang! <:gunspurr:356191158017196032>').catch(console.error);
 
 	//+movetutor [PokemonName] [EvoLeft (2 for 3-stage, 1 for 2-stage, 0 for no more evo)] [Move Name] [Move PP] [Successes (1-5)]
 
 	//if asking for help, gib help
 	if (args[0] === "help") {
-		logger.info("[movetutorlegacy] Sending help message.")
-		message.channel.send("`LEGACY- This is the old version of +movetutor!`\n The command to check the Train" +
+		logger.info("[movetutorlegacy] Sending help interaction.")
+		interaction.channel.send("`LEGACY- This is the old version of +movetutor!`\n The command to check the Train" +
 			" Pokemon" +
 			" DC to learn a new move.\n\n+movetutorlegacy" +
 			" [PokeName] [MoveName (with no spaces plz)] [MovePP] [Successes(0-5)]\n\nTo learn a skill:" +
@@ -17,8 +17,8 @@ exports.run = (client, connection, P, message, args) => {
 			" [PokeName] [IntMod] Skill [SkillName]\n\nTo get evo bonuses: +movetutorlegacy evolution").catch(console.error);
 		return;
 	} else if (args[0].includes('evolution')) {
-		logger.info("[movetutor] Sending evolution tip message.")
-		message.channel.send("A Pokémon that has never evolved gains a +5 bonus to this check, \
+		logger.info("[movetutor] Sending evolution tip interaction.")
+		interaction.channel.send("A Pokémon that has never evolved gains a +5 bonus to this check, \
 			and a Pokémon that has evolved once gains a +2 bonus, since it is easier to learn moves at earlier stages. \
 			However, this only applies if the evolutions can learn the same moves. \
 			If a Pokémon is a middle stage and its previous stage does not learn the move, \
@@ -31,7 +31,7 @@ exports.run = (client, connection, P, message, args) => {
 	} else if (args[2].toLowerCase().includes('skill')) { //check if asking for a skill; if so, return skill dc
 		var skillDC = 20 - args[1];
 		logger.info("[movetutor] " + `The DC for ${args[0]} to learn the ${args[3]} skill is ${skillDC}.`)
-		message.channel.send(`The DC for ${args[0]} to learn the ${args[3]} skill is ${skillDC}.`).catch(console.error);
+		interaction.channel.send(`The DC for ${args[0]} to learn the ${args[3]} skill is ${skillDC}.`).catch(console.error);
 		return;
 	} else {
 
@@ -61,25 +61,25 @@ exports.run = (client, connection, P, message, args) => {
 				finalDC = baseDC[successes] + formulaMod;
 				logger.info("[movetutor] " + `The DC for ${pokeName} to learn ${moveName} is ${finalDC}.\
 					\n\nUse your normal Train Pokemon skill to practice this move outside of battle.`)
-				message.channel.send(`The DC for ${pokeName} to learn ${moveName} is ${finalDC}.\
+				interaction.channel.send(`The DC for ${pokeName} to learn ${moveName} is ${finalDC}.\
 					\n\nUse your normal Train Pokemon skill to practice this move outside of battle.`).catch(console.error);
 				if (successes === 2) {
-					message.channel.send("Note: if you succeed on this check and your Pokemon already knows four moves, you must forget one to make space for this new one!");
+					interaction.channel.send("Note: if you succeed on this check and your Pokemon already knows four moves, you must forget one to make space for this new one!");
 				}
 			} else { //if 3+, in-battle, so (baseDC + formMod)
 				finalDC = baseDC[successes] + formulaMod;
 				logger.info("[movetutor] " + `The DC for ${pokeName} to learn ${moveName} is ${finalDC}.\
 					\n\nWhen rolling, use a Train Pokemon check, but utilizing the Pokemon's INT mod instead of your CHA mod.\
 					This check must be attempted while in a battle.`)
-				message.channel.send(`The DC for ${pokeName} to learn ${moveName} is ${finalDC}.\
+				interaction.channel.send(`The DC for ${pokeName} to learn ${moveName} is ${finalDC}.\
 				\n\nWhen rolling, use a Train Pokemon check, but utilizing the Pokemon's INT mod instead of your CHA mod.\
 				 This check must be attempted while in a battle.`);
 			}
 
 		} catch (error) {
 			logger.error("[movetutor] " + error.message)
-			message.channel.send("ChaCha machine :b:roke :^(").catch(console.error);
-			message.channel.send(error.message);
+			interaction.channel.send("ChaCha machine :b:roke :^(").catch(console.error);
+			interaction.channel.send(error.message);
 		}
 	}
 }

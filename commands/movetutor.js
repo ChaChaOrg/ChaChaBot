@@ -11,23 +11,23 @@ const MOVETUTOR_HELP = "" +
 	"\n\nTo learn a move: `+movetutor [Move_Name (Use _'s for spaces)]`" +
 	"\n\nTo learn a skill: `+movetutor Skillpoint [PokeName] [IntMod] [SkillName]`";
 
-exports.run = (client, connection, P, message, args) => {
+exports.run = (interaction) => {
 
 	let https = require('https');
 	let jsdom = require('jsdom');
 
 	if (args.length < 1) {
 		logs.info("[movetutor] Blank message sent, alerting user");
-		message.reply("Not enough arguments given. Please try again- make sure to use _ for spaces in moves!");
+		interaction.reply("Not enough arguments given. Please try again- make sure to use _ for spaces in moves!");
 		return;
 	} else if(args[0].includes('help')) {
 		logs.info("[movetutor] Sending help message");
-		message.reply(MOVETUTOR_HELP);
+		interaction.reply(MOVETUTOR_HELP);
 		return;
 	} else if ( args[0].toLowerCase().includes('skillpoint')) { //check if asking for a skill; if so, return skill dc
 		logs.info("[movetutor] Skill tutor calculations");
 		var skillDC = 20 - args[2];
-		message.reply(`The DC for ${args[1]} to learn the ${args[3]} skill is ${skillDC}.`).catch(console.error);
+		interaction.reply(`The DC for ${args[1]} to learn the ${args[3]} skill is ${skillDC}.`).catch(console.error);
 		return;
 	} else {
 		logs.info("[movetutor] Move tutor calculations");
@@ -133,23 +133,23 @@ exports.run = (client, connection, P, message, args) => {
 								" if it's the second evolution" +
 								" stage that can learn" +
 								" the move.\n";
-							message.channel.send(output);
+							interaction.channel.send(output);
 						}else{
 							logs.error("[movetutor] " + moveName + " found, could not locate pp value");
-							message.channel.send("Could not find pp of move: " + moveName);
+							interaction.channel.send("Could not find pp of move: " + moveName);
 						}		
 					}else{
 						logs.error("[movetutor] Unable to find the move " + moveName);
-						message.channel.send("Could not find move: " + moveName + "\n Please double check your spelling," +
+						interaction.channel.send("Could not find move: " + moveName + "\n Please double check your spelling," +
 							" especially if the move has a - in it.");
 					}
 				});
 				
 							
 			}else{
-				//message.channel.send("Couldn't connect to move list(" + databaseURL + ").");
+				//interaction.channel.send("Couldn't connect to move list(" + databaseURL + ").");
 				logs.error("[movetutor] Couldn't connect to move database on bulbapedia, response code: " + response);
-				message.channel.send("Couldn't connect to move list.");
+				interaction.channel.send("Couldn't connect to move list.");
 				//console.log("response code: " + response);
 			}
 		});

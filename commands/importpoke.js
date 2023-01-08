@@ -1,14 +1,14 @@
 const logger = require('../logs/logger.js');
 
-module.exports.run = (client, connection, P, message, args) => {
+module.exports.run = (interaction) => {
     let Pokemon = require('../models/pokemon.js');
     let importPoke = new Pokemon();
 
-    let importContent = message.content.substr("+pokeimport ".length, message.content.length - "+pokeimport ".length);
+    let importContent = interaction.content.substr("+pokeimport ".length, interaction.content.length - "+pokeimport ".length);
 
     if (args.length == 0 || args[0] === "help") {
-        logger.info("[importpoke] Sending help message.")
-        message.reply('Pokemon importer. Paste showdown export string or fill in as follows.\nNote that you can omit individual EVs or the entire EV line if they all equal 0.\nReplace any instances of [] with the desired Pokemon\'s info (without the brackets themselves), and make sure that each piece of info is on its own line.\n' +
+        logger.info("[importpoke] Sending help interaction.")
+        interaction.reply('Pokemon importer. Paste showdown export string or fill in as follows.\nNote that you can omit individual EVs or the entire EV line if they all equal 0.\nReplace any instances of [] with the desired Pokemon\'s info (without the brackets themselves), and make sure that each piece of info is on its own line.\n' +
             '```+importpoke [Nickname] ([Species]) ([M/F/N])\n' +
             'Ability: [Ability Name]\n' +
             'Level: [Level]\n' +
@@ -29,8 +29,8 @@ module.exports.run = (client, connection, P, message, args) => {
     logger.info("[importpoke] " + importContent);
     importPoke.importPokemon(connection, P, importContent)
         .then(response => {
-            logger.info("[importpoke] Sending summary message.")
-            message.channel.send(importPoke.sendSummaryMessage(client));
+            logger.info("[importpoke] Sending summary interaction.")
+            interaction.channel.send(importPoke.sendSummaryMessage(client));
             importPoke.uploadPokemon(connection, message);
         });
 };

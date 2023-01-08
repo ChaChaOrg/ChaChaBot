@@ -32,25 +32,25 @@ const HELP_MESSAGE = '\n' + CMD_TEMPLATE + '\n\n' + 'examples - `+genpoke Pikach
 	' default** - use `+modpoke (name) private 0` to make publicly visible/editable\n\n' +
 	'(Hint: You can view an existing Pokemon with `+showpoke [nickname]`, or remove it using `+rempoke [nickname]`';
 */
-module.exports.run = (client, connection, P, message, args) => {
+module.exports.run = (interaction) => {
 
 	let Pokemon = require('../models/pokemon.js');
 
 	if (args[0] === "help") {
-		logger.info("[genpoke] Sending help message.");
-		message.reply(HELP_MESSAGE).catch(console.error);
+		logger.info("[genpoke] Sending help interaction.");
+		interaction.reply(HELP_MESSAGE).catch(console.error);
 		return;
 	}
 
 	if (args.length < 3) {
 		logger.info("[genpoke] Sending not enough arguments warning.");
-		message.channel.send("You haven't provided enough arguments. Should be " + CMD_TEMPLATE)
+		interaction.channel.send("You haven't provided enough arguments. Should be " + CMD_TEMPLATE)
 		return;
 	}
 
 	if (args[2].match(/[-\/\\^$*+?.()|[\]{}'"\s]/)) {
 		logger.warn("[showpoke] User put special character in pokemon name, sending warning.");
-		message.reply("Please do not use special characters when using generating Pokemon.");
+		interaction.reply("Please do not use special characters when using generating Pokemon.");
 		return;
 	}
 
@@ -72,22 +72,22 @@ module.exports.run = (client, connection, P, message, args) => {
 				genPokemon.uploadPokemon(connection, message);
 
 				// post embed
-				logger.info("[genpoke] Sending summary message.");
-				message.channel.send(genPokemon.sendSummaryMessage(client));
+				logger.info("[genpoke] Sending summary interaction.");
+				interaction.channel.send(genPokemon.sendSummaryMessage(client));
 
 				// alert user that their poke has been added to the database
 				logger.info("[genpoke] Sending upload confirmation and how to remove pokemon.");
-				message.reply(genPokemon.name + " has been added to the database.\nTo remove it, use this command: `+rempoke " + genPokemon.name + "`");
+				interaction.reply(genPokemon.name + " has been added to the database.\nTo remove it, use this command: `+rempoke " + genPokemon.name + "`");
 			})
 			.catch(function (error) {
 				logger.error(error);
-				message.reply(error);
+				interaction.reply(error);
 			});
 	}
 	/* istanbul ignore next */
 	catch (error) {
 		logger.error(error);
-		message.channel.send('ChaCha machine :b:roke while attempting to generate a Pokemon, please try again later').catch(console.error);
+		interaction.channel.send('ChaCha machine :b:roke while attempting to generate a Pokemon, please try again later').catch(console.error);
 	}
 
 };

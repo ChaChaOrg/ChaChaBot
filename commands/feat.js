@@ -3,13 +3,13 @@ const logger = require('../logs/logger.js');
 // JavaScript Document
 
 //run
-exports.run = (client, connection, P, message, args) => {
+exports.run = (interaction) => {
 
 
 	//check if asking for help
 	if (args[0].includes('help')) {
-		logger.info("[feat] Sending help message.")
-		message.channel.send('Feat finder, prints a given feat name. +feat [feat name]').catch(console.error);
+		logger.info("[feat] Sending help interaction.")
+		interaction.channel.send('Feat finder, prints a given feat name. +feat [feat name]').catch(console.error);
 		return;
 	}
 
@@ -626,7 +626,7 @@ exports.run = (client, connection, P, message, args) => {
 				name: "Symbiote",
 				cat: "Trainer Feat",
 				prereq: "n/a",
-				effect: "Only Grass type Pokémon may use this feat. As a standard action, the Pokémon chooses a target to recover from. Whenever the target Pokémon gains HP due to a move, an item being used on it, or eating a berry, the Pokémon using this feat also recovers 1/8th of its maximum HP. The symbiote effect lasts for a number of rounds equal to the Pokémon’s level. If the Pokémon using this feat is removed from battle, by fainting, being withdrawn, or otherwise, it ends Symbiote.",
+				effect: "Only Grass type Pokémon may use this feat. As a standard action, the Pokémon chooses a target to recover from. Whenever the target Pokémon gains HP due to a move, an item being used on it, or eating a berry, the Pokémon using this feat also recovers 1/8th of its maximum Hinteraction.pokedex. The symbiote effect lasts for a number of rounds equal to the Pokémon’s level. If the Pokémon using this feat is removed from battle, by fainting, being withdrawn, or otherwise, it ends Symbiote.",
 				normal: "This action cannot be done.",
 				special: "Fatigue Cost: 1"
 			},
@@ -703,8 +703,8 @@ exports.run = (client, connection, P, message, args) => {
 		//if the feat isn't null, print it out
 
 		if (featFound !== null) {
-			logger.info("[feat] Sending embed message.")
-			message.channel.send({
+			logger.info("[feat] Sending embed interaction.")
+			interaction.channel.send({
 				embed: {
 					color: 3447003,
 					author: {
@@ -740,11 +740,11 @@ exports.run = (client, connection, P, message, args) => {
 			});
 		} else {
 			logger.info("[feat] No feat found.")
-			message.channel.send("No feat found, sorry :^(").catch(error);
+			interaction.channel.send("No feat found, sorry :^(").catch(error);
 		}
 	} catch (error) {
 		logger.error("[feat] " + error)
-		message.channel.send(`No feat found, sorry :^( ${error}`).catch(error);
+		interaction.channel.send(`No feat found, sorry :^( ${error}`).catch(error);
 	}
 };
 

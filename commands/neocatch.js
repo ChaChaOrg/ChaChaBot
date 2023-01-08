@@ -1,5 +1,5 @@
 //reworked catch calculator
-exports.run = (client, connection, P, message, args) => {
+exports.run = (interaction) => {
 	//get pokeball emoji
 	const shakey = client.emojis.find("name", "poke_shake");
 	const helpMessage = "Catch Rate Calculator. (★ = required field)\n\n `+neocatch [Pokemon Name★] [Current HP★] [Max HP★] [Catch Roll★] [Pokeball Bonus] [Status Bonus] [Capture Power Bonus]`\n\n" + 
@@ -12,7 +12,7 @@ exports.run = (client, connection, P, message, args) => {
 		let name = args[0];
 		//clause for helping!
 		if (args.length < 4 || name.includes('help')) {			
-			message.reply(helpMessage).catch(console.error);
+			interaction.reply(helpMessage).catch(console.error);
 			return;
 		}
 		let hp = args[1];
@@ -32,7 +32,7 @@ exports.run = (client, connection, P, message, args) => {
 		if(args.length >= 7){
 			bonus = args[6];
 		}
-		message.channel.send(`data received! loading... <a:pokeball:790311645095919637>`).catch(console.error);
+		interaction.channel.send(`data received! loading... <a:pokeball:790311645095919637>`).catch(console.error);
 		let sql = `SELECT * From pokemon WHERE name = '${name}';`;
 		console.log(sql);
 		let loadSQLPromise = [];
@@ -41,14 +41,14 @@ exports.run = (client, connection, P, message, args) => {
 			if(err){
 				let errMsg = `Error with SQL query: ${err}`;
 		        console.log(errMsg);
-		        message.reply(errMsg);
+		        interaction.reply(errMsg);
 		        return;
 			};
 	
 			if(response.length == 0){
 				let errMsg = `Cannot find '${name}'. Please check your spelling + case-sensitivity.`
         		console.log(errMsg);
-        		message.reply(errMsg);
+        		interaction.reply(errMsg);
         		return;
 			}else{
 				
@@ -120,7 +120,7 @@ exports.run = (client, connection, P, message, args) => {
 					console.log("Calculation: " + calcC + "\nRandom: " + critRando);
 					console.log("Level: " + opponent.level + "\nRoll: " + roll);
 					if ((calcC > critRando) && (opponent.level <= roll)) {
-						message.channel.send(`:star2: **CLICK!** :star2:\nIt's a critical capture! ${name} has been caught `).catch(console.error);
+						interaction.channel.send(`:star2: **CLICK!** :star2:\nIt's a critical capture! ${name} has been caught `).catch(console.error);
 						return;
 					}
 	
@@ -129,27 +129,27 @@ exports.run = (client, connection, P, message, args) => {
 					console.log("Catch rate: " + rate);
 					console.log("number: " + calcB + " target: " + b_randomShake[0]);
 					if (calcB > b_randomShake[0]){
-						message.channel.send(`The ball shakes once...`).catch(console.error);
+						interaction.channel.send(`The ball shakes once...`).catch(console.error);
 						console.log("number: " + calcB + " target: " + b_randomShake[1]);
 						if (calcB > b_randomShake[1]) {
-							message.channel.send(`...it shakes twice...`).catch(console.error);
+							interaction.channel.send(`...it shakes twice...`).catch(console.error);
 							console.log("number: " + calcB + " target: " + b_randomShake[2]);
 							if (calcB > b_randomShake[2]) {
-								message.channel.send(`......it shakes three times... (so exciting!! :fingers_crossed:)`).catch(console.error);
+								interaction.channel.send(`......it shakes three times... (so exciting!! :fingers_crossed:)`).catch(console.error);
 								console.log("number: " + calcB + " target: " + b_randomShake[3]);
 								if (calcB > b_randomShake[3]) {
-									message.channel.send(`:star2: **CLICK** :star2:\nDadadada! The wild ${name} was caught!`).catch(console.error);
+									interaction.channel.send(`:star2: **CLICK** :star2:\nDadadada! The wild ${name} was caught!`).catch(console.error);
 								} else {
-									message.channel.send(`Nooo, ${name} broke free! It was so close, too...`).catch(console.error);
+									interaction.channel.send(`Nooo, ${name} broke free! It was so close, too...`).catch(console.error);
 								}
 							} else {
-								message.channel.send(`Argh, ${name} got out!`).catch(console.error);
+								interaction.channel.send(`Argh, ${name} got out!`).catch(console.error);
 							}	
 						} else {
-							message.channel.send(`Oh no, ${name} broke free!`).catch(console.error);
+							interaction.channel.send(`Oh no, ${name} broke free!`).catch(console.error);
 						}
 					} else {
-						message.channel.send(`Drat! ${name} broke free!`).catch(console.error);
+						interaction.channel.send(`Drat! ${name} broke free!`).catch(console.error);
 					}
 				
 				});
@@ -159,7 +159,7 @@ exports.run = (client, connection, P, message, args) => {
 	
 		
 	}catch(error){
-		message.channel.send(error.toString);
-		message.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);
+		interaction.channel.send(error.toString);
+		interaction.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);
 	}
 };

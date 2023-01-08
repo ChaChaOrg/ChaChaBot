@@ -1,7 +1,9 @@
 const logger = require('../logs/logger.js');
 
 //get help on various chachabot topics
-exports.run = (client, connection, P, message, args) => {
+
+
+exports.run = (interaction) => {
 
     //help topics
     let helpTopics = ["pokemon","chacha","legacy","all"];
@@ -125,7 +127,7 @@ exports.run = (client, connection, P, message, args) => {
     let helpDefault = function () {
         // if there were no args given, just print help message with list
         helpMessage.embed.fields.push(helpList);
-        message.channel.send(helpMessage);
+        interaction.channel.send(helpMessage);
     }
 
     // function to push array of fields into help message
@@ -164,8 +166,8 @@ exports.run = (client, connection, P, message, args) => {
 
         // after the proper items are added, send the message to the user directly & make a note of it in the
         // channel they requested it
-        message.author.send(helpMessage);
-        message.reply(helpAlert);
+        interaction.author.send(helpMessage);
+        interaction.reply(helpAlert);
     }
     else {
         // if there were no args given, just print help message with list

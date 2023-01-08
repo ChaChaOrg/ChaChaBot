@@ -1,7 +1,7 @@
 const logger = require('../logs/logger.js');
 // Calculates a Pokemon Ranger's DC to loop/catch a Pokemon is, given its dex and catch rate.
 
-exports.run = (client, connection, P, message, args) => {
+exports.run = (interaction) => {
 
     //The Pokemon's name
     let name = args[0];
@@ -12,8 +12,8 @@ exports.run = (client, connection, P, message, args) => {
 
     //check if asking for help
     if (args[0].includes('help')) {
-        logger.info("[ranger] Sending help message.")
-        message.reply(helpMessage).catch(console.error);
+        logger.info("[ranger] Sending help interaction.")
+        interaction.reply(helpMessage).catch(console.error);
         return;
     }
 
@@ -26,8 +26,8 @@ exports.run = (client, connection, P, message, args) => {
 
         // check if either arguments are not numbers; if they put non-numbers in then get outta here
         if (!isNumber(args[0]) || !isNumber(args[1])) {
-            logger.info("[ranger] Non-number arguments given. Sending error message.");
-            message.reply("Please provide number arguments only: the Pokemon's Dex mod, followed by their catch" +
+            logger.info("[ranger] Non-number arguments given. Sending error interaction.");
+            interaction.reply("Please provide number arguments only: the Pokemon's Dex mod, followed by their catch" +
                 " rate.").catch (console.error);
             return;
         }
@@ -49,7 +49,7 @@ exports.run = (client, connection, P, message, args) => {
     \n\nDon't forget, a Nat 1 is an auto-fail, and a Nat 20 is an auto-success.`
 
         logger.info("[ranger] " + finalMessage);
-        message.reply(finalMessage);
+        interaction.reply(finalMessage);
 
         return;
 
@@ -73,14 +73,14 @@ exports.run = (client, connection, P, message, args) => {
             let pokeNotFoundMessage = "Pokemon not found in database. Please check your spelling, or the Pokemon may" +
                 " not be there.";
             logger.info("[showpoke] " + pokeNotFoundMessage);
-            message.reply(pokeNotFoundMessage);
+            interaction.reply(pokeNotFoundMessage);
         }
         else {
             // check if the user is allowed to edit the Pokemon. If a Pokemon is private, the user's discord ID must match the Pokemon's creator ID
-            if (response[0].private > 0 && message.author.id !== response[0].discordID) {
+            if (response[0].private > 0 && interaction.author.id !== response[0].discordID) {
                 logger.info("[modpoke] Detected user attempting to access private Pokemon.")
                 // If user found a pokemon that was marked private and belongs to another user, act as if the pokemon doesn't exist in messages
-                message.reply(notFoundMessage);
+                interaction.reply(notFoundMessage);
                 return;
             }
 
@@ -118,7 +118,7 @@ exports.run = (client, connection, P, message, args) => {
                     \nDon't forget, a Nat 1 is an auto-fail, and a Nat 20 is an auto-success.`;
 
                     logger.info("[ranger] " + finalData)
-                    message.reply(finalData);
+                    interaction.reply(finalData);
 
                 });
         }

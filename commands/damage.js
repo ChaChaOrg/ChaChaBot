@@ -1,4 +1,5 @@
 const logger = require('../logs/logger.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
 
 const STAT_ARRAY_MAX = 6;
 const HP_ARRAY_INDEX = 0;
@@ -28,28 +29,20 @@ module.exports = {
   data: new SlashCommandBuilder()
       .setName('damage')
       .setDescription('A damage calculator that uses the Pokemon in the database.'),
-    async execute(interaction){
-      damage(client, connection, P, message, args)
-    }
-}
-
-module.exports.run = damage(client, connection, P, message, args);
-
-
-function damage(client, connection, P, message, args) {
-  try {
-
+    async run(interaction){
+      try{
+      
     //clause for helping!
     if (args[0].includes("help")) {
-      logger.info("[damage] Sending help message.");
-      message.reply(HELP_MESSAGE)
+      logger.info("[damage] Sending help interaction.");
+      interaction.reply(HELP_MESSAGE)
         .catch(console.error);
       return;
     }
 
     if (args.length < 3) {
-      logger.info("[damage] Sending too few parameters message.");
-      message.reply("You haven't provided enough parameters, please try again.").catch(console.error);
+      logger.info("[damage] Sending too few parameters interaction.");
+      interaction.reply("You haven't provided enough parameters, please try again.").catch(console.error);
       return;
     }
 
@@ -151,18 +144,18 @@ function damage(client, connection, P, message, args) {
     let loadSQLPromise = [];
 
     /* istanbul ignore next */
-    connection.query(sql, function (err, response) {
+    interaction.client.mysqlConnection.query(sql, function (err, response) {
       if (err) {
         let errMsg = `Error with SQL query: ${err}`;
         logger.error(errMsg);
-        message.reply(errMsg);
+        interaction.reply(errMsg);
         return;
       };
 
       if (response.length === 0) {
         let errMsg = `Cannot find neither '${attackerName}' nor '${defenderName}'. Please check your spelling + case-sensitivity.`
         logger.error(errMsg);
-        message.reply(errMsg);
+        interaction.reply(errMsg);
         return;
       }
       else if (response.length === 1) {
@@ -175,7 +168,7 @@ function damage(client, connection, P, message, args) {
           errMsg = `I found the defender '${defenderName}' but not the attacker. Please check your spelling + case-sensitivity.`
 
         logger.error(errMsg);
-        message.reply(errMsg);
+        interaction.reply(errMsg);
         return;
       }
 
@@ -195,8 +188,8 @@ function damage(client, connection, P, message, args) {
         //
         // Now that the pokemon have been found, grab the move information and the relevant type information.
         //
-        P.getMoveByName(attackerMove.toLowerCase()).then((moveData) => {
-          P.getTypeByName(moveData.type.name).then((typeData) => {
+        interaction.pokedex.getMoveByName(attackerMove.toLowerCase()).then((moveData) => {
+          interaction.pokedex.getTypeByName(moveData.type.name).then((typeData) => {
 
             //
             // parse attack stages into the effect it has on damage.
@@ -366,8 +359,8 @@ function damage(client, connection, P, message, args) {
               embed: {
                 color: 3447003,
                 author: {
-                  name: client.user.username,
-                  icon_url: client.user.avatarURL,
+                  name: interaction.user.username,
+                  icon_url: interaction.user.avatarURL,
                 },
                 title: `**${attackerName}** used ${tempMove} on **${defenderName}**!`,
                 url: `https://bulbapedia.bulbagarden.net/wiki/${tempMove.replace(
@@ -398,7 +391,7 @@ function damage(client, connection, P, message, args) {
                 ],
                 timestamp: new Date(),
                 footer: {
-                  icon_url: client.user.avatarURL,
+                  icon_url: interaction.client.user.avatarURL,
                   text: "Chambers and Charizard!",
                 },
               },
@@ -408,16 +401,16 @@ function damage(client, connection, P, message, args) {
 
             //embed message
             logger.info("[damage] Sending combat embed string.");
-            message.channel.send(combatEmbedString).catch(console.error);
+            interaction.channel.send(combatEmbedString).catch(console.error);
           });
         }).catch(function (error) {
           if (error.response.status == 404) {
             logger.error("[damage] Move not found. " + error)
-            message.reply("Move not found, check your spelling and whether dashes are needed or not!");
+            interaction.reply("Move not found, check your spelling and whether dashes are needed or not!");
             return;
           } else {
             logger.error('[damage] There was an error: ' + error);
-            message.reply("Error getting move!");
+            interaction.reply("Error getting move!");
             return;
           }
         });
@@ -425,12 +418,13 @@ function damage(client, connection, P, message, args) {
     });
   } catch (error) {
     logger.error(error);
-    message.channel.send(error.toString());
-    message.channel
+    interaction.channel.send(error.toString());
+    interaction.channel
       .send("ChaCha machine :b:roke, please try again later")
       .catch(console.error);
   }
-};
+}
+}
 
 let capitalizeWord = function (tempWord) {
   return tempWord.charAt(0).toUpperCase() + tempWord.substr(1);

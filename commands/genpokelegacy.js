@@ -2,8 +2,8 @@ const logger = require('../logs/logger.js');
 
 // Generates a new ChaCha Pokemon, given level & base stats
 
-exports.run = (client, connection, P, message, args) => {
-    //message.channel.send('Bang! <:gunspurr:356191158017196032>').catch(console.error);
+exports.run = (interaction) => {
+    //interaction.channel.send('Bang! <:gunspurr:356191158017196032>').catch(console.error);
     //Math.floor((Math.random() * 65535) + 1) randomnumgen
 
     // ======================= VARIABLES =======================
@@ -90,8 +90,8 @@ exports.run = (client, connection, P, message, args) => {
 
     //check if asking for help
     if (species === 'help') {
-        logger.info("[genpokelegacy] Sending help message.")
-        message.reply(':warning: HEY, THIS IS OLD! USE `+genpoke` to create a pokemon way easier.:warning:\n\n New' +
+        logger.info("[genpokelegacy] Sending help interaction.")
+        interaction.reply(':warning: HEY, THIS IS OLD! USE `+genpoke` to create a pokemon way easier.:warning:\n\n New' +
             ' Pokemon' +
             ' Generator.' +
             ' Variables in order:\n' +
@@ -201,15 +201,15 @@ exports.run = (client, connection, P, message, args) => {
         natArmor = (0.08 * (parseFloat(finalStats[2]))) - 0.6;
 
         //armor class
-        //message.channel.send(`Natural Armor: ${natArmor} || Size Bonus: ${sizeBonus} || Dex: ${dexMod}`);
+        //interaction.channel.send(`Natural Armor: ${natArmor} || Size Bonus: ${sizeBonus} || Dex: ${dexMod}`);
         armorClass = (10 + parseFloat(natArmor) + parseFloat(sizeBonus) + ((dexBase - 10) / 2)).toFixed(0);
 
         //get move speed
         moveSpeed = (0.38 * finalStats[5] + 4).toFixed(2);
 
         // Final Print
-        logger.info("[genpokelegacy] Sending embed message.")
-        message.channel.send({
+        logger.info("[genpokelegacy] Sending embed interaction.")
+        interaction.channel.send({
             embed: {
                 color: 3447003,
                 author: {
@@ -263,8 +263,8 @@ exports.run = (client, connection, P, message, args) => {
 
     } catch (error) {
         logger.error("[genpokelegacy] " + error)
-        message.channel.send(error.toString);
-        message.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);
+        interaction.channel.send(error.toString);
+        interaction.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);
     }
 
 };

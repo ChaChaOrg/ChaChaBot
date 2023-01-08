@@ -140,12 +140,12 @@ a command reload command that we theoretically could use to update code while th
 
 Deletes the listed Pokemon from the SQL database, if it exists.
 
-((If found, confirm deletion by reaction to the posted message.))
+((If found, confirm deletion by reaction to the posted interaction.))
 ```
 A command the deletes a pokemon that you own.
-Has a reaction confirmation message.
+Has a reaction confirmation interaction.
 
 ## showpoke.js
 ((Oh oops this one doesn't have a help message))
 
-Given a name, posts its pokemon's summary message.
+Given a name, posts its pokemon's summary interaction.

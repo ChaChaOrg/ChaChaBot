@@ -13,7 +13,7 @@ const HELP_MESSAGE = "The \"manual\" damage calculator. Variables in order:\n" +
 	"**Misc Modifiers:** Any other modifiers to the stat, as a percentage. Default = 1\n" +
 	"**Stages of Attack/Defense:** 0 by default, can be -6 to 6";
 
-exports.run = (client, connection, P, message, args) => {
+exports.run = (interaction) => {
 	try {
 		//variables required
 		let attackName = args[0];
@@ -31,8 +31,8 @@ exports.run = (client, connection, P, message, args) => {
 
 		//clause for helping!
 		if (args[0].toUpperCase() === 'HELP') {
-			logger.info("[damagelegacy] Sending help message.")
-			message.reply(HELP_MESSAGE).catch(console.error);
+			logger.info("[damagelegacy] Sending help interaction.")
+			interaction.reply(HELP_MESSAGE).catch(console.error);
 			return;
 		}
 
@@ -59,13 +59,13 @@ exports.run = (client, connection, P, message, args) => {
 		damageTotal = damageTotal.toFixed(2);
 
 		logger.info("[damagelegacy] " + `${attackName} deals ${damageTotal} damage to the defending ${defendName}`);
-		message.channel.send(`${attackName} deals ${damageTotal} damage to the defending ${defendName}`).catch(console.error);
+		interaction.channel.send(`${attackName} deals ${damageTotal} damage to the defending ${defendName}`).catch(console.error);
 
 	}
 	catch (error) {
 		logger.error("[damagelegacy] " + error)
-		message.channel.send(error.toString);
-		message.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);
+		interaction.channel.send(error.toString);
+		interaction.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);
 
 	}
 }
