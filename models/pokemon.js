@@ -914,8 +914,8 @@ Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
 
                             this.pokemonData.stats[0].base_stat = pokeForm.hpBST;
                             this.pokemonData.stats[1].base_stat = pokeForm.atkBST;
-                            this.pokemonData.stats[2].base_stat = pokeForm.spaBST;
-                            this.pokemonData.stats[3].base_stat = pokeForm.defBST;
+                            this.pokemonData.stats[2].base_stat = pokeForm.defBST;
+                            this.pokemonData.stats[3].base_stat = pokeForm.spaBST;
                             this.pokemonData.stats[4].base_stat = pokeForm.spdBST;
                             this.pokemonData.stats[5].base_stat = pokeForm.speBST;
 
