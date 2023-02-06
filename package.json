@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "coverage": "^0.4.1",
+    "discord": "^0.8.2",
     "discord.js": "^11.6.4",
     "enmap": "^4.8.7",
     "jsdom": "^16.4.0",
@@ -19,9 +20,9 @@
     "pokedex-promise-v2": "^3.2.0"
   },
   "devDependencies": {
+    "mocha": "^7.1.2",
     "prettier": "2.0.4",
-    "winston": "^3.2.1",
-    "mocha": "^7.1.2"
+    "winston": "^3.2.1"
   },
   "repository": {
     "type": "git",
