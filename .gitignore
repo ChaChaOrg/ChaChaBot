@@ -3,5 +3,6 @@ config-test.json
 .idea/
 node_modules/
 .nyc_output/
+launch.json
 *.log
 .vs/
