@@ -869,15 +869,50 @@ Pokemon.prototype.importPokemon = function (connection, P, importString) {
     }.bind(this)
   );
 
-  return this.getPokemonAndSpeciesData(connection, P).then(
-    //assign types, base states and then calculate those Stats
-    function (response) {
-      this.assignTypes();
-      this.statBlock.assignBaseStats(this);
-      this.statBlock.calculateStats(this);
-      this.statBlock.calculateSaves(this);
-    }.bind(this)
-  );
+  let sql = `SELECT * FROM pokemon WHERE name = '${this.name}';`;
+
+  //console.log(sql);
+  connection.query(sql, function (err, response) {
+      if (err) throw err;
+
+      if (response.length != 0) {
+          this.name = this.name + str(response.length + 1)
+
+          return this.getPokemonAndSpeciesData(connection, P).then(
+            //assign types, base states and then calculate those Stats
+            function (response) {
+              this.assignTypes();
+              this.statBlock.assignBaseStats(this);
+              this.statBlock.calculateStats(this);
+              this.statBlock.calculateSaves(this);
+            }.bind(this)
+          );
+      }
+  })
+
+
+  new Promise((resolve,reject) => {
+    connection.query(sql, function (err, response) {
+      if (err) reject(err);
+
+      if (response.length != 0) {
+          resolve(this.name = this.name + str(response.length + 1))
+      }
+
+      resolve()
+
+    })
+  }).then(() => { 
+    return this.getPokemonAndSpeciesData(connection, P).then(
+      //assign types, base states and then calculate those Stats
+      function (response) {
+        this.assignTypes();
+        this.statBlock.assignBaseStats(this);
+        this.statBlock.calculateStats(this);
+        this.statBlock.calculateSaves(this);
+      }.bind(this)
+    );
+  })
 };
 
 Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
