@@ -243,8 +243,10 @@ module.exports.run = (client, connection, P, message, args) => {
                                 let thisPoke = rows[0];
 
                                 // if the valName is species, assign directly, otherwise convert it into a number
+
                                 if (valName === "species") thisPoke[valName] = valString.toLowerCase();
                                 else if (valName === "nature") thisPoke[valName] = valString;
+                                else if (valName === "form") thisPoke[valName] = valString;
                                 else thisPoke[valName] = parseInt(valString);
 
                                 //Make new empty Pokemon object
