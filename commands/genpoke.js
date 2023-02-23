@@ -60,29 +60,45 @@ module.exports.run = (client, connection, P, message, args) => {
 	}
 
 	try {
-		let genPokemon = new Pokemon(args[0].toLowerCase(), args[1], args[2], args[3].toLowerCase());
-		// assign hidden ability chance, if listed
-		//if (args[3] !== null) genPokemon.haChance = args[3];
-		// initialize the Pokemon
-		/* istanbul ignore next */
-		genPokemon.init(connection, P)
-			.then(function (response) {
-				// upload pokemon to database
-				logger.info("[genpoke] Uploading pokemon to database.");
-				genPokemon.uploadPokemon(connection, message);
+		let sql = `SELECT * FROM pokemon WHERE name = '${args[2]}';`;
+        logger.info(`[genpoke] SQL query: ${sql}`);
 
-				// post embed
-				logger.info("[genpoke] Sending summary message.");
-				message.channel.send(genPokemon.sendSummaryMessage(client));
+        //console.log(sql);
+        connection.query(sql, function (err, response) {
+            if (err) throw err;
 
-				// alert user that their poke has been added to the database
-				logger.info("[genpoke] Sending upload confirmation and how to remove pokemon.");
-				message.reply(genPokemon.name + " has been added to the database.\nTo remove it, use this command: `+rempoke " + genPokemon.name + "`");
-			})
-			.catch(function (error) {
-				logger.error(error);
-				message.reply(error);
-			});
+            if (response.length == 0) {
+                logger.info("[genpoke] Pokemon not found in database, continuing to create.");
+
+				let genPokemon = new Pokemon(args[0].toLowerCase(), args[1], args[2], args[3].toLowerCase());
+				// assign hidden ability chance, if listed
+				//if (args[3] !== null) genPokemon.haChance = args[3];
+				// initialize the Pokemon
+				/* istanbul ignore next */
+				genPokemon.init(connection, P)
+					.then(function (response) {
+						// upload pokemon to database
+						logger.info("[genpoke] Uploading pokemon to database.");
+						genPokemon.uploadPokemon(connection, message);
+
+						// post embed
+						logger.info("[genpoke] Sending summary message.");
+						message.channel.send(genPokemon.sendSummaryMessage(client));
+
+						// alert user that their poke has been added to the database
+						logger.info("[genpoke] Sending upload confirmation and how to remove pokemon.");
+						message.reply(genPokemon.name + " has been added to the database.\nTo remove it, use this command: `+rempoke " + genPokemon.name + "`");
+					})
+					.catch(function (error) {
+						logger.error(error);
+						message.reply(error);
+					});
+            }
+            else {
+                logger.info("[genpoke] Pokemon with name already exists, exiting.")
+				message.channel.send("A Pokemon with that name already exists! Please choose another name.")
+            }
+        });
 	}
 	/* istanbul ignore next */
 	catch (error) {
