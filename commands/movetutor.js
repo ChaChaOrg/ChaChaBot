@@ -34,7 +34,7 @@ exports.run = (client, connection, P, message, args) => {
 	} else {
 		logs.info("[movetutor] Move tutor calculations");
 		//var request = new XMLHttpRequest();
-		logs.info("[movetutor] Sending https request");
+		logs.info("[movetutor] Reading text file");
 		let moves;
 		fs.readFile('Moves.txt', (err, data) => {
 			//console.log(data);
@@ -52,15 +52,25 @@ exports.run = (client, connection, P, message, args) => {
 					workingName += word.replace(word.charAt(0), word.charAt(0).toUpperCase());
 					workingName += " ";
 				}
-				if (workingName.toLowerCase() === "u-turn") {
-					//console.log("U-turn detected.");
-					workingName = 'U-turn';
-				}
-				if (workingName.toLowerCase() === "v-create") {
-					workingName = 'V-create';
-				}
-				if (workingName.toLowerCase() === "trick-or-treat") {
-					workingName = 'Trick-or-Treat';
+				let moveName = workingName.substring(0, workingName.length - 1);
+				if (moveName.indexOf("-") > 0) {
+					if (moveName.toLowerCase() === "u-turn") {
+						//console.log("U-turn detected.");
+						moveName = 'U-turn';
+					}
+					if (moveName.toLowerCase() === "v-create") {
+						moveName = 'V-create';
+					}
+					if (moveName.toLowerCase() === "trick-or-treat") {
+						moveName = 'Trick-or-Treat';
+					}
+                }
+				
+				if (args.length > 1) {
+					for (let i = 1; i < args.length; i++) {
+						let word = args[i];
+						moveName += " " + word.replace(word.charAt(0), word.charAt(0).toUpperCase());
+					}
 				}
 				let move = "";
 				let i = 0;
@@ -85,7 +95,9 @@ exports.run = (client, connection, P, message, args) => {
 					//console.log(typeof workingName);
 					//console.log('' + workingName.toLowerCase() + '');
 					//console.log("" + workingName.toLowerCase() + "");
-					if (move[1].toLowerCase() === workingName.trim().toLowerCase()) {
+					//console.log(move[1].toLowerCase());
+					//console.log(moveName.trim().toLowerCase());
+					if (move[1].toLowerCase() === moveName.trim().toLowerCase()) {
 						found = true;
 					}
 					i++;
@@ -97,7 +109,7 @@ exports.run = (client, connection, P, message, args) => {
 					//0    1    2       3    4    5    6   7
 					//console.log(move);
 					let pp = move[4];
-					console.log(pp);
+					//console.log(pp);
 					let DCs = [20, 17, 15, 13, 10, 8];
 					let dcAdjust = 8 - Math.round(pp / 5);
 					let output = "";
@@ -110,7 +122,7 @@ exports.run = (client, connection, P, message, args) => {
 						DCs[i] += dcAdjust;
 					}
 					logs.info("[movetutor] Displaying results");
-					output += "**" + workingName + " Training**\n\n";
+					output += "**" + moveName + " Training**\n\n";
 					logs.info("[movetutor] Displaying results");
 					output += "**Out of Combat Checks** (Checks 1-3)\n";
 					output += "Use your trainer's CHA modifier for these checks.\n";
@@ -133,7 +145,7 @@ exports.run = (client, connection, P, message, args) => {
 				//let index = data.search(workingName);
 				//index += workingName.length;
 				} else {
-					message.reply("Unable to find move: " + workingName + ". Please check your spelling.");
+					message.reply("Unable to find move: " + moveName + ". Please check your spelling.");
                 }
 				
             }
