@@ -1,4 +1,5 @@
 const logger = require('../logs/logger.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
 
 // Generates a new ChaCha Pokemon, given level & base stats
 
@@ -32,44 +33,76 @@ const HELP_MESSAGE = '\n' + CMD_TEMPLATE + '\n\n' + 'examples - `+genpoke Pikach
 	' default** - use `+modpoke (name) private 0` to make publicly visible/editable\n\n' +
 	'(Hint: You can view an existing Pokemon with `+showpoke [nickname]`, or remove it using `+rempoke [nickname]`';
 */
-module.exports.run = (interaction) => {
+// +genpoke [SPECIES] [LEVEL (1-20)] [NICKNAME - no spaces or special characters] [Form Name] [HIDDEN' +
+// 	' ABILITY % (as a number, 0-100)]';
+module.exports.data = new SlashCommandBuilder()
+		.setName('genpoke')
+		.setDescription('Generate a new pokemon')
+		.addStringOption(option =>
+			option.setName('species')
+				.setDescription('Species of the Pokemon being generated')
+				.setRequired(true))
+		.addIntegerOption(option =>
+			option.setName('level')
+				.setDescription('Level of the Pokemon being generated. Minimum 1, maximum 20')
+				.setRequired(true)
+				.setMinValue(1)
+				.setMaxValue(20))
+		.addStringOption(option =>
+			option.setName('nickname')
+				.setDescription('Nickname of the Pokemon being generated. Do not use spaces or special characters!')
+				.setRequired(true))
+		.addStringOption(option =>
+			option.setName('form')
+				.setDescription('Form name of the Pokemon if it is different from the species.')
+				.setRequired(false))
+		// .addIntegerOption(option =>
+		// 	option.setName('hidden-ability')
+		// 		.setDescription('Hidden ability percentage from 0 - 100.')
+		// 		.setRequired(false)
+		// 		.setMinValue(0)
+		// 		.setMaxValue(100))
+
+module.exports.run = async (interaction) => {
+	await interaction.deferReply();
 
 	let Pokemon = require('../models/pokemon.js');
 
-	if (args[0] === "help") {
-		logger.info("[genpoke] Sending help interaction.");
-		interaction.reply(HELP_MESSAGE).catch(console.error);
-		return;
-	}
+	// if (args[0] === "help") {
+	// 	logger.info("[genpoke] Sending help interaction.");
+	// 	interaction.reply(HELP_MESSAGE).catch(console.error);
+	// 	return;
+	// }
 
-	if (args.length < 3) {
-		logger.info("[genpoke] Sending not enough arguments warning.");
-		interaction.channel.send("You haven't provided enough arguments. Should be " + CMD_TEMPLATE)
-		return;
-	}
+	// if (args.length < 3) {
+	// 	logger.info("[genpoke] Sending not enough arguments warning.");
+	// 	interaction.channel.send("You haven't provided enough arguments. Should be " + CMD_TEMPLATE)
+	// 	return;
+	// }
 
-	if (args[2].match(/[-\/\\^$*+?.()|[\]{}'"\s]/)) {
-		logger.warn("[showpoke] User put special character in pokemon name, sending warning.");
-		interaction.reply("Please do not use special characters when using generating Pokemon.");
-		return;
-	}
+	// if (args[2].match(/[-\/\\^$*+?.()|[\]{}'"\s]/)) {
+	// 	logger.warn("[showpoke] User put special character in pokemon name, sending warning.");
+	// 	interaction.reply("Please do not use special characters when using generating Pokemon.");
+	// 	return;
+	// }
 
 	// if no fourth argument was given, set the species to the form
-	if (args[3] === undefined || args[3] === null) {
-		args.splice(3, 0, args[0]);
-	}
+	// if (args[3] === undefined || args[3] === null) {
+	// 	args.splice(3, 0, args[0]);
+	// }
 
 	try {
-		let genPokemon = new Pokemon(args[0].toLowerCase(), args[1], args[2], args[3].toLowerCase());
+		let genPokemon = new Pokemon(interaction.options.getString('species'), interaction.options.getInteger('level'),
+			interaction.options.getString('nickname'), interaction.options.getString('form'));
 		// assign hidden ability chance, if listed
 		//if (args[3] !== null) genPokemon.haChance = args[3];
 		// initialize the Pokemon
 		/* istanbul ignore next */
-		genPokemon.init(connection, P)
+		genPokemon.init(interaction.client.mysqlConnection, interaction.client.pokedex)
 			.then(function (response) {
 				// upload pokemon to database
 				logger.info("[genpoke] Uploading pokemon to database.");
-				genPokemon.uploadPokemon(connection, message);
+				genPokemon.uploadPokemon(interaction.client.mysqlConnection, message);
 
 				// post embed
 				logger.info("[genpoke] Sending summary interaction.");
