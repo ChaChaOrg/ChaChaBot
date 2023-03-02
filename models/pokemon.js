@@ -937,10 +937,10 @@ Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
                 //
                 if (found === 0) {
                     this.form = this.species;
-                    interaction.pokedex.getPokemonSpeciesByName(this.species.toLowerCase())
+                    P.getPokemonSpeciesByName(this.species.toLowerCase())
                         .then(function (response) {
                             this.speciesData = response;
-                            interaction.pokedex.getPokemonByName(this.speciesData.id)
+                            P.getPokemonByName(this.speciesData.id)
                                 .then(
                                     function (response) {
                                         this.pokemonData = response;

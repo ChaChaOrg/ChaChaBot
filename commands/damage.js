@@ -64,20 +64,24 @@ module.exports.data = new SlashCommandBuilder()
 module.exports.run = async (interaction) => {
       try{
 
+
+        await interaction.deferReply();
+
       //clause for helping!
-    if (args[0].includes("help")) {
+    /* if (args[0].includes("help")) {
       logger.info("[damage] Sending help interaction.");
       interaction.reply(HELP_MESSAGE)
         .catch(console.error);
       return;
     }
+    
 
     if (args.length < 3) {
       logger.info("[damage] Sending too few parameters interaction.");
       interaction.reply("You haven't provided enough parameters, please try again.").catch(console.error);
       return;
     }
-
+    */
     // DAMAGE
     // args[0] = attacker's name [REQUIRED]
     // args[1] = move name [REQUIRED]
@@ -89,7 +93,7 @@ module.exports.run = async (interaction) => {
     // args[7] = multiplicative damage bonus [Defaults to 1]
     //
 
-    let args_string = args.slice(0).join(" ")
+    //let args_string = args.slice(0).join(" ")
 
     let attackerName;
     let attackerMove;
@@ -120,13 +124,19 @@ module.exports.run = async (interaction) => {
     attackerMove = interaction.options.getString('move-name');
     defenderName = interaction.options.getString('defender-name');
     if (interaction.options.getBoolean('critical-hit'))
-      critHit = interaction.options.getBoolean('critical-hit'); //critical hit
+      critHit = true; //critical hit
     else
       critHit = false;
-    bonusAtk = interaction.options.getInteger('stages-of-attack'); //Stages Attack
+    
+    if(interaction.options.getInteger('stages-of-attack'))
+      bonusAtk = interaction.options.getInteger('stages-of-attack'); //Stages Attack
+    if(interaction.options.getInteger('stages-of-defense'))
     bonusDef = interaction.options.getInteger('stages-of-defense'); //Stages Defense    
-    other = interaction.options.getInteger('additive-bonus');
-    otherMult = interaction.options.getInteger('multiplicitive-bonus');
+    if(interaction.options.getInteger('additive-bonus'))
+      other = interaction.options.getInteger('additive-bonus');
+    if(interaction.options.getInteger('multiplicitive-bonus'))
+      otherMult = interaction.options.getInteger('multiplicitive-bonus');
+    
 
     //values used for calculation
     let stageModAtk = 0;
@@ -183,16 +193,16 @@ module.exports.run = async (interaction) => {
       //
       response.forEach((element) => {
         if (element["name"].toLowerCase() === attackerName.toLowerCase())
-          loadSQLPromise.push(attackPoke.loadFromSQL(connection, P, element));
-        else loadSQLPromise.push(defendPoke.loadFromSQL(connection, P, element));
+          loadSQLPromise.push(attackPoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, element));
+        else loadSQLPromise.push(defendPoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, element));
       });
 
       Promise.all(loadSQLPromise).then((response) => {
         //
         // Now that the pokemon have been found, grab the move information and the relevant type information.
         //
-        interaction.pokedex.getMoveByName(attackerMove.toLowerCase()).then((moveData) => {
-          interaction.pokedex.getTypeByName(moveData.type.name).then((typeData) => {
+        interaction.client.pokedex.getMoveByName(attackerMove.toLowerCase()).then((moveData) => {
+          interaction.client.pokedex.getTypeByName(moveData.type.name).then((typeData) => {
 
             //
             // parse attack stages into the effect it has on damage.
@@ -359,7 +369,6 @@ module.exports.run = async (interaction) => {
             let moveHungerCost = (8 - moveData.pp / 5) + 1;
             
             let combatEmbedString = {
-              embed: {
                 color: 3447003,
                 author: {
                   name: interaction.user.username,
@@ -397,23 +406,22 @@ module.exports.run = async (interaction) => {
                   icon_url: interaction.client.user.avatarURL,
                   text: "Chambers and Charizard!",
                 },
-              },
-            };
+              };
 
             // comment out embed if necessary
 
             //embed message
             logger.info("[damage] Sending combat embed string.");
-            interaction.channel.send(combatEmbedString).catch(console.error);
+            interaction.followUp({ embeds: [combatEmbedString] }).catch(console.error);
           });
         }).catch(function (error) {
           if (error.response.status == 404) {
             logger.error("[damage] Move not found. " + error)
-            interaction.reply("Move not found, check your spelling and whether dashes are needed or not!");
+            interaction.followUp("Move not found, check your spelling and whether dashes are needed or not!");
             return;
           } else {
             logger.error('[damage] There was an error: ' + error);
-            interaction.reply("Error getting move!");
+            interaction.followUp("Error getting move!");
             return;
           }
         });
