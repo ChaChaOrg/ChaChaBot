@@ -25,14 +25,46 @@ const HELP_MESSAGE = "A damage calculator that uses the Pokemon in the database.
 // OLD HELP MESSAGE - Damage Calculator. Variables in order:
 //  [Attacker (A) Name] [Attacker Move] [Defender (D) Name] [Stages of Attack] [Stages of Defense] [Extra Base Power (min 0)] [MultDamage (min 1)] [Critical Hit (y/n)]
 
-module.exports = {
-  data: new SlashCommandBuilder()
+module.exports.data = new SlashCommandBuilder()
       .setName('damage')
-      .setDescription('A damage calculator that uses the Pokemon in the database.'),
-    async run(interaction){
+      .setDescription('A damage calculator that uses the Pokemon in the database.')
+      .addStringOption(option =>
+        option.setName('attacker-name')
+          .setDescription('The name of the attacker, as listed in the database')
+          .setRequired(true))
+      .addStringOption(option => 
+        option.setName('move-name')
+          .setDescription('The move used (gen 1-7 only sorry :<) lowercase with dashes instead of spaces. Ie, "rock-smash"')
+          .setRequired(true))
+      .addStringOption(option => 
+        option.setName('defender-name')
+          .setDescription('The name of the pokemon being hit by the attack, as listed in the database')
+          .setRequired(true))
+      .addBooleanOption(option =>
+        option.setName('critical-hit')
+        .setDescription('If the attacker struck a critical hit Defaults to no.'))
+      .addIntegerOption(option =>
+          option.setName('stages-of-attack')
+          .setDescription('Stages of attack/special attack the attacker has. Minimum -6, maximum +6')
+          .setMaxValue(6)
+          .setMinValue(-6))
+      .addIntegerOption(option =>
+          option.setName('stages-of-defense')
+          .setDescription('Stages of defense/special defense the attacker has. Minimum -6, maximum +6')
+          .setMaxValue(6)
+          .setMinValue(-6))
+      .addIntegerOption(option =>
+          option.setName('additive-bonus')
+          .setDescription('Extra damage *added* to the base power. Usually done through ChaCha feats. Defaults to 0'))
+      .addIntegerOption(option =>
+          option.setName('multiplicitive-bonus')
+          .setDescription('Extra damage *multiplying* the base power.')
+          .setMinValue(0));
+
+module.exports.run = async (interaction) => {
       try{
-      
-    //clause for helping!
+
+      //clause for helping!
     if (args[0].includes("help")) {
       logger.info("[damage] Sending help interaction.");
       interaction.reply(HELP_MESSAGE)
@@ -68,12 +100,6 @@ module.exports = {
     let otherMult = 1;
 
     var critHit;
-    let critHit_regex = /(-ch \d+)|(-critical(\s|-|_)?hit \d+)/
-    let critHit_match = critHit_regex.exec(args_string);
-    if (critHit_match)
-      critHit = critHit[0].split(" ")[1]
-    else
-      critHit = "n"
 
 
     //variables required
@@ -89,41 +115,18 @@ module.exports = {
     // Checks if an arg is there, than assigns it. This keeps null values out of the way.
     // This means that if an arg is left off, it will just keep the defaults, but you CAN'T put them out of order.
     //
-    args.forEach(function (element, index) {
-      if (element !== null) {
-        switch (index) {
-          case 0:
-            attackerName = args[0];
-            break;
-          case 1:
-            attackerMove = args[1];
-            break;
-          case 2:
-            defenderName = args[2];
-            break;
-          case 3:
-            if (args[3])
-              critHit = args[3]; //critical hit
-            else
-              critHit = 'n'
-            break;
-          case 4:
-            bonusAtk = Number(args[4]); //Stages Attack
-            break;
-          case 5:
-            bonusDef = Number(args[5]); //Stages Defense
-            break;
-          case 6:
-            other = Number(args[6]);
-            break;
-          case 7:
-            otherMult = Number(args[7]);
-            break;
-
-        }
-      }
-      else if (index < 3) throw Error(`ARG at ${index} not found! Check your input`);
-    });
+    
+    attackerName = interaction.options.getString('attacker-name');
+    attackerMove = interaction.options.getString('move-name');
+    defenderName = interaction.options.getString('defender-name');
+    if (interaction.options.getBoolean('critical-hit'))
+      critHit = interaction.options.getBoolean('critical-hit'); //critical hit
+    else
+      critHit = false;
+    bonusAtk = interaction.options.getInteger('stages-of-attack'); //Stages Attack
+    bonusDef = interaction.options.getInteger('stages-of-defense'); //Stages Defense    
+    other = interaction.options.getInteger('additive-bonus');
+    otherMult = interaction.options.getInteger('multiplicitive-bonus');
 
     //values used for calculation
     let stageModAtk = 0;
@@ -282,7 +285,7 @@ module.exports = {
 
             //critical hit - done manually, checks first letter only
 
-            if ("Y" === critHit.charAt(0).toUpperCase()) {
+            if (critHit) {
               critical = CRITICAL_HIT_MULTIPLIER;
               criticalString = "**A critical hit!**\n";
             }
@@ -423,7 +426,6 @@ module.exports = {
       .send("ChaCha machine :b:roke, please try again later")
       .catch(console.error);
   }
-}
 }
 
 let capitalizeWord = function (tempWord) {
