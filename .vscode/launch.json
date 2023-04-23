@@ -4,7 +4,8 @@
             "type": "node",
             "name": "Run Current File",
             "request": "launch",
-            "program": "${workspaceFolder}\\chachabot.js"
+            "program": "${workspaceFolder}\\chachabot.js",
+            "outputCapture": "std"
         }
     ]
 }
