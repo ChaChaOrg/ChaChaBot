@@ -305,8 +305,7 @@ module.exports.run = async (interaction) => {
             //
             let tempAttack = 0;
             let tempDefense = 0;
-
-            if (moveData.damage_class === "physical") {
+            if (moveData.damage_class.name == "physical") {
               tempAttack = attackPoke.statBlock.finalStats[ATK_ARRAY_INDEX];
               tempDefense = defendPoke.statBlock.finalStats[DEF_ARRAY_INDEX];
             } else {
@@ -317,13 +316,10 @@ module.exports.run = async (interaction) => {
             //
             // Final damage calculation
             //
-
             damageTotal =
               ((10 * attackPoke.level + 10) / 250) *
-              ((tempAttack *
-                stageModAtk) /
-                (tempDefense *
-                  stageModDef)) *
+              ((tempAttack * stageModAtk) /
+                (tempDefense * stageModDef)) *
               dice *
               stab *
               effective *
