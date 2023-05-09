@@ -6,7 +6,7 @@ This bot's purpose is to be a tool to smooth out a DM's workload when working wi
 We are also developing a [companion website][2] that should also help enhance and streamline the ChaCha experience. 
 
 [1]: https://chambers-and-charizard.weebly.com/
-[2]: http://34.226.119.6:7000/
+[2]: http://52.2.31.9:7000/
 
 Below are some resources that should help with some of thebits and bobs this tool uses
 
