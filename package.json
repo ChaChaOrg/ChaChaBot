@@ -12,8 +12,8 @@
   "dependencies": {
     "coverage": "^0.4.1",
     "discord": "^0.8.2",
-    "discord.js": "^11.6.4",
-    "enmap": "^4.8.7",
+    "discord.js": "^12.0.0",
+    "enmap": "^5.0.0",
     "jsdom": "^16.4.0",
     "mysql": "^2.18.1",
     "nyc": "^15.1.0",
