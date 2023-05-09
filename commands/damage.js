@@ -288,7 +288,7 @@ module.exports.run = (client, connection, P, message, args) => {
             let tempAttack = 0;
             let tempDefense = 0;
 
-            if (moveData.damage_class === "physical") {
+            if (moveData.damage_class.name === "physical") {
               tempAttack = attackPoke.statBlock.finalStats[ATK_ARRAY_INDEX];
               tempDefense = defendPoke.statBlock.finalStats[DEF_ARRAY_INDEX];
             } else {
