@@ -340,12 +340,94 @@ module.exports.run = async (interaction) => {
                                                 // parse int val from newVal
                                                 let newNum = parseInt(newVal, 10);
 
-                                                // if newNum is higher than old, make it green
-                                                if (newNum > oldNum) {
-                                                    diffFieldString = "\n+ " + newString + "\n--- OLD: " + oldString + "\n";
+                            // await promise before attempting non-static update
+                            staticCheck.then(() => {
+                                // if you're here, then the field is not static and needs to get verification before being updated
+                                if (!isStaticVal) {// if not a static field, it's one that updates other fields as well...
+                                    logger.info(pokeName + " found. Attempting to update non-static field " + valName + " to " + valString + "...")
+                                    /* HP calculation stuff (for later)
+
+                                // === NEW HP CALCULATION(if needed)===
+                                // roll 2d10 to get new hp
+                                let hpRoll1 = Math.floor(Math.random() * 10) + 1;
+                                let hpRoll2 = Math.floor(Math.random() * 10) + 1;
+                                // stow away old HP
+                                let oldHP = rows[0].hp;
+
+                                // roll through the poke array pre-conversion and adds the new variable
+                                    */
+
+                                    // create a pokemon object with the original data
+                                    let oldPoke = new Pokemon();
+
+                                    // create oldPoke object
+                                    oldPoke.loadFromSQL(connection, P, rows[0]).then(function (results) {
+
+                                        console.log("oldPoke:");
+                                        console.log(`"${oldPoke.pokemonData.stats[0].stat.name}": "${oldPoke.pokemonData.stats[0].base_stat}"`);
+                                        console.log(`"${oldPoke.pokemonData.stats[1].stat.name}": "${oldPoke.pokemonData.stats[1].base_stat}"`);
+                                        console.log(`"${oldPoke.pokemonData.stats[2].stat.name}": "${oldPoke.pokemonData.stats[2].base_stat}"`);
+                                        console.log(`"${oldPoke.pokemonData.stats[3].stat.name}": "${oldPoke.pokemonData.stats[3].base_stat}"`);
+                                        console.log(`"${oldPoke.pokemonData.stats[4].stat.name}": "${oldPoke.pokemonData.stats[4].base_stat}"`);
+                                        console.log(`"${oldPoke.pokemonData.stats[5].stat.name}": "${oldPoke.pokemonData.stats[5].base_stat}"`);
+                                        // grab the row and stow it
+                                        let thisPoke = rows[0];
+
+                                        // if the valName is species, assign directly, otherwise convert it into a number
+
+                                        if (valName === "species") thisPoke[valName] = valString.toLowerCase();
+                                        else if (valName === "nature") thisPoke[valName] = valString;
+                                        else if (valName === "form") thisPoke[valName] = valString;
+                                        else thisPoke[valName] = parseInt(valString);
+
+                                        //Make new empty Pokemon object
+                                        let newPoke = new Pokemon();
+
+                                        /* ======== FOR REFERENCE ========
+                                        // oldPoke - original Pokemon OBJECT, pre-updates
+                                        // thisPoke - updated Pokemon data ARRAY, post-updates
+                                        // newPoke - updated Pokemon OBJECT, post-updates & calculated accordingly */
+
+                                        //use Pokemon.loadFromSQL to convert SQL object into a complete Pokemon object
+                                        newPoke.loadFromSQL(connection, P, thisPoke).then(function (results) {
+
+                                            console.log("new Pokemon:");
+                                            console.log(`"${newPoke.pokemonData.stats[0].stat.name}": "${newPoke.pokemonData.stats[0].base_stat}"`);
+                                            console.log(`"${newPoke.pokemonData.stats[1].stat.name}": "${newPoke.pokemonData.stats[1].base_stat}"`);
+                                            console.log(`"${newPoke.pokemonData.stats[2].stat.name}": "${newPoke.pokemonData.stats[2].base_stat}"`);
+                                            console.log(`"${newPoke.pokemonData.stats[3].stat.name}": "${newPoke.pokemonData.stats[3].base_stat}"`);
+                                            console.log(`"${newPoke.pokemonData.stats[4].stat.name}": "${newPoke.pokemonData.stats[4].base_stat}"`);
+                                            console.log(`"${newPoke.pokemonData.stats[5].stat.name}": "${newPoke.pokemonData.stats[5].base_stat}"`);
+
+
+
+                                            logger.info("SQL has been converted to a Pokemon Object\nAll values recalculated as necessary\nProviding user with comparison embed & awaiting change confirmation...")
+
+                                            // DEBUG display old and new pokes
+                                            //message.channel.send("Old Pokemon Below (debug)");
+                                            //message.channel.send(oldPoke.sendSummaryMessage(client));
+                                            //message.channel.send("New Pokemon Below (debug)");
+                                            //message.channel.send(newPoke.sendSummaryMessage(client));
+
+                                            // ======== FORMATTED VARIABLES & STRINGS & EMBED ========
+
+                                            // capitalize function
+                                            let capitalize = function (tempWord) {
+                                                return tempWord.charAt(0).toUpperCase() + tempWord.substr(1);
+                                            };
+
+                                            // format ability function
+                                            let formatAbility = function (ability) {
+                                                // if two word ability, break apart and format accordingly
+                                                if (~ability.indexOf("-")) {
+                                                    // yoink both halves
+                                                    let tempA = ability.slice(0, ability.indexOf("-"));
+                                                    let tempB = ability.slice(ability.indexOf("-") + 1, ability.length);
+                                                    // capitalize them both
+                                                    return capitalize(tempA) + " " + capitalize(tempB);
                                                 } else {
-                                                    // you're only here if newNum is lower than old, so make it red
-                                                    diffFieldString = "\n- " + newString + "\n--- OLD: " + oldString + "\n";
+                                                    // return the given ability, but capitalized properly
+                                                    return capitalize(ability);
                                                 }
                                             }
 
@@ -572,11 +654,11 @@ module.exports.run = async (interaction) => {
                                         });
                                     });
 
-                                    //TODO: Find a better way to preserve health
-                                    //As of right now just re-rolls hp
-                                    //would have to add this within pokemon to do it neatly.
-                                    //We can add an arg to .updatePokemon but I'm already doing that with private
-                                    //and a one-off fix here would be messy since hp might change in another part of the bot
+                                            //TODO: Find a better way to preserve health
+                                            //As of right now just re-rolls hp
+                                            //would have to add this within pokemon to do it neatly.
+                                            //We can add an arg to .updatePokemon but I'm already doing that with private
+                                            //and a one-off fix here would be messy since hp might change in another part of the bot
 
 
                                 }).catch(function (error) {
@@ -590,10 +672,11 @@ module.exports.run = async (interaction) => {
                                 logger.error(`[modpoke] ${loadOriginalPokeMessage}\n\t${error.toString}`)
                             });
                         }
-                    });
-                }
+                    }
+                });
             }
-        });
+        })
+
 
 
     } catch (error) {
