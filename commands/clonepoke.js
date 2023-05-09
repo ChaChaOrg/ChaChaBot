@@ -1,4 +1,5 @@
 let logger = require("../logs/logger.js");
+const { SlashCommandBuilder } = require('@discordjs/builders')
 const STAT_ARRAY_MAX = 6;
 const HP_ARRAY_INDEX = 0;
 const ATK_ARRAY_INDEX = 1;
