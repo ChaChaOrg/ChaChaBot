@@ -111,7 +111,7 @@ module.exports.run = (interaction) => {
                 }
 
             }
-
+            console.log("getting pokestring");
             /**
              * The function to get the exact string needed from the given Pokemon object
              * @param pokemon The Pokemon to get the string from
@@ -141,7 +141,7 @@ module.exports.run = (interaction) => {
                 // return the string!
                 return pokeString;
             }
-
+            console.log("querying");
             // query for the info
             connection.query("SELECT * FROM pokemon", function (err, result) {
                 // an array of promises to be fulfilled before actually sending the message to the user
@@ -339,7 +339,7 @@ module.exports.run = (interaction) => {
 
                         // temporary array for making pages
                         let pokeTempArray = [];
-
+                        console.log("pages");
                         // throw pokemon into pages until all are loaded up
                         for (let i = 0; i < pokeArray.length; i++) {
                             // push the poke into the temporary array
@@ -360,7 +360,7 @@ module.exports.run = (interaction) => {
                             pokeEmbedPages.push(embedPage(pokeTempArray, currentPageNum));
                             pokeTempArray = [];
                         }
-
+                        console.log("listing");
                         // TODO turn this into page flipping variant later
                         if (pokeEmbedPages.length > 0) {
                             interaction.author.send("Here are the Pokemon you can view." +

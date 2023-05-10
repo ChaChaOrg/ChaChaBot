@@ -4,6 +4,7 @@
 const databaseURL = "https://bulbapedia.bulbagarden.net/wiki/List_of_moves";
 const PPINDEX = 11;
 const logs = require('../logs/logger.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
 
 //help messages
 const MOVETUTOR_HELP = "" +
@@ -44,32 +45,32 @@ module.exports.data = new SlashCommandBuilder()
 			)
 	);
 
-module.exports.run = (interaction) => {
+module.exports.run = async (interaction) => {
 
-	let https = require('https');
-	let jsdom = require('jsdom');
+	
 	let fs = require('fs');
-
-	if (interaction.options.getString("tutor-type").equals("help")) {
+	await interaction.deferReply();
+	logs.info("litterally anything.....");
+	if (interaction.options.getString("tutor-type") === "help") {
 		logs.info("[movetutor] Sending help message");
-		interaction.reply(MOVETUTOR_HELP);
+		interaction.editReply(MOVETUTOR_HELP);
 		return;
-	} else if (interaction.options.getString("tutor-type").equals("skill")) {
+	} else if (interaction.options.getString("tutor-type") ==="skill") {
 		logs.info("[movetutor] Skill tutor calculations");
 		var skillDC = 20 - interaction.getInteger("int-mod");
-		interaction.reply(`The DC to learn the ${interaction.options.getString("name")} skill is ${skillDC}.`).catch(console.error);
+		interaction.editReply(`The DC to learn the ${interaction.options.getString("name")} skill is ${skillDC}.`).catch(console.error);
 		return;
-	} else if (interaction.options.getString("tutor-type").equals("move")) {
+	} else if (interaction.options.getString("tutor-type") === "move") {
 		logs.info("[movetutor] Move tutor calculations");
 		//var request = new XMLHttpRequest();
 		logs.info("[movetutor] Reading text file");
-		let moves;
+		//let moves;
 		fs.readFile('Moves.txt', (err, data) => {
 			//console.log(data);
 			//console.log(err);
 			if (err) {
 				logs.error("[movetutor] Error reading move file.");
-				interaction.reply("Could not read move list. Please contact ChaChaBot devs.");
+				interaction.editReply("Could not read move list. Please contact ChaChaBot devs.");
 			} else {
 				let workingName = "";
 				let wordArray = interaction.options.getString("name").split("_");
@@ -95,10 +96,10 @@ module.exports.run = (interaction) => {
 				}
 
 				//if (args.length > 1) {
-					//for (let i = 1; i < args.length; i++) {
-						//let word = args[i];
-						//moveName += " " + word.replace(word.charAt(0), word.charAt(0).toUpperCase());
-					//}
+				//for (let i = 1; i < args.length; i++) {
+				//let word = args[i];
+				//moveName += " " + word.replace(word.charAt(0), word.charAt(0).toUpperCase());
+				//}
 				//}
 				let move = "";
 				let i = 0;
@@ -141,7 +142,7 @@ module.exports.run = (interaction) => {
 					let DCs = [20, 17, 15, 13, 10, 8];
 					let dcAdjust = 8 - Math.round(pp / 5);
 					let output = "";
-					if (interaction.options.getString("formula").equals("original")) {
+					if (interaction.options.getString("formula") === "original") {
 						logs.info("[movetutor] Adjusting to original formula");
 						DCs = [20 + dcAdjust, 17 + dcAdjust, 15 + dcAdjust, 15, 13, 10];
 					}
@@ -173,12 +174,14 @@ module.exports.run = (interaction) => {
 					//let index = data.search(workingName);
 					//index += workingName.length;
 				} else {
-					interaction.reply("Unable to find move: " + moveName + ". Please check your spelling.");
+					interaction.editReply("Unable to find move: " + moveName + ". Please check your spelling.");
 				}
+			}
+		});
 	} else {
 		//ya dun goofed
 		logs.info("[movetutor] Invalid tutor type, how did we get here?");
-		interaction.reply("Invalid tutor type used. The valid types are help, skill and move.");
+		interaction.editReply("Invalid tutor type used. The valid types are help, skill and move.");
 		return;
     }
 
