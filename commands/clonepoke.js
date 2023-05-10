@@ -9,7 +9,7 @@ const SPD_ARRAY_INDEX = 4;
 const SPE_ARRAY_INDEX = 5;
 
 module.exports.data = new SlashCommandBuilder()
-	.setName('movetutor')
+	.setName('clonepoke')
 	.setDescription("'Creates a copy of a pokemon in the bot. Just give the command the pokemon's name.")
 	.addStringOption(option =>
 		option.setName('name')
