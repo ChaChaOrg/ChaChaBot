@@ -57,7 +57,7 @@ function Pokemon(tempSpecies, tempLevel, tempName, tempform) {
   this.statBlock = new Statblock();
 
   // pokemon's exp
-    this.exp = MIN_EXP;
+  this.exp = MIN_EXP;
 
   //hidden ability percentile
   this.haChance = 0;
@@ -73,7 +73,7 @@ function Pokemon(tempSpecies, tempLevel, tempName, tempform) {
   this.shiny = false;
 
   this.pokemonData = undefined;
-    this.speciesData = undefined;
+  this.speciesData = undefined;
   this.private = true;
   this.speciesData = undefined;
 
