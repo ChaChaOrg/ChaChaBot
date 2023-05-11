@@ -9,6 +9,14 @@ const logger = require('../logs/logger.js');
 // The help message provided when requested by the user.
 const helpMessage = "\n`+rempoke [nickname]`\n\nDeletes the listed Pokemon from the SQL database, if it exists.\n\n((If found, confirm deletion by reaction to the posted interaction.))";
 
+module.exports.data = new SlashCommandBuilder()
+                        .setName('rempoke')
+                        .setDescription("Removes a pokemon the database. Must be one you own.")
+                        .addStringOption(option =>
+                            option.setName('nickname')
+                                .setDescription('Nickname of the Pokemon being removed.')
+                                .setRequired(true))
+
 module.exports.run = (interaction) => {
     try {
         // grab the argument given, either the name of a Pokemon or a request for help
