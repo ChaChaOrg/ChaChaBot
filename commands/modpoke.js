@@ -521,9 +521,9 @@ module.exports.run = async (interaction) => {
                                                 inline: true
                                             },
                                         )
-                                        .setTimestamp()
+                                        .setTimestamp(new Date())
                                         .setFooter({
-                                            icon_url: interaction.client.user.avatarURL,
+                                            icon_url: interaction.client.user.avatar,
                                             text: "Chambers and Charizard!"
                                         })
 
