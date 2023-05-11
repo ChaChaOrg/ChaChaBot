@@ -13,6 +13,7 @@ let Nature = require("./nature.js");
 let Moveset = require("./moveset.js");
 let Statblock = require("./statblock.js");
 let fs = require('fs');
+const { EmbedBuilder } = require('@discordjs/builders');
 
 const MIN_EXP = 0;
 
@@ -479,22 +480,17 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
         addPlusOrNah(this.statBlock.willSave)
     ]
 
-  return {
-    embed: {
-      color: 3447003,
-      author: {
-        name: client.user.username,
-        icon_url: client.user.avatarURL,
-      },
-      title: `Level ${this.level} ${fullName} ~ ${this.name}`,
-      url: `https://bulbapedia.bulbagarden.net/wiki/${this.species}_(Pok%C3%A9mon)`,
-      thumbnail: {
-        url: thumbnail_url,
-      },
-      description:
-        "Click the link for the Bulbapedia page, or use !data to call info using the Pokedex bot.",
-
-      fields: [
+  let summaryEmbed = new EmbedBuilder()
+    .setColor(0x3498DB)
+    .setTitle(`Level ${this.level} ${fullName} ~ ${this.name}`)
+    .setAuthor({
+      name: client.user.username,
+      icon_url: client.user.avatar
+    })
+    .setThumbnail(thumbnail_url)
+    .setDescription("Click the link for the Bulbapedia page, or use !data to call info using the Pokedex bot.")
+    .addFields(
+      [
         {
           name: "Basic Info",
           value: `**Ability:** [${tempAbility}](${tempAbilityURL}) | **Gender:** ${this.gender} \n**Nature: ** ${this.nature.natureFinal} | ` +
@@ -551,14 +547,15 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
           name: "AC & Move Speed",
           value: `**AC: ** ${this.statBlock.armorClass} | **Move Speed: ** ${this.statBlock.moveSpeed} ft\n\n((NOTE - AC does *not* include Size Bonus, which you can find based on the Pokemon's height and [this chart](https://www.d20pfsrd.com/BASICS-ABILITY-SCORES/GLOSSARY/#Size) ))`,
         },
-      ],
-      timestamp: new Date(),
-      footer: {
-        icon_url: client.user.avatarURL,
-        text: "Chambers and Charizard!",
-      },
-    },
-  };
+      ]
+    )
+    .setTimestamp(new Date())
+    .setFooter({
+      icon_url: client.user.avatar,
+      text: "Chambers and Charizard!"
+  })
+
+  return summaryEmbed
 };
 
 // =========== Upload ===========
