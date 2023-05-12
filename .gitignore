@@ -4,5 +4,6 @@ config-test.json
 node_modules/
 .nyc_output/
 launch.json
+package-lock.json
 *.log
 .vs/
