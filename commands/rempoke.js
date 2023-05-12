@@ -5,6 +5,8 @@
  */
 
 const logger = require('../logs/logger.js');
+const { SlashCommandBuilder, ButtonBuilder, ActionRowBuilder } = require('@discordjs/builders');
+const { ButtonStyle } = require('discord.js')
 
 // The help message provided when requested by the user.
 const helpMessage = "\n`+rempoke [nickname]`\n\nDeletes the listed Pokemon from the SQL database, if it exists.\n\n((If found, confirm deletion by reaction to the posted interaction.))";
@@ -92,7 +94,7 @@ module.exports.run = async (interaction) => {
                         } else if (confirmation.customId === 'cancel') {
                             logger.info("Edits to Pokemon cancelled by user.")
                             interaction.editReply({ 
-                                content: pokeName + "'s edits have been cancelled", 
+                                content: pokeName + "'s release has been cancelled.", 
                                 components: []});
                         }
                     } catch (e) {
