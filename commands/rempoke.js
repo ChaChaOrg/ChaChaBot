@@ -17,17 +17,24 @@ module.exports.data = new SlashCommandBuilder()
                                 .setDescription('Nickname of the Pokemon being removed.')
                                 .setRequired(true))
 
-module.exports.run = (interaction) => {
+module.exports.run = async (interaction) => {
+    await interaction.deferReply();
+    const confirm = new ButtonBuilder()
+			.setCustomId('confirm')
+			.setLabel('Confirm')
+			.setStyle(ButtonStyle.Success);
+    
+    const cancel = new ButtonBuilder()
+			.setCustomId('cancel')
+			.setLabel('Cancel')
+			.setStyle(ButtonStyle.Secondary);
+    
+    const row = new ActionRowBuilder()
+			.addComponents(cancel, confirm);
+
     try {
         // grab the argument given, either the name of a Pokemon or a request for help
-        let pokeName = args[0];
-
-        // If user is asking for help, provide help string and get outta here
-        if (pokeName.includes('help')) {
-            logger.info("[rempoke] Sending help interaction.");
-            interaction.reply(helpMessage);
-            return;
-        }
+        let pokeName = interaction.options.getString("nickname");
 
         //debug print to console
         logger.info("[rempoke] Attempting to remove " + pokeName + " from the database...");
@@ -40,7 +47,7 @@ module.exports.run = (interaction) => {
         logger.info(`[rempoke] Delete pokemon SQL statement: ${deletePokeStatement}`);
 
         // Attempt to find the Pokemon in the database, ending everything if nothing found
-        connection.query(findPoke, function (err, rows, fields) {
+        interaction.client.mysqlConnection.query(findPoke, async function (err, rows, fields) {
             // if there's something wrong, throw error
             if (err) {
                 logger.error("Error while attempting to access the database.");
@@ -52,49 +59,56 @@ module.exports.run = (interaction) => {
                     // let console know
                     logger.info("[rempoke] " + pokeName + " has been found. Awaiting user confirmation.");
                     // if picked up, stow the response
-                    interaction.channel.send(
-                        'Pokemon found. Are you sure you want to release `' +
+                    const response = await interaction.editReply({ 
+                        content: 'Pokemon found. Are you sure you want to release `' +
                         rows[0].name + ", LV " + rows[0].level + " " + rows[0].species.toUpperCase() +
-                        "`?\n\n**:warning: This action cannot be undone. :warning:**"
-                    ).then(function (response) {
-                        // add reactions so user can just click on em
-                        // CHECKMARK = CONFIRM deletion, X = CANCEL deletion
-                        response.react('✅').then(response.react('❌'));
+                        "`?\n\n**:warning: This action cannot be undone. :warning:**",
+                        components: [row] 
+                    })
 
-                        // then listen for reactions
-                        response.awaitReactions((reaction, user) => user.id == interaction.author.id && (reaction.emoji.name == '✅' || reaction.emoji.name == '❌'),
-                            { max: 1, time: 30000 }).then(collected => {
-                                if (collected.first().emoji.name == '✅') {
-                                    // Alert user to deletion of pokemon & set deletePoke to true
-                                    interaction.reply("Releasing " + pokeName + " to the wild. Goodbye, " + pokeName + "!");
-                                    //removePokemon(deletePokeStatement, pokeName, message);
-                                    connection.query(deletePokeStatement, function (err, results) {
-                                        if (err) {
-                                            logger.error("[rempoke] Unable to properly delete " + pokeName);
-                                            interaction.reply("...But " + pokeName + " came back!\n((The Pokemon could not be deleted))");
-                                            throw err;
-                                        } else {
-                                            logger.info("[rempoke] " + pokeName + " has been deleted successfully.");
-                                        }
+                    const collectorFilter = i => i.user.id === interaction.user.id;
+
+                    try {
+                        const confirmation = await response.awaitMessageComponent({ filter: collectorFilter, time: 60000 });
+
+                        if (confirmation.customId == 'confirm') {
+                            interaction.editReply({
+                                content: "Releasing " + pokeName + " to the wild. Goodbye, " + pokeName + "!",
+                                components: []
+                            });
+                            //removePokemon(deletePokeStatement, pokeName, message);
+                            interaction.client.mysqlConnection.query(deletePokeStatement, function (err, results) {
+                                if (err) {
+                                    logger.error("[rempoke] Unable to properly delete " + pokeName);
+                                    interaction.editReply({
+                                        content: "...But " + pokeName + " came back!\n((The Pokemon could not be deleted))",
+                                        components: []
                                     });
+                                    throw err;
+                                } else {
+                                    logger.info("[rempoke] " + pokeName + " has been deleted successfully.");
                                 }
-                                else {
-                                    logger.info("[rempoke] Action cancelled by user.");
-                                    interaction.reply(pokeName + "'s release has been cancelled.");
-                                }
-                            }).catch(() => {
-                                logger.info("[rempoke] Action cancelled via timeout.");
-                                interaction.reply("Timed out after 30 seconds, so " + pokeName + "'s release has been cancelled.");
-                            })
-                    });
+                            });
+                        } else if (confirmation.customId === 'cancel') {
+                            logger.info("Edits to Pokemon cancelled by user.")
+                            interaction.editReply({ 
+                                content: pokeName + "'s edits have been cancelled", 
+                                components: []});
+                        }
+                    } catch (e) {
+                        console.log(e)
+                        interaction.editReply({ content: 'Confirmation not received within 1 minute, cancelling', components: [] });
+                    }
+                    
                 } else {
                     // if you're in here, it didn't find anything
                     logger.info("[rempoke] Pokemon with name " + pokeName + " not found.");
-                    interaction.reply(
-                        "No Pokemon found with name `" + pokeName +
+                    interaction.editReply({
+                        content: "No Pokemon found with name `" + pokeName +
                         "`, please check spelling and try again.\n" +
-                        "*Hint:* Use `+listpoke` to view all Pokemon you have access to."
-                    );
+                        "*Hint:* Use `+listpoke` to view all Pokemon you have access to.",
+                        components: []
+                    });
                 }
             }
         });
