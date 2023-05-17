@@ -4,9 +4,8 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
-const { token } = require('./config-test.json');
 const logger = require('./logs/logger');
-const { REST } = require('@discordjs/rest');
+//const { REST } = require('@discordjs/rest');
 const mysql = require("mysql");
 const Pokedex = require('pokedex-promise-v2');
 

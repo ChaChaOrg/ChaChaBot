@@ -57,7 +57,7 @@ function Pokemon(tempSpecies, tempLevel, tempName, tempform) {
   this.statBlock = new Statblock();
 
   // pokemon's exp
-    this.exp = MIN_EXP;
+  this.exp = MIN_EXP;
 
   //hidden ability percentile
   this.haChance = 0;
@@ -73,7 +73,7 @@ function Pokemon(tempSpecies, tempLevel, tempName, tempform) {
   this.shiny = false;
 
   this.pokemonData = undefined;
-    this.speciesData = undefined;
+  this.speciesData = undefined;
   this.private = true;
   this.speciesData = undefined;
 
@@ -869,15 +869,50 @@ Pokemon.prototype.importPokemon = function (connection, P, importString) {
     }.bind(this)
   );
 
-  return this.getPokemonAndSpeciesData(connection, P).then(
-    //assign types, base states and then calculate those Stats
-    function (response) {
-      this.assignTypes();
-      this.statBlock.assignBaseStats(this);
-      this.statBlock.calculateStats(this);
-      this.statBlock.calculateSaves(this);
-    }.bind(this)
-  );
+  let sql = `SELECT * FROM pokemon WHERE name = '${this.name}';`;
+
+  //console.log(sql);
+  connection.query(sql, function (err, response) {
+      if (err) throw err;
+
+      if (response.length != 0) {
+          this.name = this.name + str(response.length + 1)
+
+          return this.getPokemonAndSpeciesData(connection, P).then(
+            //assign types, base states and then calculate those Stats
+            function (response) {
+              this.assignTypes();
+              this.statBlock.assignBaseStats(this);
+              this.statBlock.calculateStats(this);
+              this.statBlock.calculateSaves(this);
+            }.bind(this)
+          );
+      }
+  })
+
+
+  new Promise((resolve,reject) => {
+    connection.query(sql, function (err, response) {
+      if (err) reject(err);
+
+      if (response.length != 0) {
+          resolve(this.name = this.name + str(response.length + 1))
+      }
+
+      resolve()
+
+    })
+  }).then(() => { 
+    return this.getPokemonAndSpeciesData(connection, P).then(
+      //assign types, base states and then calculate those Stats
+      function (response) {
+        this.assignTypes();
+        this.statBlock.assignBaseStats(this);
+        this.statBlock.calculateStats(this);
+        this.statBlock.calculateSaves(this);
+      }.bind(this)
+    );
+  })
 };
 
 Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
@@ -914,8 +949,8 @@ Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
 
                             this.pokemonData.stats[0].base_stat = pokeForm.hpBST;
                             this.pokemonData.stats[1].base_stat = pokeForm.atkBST;
-                            this.pokemonData.stats[2].base_stat = pokeForm.spaBST;
-                            this.pokemonData.stats[3].base_stat = pokeForm.defBST;
+                            this.pokemonData.stats[2].base_stat = pokeForm.defBST;
+                            this.pokemonData.stats[3].base_stat = pokeForm.spaBST;
                             this.pokemonData.stats[4].base_stat = pokeForm.spdBST;
                             this.pokemonData.stats[5].base_stat = pokeForm.speBST;
 
@@ -937,10 +972,10 @@ Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
                 //
                 if (found === 0) {
                     this.form = this.species;
-                    interaction.pokedex.getPokemonSpeciesByName(this.species.toLowerCase())
+                    P.getPokemonSpeciesByName(this.species.toLowerCase())
                         .then(function (response) {
                             this.speciesData = response;
-                            interaction.pokedex.getPokemonByName(this.speciesData.id)
+                            P.getPokemonByName(this.speciesData.id)
                                 .then(
                                     function (response) {
                                         this.pokemonData = response;

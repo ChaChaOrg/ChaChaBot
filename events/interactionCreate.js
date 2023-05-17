@@ -16,8 +16,12 @@ module.exports = {
 		try {
 			await command.run(interaction);
 		} catch (error) {
-            await interaction.followUp({content:'There was an error while executing this command!', ephemeral: true});
-			logger.error(`Error executing ${interaction.commandName}`);
-		}
+			console.error(error);
+			if (interaction.replied || interaction.deferred) {
+				await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true });
+			} else {
+				await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+			}
+		}	
 	},
 };

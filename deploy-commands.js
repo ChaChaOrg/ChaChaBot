@@ -10,7 +10,7 @@ const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('
 
 for(const file of commandFiles) {
     const command = require(`./commands/${file}`);
-    if ('data' in command && 'run' in command ){
+    if ('data' in command && 'run' in command){
         commands.push(command.data.toJSON());
         logger.info(`Command ${command.data.name} has been added!`);
     }

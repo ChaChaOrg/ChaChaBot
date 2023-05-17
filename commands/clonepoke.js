@@ -1,4 +1,5 @@
 let logger = require("../logs/logger.js");
+const { SlashCommandBuilder } = require('@discordjs/builders')
 const STAT_ARRAY_MAX = 6;
 const HP_ARRAY_INDEX = 0;
 const ATK_ARRAY_INDEX = 1;
@@ -7,14 +8,25 @@ const SPA_ARRAY_INDEX = 3;
 const SPD_ARRAY_INDEX = 4;
 const SPE_ARRAY_INDEX = 5;
 
-module.exports.run = (interaction) => {
-    try{
-        if (args[0] === "help") {
+module.exports.data = new SlashCommandBuilder()
+	.setName('clonepoke')
+	.setDescription("'Creates a copy of a pokemon in the bot. Just give the command the pokemon's name.")
+	.addStringOption(option =>
+		option.setName('name')
+		.setDescription("Pokemon you're copying")
+		.setRequired(true)
+        );
+
+
+module.exports.run = async (interaction) => {
+	try {
+        /*if (args[0] === "help") {
             logger.info("[clonepoke] Displaying help interaction.");
             interaction.reply("Creates a copy of a pokemon in the bot. Just give the command the pokemon's name.");
-        } else {
-            let name = args[0];
-            logger.info("Searching database for " + name);
+        */
+        
+            let name = interaction.getStringOption();
+            logger.info("[clonepoke] Searching database for " + name);
             let Pokemon = require("../models/pokemon");
             let basePoke = new Pokemon();
             let clonePoke = new Pokemon();
@@ -100,7 +112,7 @@ module.exports.run = (interaction) => {
                 }
             });
         }
-    }catch (error) {
+    catch (error) {
         logger.error("[clonepoke] Error: " + error.toString());
         interaction.channel.send(error.toString());
         interaction.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);

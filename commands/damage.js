@@ -25,27 +25,63 @@ const HELP_MESSAGE = "A damage calculator that uses the Pokemon in the database.
 // OLD HELP MESSAGE - Damage Calculator. Variables in order:
 //  [Attacker (A) Name] [Attacker Move] [Defender (D) Name] [Stages of Attack] [Stages of Defense] [Extra Base Power (min 0)] [MultDamage (min 1)] [Critical Hit (y/n)]
 
-module.exports = {
-  data: new SlashCommandBuilder()
+module.exports.data = new SlashCommandBuilder()
       .setName('damage')
-      .setDescription('A damage calculator that uses the Pokemon in the database.'),
-    async run(interaction){
+      .setDescription('A damage calculator that uses the Pokemon in the database.')
+      .addStringOption(option =>
+        option.setName('attacker-name')
+          .setDescription('The name of the attacker, as listed in the database')
+          .setRequired(true))
+      .addStringOption(option => 
+        option.setName('move-name')
+          .setDescription('The move used (gen 1-7 only sorry :<) lowercase with dashes instead of spaces. Ie, "rock-smash"')
+          .setRequired(true))
+      .addStringOption(option => 
+        option.setName('defender-name')
+          .setDescription('The name of the pokemon being hit by the attack, as listed in the database')
+          .setRequired(true))
+      .addBooleanOption(option =>
+        option.setName('critical-hit')
+        .setDescription('If the attacker struck a critical hit Defaults to no.'))
+      .addIntegerOption(option =>
+          option.setName('stages-of-attack')
+          .setDescription('Stages of attack/special attack the attacker has. Minimum -6, maximum +6')
+          .setMaxValue(6)
+          .setMinValue(-6))
+      .addIntegerOption(option =>
+          option.setName('stages-of-defense')
+          .setDescription('Stages of defense/special defense the attacker has. Minimum -6, maximum +6')
+          .setMaxValue(6)
+          .setMinValue(-6))
+      .addIntegerOption(option =>
+          option.setName('additive-bonus')
+          .setDescription('Extra damage *added* to the base power. Usually done through ChaCha feats. Defaults to 0'))
+      .addIntegerOption(option =>
+          option.setName('multiplicitive-bonus')
+          .setDescription('Extra damage *multiplying* the base power.')
+          .setMinValue(0));
+
+module.exports.run = async (interaction) => {
       try{
-      
-    //clause for helping!
-    if (args[0].includes("help")) {
+
+
+        await interaction.deferReply();
+
+      //clause for helping!
+    /* if (args[0].includes("help")) {
       logger.info("[damage] Sending help interaction.");
       interaction.reply(HELP_MESSAGE)
         .catch(console.error);
       return;
     }
+    
 
     if (args.length < 3) {
       logger.info("[damage] Sending too few parameters interaction.");
       interaction.reply("You haven't provided enough parameters, please try again.").catch(console.error);
       return;
     }
-
+    */
     // DAMAGE
     // args[0] = attacker's name [REQUIRED]
     // args[1] = move name [REQUIRED]
@@ -57,7 +93,7 @@ module.exports = {
     // args[7] = multiplicative damage bonus [Defaults to 1]
     //
 
-    let args_string = args.slice(0).join(" ")
+    //let args_string = args.slice(0).join(" ")
 
     let attackerName;
     let attackerMove;
@@ -68,12 +104,6 @@ module.exports = {
     let otherMult = 1;
 
     var critHit;
-    let critHit_regex = /(-ch \d+)|(-critical(\s|-|_)?hit \d+)/
-    let critHit_match = critHit_regex.exec(args_string);
-    if (critHit_match)
-      critHit = critHit[0].split(" ")[1]
-    else
-      critHit = "n"
 
 
     //variables required
@@ -89,41 +119,24 @@ module.exports = {
     // Checks if an arg is there, than assigns it. This keeps null values out of the way.
     // This means that if an arg is left off, it will just keep the defaults, but you CAN'T put them out of order.
     //
-    args.forEach(function (element, index) {
-      if (element !== null) {
-        switch (index) {
-          case 0:
-            attackerName = args[0];
-            break;
-          case 1:
-            attackerMove = args[1];
-            break;
-          case 2:
-            defenderName = args[2];
-            break;
-          case 3:
-            if (args[3])
-              critHit = args[3]; //critical hit
-            else
-              critHit = 'n'
-            break;
-          case 4:
-            bonusAtk = Number(args[4]); //Stages Attack
-            break;
-          case 5:
-            bonusDef = Number(args[5]); //Stages Defense
-            break;
-          case 6:
-            other = Number(args[6]);
-            break;
-          case 7:
-            otherMult = Number(args[7]);
-            break;
-
-        }
-      }
-      else if (index < 3) throw Error(`ARG at ${index} not found! Check your input`);
-    });
+    
+    attackerName = interaction.options.getString('attacker-name');
+    attackerMove = interaction.options.getString('move-name');
+    defenderName = interaction.options.getString('defender-name');
+    if (interaction.options.getBoolean('critical-hit'))
+      critHit = true; //critical hit
+    else
+      critHit = false;
+    
+    if(interaction.options.getInteger('stages-of-attack'))
+      bonusAtk = interaction.options.getInteger('stages-of-attack'); //Stages Attack
+    if(interaction.options.getInteger('stages-of-defense'))
+    bonusDef = interaction.options.getInteger('stages-of-defense'); //Stages Defense    
+    if(interaction.options.getInteger('additive-bonus'))
+      other = interaction.options.getInteger('additive-bonus');
+    if(interaction.options.getInteger('multiplicitive-bonus'))
+      otherMult = interaction.options.getInteger('multiplicitive-bonus');
+    
 
     //values used for calculation
     let stageModAtk = 0;
@@ -180,16 +193,16 @@ module.exports = {
       //
       response.forEach((element) => {
         if (element["name"].toLowerCase() === attackerName.toLowerCase())
-          loadSQLPromise.push(attackPoke.loadFromSQL(connection, P, element));
-        else loadSQLPromise.push(defendPoke.loadFromSQL(connection, P, element));
+          loadSQLPromise.push(attackPoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, element));
+        else loadSQLPromise.push(defendPoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, element));
       });
 
       Promise.all(loadSQLPromise).then((response) => {
         //
         // Now that the pokemon have been found, grab the move information and the relevant type information.
         //
-        interaction.pokedex.getMoveByName(attackerMove.toLowerCase()).then((moveData) => {
-          interaction.pokedex.getTypeByName(moveData.type.name).then((typeData) => {
+        interaction.client.pokedex.getMoveByName(attackerMove.toLowerCase()).then((moveData) => {
+          interaction.client.pokedex.getTypeByName(moveData.type.name).then((typeData) => {
 
             //
             // parse attack stages into the effect it has on damage.
@@ -282,7 +295,7 @@ module.exports = {
 
             //critical hit - done manually, checks first letter only
 
-            if ("Y" === critHit.charAt(0).toUpperCase()) {
+            if (critHit) {
               critical = CRITICAL_HIT_MULTIPLIER;
               criticalString = "**A critical hit!**\n";
             }
@@ -304,13 +317,10 @@ module.exports = {
             //
             // Final damage calculation
             //
-
             damageTotal =
               ((10 * attackPoke.level + 10) / 250) *
-              ((tempAttack *
-                stageModAtk) /
-                (tempDefense *
-                  stageModDef)) *
+              ((tempAttack * stageModAtk) /
+                (tempDefense * stageModDef)) *
               dice *
               stab *
               effective *
@@ -356,7 +366,6 @@ module.exports = {
             let moveHungerCost = (8 - moveData.pp / 5) + 1;
             
             let combatEmbedString = {
-              embed: {
                 color: 3447003,
                 author: {
                   name: interaction.user.username,
@@ -394,23 +403,22 @@ module.exports = {
                   icon_url: interaction.client.user.avatarURL,
                   text: "Chambers and Charizard!",
                 },
-              },
-            };
+              };
 
             // comment out embed if necessary
 
             //embed message
             logger.info("[damage] Sending combat embed string.");
-            interaction.channel.send(combatEmbedString).catch(console.error);
+            interaction.followUp({ embeds: [combatEmbedString] }).catch(console.error);
           });
         }).catch(function (error) {
           if (error.response.status == 404) {
             logger.error("[damage] Move not found. " + error)
-            interaction.reply("Move not found, check your spelling and whether dashes are needed or not!");
+            interaction.followUp("Move not found, check your spelling and whether dashes are needed or not!");
             return;
           } else {
             logger.error('[damage] There was an error: ' + error);
-            interaction.reply("Error getting move!");
+            interaction.followUp("Error getting move!");
             return;
           }
         });
@@ -423,7 +431,6 @@ module.exports = {
       .send("ChaCha machine :b:roke, please try again later")
       .catch(console.error);
   }
-}
 }
 
 let capitalizeWord = function (tempWord) {

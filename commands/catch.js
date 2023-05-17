@@ -1,6 +1,4 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { waitForDebugger } = require('inspector');
-const { delay } = require('lodash');
 const logger = require('../logs/logger.js');
 // Catch calculator
 

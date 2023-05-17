@@ -56,45 +56,53 @@ const CODE_FORMAT_END = "\n```"
 
 module.exports.data = new SlashCommandBuilder()
                         .setName('modpoke')
-                        .setDescription("Modifies an existing Pokemon in the database");
+                        .setDescription("Modifies an existing Pokemon in the database. Use /modpoke help help help for available fields.")
+                        .addStringOption(option =>
+                            option.setName('nickname')
+                                .setDescription('Nickname of the Pokemon being modified. Do not use spaces or special characters!')
+                                .setRequired(true))
+                        .addStringOption(option =>
+                            option.setName('field-to-change')
+                                .setDescription('Field that is going to be modified.')
+                                .setRequired(true))
+                        .addStringOption(option =>
+                            option.setName('new-value')
+                                .setDescription('New value of the field being modified')
+                                .setRequired(true));
 
 
 module.exports.run = async (interaction) => {
+    await interaction.deferReply();
+
     let Pokemon = require('../models/pokemon.js');
     try {
-        if (args[0].match(/[-\/\\^$*+?.()|[\]{}'"\s]/)) {
+        let nickname = interaction.options.getString("nickname");
+        let fieldToChange = interaction.options.getString("field-to-change");
+        let newValue = interaction.options.getString("new-value");
+
+        if (nickname == fieldToChange == newValue == 'help') {
+            interaction.channel.send(HELP_FIELDS_LIST);
+            return;
+        }
+
+        if (nickname.match(/[-\/\\^$*+?.()|[\]{}'"\s]/)) {
             logger.warn("[modpoke] User put special character in pokemon name, sending warning.");
             interaction.reply("Please do not use special characters when using renaming Pokemon.");
             return;
         }
 
-        // if asking for help, print the help message
-        if (args[0].includes('help')) {
-            logger.info("[modpoke] Sending help interaction.");
-            interaction.reply(HELP_MESSAGE);
-            return;
-        }
-
         // if looking for the list of arguments, print em
-        if (args[0].includes('list')) {
-            logger.info("[modpoke] Sending fields list help interaction.");
-            interaction.reply(HELP_FIELDS_LIST);
-            return;
-        }
-
-        //Check if enough args
-        if (args.length < 3) {
-            logger.info("[modpoke] Sending too few args interaction.");
-            interaction.reply(FEWARGS_MESSAGE);
-            return;
-        }
-        // otherwise, lets find our poke and add those updates!
+        // if (args[0].includes('list')) {
+        //     logger.info("[modpoke] Sending fields list help interaction.");
+        //     interaction.reply(HELP_FIELDS_LIST);
+        //     return;
+        // }
 
         // grab the pokemon's name
-        let pokeName = args[0];
+        let pokeName = nickname;
         //grab the value to be changed
 /*
-        let valName = args[1];
+        let valName = fieldToChange;
         let lowerCase_OTHERFIELDS = OTHER_FIELDS.map(field => field.toLowerCase()); //copy of OTHER_FIELDS all lowercase
 
         // check whether the field they want to change exists
@@ -106,7 +114,7 @@ module.exports.run = async (interaction) => {
         }
 */
         //grab the value to be changed
-        let valName = args[1];
+        let valName = fieldToChange;
         let lowerCase_OTHERFIELDS = OTHER_FIELDS.map(field => field.toLowerCase()); //copy of OTHER_FIELDS all lowercase
 
         // check whether the field they want to change exists
@@ -119,7 +127,7 @@ module.exports.run = async (interaction) => {
 
         // make value all lowercase if it's in the STATIC_FIELDS array and not already matching
         if (!STATIC_FIELDS.includes(valName) && STATIC_FIELDS.includes(valName.toLowerCase())) {
-            valName = args[1].toLowerCase();
+            valName = fieldToChange.toLowerCase();
         }
 
         // make value the correct case by setting it to matching value in OTHER_FIELDS in order to match the DB schema
@@ -130,7 +138,7 @@ module.exports.run = async (interaction) => {
 
         // make value all lowercase if it's in the STATIC_FIELDS array and not already matching
         if (!STATIC_FIELDS.includes(valName) && STATIC_FIELDS.includes(valName.toLowerCase())) {
-            valName = args[1].toLowerCase();
+            valName = fieldToChange.toLowerCase();
         }
 
         // make value the correct case by setting it to matching value in OTHER_FIELDS in order to match the DB schema
@@ -141,9 +149,9 @@ module.exports.run = async (interaction) => {
 
         //grab the new value to be input, set properly in the following if statement
         let valString;
-        if (typeof args[2] == "string") {
-            valString = `${args[2]}`;
-        } else valString = args[2];
+        if (typeof newValue == "string") {
+            valString = `${newValue}`;
+        } else valString = newValue;
 
         if (valName == "nature") {
             if (!ALL_NATURES.includes(valString)) {
@@ -152,7 +160,7 @@ module.exports.run = async (interaction) => {
                 return;
             }
 
-            valString = args[2].charAt(0).toUpperCase() + args[2].slice(1);
+            valString = newValue.charAt(0).toUpperCase() + newValue.slice(1);
         }
 
         // ================= SQL statements  =================
