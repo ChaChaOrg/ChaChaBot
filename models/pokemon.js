@@ -394,7 +394,7 @@ let fixAbilityOrMoveFormatting = function (tempWord, middle) {
 
 // =========== EMBED ===========
 
-Pokemon.prototype.sendSummaryMessage = function (client) {
+Pokemon.prototype.sendSummaryMessage = function (interaction) {
   // set up formatted ability name
   let tempAbility = this.ability.name;
   let tempAbilityURL = this.ability.name;
@@ -479,20 +479,23 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
         addPlusOrNah(this.statBlock.willSave)
     ]
 
+    let avatarURL = interaction.user.avatarURL();
+    let username = interaction.user.username;
+
   return {
     embed: {
+      description: 'Click the link for the Bulbapedia page, or use !data to call info using the Pokedex bot.',
       color: 3447003,
       author: {
-        name: client.user.username,
-        icon_url: client.user.avatarURL,
+        name: username,
+        icon_url: avatarURL,
       },
       title: `Level ${this.level} ${fullName} ~ ${this.name}`,
       url: `https://bulbapedia.bulbagarden.net/wiki/${this.species}_(Pok%C3%A9mon)`,
       thumbnail: {
         url: thumbnail_url,
       },
-      description:
-        "Click the link for the Bulbapedia page, or use !data to call info using the Pokedex bot.",
+      
 
       fields: [
         {
@@ -554,7 +557,7 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
       ],
       timestamp: new Date(),
       footer: {
-        icon_url: client.user.avatarURL,
+        icon_url: avatarURL,
         text: "Chambers and Charizard!",
       },
     },
@@ -563,7 +566,7 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
 
 // =========== Upload ===========
 
-Pokemon.prototype.uploadPokemon = function (connection, message) {
+Pokemon.prototype.uploadPokemon = function (connection, interaction) {
   let finalMoveList = [this.moveSet.move1,this.moveSet.move2,this.moveSet.move3,this.moveSet.move4,this.moveSet.move5];
   for (i = 0; i < 5; i++) {
       try {
@@ -620,7 +623,7 @@ Pokemon.prototype.uploadPokemon = function (connection, message) {
         "${finalMoveList[4]}",
         ${this.moveSet.moveProgress},
         "${this.originalTrainer}",
-        ${interaction.author.id},
+        ${interaction.user.id},
         ${this.private},
         '${this.dateCreated}',
         "${this.campaign}")`
