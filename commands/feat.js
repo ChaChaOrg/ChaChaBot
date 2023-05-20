@@ -1,17 +1,20 @@
 const logger = require('../logs/logger.js');
-
+const { SlashCommandBuilder } = require('@discordjs/builders');
 // JavaScript Document
+module.exports.data = new SlashCommandBuilder()
+    .setName('feat')
+    .setDescription('Returns feat info from a list of feats')
+    .addStringOption(option =>
+        option.setName('feat')
+        .setDescription('The feat you want info about')
+        .setRequired(true));
 
+
+module.exports.run = async (interaction) => 
+{
 //run
-exports.run = (interaction) => {
 
 
-	//check if asking for help
-	if (args[0].includes('help')) {
-		logger.info("[feat] Sending help interaction.")
-		interaction.channel.send('Feat finder, prints a given feat name. +feat [feat name]').catch(console.error);
-		return;
-	}
 
 	//function to get + send feat
 	function sendFeat(featName) {
@@ -694,7 +697,7 @@ exports.run = (interaction) => {
 	try {	//feat name given
 
 		//elements.join('-')
-		let givenFeat = args.join(' ');
+		let givenFeat = interaction.options.getString("feat");
 
 
 		//try to find the feat
@@ -704,12 +707,11 @@ exports.run = (interaction) => {
 
 		if (featFound !== null) {
 			logger.info("[feat] Sending embed interaction.")
-			interaction.channel.send({
-				embed: {
+			interaction.reply({ embeds: [{
 					color: 3447003,
 					author: {
-						name: client.user.username,
-						icon_url: client.user.avatarURL
+						name: interaction.user.username,
+						icon_url: interaction.user.avatarURL
 					},
 					title: `${featFound.name}`,
 					description: `**Category:** ${featFound.cat}`,
@@ -733,11 +735,11 @@ exports.run = (interaction) => {
 					],
 					timestamp: new Date(),
 					footer: {
-						icon_url: client.user.avatarURL,
+                        icon_url: interaction.user.avatarURL,
 						text: "Chambers and Charizard!"
 					}
 				}
-			});
+            ]});
 		} else {
 			logger.info("[feat] No feat found.")
 			interaction.channel.send("No feat found, sorry :^(").catch(error);
