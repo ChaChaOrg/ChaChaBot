@@ -1,4 +1,5 @@
 const logger = require('../logs/logger.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
 
 // JavaScript Document
 // takes a number, gives the mod
@@ -12,7 +13,7 @@ module.exports.data = new SlashCommandBuilder()
 
 
 module.exports.run = async (interaction) => 
-
+{
 	//interaction.channel.send('Bang! <:gunspurr:356191158017196032>').catch(console.error);
 	var score = interaction.options.getInteger('stat');
 	if (score % 2 !== 0) { score = score - 1; } //lower odd numbers by 1
@@ -25,6 +26,6 @@ module.exports.run = async (interaction) =>
 		modString = rawMod.toString();
 	}
 
-	logger.info("[mod] " + `${args[0]}(${modString})`)
-	interaction.channel.send(`${args[0]}(${modString})`).catch(console.error);
+	logger.info("[mod] " + `${score}(${modString})`)
+	interaction.reply(`${score}(${modString})`).catch(console.error);
 };
