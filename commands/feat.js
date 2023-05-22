@@ -742,11 +742,11 @@ module.exports.run = async (interaction) =>
             ]});
 		} else {
 			logger.info("[feat] No feat found.")
-			interaction.channel.send("No feat found, sorry :^(").catch(error);
+			interaction.reply("No feat found, sorry :^(");
 		}
 	} catch (error) {
 		logger.error("[feat] " + error)
-		interaction.channel.send(`No feat found, sorry :^( ${error}`).catch(error);
+		interaction.reply(`Error running command: ${error}`);
 	}
 };
 
