@@ -102,21 +102,19 @@ module.exports.run = async (interaction) => {
 			.then(function (response) {
 				// upload pokemon to database
 				logger.info("[genpoke] Uploading pokemon to database.");
-				genPokemon.uploadPokemon(interaction.client.mysqlConnection, message);
+				genPokemon.uploadPokemon(interaction.client.mysqlConnection, interaction);
 
 				// post embed
 				logger.info("[genpoke] Sending summary interaction.");
-				interaction.channel.send(genPokemon.sendSummaryMessage(client));
+				interaction.channel.send({ embeds: [genPokemon.sendSummaryMessage(interaction).embed] });
 
 				// alert user that their poke has been added to the database
 				logger.info("[genpoke] Sending upload confirmation and how to remove pokemon.");
-				interaction.editReply(genPokemon.name + " has been added to the database.\nTo remove it, use this command: `/rempoke " + genPokemon.name + "`");
+				interaction.followUp(genPokemon.name + " has been added to the database.\nTo remove it, use this command: `+rempoke " + genPokemon.name + "`");
 			})
 			.catch(function (error) {
 				logger.error(error);
-				interaction.editReply({
-					contents: error
-				});
+				interaction.followUp(error);
 			});
 	}
 	/* istanbul ignore next */

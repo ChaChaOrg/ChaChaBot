@@ -395,7 +395,7 @@ let fixAbilityOrMoveFormatting = function (tempWord, middle) {
 
 // =========== EMBED ===========
 
-Pokemon.prototype.sendSummaryMessage = function (client) {
+Pokemon.prototype.sendSummaryMessage = function (interaction) {
   // set up formatted ability name
   let tempAbility = this.ability.name;
   let tempAbilityURL = this.ability.name;
@@ -560,7 +560,7 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
 
 // =========== Upload ===========
 
-Pokemon.prototype.uploadPokemon = function (connection, message) {
+Pokemon.prototype.uploadPokemon = function (connection, interaction) {
   let finalMoveList = [this.moveSet.move1,this.moveSet.move2,this.moveSet.move3,this.moveSet.move4,this.moveSet.move5];
   for (i = 0; i < 5; i++) {
       try {
@@ -617,7 +617,7 @@ Pokemon.prototype.uploadPokemon = function (connection, message) {
         "${finalMoveList[4]}",
         ${this.moveSet.moveProgress},
         "${this.originalTrainer}",
-        ${interaction.author.id},
+        ${interaction.user.id},
         ${this.private},
         '${this.dateCreated}',
         "${this.campaign}")`

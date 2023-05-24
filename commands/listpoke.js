@@ -1,4 +1,5 @@
 const logger = require('../logs/logger.js');
+const { SlashCommandBuilder } = require('@discordjs/builders')
 
 // emotes to put at start of each string
 // created by someone else
@@ -44,22 +45,90 @@ const FILTER_NOT_FOUND = "Whoops! Either you didn't give enough arguments, or th
  */
 // TODO fill out comment info above
 //TODO split printed string by creator/ ensure it doesn't break discord character limit
-module.exports.run = (interaction) => {
+module.exports.data = new SlashCommandBuilder()
+	.setName('listpoke')
+	.setDescription("Lists all Pokemon you can see.")
+	.addStringOption(option =>
+		option.setName('species')
+		.setDescription("Filter by species")
+		.setRequired(false)
+        )
+    .addStringOption(option =>
+		option.setName('type1')
+		.setDescription("Filter by a type")
+		.setRequired(false)
+        .addChoices(
+            {name: 'water', value: 'water'},
+            {name: 'fire', value: 'fire'},
+            {name: 'grass', value: 'grass'},
+            {name: 'electric', value: 'electric'},
+            {name: 'normal', value: 'normal'},
+            {name: 'flying', value: 'flying'},
+            {name: 'ground', value: 'ground'},
+            {name: 'fighting', value: 'fighting'},
+            {name: 'bug', value: 'bug'},
+            {name: 'psychic', value: 'psychic'},
+            {name: 'dark', value: 'dark'},
+            {name: 'ghost', value: 'ghost'},
+            {name: 'steel', value: 'steel'},
+            {name: 'rock', value: 'rock'},
+            {name: 'poison', value: 'poison'},
+            {name: 'dragon', value: 'dragon'},
+            {name: 'fairy', value: 'fairy'},
+            {name: 'ice', value: 'ice'}
+        )
+        )
+        .addStringOption(option =>
+		option.setName('type2')
+		.setDescription("Filter by a second type")
+		.setRequired(false)
+        .addChoices(
+            {name: 'water', value: 'water'},
+            {name: 'fire', value: 'fire'},
+            {name: 'grass', value: 'grass'},
+            {name: 'electric', value: 'electric'},
+            {name: 'normal', value: 'normal'},
+            {name: 'flying', value: 'flying'},
+            {name: 'ground', value: 'ground'},
+            {name: 'fighting', value: 'fighting'},
+            {name: 'bug', value: 'bug'},
+            {name: 'psychic', value: 'psychic'},
+            {name: 'dark', value: 'dark'},
+            {name: 'ghost', value: 'ghost'},
+            {name: 'steel', value: 'steel'},
+            {name: 'rock', value: 'rock'},
+            {name: 'poison', value: 'poison'},
+            {name: 'dragon', value: 'dragon'},
+            {name: 'fairy', value: 'fairy'},
+            {name: 'ice', value: 'ice'}
+        )
+        )
+    .addUserOption(option =>
+		option.setName('user')
+		.setDescription("Filter by discordID")
+		.setRequired(false)
+        )
+    .addIntegerOption(option =>
+		option.setName('lower-level')
+		.setDescription("Filter below this level level")
+		.setRequired(false)
+        )
+    .addIntegerOption(option =>
+		option.setName('upper-level')
+		.setDescription("Filter above this level")
+		.setRequired(false)
+        )
+    .addBooleanOption(option =>
+		option.setName('private')
+		.setDescription("Filter by Private")
+		.setRequired(false)
+        );
+
+module.exports.run = async (interaction) => {
 
     try {
-
-        // if there are less than 2 args, they either need help or didn't put enough info in
-        if (args.length < 2 && args.length > 0) {
-            if (args[0].includes('help')) {
-                logger.info("[listpoke] Sending help interaction.");
-                interaction.reply(HELP_MESSAGE);
-            } else {
-                logger.info("[listpoke] Filter option not found or not enough args. Sending error message");
-                interaction.reply(FILTER_NOT_FOUND);
-            }
-        } else {
-
-            interaction.reply("Looking for that now!");
+            await interaction.deferReply();
+            await interaction.followUp("Looking for that now!");
 
             // if you're here, it's time to create an array/pages to hold and display pokemon
 
@@ -67,50 +136,15 @@ module.exports.run = (interaction) => {
             let pokeArray = [];
 
             // items to filter for
-            let filterSpecies = "";
-            let filterForm = "";
-            let filterType1 = "";
-            let filterType2 = "";
-            let filterDiscordID = "";
-            let filterLevel = "";
-            let filterPrivate = "";
-
-            // grab commands given in the args
-            for (let i = 1; i < args.length; i++) {
-                //proceed if item is NOT the filter itself
-                if (args[i].charAt(0) !== '-') {
-                    let filterContent = args[i].toLowerCase();
-                    let filterChoice = args[i-1].toLowerCase().slice(1);
-                    //if the array of filter options includes the given filter previously, proceed
-                    if (filterOptions.includes(filterChoice)) {
-                        //find which item to fill in!
-                        switch (filterChoice) {
-                            case filterOptions[0]: // species
-                                filterSpecies = filterContent;
-                                break;
-                            case filterOptions[1]: //type
-                                // fill first type if first one; second if first one is filled
-                                if (filterType1) {
-                                    filterType2 = filterContent
-                                } else filterType1 = filterContent;
-                                break;
-                            case filterOptions[2]: // discord ID
-                                filterDiscordID = filterContent;
-                                break;
-                            case filterOptions[3]: // form
-                                filterForm = filterContent;
-                                break;
-                            case filterOptions[4]: // level
-                                filterLevel = filterContent;
-                                break;
-                            case filterOptions[5]: // private
-                                filterPrivate = filterContent;
-                                break;
-                        }
-                    }
-                }
-
-            }
+            // ?? checks if the option is null, and if it is sets the vaule to ""
+            let filterSpecies = interaction.options.getString("species") ?? "";
+            let filterForm = interaction.options.getString("form") ?? "";
+            let filterType1 = interaction.options.getString("type1") ?? "";
+            let filterType2 = interaction.options.getString("type2") ?? "";
+            let filterDiscordID = interaction.options.getUser("user") ?? "";
+            let filterUpperLevel = interaction.options.getInteger("upper-level") ?? "";
+            let filterLowerLevel = interaction.options.getInteger("lower-level") ?? "";
+            let filterPrivate = interaction.options.getBoolean("private") ?? "";
 
             /**
              * The function to get the exact string needed from the given Pokemon object
@@ -123,7 +157,7 @@ module.exports.run = (interaction) => {
                 let pokeString = "";
 
                 // if discord id matches message sender, start with userCreator; otherwise start with otherCreator
-                if (pokemon.discordID == interaction.author.id) {
+                if (pokemon.discordID == interaction.user.id) {
                     if (pokemon.private) pokeString += userCreatorPrivate;
                     else pokeString += userCreator;
                 } else {
@@ -133,170 +167,94 @@ module.exports.run = (interaction) => {
                 // add pokemon info
                 pokeString += " **" + pokemon.name + "**, LV " + pokemon.level + " ";
                 // list form if different from species
+                try{
+
                 if (pokemon.species.toUpperCase() !== pokemon.form.toUpperCase()) {
                     pokeString += pokemon.form.toUpperCase() + " (" + pokemon.species.toUpperCase() + ") "
                 } else {
                     pokeString += pokemon.species.toUpperCase();
                 }
+
+                }
+            catch(err){
+                console.log(`${pokemon.species} ${pokemon.form} `+err);
+                return "ERROR"
+            }
                 // return the string!
                 return pokeString;
             }
 
+
+            //Build SQL Query
+            let initialQuery = "SELECT * FROM pokemon"
+            let filterQuery = " WHERE "
+            let countQuery = 0;
+            initialQuery = initialQuery + filterQuery;
+
+            if (filterSpecies || filterForm || filterType1 || filterType2 || filterDiscordID || filterUpperLevel || filterLowerLevel ||filterPrivate) {
+
+                if (filterSpecies !== ""){ 
+                    if (countQuery>0) { initialQuery += " AND ";} 
+                    initialQuery += `species = "${filterSpecies}"`; 
+                    countQuery++;
+                }
+
+                if (filterForm !== "") { 
+                    if (countQuery>0) { initialQuery += " AND ";} 
+                    initialQuery += `form = "${filterForm}"`; 
+                    countQuery++;
+                }
+                
+                if (filterType1 !== "") { 
+                    if (countQuery>0) { initialQuery += " AND ";} 
+                    initialQuery += `(type1 = "${filterType1}" OR type2="${filterType1}")`; 
+                    countQuery++;
+                }
+                
+                if (filterType2 !== "") { 
+                    if (countQuery>0) { initialQuery += " AND ";} 
+                    initialQuery += `(type1 = "${filterType2}" OR type2="${filterType2}")`; 
+                    countQuery++;
+                }
+                
+                if (filterDiscordID !== "") { 
+                    if (countQuery>0) { initialQuery += " AND ";} 
+                    initialQuery += `discordID = "${filterDiscordID.id}"`; 
+                    countQuery++;
+                }
+                
+                if (filterUpperLevel !== "") { 
+                    if (countQuery>0) { initialQuery += " AND ";} 
+                    initialQuery += `level <= ${filterUpperLevel}`; 
+                    countQuery++;
+                }
+
+                if (filterLowerLevel !== "") { 
+                    if (countQuery>0) { initialQuery += " AND ";} 
+                    initialQuery += `level >= ${filterLowerLevel}`; 
+                    countQuery++;
+                }
+                
+                if (filterPrivate !== "") { 
+                    if (countQuery>0) { initialQuery += " AND ";}
+                    if (filterPrivate) filterPrivate = 1; else filterPrivate = 0;
+                    initialQuery += `private = ${filterPrivate}`; 
+                    countQuery++;
+                }
+            }
+            if (countQuery>0) { initialQuery += " AND ";} 
+            initialQuery += `(discordID = "${interaction.user.id}" OR private = 0)`
+            initialQuery += ';';
+
+            console.log(initialQuery);
+
             // query for the info
-            connection.query("SELECT * FROM pokemon", function (err, result) {
-                // an array of promises to be fulfilled before actually sending the message to the user
-                let promises = [];
-                // for each pokemon to be created, go through a promise
-                new Promise(function (resolve) {
-
-                    // lock in whatever filter was entered, if any
-                    let filterChoice = "none";
-                    if (args[0]) filterChoice = args[0].toLowerCase();
-                    let filterCriteria = "none";
-                    if (args[1]) filterCriteria = args[1].toLowerCase();
-
+            interaction.client.mysqlConnection.query(initialQuery, function (err, result) {
                     // go through each pokemon, creating their summary string and adding it to the array of pokes to be displayed
                     result.forEach(pokemon => {
-                        // only add the pokemon if they are private BUT belong to the user, or are public
-                        if (pokemon.discordID === interaction.author.id || pokemon.private === 0) {
-                            // true/false checks for grabbing the pokemon; if any are false, don't process it
-                            let filterSpeciesSwitch = true;
-                            let filterFormSwitch = true;
-                            let filterType1Switch = true;
-                            let filterType2Switch = true;
-                            let filterDiscordIDSwitch = true;
-                            let filterLevelSwitch = true;
-                            let filterPrivateSwitch = true;
-
-                            //check if any filter items are not blank; if a filter is not blank and doesn't match what's
-                            // in the pokemon, then flip one of the switches to false
-                            if (filterSpecies || filterForm || filterType1 || filterType2 || filterDiscordID || filterLevel || filterPrivate) {
-                                //check species if not blank
-                                if (filterSpecies && (pokemon.species.toLowerCase() !== filterSpecies)) {
-                                    filterSpeciesSwitch = false;
-                                }
-                                // check form if not blank
-                                if (filterForm && (pokemon.form.toLowerCase() !== filterForm)) {
-                                    filterFormSwitch = false;
-                                }
-                                // check type 1
-                                if (filterType1 && (pokemon.type1.toLowerCase() !== filterType1 && pokemon.type2.toLowerCase() !== filterType1)) {
-                                    filterType1Switch = false;
-                                }
-                                // check type 2
-                                if (filterType2 && (pokemon.type1.toLowerCase() !== filterType2 && pokemon.type2.toLowerCase() !== filterType2)) {
-                                    filterType2Switch = false;
-                                }
-                                // check discord id
-                                if (filterDiscordID && pokemon.discordID !== filterDiscordID) {
-                                    filterDiscordIDSwitch = false;
-                                }
-                                //check private
-                                if (filterPrivate) {
-                                    if (filterPrivate === "yes") { // they do want only private items
-                                        if (!pokemon.private) filterPrivateSwitch = false;
-                                    } else { // assume if they didn't say yes they want public items only
-                                        if (pokemon.private) filterPrivateSwitch = false;
-                                    }
-                                }
-                                //check level
-                                if (filterLevel) {
-                                    //check if they want above or below a certain level
-                                    try {
-                                        let levelRange = filterLevel.charAt(filterLevel.length - 1);
-                                        //if the final character is a +, check if at the level or above
-                                        if (levelRange === "+" || levelRange === "-") {
-                                            let levelRangeNumOnly = parseInt(filterLevel.substr(0, filterLevel.length - 1));
-                                            if (levelRange === "+") { // they want pokemon at the given level or higher
-                                                if (pokemon.level < levelRangeNumOnly) filterLevelSwitch = false;
-                                            } else {
-                                                if (pokemon.level > levelRangeNumOnly) filterLevelSwitch = false;
-                                            }
-                                        } else { // if you're here, they want the exact level
-                                            let levelRange = parseInt(filterLevel);
-                                            if (pokemon.level !== levelRange) {
-                                                filterLevelSwitch = false;
-                                            }
-                                        }
-                                    } catch (oopsie) {
-                                        interaction.reply("Error while attempting to find level range");
-                                    }
-                                }
-                            }
-
-                            // walk through each filter
-                            /*if (filterChoice === filterOptions[0]) { // filter by species
-                                // only grab the pokemon IF either species or form matches
-                                if (pokemon.species.toLowerCase() === filterCriteria || pokemon.form.name === filterCriteria) {
-                                    // push the promise of fetching the user to the outside promise array
-                                    promises.push(client.fetchUser(pokemon.discordID)
-                                        .then(function (response) {
-                                            // create the pokestring and add it to the array
-                                            pokeArray.push(getPokeString(pokemon));
-                                        })
-                                        .catch(error => {
-                                            // if you're here, there was an issue pushing the pokemon into the list
-                                            let pushPokeError = "Error while converting Pokemon into summary interaction.";
-                                            logger.error("[listpoke] " + error + "\n" + pushPokeError);
-                                            interaction.reply(pushPokeError);
-                                        }));
-                                }
-                            } else if (filterChoice === filterOptions[1]) { // filter by type
-                                if (pokemon.type1.toLowerCase() === filterCriteria || pokemon.type2.toLowerCase() === filterCriteria) {
-                                    // push the promise of fetching the user to the outside promise array
-                                    promises.push(client.fetchUser(pokemon.discordID)
-                                        .then(function (response) {
-                                            // create the pokestring and add it to the array
-                                            pokeArray.push(getPokeString(pokemon));
-                                        })
-                                        .catch(error => {
-                                            // if you're here, there was an issue pushing the pokemon into the list
-                                            let pushPokeError = "Error while converting Pokemon into summary interaction.";
-                                            logger.error("[listpoke] " + error + "\n" + pushPokeError);
-                                            interaction.reply(pushPokeError);
-                                        }));
-                                }
-                            } else if (filterChoice === filterOptions[2]) { // filter by discord id
-                                if (pokemon.discordID === filterCriteria) {
-                                    // push the promise of fetching the user to the outside promise array
-                                    promises.push(client.fetchUser(pokemon.discordID)
-                                        .then(function (response) {
-                                            // create the pokestring and add it to the array
-                                            pokeArray.push(getPokeString(pokemon));
-                                        })
-                                        .catch(error => {
-                                            // if you're here, there was an issue pushing the pokemon into the list
-                                            let pushPokeError = "Error while converting Pokemon into summary interaction.";
-                                            logger.error("[listpoke] " + error + "\n" + pushPokeError);
-                                            interaction.reply(pushPokeError);
-                                        }));
-                                }*/
-                            console.log("test");
-                            //if any of the switches are false, don't push
-                            if (filterSpeciesSwitch && filterFormSwitch && filterType1Switch && filterType2Switch &&
-                                filterDiscordIDSwitch && filterPrivateSwitch && filterLevelSwitch) {
-                                 // if you're here, the pokemon is good to add!
-                                // push the promise of fetching the user to the outside promise array
-                                promises.push(client.fetchUser(pokemon.discordID)
-                                    .then(function (response) {
-                                        // create the pokestring and add it to the array
-                                        pokeArray.push(getPokeString(pokemon));
-                                    })
-                                    .catch(error => {
-                                        // if you're here, there was an issue pushing the pokemon into the list
-                                        let pushPokeError = "Error while converting Pokemon into summary interaction.";
-                                        logger.error("[listpoke] " + error + "\n" + pushPokeError);
-                                        interaction.reply(pushPokeError);
-                                    }));
-                            }
-                        }
-                    });
-                    Promise.all(promises).then(function () {
-                        // resolve the promise when the poke is done being processed!
-                        resolve("Done");
-                    });
-                })
-                    .then(function (response) {
+                        // create the pokestring and add it to the array
+                        pokeArray.push(getPokeString(pokemon));
+                    });                     
                         //  === START PAGE COUNTERS ===
 
                         // the last page the user can be on
@@ -315,25 +273,23 @@ module.exports.run = (interaction) => {
                             pokeArray.forEach(pokeString => { pokeList += pokeString + "\n"; });
 
                             // create and return embed
-                            return {
-                                embed: {
-                                    color: 3447003,
-                                    title: `ChaChaBot Database - Visible Pokemon`,
-                                    description: `.`,
-                                    fields: [
-                                        {
-                                            name: "**=========**",
-                                            value: `${pokeList}`
+                            return {                                
+                                    "embed": {
+                                        "color": 3447003,
+                                        "title": "ChaChaBot Database - Visible Pokemon",
+                                        "description": ".",
+                                        "fields": [
+                                            {
+                                            "name": "**=========**",
+                                            "value": `${pokeList}`
+                                            }
+                                        ],
+                                        "footer": {
+                                            "text": `Page ${pageNum} of ${lastPageNum} of visible Pokemon`
                                         }
-                                    ],
-                                    footer: {
-                                        text: `Page ${pageNum} of ${lastPageNum} of visible Pokemon`
                                     }
-                                }
+                                };
                             };
-
-                        };
-
                         // create "pages" of embeds based on every 10 pokemon in the total list
                         let pokeEmbedPages = [];
 
@@ -363,17 +319,17 @@ module.exports.run = (interaction) => {
 
                         // TODO turn this into page flipping variant later
                         if (pokeEmbedPages.length > 0) {
-                            interaction.author.send("Here are the Pokemon you can view." +
+                            interaction.user.send("Here are the Pokemon you can view." +
                                 "\n\nYou can also view them on the site at http://34.226.119.6:7000/\n\n" +
                                 userCreatorPrivate + " = Created by you, private/visible only to you\n" +
                                 userCreator + " = Created by you, but public\n" +
                                 otherCreator + " = Created by someone else");
                             pokeEmbedPages.forEach(pokePage => {
-                                interaction.author.send(pokePage);
+                                interaction.user.send({embeds: [pokePage.embed]});
                             });
-                            interaction.channel.send("I've DM'd you the list!");
+                            interaction.followUp("I've DM'd you the list!");
                         } else {
-                            interaction.reply("No results found.");
+                            interaction.followUp("No results found.");
                         }
                         logger.info("[listpoke] Sent all pages to user");
 
@@ -381,20 +337,11 @@ module.exports.run = (interaction) => {
                         //console.log(`String: ${printString}`);
                         //interaction.author.send(printString);
                     })
-                    .catch(error => {
-                        // if you're here, there was an error while attempting to resolve the Big Promise
-                        let errorMessage = "Error while attempting to create promises."
-                        interaction.reply(errorMessage);
-                        logger.info("[listpoke] " + errorMessage + "\n" + error);
-                    });
-
-            });
-
-        }
     } catch (err) {
         // if you're here, there was a broad error that wasn't caught by the other stuff!
         let broadErrMessage = "Error while attempting to execute the listpoke command.";
+        console.log("[listpoke] " + broadErrMessage + "\n" + err);
         logger.info("[listpoke] " + broadErrMessage + "\n" + err);
-        interaction.reply(broadErrMessage);
+        interaction.followUp(broadErrMessage);
     }
 };
