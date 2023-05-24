@@ -111,7 +111,7 @@ module.exports.run = async (interaction) => {
 		//clause for helping!
 		if (interaction.options.getBoolean("help")) {
 			logger.info("[damagelegacy] Sending help interaction.")
-			interaction.editReply(HELP_MESSAGE).catch(console.error);
+			interaction.followUp(HELP_MESSAGE).catch(console.error);
 			return;
 		}
 
@@ -138,13 +138,13 @@ module.exports.run = async (interaction) => {
 		damageTotal = damageTotal.toFixed(2);
 
 		logger.info("[damagelegacy] " + `${attackName} deals ${damageTotal} damage to the defending ${defendName}`);
-		interaction.editReply(`${attackName} deals ${damageTotal} damage to the defending ${defendName}`).catch(console.error);
+		interaction.followUp(`${attackName} deals ${damageTotal} damage to the defending ${defendName}`).catch(console.error);
 
 	}
 	catch (error) {
 		logger.error("[damagelegacy] " + error)
-		interaction.editReply(error.toString);
-		interaction.editReply('ChaCha machine :b:roke, please try again later').catch(console.error);
+		interaction.followUp(error.toString);
+		interaction.followUp('ChaCha machine :b:roke, please try again later').catch(console.error);
 
 	}
 }
