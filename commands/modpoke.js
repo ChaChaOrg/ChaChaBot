@@ -51,6 +51,8 @@ const OTHER_FIELDS = ["species", "form", "level", "nature", "type1", "type2", "h
 const ALL_NATURES = ["adamant", "bashful", "bold", "brave", "calm", "careful", "docile", "gentle", "hardy", "hasty", "impish", "jolly", 
                         "lax", "lonely", "mild", "modest", "naive", "naughty", "quiet", "quirky", "rash", "relaxed", "sassy", "serious", "timid"]
 
+const ALL_IVS = ["hpIV", "atkIV", "defIV", "spaIV", "spdIV", "speIV"]
+
 // code formatting variables for the embed
 const CODE_FORMAT_START = "```diff\n";
 const CODE_FORMAT_END = "\n```"
@@ -141,6 +143,12 @@ module.exports.run = async (interaction) => {
             valName = OTHER_FIELDS[idx];
         }
 
+        if (ALL_IVS.includes(valName) && (parseInt(valName) < 0 && parseInt(valName) > 31)) {
+            logger.error("[modpoke] IV value is outside the bounds of 0 - 31!")
+            interaction.editReply("IV value is outside the bounds of 0 - 31!")
+            return;
+        }
+
         //grab the new value to be input, set properly in the following if statement
         let valString;
         if (typeof newValue == "string") {
@@ -154,8 +162,10 @@ module.exports.run = async (interaction) => {
                 return;
             }
 
+            valString = valString.toLowerCase();
             valString = newValue.charAt(0).toUpperCase() + newValue.slice(1);
         }
+
 
         // ================= SQL statements  =================
         // sql statement to check if the Pokemon exists
