@@ -52,6 +52,7 @@ const ALL_NATURES = ["adamant", "bashful", "bold", "brave", "calm", "careful", "
                         "lax", "lonely", "mild", "modest", "naive", "naughty", "quiet", "quirky", "rash", "relaxed", "sassy", "serious", "timid"]
 
 const ALL_IVS = ["hpIV", "atkIV", "defIV", "spaIV", "spdIV", "speIV"]
+const ALL_EVS = ["hpEV", "atkEV", "defEV", "spaEV", "spdEV", "speEV"]
 
 // code formatting variables for the embed
 const CODE_FORMAT_START = "```diff\n";
@@ -143,12 +144,6 @@ module.exports.run = async (interaction) => {
             valName = OTHER_FIELDS[idx];
         }
 
-        if (ALL_IVS.includes(valName) && (parseInt(valName) < 0 && parseInt(valName) > 31)) {
-            logger.error("[modpoke] IV value is outside the bounds of 0 - 31!")
-            interaction.editReply("IV value is outside the bounds of 0 - 31!")
-            return;
-        }
-
         //grab the new value to be input, set properly in the following if statement
         let valString;
         if (typeof newValue == "string") {
@@ -164,6 +159,24 @@ module.exports.run = async (interaction) => {
 
             valString = valString.toLowerCase();
             valString = newValue.charAt(0).toUpperCase() + newValue.slice(1);
+        }
+
+        if (ALL_IVS.includes(valName) && (parseInt(valString) < 0 || parseInt(valString) > 31)) {
+            logger.error(`[modpoke] IV value (${valString}) for ${pokeName} is outside the bounds of 0 - 31! Modification canceled.`)
+            interaction.editReply(`IV value (${valString}) for ${pokeName} is outside the bounds of 0 - 31! Modification canceled.`)
+            return;
+        }
+
+        if (ALL_EVS.includes(valName) && (parseInt(valString) < 0 || parseInt(valString) > 252)) {
+            logger.error(`[modpoke] EV value (${valString}) for ${pokeName} is outside the bounds of 0 - 252! Modification canceled.`)
+            interaction.editReply(`EV value (${valString}) for ${pokeName} is outside the bounds of 0 - 252! Modification canceled.`)
+            return;
+        }
+
+        if (valName.toLowerCase() == 'level' && (parseInt(valString) < 1 || parseInt(valString) > 20)) {
+            logger.error(`[modpoke]Level value (${valString}) for ${pokeName} is outside the bounds of 1 - 20! Modification canceled.`)
+            interaction.editReply(`Level value (${valString}) for ${pokeName} is outside the bounds of 1 - 20! Modification canceled.`)
+            return;
         }
 
 
