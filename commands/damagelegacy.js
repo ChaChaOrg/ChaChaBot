@@ -1,5 +1,6 @@
 // Damage Calculator
 const logger = require('../logs/logger.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
 
 // help message
 const HELP_MESSAGE = "The \"manual\" damage calculator. Variables in order:\n" +
@@ -12,6 +13,65 @@ const HELP_MESSAGE = "The \"manual\" damage calculator. Variables in order:\n" +
 	"**Critical Hit:** 1.5 if a critical hit, 1 otherwise\n" +
 	"**Misc Modifiers:** Any other modifiers to the stat, as a percentage. Default = 1\n" +
 	"**Stages of Attack/Defense:** 0 by default, can be -6 to 6";
+	module.exports.data = new SlashCommandBuilder()
+	.setName('damage')
+	.setDescription('A damage calculator that uses the Pokemon in the database.')
+	.addStringOption(option =>
+	  option.setName('attacker-name')
+		.setDescription('The name of the attacker, as listed in the database')
+		.setRequired(true))
+	.addStringOption(option => 
+	  option.setName('defender-name')
+		.setDescription('The name of the pokemon being hit by the attack, as listed in the database')
+		.setRequired(true))
+	.addIntegerOption(option =>
+		option.setName('level')
+		.setDescription('Level of the attacker')
+		.setMaxValue(20)
+		.setMinValue(1))
+	.addIntegerOption(option =>
+		option.setName('attack-stat')
+		.setDescription('A\'s attack stat')
+		.setMinValue(0))
+	.addIntegerOption(option =>
+		option.setName('defend-stat')
+		.setDescription('Xd8, where X is the power of the move used divided by 5.')
+		.setMinValue(0))
+	.addIntegerOption(option =>
+		option.setName('dice-roll')
+		.setDescription('D\'s defend stat')
+		.setMinValue(0))
+	.addIntegerOption(option =>
+		option.setName('STAB')
+		.setDescription('Same-Type Attack Bonus; 1.5 if the move used is the same type as the attacker, 1 otherwise')
+		.setMinValue(1)
+	  	.setMaxValue(1.5))
+	.addIntegerOption(option =>
+		option.setName('effectiveness')
+		.setDescription('The effectiveness of the move on the foe, as a percentage. Ie, a super-effective move would have an effectiveness of 2, while a not very effective move would have an effectiveness of .5.')
+		.setMinValue(.5)
+		.setMaxValue(2))
+	.addIntegerOption(option =>
+		option.setName('critical-hit')
+		.setDescription('1.5 if a critical hit, 1 otherwise.')
+		.setMinValue(1)
+		.setMaxValue(1.5))
+	.addIntegerOption(option =>
+		option.setName('misc-modifiers')
+		.setDescription('Any other modifiers to the stat, as a percentage. Default = 1'))
+		.setMinValue(1)
+	.addIntegerOption(option =>
+		option.setName('stages-of-attack')
+		.setDescription('Stages of attack/special attack the attacker has. Minimum -6, maximum +6')
+		.setMaxValue(6)
+		.setMinValue(-6))
+	.addIntegerOption(option =>
+		option.setName('stages-of-defense')
+		.setDescription('Stages of defense/special defense the attacker has. Minimum -6, maximum +6')
+		.setMaxValue(6)
+		.setMinValue(-6))
+	
+
 
 exports.run = (interaction) => {
 	try {
