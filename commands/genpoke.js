@@ -110,11 +110,13 @@ module.exports.run = async (interaction) => {
 
 				// alert user that their poke has been added to the database
 				logger.info("[genpoke] Sending upload confirmation and how to remove pokemon.");
-				interaction.reply(genPokemon.name + " has been added to the database.\nTo remove it, use this command: `+rempoke " + genPokemon.name + "`");
+				interaction.editReply(genPokemon.name + " has been added to the database.\nTo remove it, use this command: `/rempoke " + genPokemon.name + "`");
 			})
 			.catch(function (error) {
 				logger.error(error);
-				interaction.reply(error);
+				interaction.editReply({
+					contents: error
+				});
 			});
 	}
 	/* istanbul ignore next */
