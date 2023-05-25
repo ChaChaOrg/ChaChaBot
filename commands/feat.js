@@ -8,6 +8,7 @@ module.exports.data = new SlashCommandBuilder()
         option.setName('feat')
         .setDescription('The feat you want info about')
         .setRequired(true));
+    .'
 
 
 module.exports.run = async (interaction) => 

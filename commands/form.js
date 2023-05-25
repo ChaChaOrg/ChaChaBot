@@ -2,13 +2,58 @@ const logger = require('../logs/logger.js');
 const helpMessage = "Form is a command for managing the various forms of a pokemon, such as regional variants or alternate forms. This command has the list and add subcommands.\n";
 const listMessage = "The list subcommand lists all forms avaiable to a given pokemon species. Use: form list <speciesName>\n";
 const addMessage = "The add subcommand adds a form to the list of available forms for a pokemon species. Use: form add <speciesName> <formName> <ability1> <ability2> <abilitly3> <hpBaseStat> <attackBaseStat> <defenseBaseStat> <specialAttackBaseStat> <specialDefenseBaseStat> <speedBaseStat> <firstType> <secondType> <genderRatio> <captureRate> <eggGroup1> <eggGroup2> <private>\n";
-exports.run = (interaction) => {
+const { SlashCommandBuilder } = require('@discordjs/builders');
+// JavaScript Document
+module.exports.data = new SlashCommandBuilder()
+    .setName('form')
+    .setDescription('Manages the various forms of a pokemon, such as regional variants or alternate forms.')
+    .addStringOption(option =>
+        option.setName('feat')
+        .setDescription('The feat you want info about')
+        .setRequired(true))
+    .addSubcommand(subcommand =>
+        subcommand
+            .setName('list')
+            .setDescription('List all forms for a species')
+            .addStringOption(option =>
+                option.setName('species-name').setDescription('the Species name')))
+    .addSubcommand(subcommand =>
+        subcommand
+            .setName('add')
+            .setDescription('adds a form to the database')
+            .addStringOption(option => option.setName('species-name').setDescription('Species Name').setRequired(true))
+            .addStringOption(option => option.setName('form-name').setDescription('Form Name').setRequired(true))
+            .addStringOption(option => option.setName('ability1').setDescription('First Ability').setRequired(true))
+            .addStringOption(option => option.setName('ability2').setDescription('Second Ability'))
+            .addStringOption(option => option.setName('ability3').setDescription('Third Ability'))
+            .addIntegerOption(option => option.setName('healthpointsBaseStat').setDescription('HP Base Stat').setRequired(true))
+            .addIntegerOption(option => option.setName('attackBaseStat').setDescription('ATK Base Stat').setRequired(true))
+            .addIntegerOption(option => option.setName('defenseBaseStat').setDescription('DEF Base Stat').setRequired(true))
+            .addIntegerOption(option => option.setName('specialAttackBaseStat').setDescription('SPA Base Stat').setRequired(true))
+            .addIntegerOption(option => option.setName('specialDefenseBaseStat').setDescription('SPD Base Stat').setRequired(true))
+            .addIntegerOption(option => option.setName('speedBaseStat').setDescription('SPE Base Stat').setRequired(true))
 
+            .addStringOption(option => option.setName('firstType').setDescription('First Type').setRequired(true))
+            .addStringOption(option => option.setName('secondType').setDescription('Second Type'))
+            .addIntegerOption(option => option.setName('genderRatio').setDescription('Gender ratio'))
+            .addIntegerOption(option => option.setName('captureRate').setDescription('Capture rate'))
+            .addStringOption(option => option.setName('eggGroup1').setDescription('First Egg group'))
+            .addStringOption(option => option.setName('eggGroup2').setDescription('Second Egg group'))
+            .addBooleanOption(option => option.setName('private').setDescription('private the form?').setRequired(true)))
+     .addSubcommand(subcommand =>
+        subcommand
+            .setName('remove')
+            .setDescription('adds a form to the database')
+            .addStringOption(option => option.setName('species-name').setDescription('Species Name').setRequired(true))
+            .addStringOption(option => option.setName('form-name').setDescription('Form Name').setRequired(true)));
+
+module.exports.run = async (interaction) => 
+{
     try {
-        if (args[0].includes("list")) {
+        if (interaction.options.getSubcommand() === 'list') {
             //throw "Work in Progress";
-            let species = args[1].toLowerCase();
-            logger.info("[form] Listing forms for " + args[1]);
+            let species = interaction.options.getStringOption('species-name').toLowerCase();
+            logger.info("[form] Listing forms for " + species);
             let sql = 'SELECT form FROM pokeForms WHERE species = \'' + species + '\'';
             logger.info("[form] List sql query");
             
@@ -28,8 +73,8 @@ exports.run = (interaction) => {
                             names += ", ";
                         }
                     }
-                    //interaction.reply("The " + args[1] + " species has the following forms in game: " + names);
-                    output += "The " + args[1] + " species has the following forms in game: " + names;
+                    //interaction.reply("The " + species + " species has the following forms in game: " + names);
+                    output += "The " + species + " species has the following forms in game: " + names;
                 } else { 
                     logger.info("[form] No main forms found");
                     //interaction.reply("No main game forms found.");
@@ -56,7 +101,7 @@ exports.run = (interaction) => {
                         console.log("custom forms found");
                         console.log(result);
                         console.log(result[1]);
-                        let cust = "The " + args[1] + " species has the following custom forms: ";
+                        let cust = "The " + species + " species has the following custom forms: ";
                         for (let i = 0; i < result.length; i++) {
                             //console.log(result[i]);
                             if (i != 0) {
@@ -77,12 +122,31 @@ exports.run = (interaction) => {
                 //interaction.channel.send(error.message);
             });
             
-        } else if (args[0].includes("add")) {
-            if (args.length != 19) {
-                throw "Incorrect number of arguments to add the form.";
-            }
-            let species = args[1].toLowerCase();
-            let check = `SELECT * from pokeForms WHERE species = \'` + species + `\' AND form = \'` + args[2] + `\'`;
+        } else if (interaction.options.getSubcommand() === 'add'){
+            let species = interaction.options.getStringOption("species-name").toLowerCase();
+            let check = `SELECT * from pokeForms WHERE species = \'` + species + `\' AND form = \'` + interaction.options.getStringOption("form-name").toLowerCase() + `\'`;
+
+           
+           let form = interaction.options.getStringOption("form-name") ?? ''; 
+           let ability1 = interaction.options.getStringOption("ability1") ?? '';  
+           let ability2 = interaction.options.getStringOption("ability2") ?? '';
+           let ability3 = interaction.options.getStringOption("ability3") ?? '';
+           let hpBST = interaction.options.getIntegerOption("hpBaseStat") ?? '';
+           let atkBST = interaction.options.getIntegerOption("attackBaseStat") ?? '';
+           let defBST = interaction.options.getIntegerOption("defenseBaseStat") ?? '';
+           let spaBST = interaction.options.getIntegerOption("specialAttackBaseStat") ?? '';
+           let spdBST = interaction.options.getIntegerOption("specialDefenseBaseStat") ?? '';
+           let speBST = interaction.options.getIntegerOption("speedBaseStat") ?? '';
+           let type1 = interaction.options.getStringOption("type1") ?? '';
+           let type2 = interaction.options.getStringOption("type2") ?? '';
+           let genderRate = interaction.options.getStringOption("genderRate") ?? '';
+           let captureRate = interaction.options.getStringOption("captureRate") ?? '';
+           let eggGroup1 = interaction.options.getStringOption("eggGroup1") ?? '';
+           let eggGroup2 = interaction.options.getStringOption("eggGroup2") ?? '';
+           let private = interaction.options.getStringOption("private") ?? false;
+
+            if(private) private = 1; else private = 0;
+
             logger.info('[from] Checking database for new form.');
             connection.query(check, function (err, result) {
                 if (err) {
@@ -95,25 +159,25 @@ exports.run = (interaction) => {
                     let sql = `INSERT INTO pokeForms (species, form, ability1, ability2, ability3, hpBST, atkBST, defBST, spaBST, spdBST, speBST, type1, type2, genderRate, captureRate, eggGroup1, eggGroup2, discordID, private) 
                     VALUES (
                     "${species}",
-                    "${args[2]}",
-                    "${args[3]}",
-                    "${((args[4].toLowerCase() == 'none') ? '-' : args[4])}",
-                    "${((args[5].toLowerCase() == 'none') ? '-' : args[5])}",
+                    "${form}",
+                    "${ability1}",
+                    "${ability2}",
+                    "${ability3}",
 
-                    ${args[6]},
-                    ${args[7]},
-                    ${args[8]},
-                    ${args[9]},
-                    ${args[10]},
-                    ${args[11]},
-                    "${args[12]}",
-                    "${((args[13].toLowerCase() == 'none') ? '-' : args[13])}",
-                    ${args[14]},
-                    ${args[15]},
-                    "${args[16]}",
-                    "${((args[17].toLowerCase() == 'none') ? '-' : args[13])}",
-                    ${interaction.author.id},
-                    ${args[18]});`;
+                    ${hpBST},
+                    ${atkBST},
+                    ${defBST},
+                    ${spaBST},
+                    ${spdBST},
+                    ${speBST},
+                    "${type1}",
+                    "${type2}",
+                    ${genderRate},
+                    ${captureRate},
+                    "${eggGroup1}",
+                    "${eggGroup2}",
+                    ${interaction.user.id},
+                    ${private})`;
                     //console.log(sql);
                     logger.info(`[form] upload SQL query: ${sql}`);
                     connection.query(sql, function (err, result) {
@@ -123,16 +187,18 @@ exports.run = (interaction) => {
                         }
                         console.log("1 record inserted");
                         logger.info("[form] upload SQL was successful.");
-                        interaction.reply("Your new form for " + args[1] + " was successfully added.");
+                        interaction.reply("Your new form for " + species + " was successfully added.");
                     });
                 } else {
                     logger.info('[form] New form already exists.');
-                    interaction.reply("That form already exists.");
+                    interaction.reply("That already exists.");
                 }
             });
             
-        } else if(args[0].includes("remove")){
+        } else if(interaction.options.getSubcommand("remove")){
             //in future, may want to add a confirmation step to the deletion process
+            let species = interaction.options.getStringOption("species-name").toLowerCase();
+            let form = interaction.options.getStringOption("form-name").toLowerCase();
             if (args.length != 3) {
                 throw { message: "Please include the species the form belongs to and the name of the form to remove." };
             }
@@ -146,7 +212,7 @@ exports.run = (interaction) => {
 
                     if (collected.first().emoji.name === '✅') {
                         logger.info("[form] Removing form");
-                        let sql = `DELETE FROM pokeForms WHERE species='` + args[1] + `' AND form='` + args[2] + `';`;
+                        let sql = `DELETE FROM pokeForms WHERE species='` + species + `' AND form='` + form + `';`;
                         connection.query(sql, function (err, result) {
                             if (err) {
                                 logger.error(err);
