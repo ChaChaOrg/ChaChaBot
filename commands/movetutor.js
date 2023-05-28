@@ -5,7 +5,7 @@ const databaseURL = 'https://bulbapedia.bulbagarden.net/wiki/List_of_moves';
 const PPINDEX = 11;
 const logs = require('../logs/logger.js');
 const {
-	SlashCommandBuilder
+	SlashCommandBuilder, SlashCommandSubcommandBuilder
 } = require('@discordjs/builders');
 
 //help messages
@@ -17,39 +17,43 @@ const {
 module.exports.data = new SlashCommandBuilder()
 	.setName('movetutor')
 	.setDescription('The command to check the Train Pokemon DC to learn a new move or skill.')
-	.addStringOption(option =>
-		option.setName('tutor-type')
-		.setDescription("What type of thing you're learning. (Skill or Move).")
-		.setRequired(true)
-		.addChoices({
-			name: 'Skill',
-			value: 'skill'
-		}, {
-			name: 'Move',
-			value: 'move'
-		}, {
-			name: 'Help',
-			value: 'help'
-		}))
-	.addStringOption(option =>
-		option.setName('tutor-name')
-		.setDescription("The name of what you're trying to learn.")
-		.setRequired(true))
-	.addIntegerOption(option =>
-		option.setName('int-mod')
-		.setDescription('How smart your pokemon is. (Required for skill tutoring)')
-		.setRequired(false))
-	.addStringOption(option =>
-		option.setName('formula')
-		.setDescription('Which move DC forula to use.')
-		.setRequired(false)
-		.addChoices({
-			name: 'Normal',
-			value: 'normal'
-		}, {
-			name: 'Original',
-			value: 'original'
-		})
+	.addSubcommand(subcommand =>
+		subcommand.setName('move')
+			.setDescription('Calculates the DC for learning a move.')
+			.addStringOption(option =>
+				option.setName('move-name')
+					.setDescription("The name of what you're trying to learn.")
+					.setRequired(true))
+			.addStringOption(option =>
+				option.setName('formula')
+					.setDescription('Which move DC forula to use.')
+					.setRequired(false)
+					.addChoices({
+						name: 'Normal',
+						value: 'normal'
+					}, {
+						name: 'Original',
+						value: 'original'
+					})
+			)
+	)
+	.addSubcommand(subcommand =>
+		subcommand.setName('skill')
+			.setDescription('Calculates the DC for learning a skill.')
+			.addStringOption(option =>
+				option.setName('skill-name')
+					.setDescription("The name of what you're trying to learn.")
+					.setRequired(true)
+			)
+			.addIntegerOption(option =>
+				option.setName('int-mod')
+					.setDescription('Your pokemon\'s intelligence modifier.')
+					.setRequired(true)
+			)
+	)
+	.addSubcommand(subcommand =>
+		subcommand.setName('help')
+			.setDescription('Displays the help message.')
 	);
 
 module.exports.run = async (interaction) => {
@@ -58,16 +62,16 @@ module.exports.run = async (interaction) => {
 		//let jsdom = require('jsdom');
 		let fs = require('fs');
 		await interaction.deferReply();
-		if (interaction.options.getString('tutor-type') === 'help') {
+		if (interaction.options.getSubcommand() === 'help') {
 			logs.info('[movetutor] Sending help message');
 			interaction.followUp(MOVETUTOR_HELP);
 			return;
-		} else if (interaction.options.getString('tutor-type') === 'skill') {
+		} else if (interaction.options.getSubcommand() === 'skill') {
 			logs.info('[movetutor] Skill tutor calculations');
-			var skillDC = 20 - interaction.getInteger('int-mod');
-			interaction.followUp(`The DC to learn the ${interaction.options.getString('name')} skill is ${skillDC}.`).catch(console.error);
+			var skillDC = 20 - interaction.options.getInteger('int-mod');
+			interaction.followUp(`The DC to learn the ${interaction.options.getString('skill-name')} skill is ${skillDC}.`).catch(console.error);
 			return;
-		} else if (interaction.options.getString('tutor-type') === 'move') {
+		} else if (interaction.options.getSubcommand() === 'move') {
 			logs.info('[movetutor] Move tutor calculations');
 			//var request = new XMLHttpRequest();
 			logs.info('[movetutor] Reading text file');
@@ -80,7 +84,7 @@ module.exports.run = async (interaction) => {
 					interaction.followUp('Could not read move list. Please contact ChaChaBot devs.');
 				} else {
 					let workingName = '';
-					let wordArray = interaction.options.getString('tutor-name').split('_');
+					let wordArray = interaction.options.getString('move-name').split('_');
 					//console.log(wordArray);
 					let dataArray = data.toString().split(/\r?\n/);
 					for (let i = 0; i < wordArray.length; i++) {
@@ -177,7 +181,7 @@ module.exports.run = async (interaction) => {
 							" if it's the second evolution" +
 							' stage that can learn' +
 							' the move.\n';
-						interaction.channel.send(output);
+						interaction.followUp(output);
 						//let index = data.search(workingName);
 						//index += workingName.length;
 					} else {
@@ -192,6 +196,6 @@ module.exports.run = async (interaction) => {
 			return;
 		}
 	} catch (error) {
-		logger.error("[charisma] " + error.toString())
+		logs.error("[charisma] " + error.toString())
 	}
 }
