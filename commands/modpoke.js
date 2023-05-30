@@ -1,4 +1,5 @@
-const { SlashCommandAssertions, SlashCommandBuilder } = require('@discordjs/builders');
+const { EmbedBuilder, SlashCommandAssertions, SlashCommandBuilder, ButtonBuilder, ActionRowBuilder } = require('@discordjs/builders');
+const { ButtonStyle } = require('discord.js')
 const logger = require('../logs/logger.js');
 
 // help message
@@ -50,6 +51,9 @@ const OTHER_FIELDS = ["species", "form", "level", "nature", "type1", "type2", "h
 const ALL_NATURES = ["adamant", "bashful", "bold", "brave", "calm", "careful", "docile", "gentle", "hardy", "hasty", "impish", "jolly", 
                         "lax", "lonely", "mild", "modest", "naive", "naughty", "quiet", "quirky", "rash", "relaxed", "sassy", "serious", "timid"]
 
+const ALL_IVS = ["hpIV", "atkIV", "defIV", "spaIV", "spdIV", "speIV"]
+const ALL_EVS = ["hpEV", "atkEV", "defEV", "spaEV", "spdEV", "speEV"]
+
 // code formatting variables for the embed
 const CODE_FORMAT_START = "```diff\n";
 const CODE_FORMAT_END = "\n```"
@@ -73,6 +77,18 @@ module.exports.data = new SlashCommandBuilder()
 
 module.exports.run = async (interaction) => {
     await interaction.deferReply();
+    const confirm = new ButtonBuilder()
+			.setCustomId('confirm')
+			.setLabel('Confirm')
+			.setStyle(ButtonStyle.Success);
+    
+    const cancel = new ButtonBuilder()
+			.setCustomId('cancel')
+			.setLabel('Cancel')
+			.setStyle(ButtonStyle.Secondary);
+    
+    const row = new ActionRowBuilder()
+			.addComponents(cancel, confirm);
 
     let Pokemon = require('../models/pokemon.js');
     try {
@@ -87,32 +103,13 @@ module.exports.run = async (interaction) => {
 
         if (nickname.match(/[-\/\\^$*+?.()|[\]{}'"\s]/)) {
             logger.warn("[modpoke] User put special character in pokemon name, sending warning.");
-            interaction.reply("Please do not use special characters when using renaming Pokemon.");
+            interaction.editReply("Please do not use special characters when using renaming Pokemon.");
             return;
         }
-
-        // if looking for the list of arguments, print em
-        // if (args[0].includes('list')) {
-        //     logger.info("[modpoke] Sending fields list help interaction.");
-        //     interaction.reply(HELP_FIELDS_LIST);
-        //     return;
-        // }
 
         // grab the pokemon's name
         let pokeName = nickname;
-        //grab the value to be changed
-/*
-        let valName = fieldToChange;
-        let lowerCase_OTHERFIELDS = OTHER_FIELDS.map(field => field.toLowerCase()); //copy of OTHER_FIELDS all lowercase
 
-        // check whether the field they want to change exists
-        if (!STATIC_FIELDS.includes(valName) && !OTHER_FIELDS.includes(valName) &&
-            !STATIC_FIELDS.includes(valName.toLowerCase()) && !lowerCase_OTHERFIELDS.includes(valName.toLowerCase())) {
-            logger.warn("[modpoke] Can't change that field because of spelling or doesn't exist. Sending nonexistent field interaction.");
-            interaction.reply(NONEXISTENT_FIELD_MESSAGE);
-            return;
-        }
-*/
         //grab the value to be changed
         let valName = fieldToChange;
         let lowerCase_OTHERFIELDS = OTHER_FIELDS.map(field => field.toLowerCase()); //copy of OTHER_FIELDS all lowercase
@@ -121,7 +118,7 @@ module.exports.run = async (interaction) => {
         if (!STATIC_FIELDS.includes(valName) && !OTHER_FIELDS.includes(valName) &&
             !STATIC_FIELDS.includes(valName.toLowerCase()) && !lowerCase_OTHERFIELDS.includes(valName.toLowerCase())) {
             logger.warn("[modpoke] Can't change that field because of spelling or doesn't exist. Sending nonexistent field interaction.");
-            interaction.reply(NONEXISTENT_FIELD_MESSAGE);
+            interaction.editReply(NONEXISTENT_FIELD_MESSAGE);
             return;
         }
 
@@ -156,12 +153,32 @@ module.exports.run = async (interaction) => {
         if (valName == "nature") {
             if (!ALL_NATURES.includes(valString)) {
                 logger.error("[modpoke] User tried to put in invalid nature.")
-                interaction.reply("That is not a valid pokemon nature, please check your spelling.")
+                interaction.editReply("That is not a valid pokemon nature, please check your spelling.")
                 return;
             }
 
+            valString = valString.toLowerCase();
             valString = newValue.charAt(0).toUpperCase() + newValue.slice(1);
         }
+
+        if (ALL_IVS.includes(valName) && (parseInt(valString) < 0 || parseInt(valString) > 31)) {
+            logger.error(`[modpoke] IV value (${valString}) for ${pokeName} is outside the bounds of 0 - 31! Modification canceled.`)
+            interaction.editReply(`IV value (${valString}) for ${pokeName} is outside the bounds of 0 - 31! Modification canceled.`)
+            return;
+        }
+
+        if (ALL_EVS.includes(valName) && (parseInt(valString) < 0 || parseInt(valString) > 252)) {
+            logger.error(`[modpoke] EV value (${valString}) for ${pokeName} is outside the bounds of 0 - 252! Modification canceled.`)
+            interaction.editReply(`EV value (${valString}) for ${pokeName} is outside the bounds of 0 - 252! Modification canceled.`)
+            return;
+        }
+
+        if (valName.toLowerCase() == 'level' && (parseInt(valString) < 1 || parseInt(valString) > 20)) {
+            logger.error(`[modpoke]Level value (${valString}) for ${pokeName} is outside the bounds of 1 - 20! Modification canceled.`)
+            interaction.editReply(`Level value (${valString}) for ${pokeName} is outside the bounds of 1 - 20! Modification canceled.`)
+            return;
+        }
+
 
         // ================= SQL statements  =================
         // sql statement to check if the Pokemon exists
@@ -174,24 +191,25 @@ module.exports.run = async (interaction) => {
         let notFoundMessage = pokeName + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `+listpoke` to view the Pokemon you can edit.)";
 
         // try to find the poke in the array first
-        connection.query(sqlFindPoke, function (err, rows, fields) {
+        interaction.client.mysqlConnection.query(sqlFindPoke, function (err, rows, fields) {
             // if you're here, the name couldn't be found in the table
             if (err) {
                 let cantAccessSQLMessage = "SQL error, please try again later or contact a maintainer if the issue persists.";
                 logger.error("[modpoke]" + cantAccessSQLMessage + ` ${err}`)
-                interaction.reply(cantAccessSQLMessage);
+                interaction.editReply(cantAccessSQLMessage);
                 return;
             } else if (rows.length === 0) {
                 // the pokemon was not found
                 logger.info(`[modpoke] ${pokeName} was not found.`)
-                interaction.reply(notFoundMessage);
+                interaction.editReply(notFoundMessage);
                 return;
             } else {
                 // check if the user is allowed to edit the Pokemon. If a Pokemon is private, the user's discord ID must match the Pokemon's creator ID
                 if (rows[0].private > 0 && interaction.user.id !== rows[0].discordID) {
                     logger.info("[modpoke] Detected user attempting to edit private Pokemon that isn't their own.")
                     // If user found a pokemon that was marked private and belongs to another user, act as if the pokemon doesn't exist in messages
-                    interaction.reply(notFoundMessage);
+                    interaction.editReply(notFoundMessage);
+                    return
                 } else {
                     logger.info(`[modpoke] ${pokeName} confirmed to be editable by user. Checking for static/dynamic variable.`);
                     // true/false declaring whether or not the variable is static or not
@@ -204,17 +222,17 @@ module.exports.run = async (interaction) => {
                             if (staticField === valName) {
                                 isStaticVal = true;
                                 // go ahead and run the update string right away
-                                connection.query(sqlUpdateString, function (err, results) {
+                                interaction.client.mysqlConnection.query(sqlUpdateString, function (err, results) {
                                     if (err) {
                                         let errorMessage = "Unable to update static field " + valName + " of " + pokeName;
                                         logger.error(`[modpoke] ${errorMessage}\n\t${err.toString()}`);
                                         logger.error("[modpoke] " + err);
-                                        interaction.reply(errorMessage);
+                                        interaction.editReply(errorMessage);
                                         reject();
                                     } else {
                                         let successMessage = "**" + pokeName + "'s** " + valName + " has been changed to " + valString + "!";
                                         logger.info(`[modpoke] ${successMessage}`)
-                                        interaction.reply(successMessage + "\nNOTE: Any updates to base stats will be overwritten if related variables (such as IVs, EVs, and level) are changed.");
+                                        interaction.editReply(successMessage + "\nNOTE: Any updates to base stats will be overwritten if related variables (such as IVs, EVs, and level) are changed.");
                                         resolve();
                                     }
                                 });
@@ -244,7 +262,7 @@ module.exports.run = async (interaction) => {
                             let oldPoke = new Pokemon();
 
                             // create oldPoke object
-                            oldPoke.loadFromSQL(connection, P, rows[0]).then(function (results) {
+                            oldPoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, rows[0]).then(function (results) {
 
                                 console.log("oldPoke:");
                                 console.log(`"${oldPoke.pokemonData.stats[0].stat.name}": "${oldPoke.pokemonData.stats[0].base_stat}"`);
@@ -271,7 +289,7 @@ module.exports.run = async (interaction) => {
                                 // newPoke - updated Pokemon OBJECT, post-updates & calculated accordingly */
 
                                 //use Pokemon.loadFromSQL to convert SQL object into a complete Pokemon object
-                                newPoke.loadFromSQL(connection, P, thisPoke).then(function (results) {
+                                newPoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, thisPoke).then(async function (results) {
 
                                     console.log("new Pokemon:");
                                     console.log(`"${newPoke.pokemonData.stats[0].stat.name}": "${newPoke.pokemonData.stats[0].base_stat}"`);
@@ -400,185 +418,175 @@ module.exports.run = async (interaction) => {
                                     // TODO update above array with charisma calculator when that's done and ready
 
                                     // Create embed with old/new updates
-                                    let comparisonEmbed = {
-                                        embed: {
-                                            color: 3447003,
-                                            author: {
-                                                name: client.user.username,
-                                                icon_url: client.user.avatarURL
+                                    let comparisonEmbed = new EmbedBuilder()
+                                        .setColor(0x3498DB)
+                                        .setTitle(`Review & Confirm Changes to ${newPoke.name}`)
+                                        .setAuthor({
+                                            name: interaction.client.user.username,
+                                            icon_url: interaction.client.user.avatarURL
+                                        })
+                                        .setThumbnail(`${newPoke.pokemonData.sprites.front_default}`)
+                                        .setDescription(`Please review the Pokemon's updated stats, highlighted in color below. If the updates are correct, confirm the changes to the Pokemon by reacting to the message beneath this embed.`)
+                                        .addFields(
+                                            {
+                                                name: "Static Fields",
+                                                value: `These should not change via dynamic field updates.\n`
+                                                    + `**Name:** ${newPoke.name}\n`
+                                                    + `**Ability:** ${formatAbility(newPoke.ability.name)}\n`
+                                                    + `**Gender:** ${capitalize(newPoke.gender)}\n`
+                                                    + `**Shiny?** ${newPoke.shiny}`,
+                                                inline: true
                                             },
-                                            title: `Review & Confirm Changes to ${newPoke.name}`,
-                                            thumbnail: {
-                                                url: `${newPoke.pokemonData.sprites.front_default}`,
+                                            {
+                                                name: "Core Fields",
+                                                value: `${CODE_FORMAT_START}Level${fieldChanged(oldPoke.level, newPoke.level, true)}Species${fieldChanged(oldSpecies, newSpecies, false)}${CODE_FORMAT_END}`,
+                                                inline: true
                                             },
-                                            description: `Please review the Pokemon's updated stats, highlighted in color below. If the updates are correct, confirm the changes to the Pokemon by reacting to the message beneath this embed.`,
-                                            fields: [
-                                                {
-                                                    name: "Static Fields",
-                                                    value: `These should not change via dynamic field updates.\n`
-                                                        + `**Name:** ${newPoke.name}\n`
-                                                        + `**Ability:** ${formatAbility(newPoke.ability.name)}\n`
-                                                        + `**Gender:** ${capitalize(newPoke.gender)}\n`
-                                                        + `**Shiny?** ${newPoke.shiny}`,
-                                                    inline: true
-                                                },
-                                                {
-                                                    name: "Core Fields",
-                                                    value: `${CODE_FORMAT_START}Level${fieldChanged(oldPoke.level, newPoke.level, true)}Species${fieldChanged(oldSpecies, newSpecies, false)}${CODE_FORMAT_END}`,
-                                                    inline: true
-                                                },
-                                                {
-                                                    name: "=====",
-                                                    value: "**BASE STATS**"
-                                                },
-                                                {
-                                                    name: "Hit Points (HP)",
-                                                    value: `${CODE_FORMAT_START}IV: ${fieldChanged(oldPoke.statBlock.ivStats[0], newPoke.statBlock.ivStats[0], true)}EV: ${fieldChanged(oldPoke.statBlock.evStats[0], newPoke.statBlock.evStats[0], true)}FINAL: ${fieldChanged(oldPoke.statBlock.finalStats[0], newPoke.statBlock.finalStats[0], true)}${CODE_FORMAT_END}`,
-                                                    inline: true
-                                                },
-                                                {
-                                                    name: "Attack (ATK)",
-                                                    value: `${CODE_FORMAT_START}IV: ${fieldChanged(oldPoke.statBlock.ivStats[1], newPoke.statBlock.ivStats[1], true)}EV: ${fieldChanged(oldPoke.statBlock.evStats[1], newPoke.statBlock.evStats[1], true)}FINAL: ${fieldChanged(oldPoke.statBlock.finalStats[1], newPoke.statBlock.finalStats[1], true)}${CODE_FORMAT_END}`,
-                                                    inline: true
-                                                },
-                                                {
-                                                    name: "Defense (DEF)",
-                                                    value: `${CODE_FORMAT_START}IV: ${fieldChanged(oldPoke.statBlock.ivStats[2], newPoke.statBlock.ivStats[2], true)}EV: ${fieldChanged(oldPoke.statBlock.evStats[2], newPoke.statBlock.evStats[2], true)}FINAL: ${fieldChanged(oldPoke.statBlock.finalStats[2], newPoke.statBlock.finalStats[2], true)}${CODE_FORMAT_END}`,
-                                                    inline: true
-                                                },
-                                                {
-                                                    name: "Spec. Attack (SPA)",
-                                                    value: `${CODE_FORMAT_START}IV: ${fieldChanged(oldPoke.statBlock.ivStats[3], newPoke.statBlock.ivStats[3], true)}EV: ${fieldChanged(oldPoke.statBlock.evStats[3], newPoke.statBlock.evStats[3], true)}FINAL: ${fieldChanged(oldPoke.statBlock.finalStats[3], newPoke.statBlock.finalStats[3], true)}${CODE_FORMAT_END}`,
-                                                    inline: true
-                                                },
-                                                {
-                                                    name: "Spec. Defense (SPD)",
-                                                    value: `${CODE_FORMAT_START}IV: ${fieldChanged(oldPoke.statBlock.ivStats[4], newPoke.statBlock.ivStats[4], true)}EV: ${fieldChanged(oldPoke.statBlock.evStats[4], newPoke.statBlock.evStats[4], true)}FINAL: ${fieldChanged(oldPoke.statBlock.finalStats[4], newPoke.statBlock.finalStats[4], true)}${CODE_FORMAT_END}`,
-                                                    inline: true
-                                                },
-                                                {
-                                                    name: "Speed (SPE)",
-                                                    value: `${CODE_FORMAT_START}IV: ${fieldChanged(oldPoke.statBlock.ivStats[5], newPoke.statBlock.ivStats[5], true)}EV: ${fieldChanged(oldPoke.statBlock.evStats[5], newPoke.statBlock.evStats[5], true)}FINAL: ${fieldChanged(oldPoke.statBlock.finalStats[5], newPoke.statBlock.finalStats[5], true)}${CODE_FORMAT_END}`,
-                                                    inline: true
-                                                },
-                                                {
-                                                    name: "=====",
-                                                    value: "**ABILITY SCORES**"
-                                                },
-                                                {
-                                                    name: "Strength (STR)",
-                                                    value: `${abilityScoreString[0]}`,
-                                                    inline: true
-                                                },
-                                                {
-                                                    name: "Dexterity (DEX)",
-                                                    value: `${abilityScoreString[1]}`,
-                                                    inline: true
-                                                },
-                                                {
-                                                    name: "Constitution (CON)",
-                                                    value: `${abilityScoreString[2]}`,
-                                                    inline: true
-                                                },
-                                                {
-                                                    name: "Intelligence (INT)",
-                                                    value: `${abilityScoreString[3]}`,
-                                                    inline: true
-                                                },
-                                                {
-                                                    name: "Wisdom (WIS)",
-                                                    value: `${abilityScoreString[4]}`,
-                                                    inline: true
-                                                },
-                                                {
-                                                    name: "Charisma (CHA)",
-                                                    value: `${abilityScoreString[5]}`,
-                                                    inline: true
-                                                },
-                                                {
-                                                    name: "=====",
-                                                    value: "**SAVING THROWS**"
-                                                },
-                                                {
-                                                    name: "Fortitude (FORT)\nBased on CON",
-                                                    value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.statBlock.fortSave, newPoke.statBlock.fortSave, true)}${CODE_FORMAT_END}`,
-                                                    inline: true
-                                                },
-                                                {
-                                                    name: "Reflex (REF)\nBased on DEX",
-                                                    value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.statBlock.refSave, newPoke.statBlock.refSave, true)}${CODE_FORMAT_END}`,
-                                                    inline: true
-                                                },
-                                                {
-                                                    name: "Will (WILL)\nBased on WIS",
-                                                    value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.statBlock.willSave, newPoke.statBlock.willSave, true)}${CODE_FORMAT_END}`,
-                                                    inline: true
-                                                },
-                                                {
-                                                    name: "=====",
-                                                    value: "**AC & Move Speed**"
-                                                },
-                                                {
-                                                    name: "Armor Class (AC)",
-                                                    value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.statBlock.armorClass, newPoke.statBlock.armorClass, true)}${CODE_FORMAT_END}`,
-                                                    inline: true
-                                                },
-                                                {
-                                                    name: "Move Speed (measured in feet)",
-                                                    value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.statBlock.armorClass, newPoke.statBlock.armorClass, true)}${CODE_FORMAT_END}`,
-                                                    inline: true
-                                                },
-                                            ],
-                                            timestamp: new Date(),
-                                            footer: {
-                                                icon_url: client.user.avatarURL,
-                                                text: "Chambers and Charizard!"
-                                            }
-                                        }
-                                    };
+                                            {
+                                                name: "=====",
+                                                value: "**BASE STATS**"
+                                            },
+                                            {
+                                                name: "Hit Points (HP)",
+                                                value: `${CODE_FORMAT_START}IV: ${fieldChanged(oldPoke.statBlock.ivStats[0], newPoke.statBlock.ivStats[0], true)}EV: ${fieldChanged(oldPoke.statBlock.evStats[0], newPoke.statBlock.evStats[0], true)}FINAL: ${fieldChanged(oldPoke.statBlock.finalStats[0], newPoke.statBlock.finalStats[0], true)}${CODE_FORMAT_END}`,
+                                                inline: true
+                                            },
+                                            {
+                                                name: "Attack (ATK)",
+                                                value: `${CODE_FORMAT_START}IV: ${fieldChanged(oldPoke.statBlock.ivStats[1], newPoke.statBlock.ivStats[1], true)}EV: ${fieldChanged(oldPoke.statBlock.evStats[1], newPoke.statBlock.evStats[1], true)}FINAL: ${fieldChanged(oldPoke.statBlock.finalStats[1], newPoke.statBlock.finalStats[1], true)}${CODE_FORMAT_END}`,
+                                                inline: true
+                                            },
+                                            {
+                                                name: "Defense (DEF)",
+                                                value: `${CODE_FORMAT_START}IV: ${fieldChanged(oldPoke.statBlock.ivStats[2], newPoke.statBlock.ivStats[2], true)}EV: ${fieldChanged(oldPoke.statBlock.evStats[2], newPoke.statBlock.evStats[2], true)}FINAL: ${fieldChanged(oldPoke.statBlock.finalStats[2], newPoke.statBlock.finalStats[2], true)}${CODE_FORMAT_END}`,
+                                                inline: true
+                                            },
+                                            {
+                                                name: "Sp. Attack (SPA)",
+                                                value: `${CODE_FORMAT_START}IV: ${fieldChanged(oldPoke.statBlock.ivStats[3], newPoke.statBlock.ivStats[3], true)}EV: ${fieldChanged(oldPoke.statBlock.evStats[3], newPoke.statBlock.evStats[3], true)}FINAL: ${fieldChanged(oldPoke.statBlock.finalStats[3], newPoke.statBlock.finalStats[3], true)}${CODE_FORMAT_END}`,
+                                                inline: true
+                                            },
+                                            {
+                                                name: "Sp. Defense (SPD)",
+                                                value: `${CODE_FORMAT_START}IV: ${fieldChanged(oldPoke.statBlock.ivStats[4], newPoke.statBlock.ivStats[4], true)}EV: ${fieldChanged(oldPoke.statBlock.evStats[4], newPoke.statBlock.evStats[4], true)}FINAL: ${fieldChanged(oldPoke.statBlock.finalStats[4], newPoke.statBlock.finalStats[4], true)}${CODE_FORMAT_END}`,
+                                                inline: true
+                                            },
+                                            {
+                                                name: "Speed (SPE)",
+                                                value: `${CODE_FORMAT_START}IV: ${fieldChanged(oldPoke.statBlock.ivStats[5], newPoke.statBlock.ivStats[5], true)}EV: ${fieldChanged(oldPoke.statBlock.evStats[5], newPoke.statBlock.evStats[5], true)}FINAL: ${fieldChanged(oldPoke.statBlock.finalStats[5], newPoke.statBlock.finalStats[5], true)}${CODE_FORMAT_END}`,
+                                                inline: true
+                                            },
+                                            {
+                                                name: "=====",
+                                                value: "**ABILITY SCORES**"
+                                            },
+                                            {
+                                                name: "Strength (STR)",
+                                                value: `${abilityScoreString[0]}`,
+                                                inline: true
+                                            },
+                                            {
+                                                name: "Dexterity (DEX)",
+                                                value: `${abilityScoreString[1]}`,
+                                                inline: true
+                                            },
+                                            {
+                                                name: "Constitution (CON)",
+                                                value: `${abilityScoreString[2]}`,
+                                                inline: true
+                                            },
+                                            {
+                                                name: "Intelligence (INT)",
+                                                value: `${abilityScoreString[3]}`,
+                                                inline: true
+                                            },
+                                            {
+                                                name: "Wisdom (WIS)",
+                                                value: `${abilityScoreString[4]}`,
+                                                inline: true
+                                            },
+                                            {
+                                                name: "Charisma (CHA)",
+                                                value: `${abilityScoreString[5]}`,
+                                                inline: true
+                                            },
+                                            {
+                                                name: "=====",
+                                                value: "**SAVING THROWS**"
+                                            },
+                                            {
+                                                name: "Fortitude (FORT)\nBased on CON",
+                                                value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.statBlock.fortSave, newPoke.statBlock.fortSave, true)}${CODE_FORMAT_END}`,
+                                                inline: true
+                                            },
+                                            {
+                                                name: "Reflex (REF)\nBased on DEX",
+                                                value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.statBlock.refSave, newPoke.statBlock.refSave, true)}${CODE_FORMAT_END}`,
+                                                inline: true
+                                            },
+                                            {
+                                                name: "Will (WILL)\nBased on WIS",
+                                                value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.statBlock.willSave, newPoke.statBlock.willSave, true)}${CODE_FORMAT_END}`,
+                                                inline: true
+                                            },
+                                            {
+                                                name: "=====",
+                                                value: "**AC & Move Speed**"
+                                            },
+                                            {
+                                                name: "Armor Class (AC)",
+                                                value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.statBlock.armorClass, newPoke.statBlock.armorClass, true)}${CODE_FORMAT_END}`,
+                                                inline: true
+                                            },
+                                            {
+                                                name: "Move Speed (measured in feet)",
+                                                value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.statBlock.armorClass, newPoke.statBlock.armorClass, true)}${CODE_FORMAT_END}`,
+                                                inline: true
+                                            },
+                                        )
+                                        .setTimestamp(new Date())
+                                        .setFooter({
+                                            icon_url: interaction.client.user.avatar,
+                                            text: "Chambers and Charizard!"
+                                        })
 
                                     // ======== END FORMATTED VARIABLES & STRINGS & EMBED ========
 
                                     // post embed with changes displayed
-                                    interaction.channel.send(comparisonEmbed);
+                                    // interaction.channel.send({ embeds: [comparisonEmbed] });
+                                    const response = await interaction.editReply({ 
+                                        content: 'Confirm with confirm or cancel. Times out in one minute',
+                                        embeds: [comparisonEmbed],
+                                        components: [row] 
+                                    })
 
-                                    // alert user that they must confirm before actually sending changes
-                                    interaction.reply("Changes displayed in embed above. Confirm with reaction ✅, or cancel with ❌").then(function (response) {
-                                        // add reactions for easy user access
-                                        response.react('✅');
-                                        response.react('❌');
+                                    await interaction.channel.send("Changes displayed in embed above. Confirm with confirm or deny.")
+                                    
+                                    const collectorFilter = i => i.user.id === interaction.user.id;
 
-                                        //filter for the reaction collector
-                                        const filter = (reaction, user) => user.id === interaction.user.id && (reaction.emoji.name === '✅' || reaction.emoji.name === '❌');
+                                    try {
+                                        const confirmation = await response.awaitMessageComponent({ filter: collectorFilter, time: 60000 });
 
-                                        // await user reaction
-                                        response.awaitReactions(filter, { max: 1, time: 100000 }).then(collected => {
-                                            // tell the log
-                                            logger.info(`[modpoke] Collected ${collected.size} reactions.`)
-                                            // if confirmed, update the poke and alert the user to such
-                                            if (collected.first().emoji.name === '✅') {
-                                                // update the pokemon and print confirmation
-                                                newPoke.updatePokemon(connection, message, rows[0].private).then(function (results) {
-                                                    let successString = "Success! " + pokeName + "'s " + valName + " has been changed to " + valString + " and all related stats have been updated.\n\nHint: View Pokemon's stat's using `+showpoke [nickname]`";
-                                                    logger.info(`[modpoke] ${successString}`)
-                                                    interaction.reply(successString);
-                                                }).catch(function (error) {
-                                                    interaction.reply("Error updating SQL for: " + pokeName);
-                                                    logger.error(`[modpoke] Error updating SQL for ${pokeName}`)
-                                                });
-                                            } else {
-                                                // if you're here, the user clicked X
-                                                logger.info("Edits to Pokemon cancelled by user.")
-                                                interaction.reply(pokeName + "'s edits have been cancelled");
-                                            }
-                                        }).catch((err) => {
-                                            // timeout message
-                                            let timeoutMessage = "Edits to " + pokeName + " cancelled via timeout.";
-                                            // if you're here, the action timed out
-                                            logger.error(`[modpoke] ${timeoutMessage}`);
-                                            interaction.reply(timeoutMessage);
-                                        });
-                                    });
+                                        if (confirmation.customId == 'confirm') {
+                                            newPoke.updatePokemon(interaction.client.mysqlConnection, null, rows[0].private).then(function (results) {
+                                                let successString = "Success! " + pokeName + "'s " + valName + " has been changed to " + valString + " and all related stats have been updated.\n\nHint: View Pokemon's stat's using `+showpoke [nickname]`";
+                                                logger.info(`[modpoke] ${successString}`)
+                                                interaction.editReply({ components: []});
+                                                interaction.channel.send({ content: successString });
+                                            }).catch(function (error) {
+                                                interaction.editReply({ components: []});
+                                                interaction.channel.send({ content: "Error updating SQL for: " + pokeName })
+                                                logger.error(`[modpoke] Error updating SQL for ${pokeName}`)
+                                            });
+                                        } else if (confirmation.customId === 'cancel') {
+                                            logger.info("Edits to Pokemon cancelled by user.")
+                                            interaction.editReply({ content: pokeName + "'s edits have been cancelled", components: []});
+                                        }
+                                    } catch (e) {
+                                        console.log(e)
+                                        interaction.editReply({ content: 'Confirmation not received within 1 minute, cancelling', components: [] });
+                                    }
+                                
 
                                     //TODO: Find a better way to preserve health
                                     //As of right now just re-rolls hp
@@ -589,12 +597,12 @@ module.exports.run = async (interaction) => {
 
                                 }).catch(function (error) {
                                     let loadNewPokeMessage = "Error loading new Pokemon to object. Please make sure you've entered a valid field and value.";
-                                    interaction.reply(loadNewPokeMessage);
+                                    interaction.editReply(loadNewPokeMessage);
                                     logger.error(`[modpoke] ${loadNewPokeMessage}\n\t${error.toString()}`)
                                 });
                             }).catch(function (error) {
                                 let loadOriginalPokeMessage = "Error while attempting to load the original Pokemon to an object.";
-                                interaction.reply(loadOriginalPokeMessage);
+                                interaction.editReply(loadOriginalPokeMessage);
                                 logger.error(`[modpoke] ${loadOriginalPokeMessage}\n\t${error.toString}`)
                             });
                         }
