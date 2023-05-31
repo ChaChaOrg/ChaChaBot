@@ -69,7 +69,7 @@ module.exports.data = new SlashCommandBuilder()
                         .addSubcommand(subcommand =>
                             subcommand
                             .setName('pokemon')
-                            .setDescription('Tells the user which fields can be modified.')
+                            .setDescription('Modify aspects of a pokemon.')
                             .addStringOption(option =>
                                 option.setName('nickname')
                                     .setDescription('Nickname of the Pokemon being modified. Do not use spaces or special characters!')
