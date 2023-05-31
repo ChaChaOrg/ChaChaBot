@@ -60,19 +60,29 @@ const CODE_FORMAT_END = "\n```"
 
 module.exports.data = new SlashCommandBuilder()
                         .setName('modpoke')
-                        .setDescription("Modifies an existing Pokemon in the database. Use /modpoke help help help for available fields.")
-                        .addStringOption(option =>
-                            option.setName('nickname')
-                                .setDescription('Nickname of the Pokemon being modified. Do not use spaces or special characters!')
-                                .setRequired(true))
-                        .addStringOption(option =>
-                            option.setName('field-to-change')
-                                .setDescription('Field that is going to be modified.')
-                                .setRequired(true))
-                        .addStringOption(option =>
-                            option.setName('new-value')
-                                .setDescription('New value of the field being modified')
-                                .setRequired(true));
+                        .setDescription("Modifies an existing Pokemon in the database. Use /modpoke help for available fields.")
+                        .addSubcommand(subcommand =>
+                            subcommand
+                            .setName('help')
+                            .setDescription('Tells the user which fields can be modified.')
+                        )
+                        .addSubcommand(subcommand =>
+                            subcommand
+                            .setName('pokemon')
+                            .setDescription('Tells the user which fields can be modified.')
+                            .addStringOption(option =>
+                                option.setName('nickname')
+                                    .setDescription('Nickname of the Pokemon being modified. Do not use spaces or special characters!')
+                                    .setRequired(true))
+                            .addStringOption(option =>
+                                option.setName('field-to-change')
+                                    .setDescription('Field that is going to be modified.')
+                                    .setRequired(true))
+                            .addStringOption(option =>
+                                option.setName('new-value')
+                                    .setDescription('New value of the field being modified')
+                                    .setRequired(true))
+                        );
 
 
 module.exports.run = async (interaction) => {
@@ -92,14 +102,19 @@ module.exports.run = async (interaction) => {
 
     let Pokemon = require('../models/pokemon.js');
     try {
+        if (interaction.options.getSubcommand() === 'help') {
+            interaction.editReply(HELP_FIELDS_LIST);
+            return;
+        }
+
         let nickname = interaction.options.getString("nickname");
         let fieldToChange = interaction.options.getString("field-to-change");
         let newValue = interaction.options.getString("new-value");
 
-        if (nickname == fieldToChange == newValue == 'help') {
-            interaction.channel.send(HELP_FIELDS_LIST);
-            return;
-        }
+        // if (nickname == fieldToChange == newValue == 'help') {
+        //     interaction.channel.send(HELP_FIELDS_LIST);
+        //     return;
+        // }
 
         if (nickname.match(/[-\/\\^$*+?.()|[\]{}'"\s]/)) {
             logger.warn("[modpoke] User put special character in pokemon name, sending warning.");
@@ -555,7 +570,7 @@ module.exports.run = async (interaction) => {
                                     // post embed with changes displayed
                                     // interaction.channel.send({ embeds: [comparisonEmbed] });
                                     const response = await interaction.editReply({ 
-                                        content: 'Confirm with confirm or cancel. Times out in one minute',
+                                        content: 'Confirm with confirm or cancel. Times out in one minute.',
                                         embeds: [comparisonEmbed],
                                         components: [row] 
                                     })
