@@ -54,7 +54,27 @@ module.exports.data = new SlashCommandBuilder()
 	.addSubcommand(subcommand =>
 		subcommand.setName('help')
 			.setDescription('Displays the help message.')
-	);
+)
+	.addSubcommand(subcommand =>
+		subcommand.setName('legacy')
+			.setDescription('Manual Power Point value selection.')
+			.addIntegerOption(option =>
+				option.setName('pp-value')
+					.setDescription('The Power Point value of the move.')
+					.setRequired(true)
+		)
+		.addStringOption(option =>
+			option.setName('formula')
+				.setDescription('Which move DC forula to use.')
+				.setRequired(false)
+				.addChoices({
+					name: 'Normal',
+					value: 'normal'
+				}, {
+					name: 'Original',
+					value: 'original'
+				})
+		));
 
 module.exports.run = async (interaction) => {
 	try {
@@ -189,7 +209,46 @@ module.exports.run = async (interaction) => {
 					}
 				}
 			});
-		} else {
+		} else if (interaction.options.getSubcommand() === 'legacy') {
+			//data array index list 
+			//mv# name type category pp power acc gen
+			//0    1    2       3    4    5    6   7
+			//console.log(move);
+			let pp = interaction.options.getInteger('pp-value');
+			//console.log(pp);
+			let DCs = [20, 17, 15, 13, 10, 8];
+			let dcAdjust = 8 - Math.round(pp / 5);
+			let output = '';
+			if (interaction.options.getString('formula') === ('original')) {
+				logs.info('[movetutor] Adjusting to original formula');
+				DCs = [20 + dcAdjust, 17 + dcAdjust, 15 + dcAdjust, 15, 13, 10];
+			}
+
+			for (let i = 0; i < DCs.length; i++) {
+				DCs[i] += dcAdjust;
+			}
+			logs.info('[movetutor] Displaying results');
+			output += '** Move Training**\n\n';
+			logs.info('[movetutor] Displaying results');
+			output += '**Out of Combat Checks** (Checks 1-3)\n';
+			output += "Use your trainer's CHA modifier for these checks.\n";
+			output += '```First DC: ' + DCs[0] + ' // ' + 'Second DC: ' + DCs[1] + ' // ' + 'Third' +
+				' DC:' +
+				' ' + DCs[2] + '```\n';
+			output += '**In Combat Checks** (Checks 4-6)\n';
+			output += "Replace your trainer's CHA modifier with your pokemon's INT modifier (*or 0 if" +
+				" it's negative*) for these checks.\n";
+			output += '```First DC: ' + DCs[3] + ' // ' + 'Second DC: ' + DCs[4] + ' // ' + 'Third' +
+				' DC:' +
+				' ' + DCs[5] + '```\n';
+			output += ':small_blue_diamond: **First Evolutionary Stage** gets **+5** to the check if' +
+				" it's the first stage that can learn the move\n";
+			output += ':small_orange_diamond: **Second Evolutionary Stage** gets **+2** to the check' +
+				" if it's the second evolution" +
+				' stage that can learn' +
+				' the move.\n';
+			interaction.followUp(output);
+		}else {
 			//ya dun goofed
 			logs.info('[movetutor] Invalid tutor type, how did we get here?');
 			interaction.followUp('Invalid tutor type used. The valid types are help, skill and move.');
