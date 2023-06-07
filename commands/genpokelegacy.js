@@ -1,8 +1,30 @@
 const logger = require('../logs/logger.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
 
 // Generates a new ChaCha Pokemon, given level & base stats
+module.exports.data = new SlashCommandBuilder()
+		.setName('genpokelegacy')
+		.setDescription('Generate a new pokemon (legacy command)')
+		.addStringOption(option =>
+			option.setName('species')
+				.setDescription('Species of the Pokemon being generated')
+				.setRequired(true))
+		.addIntegerOption(option =>
+			option.setName('level')
+				.setDescription('Level of the Pokemon being generated. Minimum 1, maximum 20')
+				.setRequired(true)
+				.setMinValue(1)
+				.setMaxValue(20))
+		.addStringOption(option =>
+			option.setName('nickname')
+				.setDescription('Nickname of the Pokemon being generated. Do not use spaces or special characters!')
+				.setRequired(true))
+		.addStringOption(option =>
+			option.setName('form')
+				.setDescription('Form name of the Pokemon if it is different from the species.')
+				.setRequired(false))
 
-exports.run = (interaction) => {
+module.exports.run = (interaction) => {
     //interaction.channel.send('Bang! <:gunspurr:356191158017196032>').catch(console.error);
     //Math.floor((Math.random() * 65535) + 1) randomnumgen
 
