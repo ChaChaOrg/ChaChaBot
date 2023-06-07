@@ -13,7 +13,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 
 module.exports.data = new SlashCommandBuilder()
 		.setName('showpoke')
-		.setDescription('Show a pokemon pokemon')
+		.setDescription('Show a pokemon')
 		.addStringOption(option =>
 			option.setName('nickname')
 				.setDescription('Nickname of the pokemon to search for')
