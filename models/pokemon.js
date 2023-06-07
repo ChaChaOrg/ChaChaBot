@@ -410,7 +410,7 @@ Pokemon.prototype.sendSummaryMessage = function (interaction) {
       tempSpecies = this.form;
   tempSpecies = capitalizeWord(tempSpecies);
 
-  var thumbnail_url = `${this.pokemonData.sprites.front_default}`
+  var thumbnail_url = `${this.pokemonData.sprites.front_default}`;
 
   if (thumbnail_url === null) {
     thumbnail_url = "https://e7.pngegg.com/pngimages/960/239/png-clipart-internet-archive-http-404-wayback-machine-error-miscellaneous-text-thumbnail.png"
@@ -708,6 +708,7 @@ Pokemon.prototype.updatePokemon = function (connection, message, pokePrivate) {
 // =========== Import (Showdown Style) ===========
 
 Pokemon.prototype.importPokemon = function (connection, P, importString) {
+  return new Promise((resolve,reject) => {
   logger.info("[pokemon] Importing Pokemon.");
   //splits the message into lines then splits the lines into words separated by spaces.
   let lines = importString.split("\n");
@@ -879,7 +880,7 @@ Pokemon.prototype.importPokemon = function (connection, P, importString) {
       if (err) throw err;
 
       if (response.length != 0) {
-          this.name = this.name + str(response.length + 1)
+          this.name = this.name + ('' + (response.length + 1))
 
           return this.getPokemonAndSpeciesData(connection, P).then(
             //assign types, base states and then calculate those Stats
@@ -891,15 +892,15 @@ Pokemon.prototype.importPokemon = function (connection, P, importString) {
             }.bind(this)
           );
       }
-  })
+  }.bind(this))
 
 
-  new Promise((resolve,reject) => {
+  
     connection.query(sql, function (err, response) {
       if (err) reject(err);
 
       if (response.length != 0) {
-          resolve(this.name = this.name + str(response.length + 1))
+          resolve(this.name = this.name + ('' + (response.length + 1)))
       }
 
       resolve()

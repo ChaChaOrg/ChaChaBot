@@ -13,6 +13,7 @@ for(const file of commandFiles) {
     if ('data' in command && 'run' in command){
         commands.push(command.data.toJSON());
         logger.info(`Command ${command.data.name} has been added!`);
+        console.log(`Command ${command.data.name} has been added!`);
     }
     else {
         //logger.error(`[WARNING] The command at ./commands/${file} is missing a required "data" or "execute" property`);
