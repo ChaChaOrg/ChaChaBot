@@ -61,6 +61,8 @@ module.exports.data	= new SlashCommandBuilder()
 
 module.exports.run = async (interaction) => {
 
+	await interaction.deferReply();
+
 	//trainer types
 	var trainerTypes = [
 		["Preschooler", "SchoolKid", "Youngster", "Lass"],
@@ -1726,7 +1728,7 @@ module.exports.run = async (interaction) => {
 
 				//Get arguments
 				let ttypeGiven = interaction.options.getString('trainertype');
-				let tFeatNum = interaction.options.getInteger('numFeats');
+				let tFeatNum = interaction.options.getInteger('numfeats');
 				let minTLevel = interaction.options.getInteger('mintrainerlevel');
 				let maxTLevel = interaction.options.getInteger('maxtrainerlevel');
 				let pokeTotal = interaction.options.getInteger('pokemonnumber');
@@ -1800,7 +1802,7 @@ module.exports.run = async (interaction) => {
 				}
 
 				//gen trainer level
-				tLevel = Math.floor(Math.random() * maxTLevel) + minTLevel;
+				tLevel = Math.floor(Math.random() * (maxTLevel - minTLevel)) + minTLevel;
 
 				//gen pokemon
 
@@ -1824,51 +1826,53 @@ module.exports.run = async (interaction) => {
 				//print the trainer out.
 
 				logger.info("[gentrainer] Sending embed interaction.")
-				interaction.reply({
-					embed: {
-						color: 3447003,
-						author: {
-							name: client.user.username,
-							icon_url: client.user.avatarURL
+
+				let embed = {embed: {
+					color: 3447003,
+					author: {
+						name: interaction.client.user.username,
+						icon_url: interaction.client.user.avatarURL
+					},
+					title: `${tType} ${tName}  (Lv ${tLevel} ${tClass}) would like to Battle!`,
+					description: `**FATIGUE:** ${fatigue}\n**Feats:** ${tFeats.toString()}`,
+					fields: [
+						{
+							name: `${tPokes[0]}`,
+							value: `\n=================`
 						},
-						title: `${tType} ${tName}  (Lv ${tLevel} ${tClass}) would like to Battle!`,
-						description: `**FATIGUE:** ${fatigue}\n**Feats:** ${tFeats.toString()}`,
-						fields: [
-							{
-								name: `${tPokes[0]}`,
-								value: `\n=================`
-							},
-							{
-								name: `${tPokes[1]}`,
-								value: `\n=================`
-							},
-							{
-								name: `${tPokes[2]}`,
-								value: `\n=================`
-							},
-							{
-								name: `${tPokes[3]}`,
-								value: `\n=================`
-							},
-							{
-								name: `${tPokes[4]}`,
-								value: `\n=================`
-							},
-							{
-								name: `${tPokes[5]}`,
-								value: `\n=================`
-							},
-						],
-						timestamp: new Date(),
-						footer: {
-							icon_url: client.user.avatarURL,
-							text: "Chambers and Charizard!"
-						}
+						{
+							name: `${tPokes[1]}`,
+							value: `\n=================`
+						},
+						{
+							name: `${tPokes[2]}`,
+							value: `\n=================`
+						},
+						{
+							name: `${tPokes[3]}`,
+							value: `\n=================`
+						},
+						{
+							name: `${tPokes[4]}`,
+							value: `\n=================`
+						},
+						{
+							name: `${tPokes[5]}`,
+							value: `\n=================`
+						},
+					],
+					timestamp: new Date(),
+					footer: {
+						icon_url: interaction.client.user.avatarURL,
+						text: "Chambers and Charizard!"
 					}
-				});
+				}}
+				interaction.followUp({ embeds: [
+					embed.embed
+				]});
 			} catch (error) {
 				logger.error("[gentrainer] " + error)
-				interaction.reply(`ChaCha Machine :b:roke :^(. ${error.message}`).catch(console.error);
+				interaction.followUp(`ChaCha Machine :b:roke :^(. ${error.message}`).catch(console.error);
 			}
 			
 
