@@ -62,7 +62,7 @@ module.exports.run = async (interaction) => {
 
                         logger.info("[showpoke] Sending summary message to user.");
                         interaction.editReply({
-                            embeds: [tempPoke.sendSummaryMessage(interaction.member)]
+                            embeds: [tempPoke.sendSummaryMessage(interaction).embed]
                         });
 
                     });
