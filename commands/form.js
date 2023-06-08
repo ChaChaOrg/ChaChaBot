@@ -46,6 +46,7 @@ module.exports.data = new SlashCommandBuilder()
 
 module.exports.run = async (interaction) => 
 {
+   await interaction.deferReply();
     const confirm = new ButtonBuilder()
         .setCustomId('confirm')
         .setLabel('Confirm')
@@ -124,7 +125,7 @@ module.exports.run = async (interaction) =>
                             //interaction.reply(output);
                             out += cust;
                         }
-                    interaction.reply(out);
+                    interaction.followUp(out);
                 });
             }).catch(function (error) {
                 logger.error("[form] " + error.message);
