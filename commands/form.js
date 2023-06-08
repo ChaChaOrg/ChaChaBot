@@ -130,7 +130,7 @@ module.exports.run = async (interaction) =>
                 logger.error("[form] " + error.message);
                 //console.log(error);
                 console.log(error.message);
-                //interaction.channel.send(error.message);
+                //interaction.reply("Given species is not a mainline pokemon species");
             });
 
         } else if (interaction.options.getSubcommand() === 'add'){
