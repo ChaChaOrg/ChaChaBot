@@ -13,7 +13,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 
 module.exports.data = new SlashCommandBuilder()
 		.setName('showpoke')
-		.setDescription('Show a pokemon pokemon')
+		.setDescription('Show a pokemon')
 		.addStringOption(option =>
 			option.setName('nickname')
 				.setDescription('Nickname of the pokemon to search for')
@@ -62,7 +62,7 @@ module.exports.run = async (interaction) => {
 
                         logger.info("[showpoke] Sending summary message to user.");
                         interaction.editReply({
-                            embeds: [tempPoke.sendSummaryMessage(interaction.member)]
+                            embeds: [tempPoke.sendSummaryMessage(interaction).embed]
                         });
 
                     });

@@ -53,7 +53,7 @@ module.exports.run = async (interaction) => {
             // if there's something wrong, throw error
             if (err) {
                 logger.error("Error while attempting to access the database.");
-                interaction.reply("Error while attempting to access the database!");
+                interaction.followUp("Error while attempting to access the database!");
                 throw err;
             } else {
                 // check to see if it picked anything up

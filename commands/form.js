@@ -46,6 +46,9 @@ module.exports.data = new SlashCommandBuilder()
 
 module.exports.run = async (interaction) => 
 {
+   await interaction.deferReply();
+
+
     const confirm = new ButtonBuilder()
         .setCustomId('confirm')
         .setLabel('Confirm')
@@ -70,8 +73,7 @@ module.exports.run = async (interaction) =>
 
             //insert api search here
             //javascript node.js promise
-            let promise = interaction.client.pokedex.getPokemonSpeciesByName(species);
-            promise.then(function (response) {
+            interaction.client.pokedex.getPokemonSpeciesByName(species).then(function (response) {
                 console.log(response.varieties);
                 logger.info("[form] Searching api");
                 let output = "";
@@ -124,13 +126,13 @@ module.exports.run = async (interaction) =>
                             //interaction.reply(output);
                             out += cust;
                         }
-                    interaction.reply(out);
+                    interaction.followUp(out);
                 });
             }).catch(function (error) {
                 logger.error("[form] " + error.message);
                 //console.log(error);
                 console.log(error.message);
-                //interaction.channel.send(error.message);
+                interaction.followUp("Given species is not a mainline pokemon species");
             });
 
         } else if (interaction.options.getSubcommand() === 'add'){
@@ -198,11 +200,13 @@ module.exports.run = async (interaction) =>
                         }
                         console.log("1 record inserted");
                         logger.info("[form] upload SQL was successful.");
-                        interaction.reply("Your new form for " + species + " was successfully added.");
+                        interaction.followUp("Your new form for " + species + " was successfully added.");
+                        return;
                     });
                 } else {
                     logger.info('[form] New form already exists.');
-                    interaction.reply("That already exists.");
+                    interaction.followUp("That already exists.");
+                    return;
                 }
             });
 
@@ -215,7 +219,7 @@ module.exports.run = async (interaction) =>
                 i.deferUpdate();
                 return i.user.id === interaction.user.id;
             }
-            const message = await interaction.reply({ content: 'Are you sure you want to delete this form?', components: [row], fetchReply: true});
+            const message = await interaction.followUp({ content: 'Are you sure you want to delete this form?', components: [row], fetchReply: true});
             try {
                 const confirmation = await message.awaitMessageComponent({ filter: collectorFilter, time: 60000 });
 
@@ -249,13 +253,13 @@ module.exports.run = async (interaction) =>
 
 
 
-
+            return;
         }
     } catch (error){
         logger.error("[form] " + error.message);
         console.log(error);
         console.log(error.message);
-        interaction.channel.send(error.message);
+        //interaction.channel.send(error.message);
     }
 
 }

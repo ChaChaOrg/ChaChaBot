@@ -25,7 +25,7 @@ module.exports.run = async (interaction) => {
             interaction.reply("Creates a copy of a pokemon in the bot. Just give the command the pokemon's name.");
         */
         
-            let name = interaction.getStringOption();
+            let name = interaction.options.getString("name");
             logger.info("[clonepoke] Searching database for " + name);
             let Pokemon = require("../models/pokemon");
             let basePoke = new Pokemon();
@@ -33,7 +33,7 @@ module.exports.run = async (interaction) => {
             let sql = `SELECT * FROM pokemon WHERE name = '${name}';`;
             logger.info(`[showpoke] SQL query: ${sql}`);
 
-            connection.query(sql, function (err, response) {
+            interaction.client.mysqlConnection.query(sql, function (err, response) {
 
                 if (err) throw err;
 
@@ -60,10 +60,10 @@ module.exports.run = async (interaction) => {
                    // }                    
                     
                     interaction.reply("Extracting " + name + "'s DNA sequence....");
-                    basePoke.loadFromSQL(P, response[0]).then(response => {
+                    basePoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, response[0]).then(response => {
 
                         let clonesql = `SELECT * FROM pokemon WHERE name LIKE '${cloneName}%';`;
-                        connection.query(clonesql, function (err, response) {
+                        interaction.client.mysqlConnection.query(clonesql, function (err, response) {
                             iterations = response.length + 1;
                             console.log("Clone Count: " + iterations);
                             if (iterations >= 2) {
@@ -97,12 +97,12 @@ module.exports.run = async (interaction) => {
                             //interaction.reply("DNA sequencing complete.");
                             //interaction.reply("Beginning incubation procedure....");
                             logger.info("[clonepoke] Importing clone.");
-                            clonePoke.importPokemon(connection, P, importString).then(response => {
-                                clonePoke.uploadPokemon(connection, message);
+                            clonePoke.importPokemon(interaction.client.mysqlConnection, interaction.client.pokedex, importString).then(response => {
+                                clonePoke.uploadPokemon(interaction.client.mysqlConnection, interaction);
                             });
                             //interaction.reply("We tried to create a perfect copy of your pokemon.....");
                             //interaction.reply("We suceeded.");
-                            interaction.reply("Cloning procedure complete. Use +showpoke " + cloneName + " to view your new old friend.");
+                            interaction.followUp("Cloning procedure complete. Use +showpoke " + cloneName + " to view your new old friend.");
                             logger.info("[clonepoke] Cloning completed.");
                         });
 
@@ -114,6 +114,8 @@ module.exports.run = async (interaction) => {
         }
     catch (error) {
         logger.error("[clonepoke] Error: " + error.toString());
+        console.log("[clonepoke] Error: " + error.toString());
+        throw error;
         interaction.channel.send(error.toString());
         interaction.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);
     }

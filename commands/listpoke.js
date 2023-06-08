@@ -295,7 +295,7 @@ module.exports.run = async (interaction) => {
 
                         // temporary array for making pages
                         let pokeTempArray = [];
-
+                        console.log("pages");
                         // throw pokemon into pages until all are loaded up
                         for (let i = 0; i < pokeArray.length; i++) {
                             // push the poke into the temporary array
@@ -316,7 +316,7 @@ module.exports.run = async (interaction) => {
                             pokeEmbedPages.push(embedPage(pokeTempArray, currentPageNum));
                             pokeTempArray = [];
                         }
-
+                        console.log("listing");
                         // TODO turn this into page flipping variant later
                         if (pokeEmbedPages.length > 0) {
                             interaction.user.send("Here are the Pokemon you can view." +
