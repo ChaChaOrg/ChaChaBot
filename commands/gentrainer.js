@@ -8,19 +8,19 @@ module.exports.data	= new SlashCommandBuilder()
 	.setDescription('Generates a trainer')
 	.addSubcommand(subcommand =>
 		subcommand
-			.setName('Random Trainer')
+			.setName('randomtrainer')
 			.setDescription('Creates a completely random trainer'))
 	.addSubcommand(subcommand =>
 		subcommand
-			.setName('Show Types')
+			.setName('showtypes')
 			.setDescription('Shows the Available Trainer Types'))
 	.addSubcommand(subcommand =>
 		subcommand
-			.setName('Random Name')
+			.setName('randomname')
 			.setDescription('Gives a random name'))
 	.addSubcommand(subcommand =>
 		subcommand
-			.setName('Generate Trainer')
+			.setName('generatetrainer')
 			.setDescription('Generate a trainer from given parameters')
 			.addStringOption(option =>
 				option.setName('trainertype')
@@ -60,13 +60,6 @@ module.exports.data	= new SlashCommandBuilder()
 // JavaScript Document
 
 module.exports.run = async (interaction) => {
-
-	//help statement
-	if (args[0].includes('help')) {
-		logger.info("[gentrainer] Sending help interaction.")
-		interaction.channel.send("Generates a random trainer. For Arceus Only!\n\n+gentrainer [TrainerType (no spaces)] [# of feats (up to 4)] [min trainer level] [max trainer level] [# of pokemon] [min poke level] [max poke level] [pokeoption1] [pokeoption2] ...\n\nTo list types: +gentrainer types\nTo get a random trainer name/ttype: +gentrainer random").catch(console.error);
-		return;
-	}
 
 	//trainer types
 	var trainerTypes = [
@@ -1686,16 +1679,16 @@ module.exports.run = async (interaction) => {
 	];
 	
 		//Check Request
-		if (interaction.options.getSubcommand() === 'Random Trainer'){
+		if (interaction.options.getSubcommand() === 'randomtrainer'){
 			//If Random Trainer is requested, return random types and name.
 			var randName = Math.floor(Math.random() * nameOptions.length);
 			var randT1 = Math.floor(Math.random() * trainerTypes.length);
 			var randT2 = Math.floor(Math.random() * trainerTypes[randT1].length);
 
 			logger.info("[gentrainer] " + `Watch out! It's ${trainerTypes[randT1][randT2]} ${nameOptions[randName]}!`)
-			interaction.channel.send(`Watch out! It's ${trainerTypes[randT1][randT2]} ${nameOptions[randName]}!`);
+			interaction.reply(`Watch out! It's ${trainerTypes[randT1][randT2]} ${nameOptions[randName]}!`);
 			return;
-		} else if (interaction.options.getSubcommand() === 'Show Types'){
+		} else if (interaction.options.getSubcommand() === 'showtypes'){
 			//If Trainer Types are requested, return possible values
 			var allTypes = "";
 			for (var i = 0; i < trainerTypes.length; i++) {
@@ -1703,15 +1696,15 @@ module.exports.run = async (interaction) => {
 				allTypes = allTypes + "\n";
 			}
 			logger.info("[gentrainer] Sending all trainer types.")
-			interaction.channel.send(`All trainer types: \n${allTypes}`).catch(console.error);
+			interaction.reply(`All trainer types: \n${allTypes}`).catch(console.error);
 			return;
-		} else if (interaction.options.getSubcommand() === 'Random Name'){
+		} else if (interaction.options.getSubcommand() === 'randomname'){
 			//If Random Name is requested, return a random name
 			var randName = Math.floor(Math.random() * nameOptions.length);
 			logger.info("[gentrainer] " + `Watch out! It's Trainer ${nameOptions[randName]}!`)
-			interaction.channel.send(`Watch out! It's Trainer ${nameOptions[randName]}!`);
+			interaction.reply(`Watch out! It's Trainer ${nameOptions[randName]}!`);
 			return;
-		} else if (interaction.options.getSubcommand() === 'Generate Trainer'){
+		} else if (interaction.options.getSubcommand() === 'generatetrainer'){
 			try{
 				//If Generate Trainer is requested, generate from input(s)
 				// ============= VARIABLES =============
@@ -1831,7 +1824,7 @@ module.exports.run = async (interaction) => {
 				//print the trainer out.
 
 				logger.info("[gentrainer] Sending embed interaction.")
-				interaction.channel.send({
+				interaction.reply({
 					embed: {
 						color: 3447003,
 						author: {
@@ -1875,7 +1868,7 @@ module.exports.run = async (interaction) => {
 				});
 			} catch (error) {
 				logger.error("[gentrainer] " + error)
-				interaction.channel.send(`ChaCha Machine :b:roke :^(. ${error.message}`).catch(console.error);
+				interaction.reply(`ChaCha Machine :b:roke :^(. ${error.message}`).catch(console.error);
 			}
 			
 
