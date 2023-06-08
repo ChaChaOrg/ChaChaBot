@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/ChaChaOrg/ChaChaBot#readme",
   "dependencies": {
-    "discord.js": "^14.7.1",
+    "discord.js": "^14.11.0",
     "mysql": "^2.18.1",
     "pokedex-promise-v2": "^3.3.2",
     "winston": "^3.8.2"
