@@ -1,0 +1,128 @@
+Explosion
+Healing Wish
+Lunar Dance
+Self-Destruct
+Draco Meteor
+Dragon Ascent
+Eruption
+Leaf Storm
+Light of Ruin
+Overheat
+Petal Dance
+Seed Flare
+Spacial Rend
+Avalanche
+Flame Wheel
+Freeze Shock
+Ice Burn
+Blue Flare
+Bolt Strike
+Echoed Voice
+Freeze-Dry
+Judgment
+Mystical Fire
+Secret Sword
+Weather Ball
+Blizzard
+Spore
+Hail
+Sheer Cold
+Cotton Spore
+Electroweb
+Acid Spray
+Thousand Arrows
+Bug Buzz
+Ice Beam
+Inferno
+Moonblast
+Psyshock
+Haze
+Ice Shard
+Icicle Spear
+Grassy Terrain
+Misty Terrain
+Origin Pulse
+Diamond Storm
+Doom Desire
+Icicle Crash
+Sacred Fire
+Steam Eruption
+Fire Pledge
+Grass Pledge
+Heal Pulse
+Water Pledge
+Aqua Ring
+Aromatic Mist
+Autotomize
+Cosmic Power
+Geomancy
+Growth
+Meditate
+Ominous Wind
+Quiver Dance
+Silver Wind
+Swords Dance
+Tail Glow
+Flame Burst
+Flash
+Psybeam
+Signal Beam
+Water Pulse
+Will-O-Wisp
+Frost Breath
+Icy Wind
+Lovely Kiss
+Perish Song
+Mean Look
+Relic Song
+Dive
+Light Screen
+Safeguard
+Flower Shield
+Heal Bell
+Mist
+Aqua Tail
+Dazzling Gleam
+Dragon Pulse
+Earth Power
+Energy Ball
+Fairy Wind
+Flamethrower
+Flash Cannon
+Ice Punch
+Powder Snow
+Power Gem
+Discharge
+Heat Wave
+Land's Wrath
+Petal Blizzard
+Surf
+Blast Burn
+Hydro Cannon
+Roar of Time
+Aurora Beam
+Bubble Beam
+Mirror Shot
+Fire Spin
+Glaciate
+Ice Ball
+Ion Deluge
+Whirlpool
+Fusion Flare
+Fire Blast
+Hydro Pump
+Nature Power
+Rain Dance
+Sunny Day
+Aura Sphere
+Clear Smog
+Magical Leaf
+Feather Dance
+Magic Coat
+Mirror Coat
+Conversion
+Conversion 2
+Round
+Venoshock
+Charge Beam
+Fiery Dance
