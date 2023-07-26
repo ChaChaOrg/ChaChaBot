@@ -4,7 +4,10 @@ const databaseURL = 'https://bulbapedia.bulbagarden.net/wiki/List_of_moves';
 // Commands for moves that require randomization or calculation
 
 const HELP_MESSAGE = "Move helper. Variables depend on subcommand"
-	+ "Current subcommands: Metronome, Beat Up"
+	+ "Current subcommands: Metronome, Beat Up, Confusion"
+
+const ATK_ARRAY_INDEX = 1;
+const DEF_ARRAY_INDEX = 2;
 
 
 
@@ -39,11 +42,30 @@ module.exports.data = new SlashCommandBuilder()
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName('assist')
-				.setDescription('Provides a random assist-compatible move from those known by the input Pokemon')
+				.setDescription('Provides a random assist-compatible move from those known by the input Pokemon. Must be in bot.')
 				.addStringOption(option =>
 					option.setName('party-members')
 					.setDescription('Party members to pull valid Assist move from, seperated by a space.')
-					.setRequired(true)));
+					.setRequired(true)))
+		.addSubcommand(subcommand =>
+			subcommand
+				.setName('confusion')
+				.setDescription('Calculates confusion damage for a given Pokemon.')
+				.addStringOption(option =>
+					option.setName('pokemon')
+					.setDescription('Pokemon that is hitting itself.')
+					.setRequired(true))
+				.addIntegerOption(option =>
+					option.setName('stages-of-attack')
+					.setDescription('Stages of attack the Pokemon has. Minimum -6, maximum +6')
+              		.setMaxValue(6)
+              		.setMinValue(-6))
+				.addIntegerOption(option =>
+					option.setName('stages-of-defense')
+					.setDescription('Stages of defens the Pokemon has. Minimum -6, maximum +6')
+					.setMaxValue(6)
+					.setMinValue(-6))
+				);
 
 module.exports.run = async (interaction) => {
 
@@ -169,6 +191,14 @@ module.exports.run = async (interaction) => {
 					followup += notFoundMessage + "\n";
 				}
 				else {
+					// Check if user is allowed to edit the Pokemon.
+					if (response[0].private > 0 && interaction.user.id !== response[0].discordID) {
+						logger.info("[modpoke] Detected user attempting to access private Pokemon.")
+						// If user found a pokemon that was marked private and belongs to another user, act as if the pokemon doesn't exist in messages
+						interaction.reply(notFoundMessage);
+						return;
+					}
+
 					await tempPoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, response[0])
 						.then(response => {
 	
@@ -208,6 +238,14 @@ module.exports.run = async (interaction) => {
 					followup += notFoundMessage + "\n";
 				}
 				else {
+					// Check if user is allowed to edit the Pokemon.
+					if (response[0].private > 0 && interaction.user.id !== response[0].discordID) {
+						logger.info("[modpoke] Detected user attempting to access private Pokemon.")
+						// If user found a pokemon that was marked private and belongs to another user, act as if the pokemon doesn't exist in messages
+						interaction.reply(notFoundMessage);
+						return;
+					}
+
 					await tempPoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, response[0])
 						.then(response => {
 	
@@ -248,6 +286,73 @@ module.exports.run = async (interaction) => {
 			}
 			interaction.followUp("Assist calls " + move + ".");
 	 	 })
+	}else if (interaction.options.getSubcommand() === 'confusion') {   
+        let Pokemon = require(`../models/pokemon`);
+        let tempPoke = new Pokemon;
+		let pokeName = interaction.options.getString('pokemon');
+		let atkStages = 0;
+		let defStages = 0;
+		let numDice = 8;
+		let dice = 0;
+		for (numDice; numDice > 0; numDice--) {
+			dice += Math.floor(Math.random() * 8 + 1);
+		  }
+		if(interaction.options.getInteger('stages-of-attack')){
+			atkStages = interaction.options.getInteger('stages-of-attack'); //Stages Attack
+		}
+      	
+   		if(interaction.options.getInteger('stages-of-defense')){
+			defStages = interaction.options.getInteger('stages-of-defense'); //Stages Defense 
+		}
+
+		let stageModAtk = 0;
+		let stageModDef = 0;
+		if (atkStages > -1) {
+			stageModAtk = (2 + atkStages) / 2;
+		} else {
+			stageModAtk = 2 / (Math.abs(atkStages) + 2);
+		}
+		//
+		// parse defense stages into the effect it has on damage.
+		//
+		if (defStages > -1) {
+			stageModDef = (2 + defStages) / 2;
+		} else {
+			stageModDef = 2 / (Math.abs(defStages) + 2);
+		}
+
+		let sql = `SELECT * FROM pokemon WHERE name = '${pokeName}';`;
+		logger.info(`[moves-confusion SQL query: ${sql}`);
+		interaction.client.mysqlConnection.query(sql, function (err, response) {
+			if (err) throw err;
+
+			if (response.length === 0) {
+				let pokeNotFoundMessage = "Pokemon not found in database. Please check your spelling, or the Pokemon may" +
+					" not be there.";
+				logger.info("[showpoke] " + pokeNotFoundMessage);
+				interaction.reply(pokeNotFoundMessage);
+			}
+			else {
+                    // check if the user is allowed to edit the Pokemon. If a Pokemon is private, the user's discord ID must match the Pokemon's creator ID
+                    if (response[0].private > 0 && interaction.user.id !== response[0].discordID) {
+                        logger.info("[modpoke] Detected user attempting to access private Pokemon.")
+                        // If user found a pokemon that was marked private and belongs to another user, act as if the pokemon doesn't exist in messages
+                        interaction.reply(notFoundMessage);
+                        return;
+                    }
+
+					tempPoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, response[0])
+                        .then(response => {
+							let atkStat = tempPoke.statBlock.finalStats[ATK_ARRAY_INDEX];
+							let defStat = tempPoke.statBlock.finalStats[DEF_ARRAY_INDEX];
+
+							let damageTotal = ((10 * tempPoke.level + 10)/250) * ((atkStat * stageModAtk) / (defStat * stageModDef)) * dice;
+							damageTotal = damageTotal.toFixed(2);
+							let combatString = `${pokeName} deals ${damageTotal} damage to themselves (Damage roll ${dice}).`
+							interaction.followUp(combatString);
+						});
+			}
+		});
 	};
 }
 
