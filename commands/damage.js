@@ -175,14 +175,14 @@ module.exports.run = async (interaction) => {
       if (err) {
         let errMsg = `Error with SQL query: ${err}`;
         logger.error(errMsg);
-        interaction.reply(errMsg);
+        interaction.followUp(errMsg);
         return;
       };
 
       if (response.length === 0) {
         let errMsg = `Cannot find neither '${attackerName}' nor '${defenderName}'. Please check your spelling + case-sensitivity.`
         logger.error(errMsg);
-        interaction.reply(errMsg);
+        interaction.followUp(errMsg);
         return;
       }
       else if (response.length === 1) {
@@ -195,7 +195,7 @@ module.exports.run = async (interaction) => {
           errMsg = `I found the defender '${defenderName}' but not the attacker. Please check your spelling + case-sensitivity.`
 
         logger.error(errMsg);
-        interaction.reply(errMsg);
+        interaction.followUp(errMsg);
         return;
       }
 
