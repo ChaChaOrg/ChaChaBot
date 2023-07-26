@@ -137,6 +137,14 @@ module.exports.run = async (interaction) => {
     attackerName = interaction.options.getString('attacker-name');
     attackerMove = interaction.options.getString('move-name');
     defenderName = interaction.options.getString('defender-name');
+
+    if (attackerName.toLowerCase() === defenderName.toLowerCase()) {
+      let errMsg = 'Did you mean to attack yourself? :thinking: You can\'t do that.';
+      logger.error(errMsg);
+      interaction.followUp(errMsg);
+      return;
+    }
+
     if (interaction.options.getBoolean('critical-hit'))
       critHit = true; //critical hit
     else
