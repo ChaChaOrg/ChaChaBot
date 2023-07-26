@@ -101,9 +101,9 @@ module.exports.run = async (interaction) => {
 		["Whirlwind", "Assist"]
 	];
 
+	await interaction.deferReply();
 	if (interaction.options.getSubcommand() === 'metronome') {
 		let fs = require('fs');
-		await interaction.deferReply();
 			logger.info('[move] Move tutor calculations');
 			logger.info('[move] Reading text file');
 			//Load Moves file
@@ -155,12 +155,13 @@ module.exports.run = async (interaction) => {
 		let followup = "";
 		let inputstring = interaction.options.getString('beatuppokemon');
 		let names = inputstring.split(" ");
+		let promisearray = [];
 
 		names.forEach((element) => {
 			let notFoundMessage = element + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `+listpoke` to view the Pokemon you can edit.)";
 			let sql = `SELECT * FROM pokemon WHERE name = '${element}';`;
 			logger.info('[move-beatup] SQL query: ${sql}');
-			interaction.client.mysqlConnection.query(sql, function (err, response) {
+			promisearray.push(new Promise(async function(resolve, reject){ interaction.client.mysqlConnection.query(sql, async function (err, response) {
 				if (err) throw err;
 	
 				if (response.length == 0) {
@@ -168,18 +169,23 @@ module.exports.run = async (interaction) => {
 					followup += notFoundMessage + "\n";
 				}
 				else {
-
-					tempPoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, response[0])
+					await tempPoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, response[0])
 						.then(response => {
 	
 							logger.info("[move-beatup] Got Pokemon info.");
-							followup += "Beat Up base power for " + element + " is " + tempPoke.statBlock.finalStats[1]/10 + 5 + ".\n";
+							let math = tempPoke.statBlock.finalStats[1]/10;
+							math += 5;
+							followup += "Beat Up base power for " + element + " is " + math + ".\n";
 	
 						});
 				}
-			})
+				resolve();
+			})}))
+			
 	});
+	Promise.all(promisearray).then(() => {
 		interaction.followUp(followup);
+	  })
 	}else if (interaction.options.getSubcommand() === 'assist') {
 		let Pokemon = require(`../models/pokemon`);
         let tempPoke = new Pokemon;
@@ -188,11 +194,13 @@ module.exports.run = async (interaction) => {
 		let partynames = interaction.options.getString('party-members');
 		let names = partynames.split(" ");
 		let movelist = [];
+		let promisearray = [];
+
 		names.forEach((element) => {
 			let notFoundMessage = element + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `+listpoke` to view the Pokemon you can edit.)";
 			let sql = `SELECT * FROM pokemon WHERE name = '${element}';`;
 			logger.info('[move-assist] SQL query: ${sql}');
-			interaction.client.mysqlConnection.query(sql, function (err, response) {
+			promisearray.push(new Promise(async function(resolve, reject){ interaction.client.mysqlConnection.query(sql, async function (err, response) {
 				if (err) throw err;
 	
 				if (response.length == 0) {
@@ -200,56 +208,46 @@ module.exports.run = async (interaction) => {
 					followup += notFoundMessage + "\n";
 				}
 				else {
-
-					tempPoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, response[0])
+					await tempPoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, response[0])
 						.then(response => {
 	
 							logger.info("[move-assist] Got Pokemon info.");
-							for (let i = 0; i < 4; i++){
-								//figure out best way to get moves.
-								if (tempPoke.moveSet.move1 != "-"){
-									movelist += tempPoke.moveSet.move1.name;
-								}
-								if (tempPoke.moveSet.move2 != "-"){
-									movelist += tempPoke.moveSet.move2.name;
-								}
-								if (tempPoke.moveSet.move3 != "-"){
-									movelist += tempPoke.moveSet.move3.name;
-								}
-								if (tempPoke.moveSet.move4 != "-"){
-									movelist += tempPoke.moveSet.move4.name;
-								}
+							if(tempPoke.moveSet.move1){
+								movelist.push(tempPoke.moveSet.move1);
 							}
-							logger.info("[move-assist] Got moves from Pokemon")
+							if(tempPoke.moveSet.move2){
+								movelist.push(tempPoke.moveSet.move2);
+							}
+							if(tempPoke.moveSet.move3){
+								movelist.push(tempPoke.moveSet.move3);
+							}
+							if(tempPoke.moveSet.move4){
+								movelist.push(tempPoke.moveSet.move4);
+							}
+	
 						});
 				}
-			})
-	});
-	//Variables to aid in search
-	let move = '';
-	let found = false;
-
-	while (!found) {
-		//Get a random index to pull a random move
-		let moveindex = Math.floor(Math.random() * (movelist.length - 1));
-		move = movelist[moveindex];
-		let valid = true;
-		let i = 0;
-		//Test to see if random move meets criteria
-		while (valid && i < assistunselectable.length){
-			if(move === assistunselectable[i]){
-				valid = false;
-				logger.info('[move] Selected move not allowed, retrying');
+				resolve();
+			})}))
+		});
+		Promise.all(promisearray).then(() => {
+			//Variables to aid in search
+			let move = '';
+			let validmoves = [];
+			movelist.forEach((element) => {
+				let badmove = assistunselectable.includes(element);
+				if(!badmove){
+					validmoves.push(element);
+				}
+			});
+			if(validmoves.length == 0){
+				move = "Nothing - no moves found recorded in given party members.";
+			}else{
+				let moveindex = Math.floor(Math.random() * (validmoves.length - 1));
+				move = validmoves[moveindex];
 			}
-			i++;
-		}
-		if (valid){
-			found = true;
-			logger.info('[move] Found a move meeting all criteria');
-		}
-	}
-	interaction.followUp("Your assist calls " + move);
-
+			interaction.followUp("Assist calls " + move + ".");
+	 	 })
 	};
 }
 
