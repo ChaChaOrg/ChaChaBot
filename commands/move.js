@@ -279,12 +279,12 @@ module.exports.run = async (interaction) => {
 				}
 			});
 			if(validmoves.length == 0){
-				move = "Nothing - no moves found recorded in given party members.";
+				move = "Nothing - no moves found recorded in given party members";
 			}else{
 				let moveindex = Math.floor(Math.random() * (validmoves.length - 1));
 				move = validmoves[moveindex];
 			}
-			interaction.followUp("Assist calls " + move + ".");
+			interaction.followUp(followup + "Assist calls " + move + ".");
 	 	 })
 	}else if (interaction.options.getSubcommand() === 'confusion') {   
         let Pokemon = require(`../models/pokemon`);
@@ -330,14 +330,14 @@ module.exports.run = async (interaction) => {
 				let pokeNotFoundMessage = "Pokemon not found in database. Please check your spelling, or the Pokemon may" +
 					" not be there.";
 				logger.info("[showpoke] " + pokeNotFoundMessage);
-				interaction.reply(pokeNotFoundMessage);
+				interaction.followUp(pokeNotFoundMessage);
 			}
 			else {
                     // check if the user is allowed to edit the Pokemon. If a Pokemon is private, the user's discord ID must match the Pokemon's creator ID
                     if (response[0].private > 0 && interaction.user.id !== response[0].discordID) {
                         logger.info("[modpoke] Detected user attempting to access private Pokemon.")
                         // If user found a pokemon that was marked private and belongs to another user, act as if the pokemon doesn't exist in messages
-                        interaction.reply(notFoundMessage);
+                        interaction.followUp(notFoundMessage);
                         return;
                     }
 
