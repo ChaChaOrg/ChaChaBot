@@ -203,7 +203,7 @@ module.exports.run = async (interaction) => {
 						.then(response => {
 	
 							logger.info("[move-beatup] Got Pokemon info.");
-							let math = tempPoke.statBlock.finalStats[1]/10;
+							let math = tempPoke.pokemonData.stats[1].base_stat / 10;
 							math += 5;
 							followup += "Beat Up base power for " + element + " is " + math + ".\n";
 	
@@ -214,7 +214,7 @@ module.exports.run = async (interaction) => {
 			
 	});
 	Promise.all(promisearray).then(() => {
-		interaction.followUp(followup);
+		interaction.followUp(followup + "This is the base power each strike should use with the Damage command - each strike can crit individually.");
 	  })
 	}else if (interaction.options.getSubcommand() === 'assist') {
 		let Pokemon = require(`../models/pokemon`);
