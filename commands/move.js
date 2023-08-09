@@ -219,7 +219,7 @@ module.exports.run = async (interaction) => {
 	  })
 	}else if (interaction.options.getSubcommand() === 'assist') {
 		let Pokemon = require(`../models/pokemon`);
-        let tempPoke = new Pokemon;
+        
 
 		let followup = "";
 		let partynames = interaction.options.getString('party-members');
@@ -228,6 +228,7 @@ module.exports.run = async (interaction) => {
 		let promisearray = [];
 
 		names.forEach((element) => {
+			let tempPoke = new Pokemon;
 			let notFoundMessage = element + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `+listpoke` to view the Pokemon you can edit.)";
 			let sql = `SELECT * FROM pokemon WHERE name = '${element}';`;
 			logger.info('[move-assist] SQL query: ${sql}');
