@@ -31,7 +31,7 @@ const HELP_MESSAGE = '\n' + CMD_TEMPLATE + '\n\n' + 'examples - `/genpoke Pikach
 	' (30% chance to have hidden ability)' +
 	'\n\nCreates a new Pokemon when given the values above, printing it upon completion. \n**Created as private by' +
 	' default** - use `/modpoke (name) private 0` to make publicly visible/editable\n\n' +
-	'(Hint: You can view an existing Pokemon with `/showpoke [nickname]`, or remove it using `+rempoke [nickname]`';
+	'(Hint: You can view an existing Pokemon with `/showpoke [nickname]`, or remove it using `/rempoke [nickname]`';
 */
 // /genpoke [SPECIES] [LEVEL (1-20)] [NICKNAME - no spaces or special characters] [Form Name] [HIDDEN' +
 // 	' ABILITY % (as a number, 0-100)]';

@@ -180,7 +180,7 @@ module.exports.run = async (interaction) => {
 		let promisearray = [];
 
 		names.forEach((element) => {
-			let notFoundMessage = element + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `+listpoke` to view the Pokemon you can edit.)";
+			let notFoundMessage = element + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `/listpoke` to view the Pokemon you can edit.)";
 			let sql = `SELECT * FROM pokemon WHERE name = '${element}';`;
 			logger.info('[move-beatup] SQL query: ${sql}');
 			promisearray.push(new Promise(async function(resolve, reject){ interaction.client.mysqlConnection.query(sql, async function (err, response) {
@@ -227,7 +227,7 @@ module.exports.run = async (interaction) => {
 		let promisearray = [];
 
 		names.forEach((element) => {
-			let notFoundMessage = element + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `+listpoke` to view the Pokemon you can edit.)";
+			let notFoundMessage = element + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `/listpoke` to view the Pokemon you can edit.)";
 			let sql = `SELECT * FROM pokemon WHERE name = '${element}';`;
 			logger.info('[move-assist] SQL query: ${sql}');
 			promisearray.push(new Promise(async function(resolve, reject){ interaction.client.mysqlConnection.query(sql, async function (err, response) {
