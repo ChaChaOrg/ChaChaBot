@@ -4,7 +4,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 // Generates a new ChaCha Pokemon, given level & base stats
 
 //message template
-const CMD_TEMPLATE = '+genpoke [SPECIES] [LEVEL (1-20)] [NICKNAME - no spaces or special characters] [Form Name] [HIDDEN' +
+const CMD_TEMPLATE = '/genpoke [SPECIES] [LEVEL (1-20)] [NICKNAME - no spaces or special characters] [Form Name] [HIDDEN' +
 	' ABILITY % (as a number, 0-100)]';
 //help message
 
