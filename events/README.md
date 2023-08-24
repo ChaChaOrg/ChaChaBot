@@ -1,7 +1,7 @@
 #Events
 The events the discord.js checks for and the code it runs for each.
 
-##message.js
+##interaction.js
 handles message interpretation and runs a command given it matches our command scheme "+[commandname] [args]"
 Includes some fun keyword reactions.
 ##ready.js

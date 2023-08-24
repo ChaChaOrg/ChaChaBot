@@ -216,7 +216,7 @@ Statblock.prototype.calculateStats = function (pokemon) {
     NATURAL_ARMOUR_SHIFT;
 
   //armor class
-  //message.channel.send(`Natural Armor: ${natArmor} || Size Bonus: ${sizeBonus} || Dex: ${dexMod}`);
+  //interaction.channel.send(`Natural Armor: ${natArmor} || Size Bonus: ${sizeBonus} || Dex: ${dexMod}`);
   this.armorClass = (
     AC_BASE +
     this.natArmor +

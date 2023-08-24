@@ -57,7 +57,7 @@ function Pokemon(tempSpecies, tempLevel, tempName, tempform) {
   this.statBlock = new Statblock();
 
   // pokemon's exp
-    this.exp = MIN_EXP;
+  this.exp = MIN_EXP;
 
   //hidden ability percentile
   this.haChance = 0;
@@ -402,7 +402,7 @@ let fixAbilityOrMoveFormatting = function (tempWord, middle) {
 
 // =========== EMBED ===========
 
-Pokemon.prototype.sendSummaryMessage = function (client) {
+Pokemon.prototype.sendSummaryMessage = function (interaction) {
   // set up formatted ability name
   let tempAbility = this.ability.name;
   let tempAbilityURL = this.ability.name;
@@ -418,7 +418,7 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
       tempSpecies = this.form;
   tempSpecies = capitalizeWord(tempSpecies);
 
-  var thumbnail_url = `${this.pokemonData.sprites.front_default}`
+  var thumbnail_url = `${this.pokemonData.sprites.front_default}`;
 
   if (thumbnail_url === null) {
     thumbnail_url = "https://e7.pngegg.com/pngimages/960/239/png-clipart-internet-archive-http-404-wayback-machine-error-miscellaneous-text-thumbnail.png"
@@ -487,21 +487,23 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
         addPlusOrNah(this.statBlock.willSave)
     ]
 
-  
+    let avatarURL = interaction.user.avatarURL();
+    let username = interaction.user.username;
+
   return {
     embed: {
+      description: 'Click the link for the Bulbapedia page, or use !data to call info using the Pokedex bot.',
       color: 3447003,
       author: {
-        name: client.user.username,
-        icon_url: client.user.avatarURL,
+        name: username,
+        icon_url: avatarURL,
       },
       title: `Level ${this.level} ${fullName} ~ ${this.name}`,
       url: `https://bulbapedia.bulbagarden.net/wiki/${this.species}_(Pok%C3%A9mon)`,
       thumbnail: {
         url: thumbnail_url,
       },
-      description:
-        "Click the link for the Bulbapedia page, or use !data to call info using the Pokedex bot.",
+      
 
       fields: [
         {
@@ -563,7 +565,7 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
       ],
       timestamp: new Date(),
       footer: {
-        icon_url: client.user.avatarURL,
+        icon_url: avatarURL,
         text: "Chambers and Charizard!",
       },
     },
@@ -572,8 +574,8 @@ Pokemon.prototype.sendSummaryMessage = function (client) {
 
 // =========== Upload ===========
 
-Pokemon.prototype.uploadPokemon = function (connection, message) {
-  let finalMoveList = [this.move1,this.move2,this.move3,this.move4,this.move5];
+Pokemon.prototype.uploadPokemon = function (connection, interaction) {
+  let finalMoveList = [this.moveSet.move1,this.moveSet.move2,this.moveSet.move3,this.moveSet.move4,this.moveSet.move5];
   for (i = 0; i < 5; i++) {
       try {
           if (!finalMoveList[i]) {
@@ -629,7 +631,7 @@ Pokemon.prototype.uploadPokemon = function (connection, message) {
         "${finalMoveList[4]}",
         ${this.moveProgress},
         "${this.originalTrainer}",
-        ${message.author.id},
+        ${interaction.user.id},
         ${this.private},
         '${this.dateCreated}',
         "${this.campaign}")`
@@ -714,6 +716,7 @@ Pokemon.prototype.updatePokemon = function (connection, message, pokePrivate) {
 // =========== Import (Showdown Style) ===========
 
 Pokemon.prototype.importPokemon = function (connection, P, importString) {
+  return new Promise((resolve,reject) => {
   logger.info("[pokemon] Importing Pokemon.");
   //splits the message into lines then splits the lines into words separated by spaces.
   let lines = importString.split("\n");
@@ -763,8 +766,9 @@ Pokemon.prototype.importPokemon = function (connection, P, importString) {
     }
   } else if (nameArgs.length === 0) {
     this.species = nameLineVals[0];
+    
   }
-
+  this.form = this.species;
   lines.forEach(
     function (element) {
       switch (element.split(" ")[0]) {
@@ -878,15 +882,50 @@ Pokemon.prototype.importPokemon = function (connection, P, importString) {
     }.bind(this)
   );
 
-  return this.getPokemonAndSpeciesData(connection, P).then(
-    //assign types, base states and then calculate those Stats
-    function (response) {
-      this.assignTypes();
-      this.statBlock.assignBaseStats(this);
-      this.statBlock.calculateStats(this);
-      this.statBlock.calculateSaves(this);
-    }.bind(this)
-  );
+  let sql = `SELECT * FROM pokemon WHERE name = '${this.name}';`;
+
+  //console.log(sql);
+  connection.query(sql, function (err, response) {
+      if (err) throw err;
+
+      if (response.length != 0) {
+          this.name = this.name + ('' + (response.length + 1))
+
+          return this.getPokemonAndSpeciesData(connection, P).then(
+            //assign types, base states and then calculate those Stats
+            function (response) {
+              this.assignTypes();
+              this.statBlock.assignBaseStats(this);
+              this.statBlock.calculateStats(this);
+              this.statBlock.calculateSaves(this);
+            }.bind(this)
+          );
+      }
+  }.bind(this))
+
+
+  
+    connection.query(sql, function (err, response) {
+      if (err) reject(err);
+
+      if (response.length != 0) {
+          resolve(this.name = this.name + ('' + (response.length + 1)))
+      }
+
+      resolve()
+
+    })
+  }).then(() => { 
+    return this.getPokemonAndSpeciesData(connection, P).then(
+      //assign types, base states and then calculate those Stats
+      function (response) {
+        this.assignTypes();
+        this.statBlock.assignBaseStats(this);
+        this.statBlock.calculateStats(this);
+        this.statBlock.calculateSaves(this);
+      }.bind(this)
+    );
+  })
 };
 
 Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
@@ -923,8 +962,8 @@ Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
 
                             this.pokemonData.stats[0].base_stat = pokeForm.hpBST;
                             this.pokemonData.stats[1].base_stat = pokeForm.atkBST;
-                            this.pokemonData.stats[2].base_stat = pokeForm.spaBST;
-                            this.pokemonData.stats[3].base_stat = pokeForm.defBST;
+                            this.pokemonData.stats[2].base_stat = pokeForm.defBST;
+                            this.pokemonData.stats[3].base_stat = pokeForm.spaBST;
                             this.pokemonData.stats[4].base_stat = pokeForm.spdBST;
                             this.pokemonData.stats[5].base_stat = pokeForm.speBST;
 
@@ -962,7 +1001,7 @@ Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
                                         error
                                     );
                                     reject("Error when retrieving pokemon species Data :C  ERROR: " + error)
-                                    //message.channel.send("Error when retrieving pokemon species Data :C  ERROR: ");
+                                    //interaction.channel.send("Error when retrieving pokemon species Data :C  ERROR: ");
                                 });
                         }.bind(this))
                         .catch(function (error) {
@@ -971,7 +1010,7 @@ Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
                                 let errMsg = "Pokemon not found, please check your spelling."
                                 reject(errMsg)
                             }
-                            //message.channel.send("Error when retrieving pokemon Data :C");
+                            //interaction.channel.send("Error when retrieving pokemon Data :C");
                         });
                 }
             }.bind(this));
@@ -1075,12 +1114,12 @@ Pokemon.prototype.loadFromSQL = function (connection, P, sqlObject) {
                         "Error when retrieving pokemon species Data :C  ERROR: ",
                         error
                     );
-                    //message.channel.send("Error when retrieving pokemon species Data :C  ERROR: ");
+                    //interaction.channel.send("Error when retrieving pokemon species Data :C  ERROR: ");
                 });
         }.bind(this)
     )
         .catch(function (error) {
             console.log("Error when Loading from SQL :C  ERROR: ", error);
-            //message.channel.send("Error when retrieving pokemon Data :C");
+            //interaction.channel.send("Error when retrieving pokemon Data :C");
         });
 }

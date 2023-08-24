@@ -1,15 +1,67 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
 const logger = require('../logs/logger.js');
+// Generates a random trainer
+
+// Build slash command
+module.exports.data	= new SlashCommandBuilder()
+	.setName('gentrainer')
+	.setDescription('Generates a trainer')
+	.addSubcommand(subcommand =>
+		subcommand
+			.setName('randomtrainer')
+			.setDescription('Creates a completely random trainer'))
+	.addSubcommand(subcommand =>
+		subcommand
+			.setName('showtypes')
+			.setDescription('Shows the Available Trainer Types'))
+	.addSubcommand(subcommand =>
+		subcommand
+			.setName('randomname')
+			.setDescription('Gives a random name'))
+	.addSubcommand(subcommand =>
+		subcommand
+			.setName('generatetrainer')
+			.setDescription('Generate a trainer from given parameters')
+			.addStringOption(option =>
+				option.setName('trainertype')
+				.setDescription('Type of Trainer - No Spaces')
+				.setRequired(true))
+			.addIntegerOption(option =>
+				option.setName('numfeats')
+				.setDescription('Number of feats (up to 4)')
+				.setRequired(true))
+			.addIntegerOption(option =>
+				option.setName('mintrainerlevel')
+				.setDescription('Minimum trainer level')
+				.setRequired(true))
+			.addIntegerOption(option =>
+				option.setName('maxtrainerlevel')
+				.setDescription('Maximum trainer level')
+				.setRequired(true))
+			.addIntegerOption(option =>
+				option.setName('pokemonnumber')
+				.setDescription('Number of Pokemon')
+				.setRequired(true))
+			.addIntegerOption(option =>
+				option.setName('minpokemonlevel')
+				.setDescription('Minimum Pokemon level')
+				.setRequired(true))
+			.addIntegerOption(option =>
+				option.setName('maxpokemonlevel')
+				.setDescription('Maximum Pokemon level')
+				.setRequired(true))
+			.addStringOption(option =>
+				option.setName('pokeoptions')
+				.setDescription('List of Pokemon that can be assigned, seperated by spaces')
+				.setRequired(true)));
+		//Figure out how to include Pokeoptions (IE various Pokemon are listed and chosen from at random)
+		//include option for Random and option to return list of types. Name?
 
 // JavaScript Document
 
-exports.run = (client, connection, P, message, args) => {
+module.exports.run = async (interaction) => {
 
-	//help statement
-	if (args[0].includes('help')) {
-		logger.info("[gentrainer] Sending help message.")
-		message.channel.send("Generates a random trainer. For Arceus Only!\n\n+gentrainer [TrainerType (no spaces)] [# of feats (up to 4)] [min trainer level] [max trainer level] [# of pokemon] [min poke level] [max poke level] [pokeoption1] [pokeoption2] ...\n\nTo list types: +gentrainer types\nTo get a random trainer name/ttype: +gentrainer random").catch(console.error);
-		return;
-	}
+	await interaction.deferReply();
 
 	//trainer types
 	var trainerTypes = [
@@ -1627,216 +1679,203 @@ exports.run = (client, connection, P, message, args) => {
 			"Reckless Attack",
 			"Sting"]
 	];
+	
+		//Check Request
+		if (interaction.options.getSubcommand() === 'randomtrainer'){
+			//If Random Trainer is requested, return random types and name.
+			var randName = Math.floor(Math.random() * nameOptions.length);
+			var randT1 = Math.floor(Math.random() * trainerTypes.length);
+			var randT2 = Math.floor(Math.random() * trainerTypes[randT1].length);
 
-	//get ttypes if asked for
-	if (args[0].toLowerCase().includes("types")) {
-		var allTypes = "";
-		for (var i = 0; i < trainerTypes.length; i++) {
-			for (var j = 0; j < trainerTypes[i].length; j++) { allTypes = allTypes + trainerTypes[i][j] + ", "; }
-			allTypes = allTypes + "\n";
-		}
-
-		logger.info("[gentrainer] Sending all trainer types.")
-		message.channel.send(`All trainer types: \n${allTypes}`).catch(console.error);
-		return;
-	}
-
-	//get a random trainer if requested
-	if (args[0].toLowerCase().includes("random")) {
-		var randName = Math.floor(Math.random() * nameOptions.length);
-		var randT1 = Math.floor(Math.random() * trainerTypes.length);
-		var randT2 = Math.floor(Math.random() * trainerTypes[randT1].length);
-
-		logger.info("[gentrainer] " + `Watch out! It's ${trainerTypes[randT1][randT2]} ${nameOptions[randName]}!`)
-		message.channel.send(`Watch out! It's ${trainerTypes[randT1][randT2]} ${nameOptions[randName]}!`);
-		return;
-	}
-
-	//get a random name if requested
-	if (args[0].includes("name")) {
-		var randName = Math.floor(Math.random() * nameOptions.length);
-		logger.info("[gentrainer] " + `Watch out! It's Trainer ${nameOptions[randName]}!`)
-		message.channel.send(`Watch out! It's Trainer ${nameOptions[randName]}!`);
-		return;
-	}
-
-	//get down to the biznass
-	try {
-
-		// ============= VARIABLES =============
-
-		//NEEDED VALS
-		//the trainer's name
-		var tName;
-		//the trainer's type
-		var tType;
-		//trainer type index (for getting classes, feats)
-		var tTypeIndex;
-		//trainer level
-		var tLevel;
-		//the trainer's class
-		var tClass = "None :(";
-		//the trainer's feats
-		var tFeats = ["None :("];
-		//the trainer's pokemon
-		var tPokes = [];
-
-		//PROVIDED VALS
-
-		//trainer type provided
-		var ttypeGiven = args[0];
-		//# of trainer feats requested
-		var tFeatNum = parseInt(args[1]);
-		//min trainer level
-		var minTLevel = parseInt(args[2]);
-		//max trainer level
-		var maxTLevel = parseInt(args[3]);
-		//# of pokes
-		var pokeTotal = parseInt(args[4]);
-		// min poke level
-		var minPLevel = parseInt(args[5]);
-		// max poke level
-		var maxPLevel = parseInt(args[6]);
-		//array for pokemon options
-		var pokeOptions = [];
-		//fill poke array
-		for (var qt = 7; qt < args.length; qt++) {
-			pokeOptions.push(args[qt]);
-		}
-
-		//generate a name first
-		tName = nameOptions[Math.floor(Math.random() * nameOptions.length)];
-
-		//first, find trainer class
-
-		//check if ttype exists
-		var isRealTType = false;
-
-		//finds trainer type provided, if its here
-		for (var a = 0; a < trainerTypes.length; a++) {
-			for (var b = 0; b < trainerTypes[a].length; b++) {
-				if (trainerTypes[a][b].localeCompare(ttypeGiven) === 0) {
-					tType = trainerTypes[a][b];
-					tTypeIndex = a;
-					isRealTType = true;
-				}
+			logger.info("[gentrainer] " + `Watch out! It's ${trainerTypes[randT1][randT2]} ${nameOptions[randName]}!`)
+			interaction.reply(`Watch out! It's ${trainerTypes[randT1][randT2]} ${nameOptions[randName]}!`);
+			return;
+		} else if (interaction.options.getSubcommand() === 'showtypes'){
+			//If Trainer Types are requested, return possible values
+			var allTypes = "";
+			for (var i = 0; i < trainerTypes.length; i++) {
+				for (var j = 0; j < trainerTypes[i].length; j++) { allTypes = allTypes + trainerTypes[i][j] + ", "; }
+				allTypes = allTypes + "\n";
 			}
-		}
+			logger.info("[gentrainer] Sending all trainer types.")
+			interaction.reply(`All trainer types: \n${allTypes}`).catch(console.error);
+			return;
+		} else if (interaction.options.getSubcommand() === 'randomname'){
+			//If Random Name is requested, return a random name
+			var randName = Math.floor(Math.random() * nameOptions.length);
+			logger.info("[gentrainer] " + `Watch out! It's Trainer ${nameOptions[randName]}!`)
+			interaction.reply(`Watch out! It's Trainer ${nameOptions[randName]}!`);
+			return;
+		} else if (interaction.options.getSubcommand() === 'generatetrainer'){
+			try{
+				//If Generate Trainer is requested, generate from input(s)
+				// ============= VARIABLES =============
+				//NEEDED VALS
+				//the trainer's name
+				var tName;
+				//the trainer's type
+				var tType;
+				//trainer type index (for getting classes, feats)
+				var tTypeIndex;
+				//trainer level
+				var tLevel;
+				//the trainer's class
+				var tClass = "None :(";
+				//the trainer's feats
+				var tFeats = ["None :("];
+				//the trainer's pokemon
+				var tPokes = [];
 
-		//if ttype is true, generate random class, feats
-		if (isRealTType) {
+				//Get arguments
+				let ttypeGiven = interaction.options.getString('trainertype');
+				let tFeatNum = interaction.options.getInteger('numfeats');
+				let minTLevel = interaction.options.getInteger('mintrainerlevel');
+				let maxTLevel = interaction.options.getInteger('maxtrainerlevel');
+				let pokeTotal = interaction.options.getInteger('pokemonnumber');
+				let minPLevel = interaction.options.getInteger('minpokemonlevel');
+				let maxPLevel = interaction.options.getInteger('maxpokemonlevel');
+				let pokeOptionsStr = interaction.options.getString('pokeoptions');
+				let pokeOptions = pokeOptionsStr.split(" ");
 
-			//generate class
+				//Name the Trainer
+				tName = nameOptions[Math.floor(Math.random() * nameOptions.length)];
 
-			//get a random number to pick out the class
-			var tClassNum = Math.floor(Math.random() * classOptions[tTypeIndex].length);
-			//assign class
-			tClass = classOptions[tTypeIndex][tClassNum];
+				//first, find trainer class
 
-			//now, assign some feats!
+				//check if ttype exists
+				var isRealTType = false;
 
-			//featcounter
-			var featCounter = 0;
-			//nums that have been picked
-			var numsPicked = [];
-
-			while (featCounter < tFeatNum) {
-				//get random number
-				var randNum = Math.floor(Math.random() * featOptions[tTypeIndex].length);
-				//if it's the first number rolled, add feat to list + nums picked
-				if (featCounter === 0) {
-					featCounter++;
-					numsPicked.push(randNum);
-					tFeats.push(featOptions[tTypeIndex][randNum]);
-					tFeats.shift();
-				} else { //check if it's in the list yet
-					var isReplica = false;
-					for (var krr = 0; krr < numsPicked.length; krr++) {
-						if (numsPicked[krr] === randNum) {
-							isReplica = true;
+				//finds trainer type provided, if its here
+				for (var a = 0; a < trainerTypes.length; a++) {
+					for (var b = 0; b < trainerTypes[a].length; b++) {
+						if (trainerTypes[a][b].localeCompare(ttypeGiven) === 0) {
+							tType = trainerTypes[a][b];
+							tTypeIndex = a;
+							isRealTType = true;
 						}
 					}
-					if (!isReplica) {
-						featCounter++;
-						numsPicked.push(randNum);
-						tFeats.push(featOptions[tTypeIndex][randNum]);
+				}
+
+				//if ttype is true, generate random class, feats
+				if (isRealTType) {
+
+					//generate class
+
+					//get a random number to pick out the class
+					var tClassNum = Math.floor(Math.random() * classOptions[tTypeIndex].length);
+					//assign class
+					tClass = classOptions[tTypeIndex][tClassNum];
+
+					//now, assign some feats!
+
+					//featcounter
+					var featCounter = 0;
+					//nums that have been picked
+					var numsPicked = [];
+
+					while (featCounter < tFeatNum) {
+						//get random number
+						var randNum = Math.floor(Math.random() * featOptions[tTypeIndex].length);
+						//if it's the first number rolled, add feat to list + nums picked
+						if (featCounter === 0) {
+							featCounter++;
+							numsPicked.push(randNum);
+							tFeats.push(featOptions[tTypeIndex][randNum]);
+							tFeats.shift();
+						} else { //check if it's in the list yet
+							var isReplica = false;
+							for (var krr = 0; krr < numsPicked.length; krr++) {
+								if (numsPicked[krr] === randNum) {
+									isReplica = true;
+								}
+							}
+							if (!isReplica) {
+								featCounter++;
+								numsPicked.push(randNum);
+								tFeats.push(featOptions[tTypeIndex][randNum]);
+							}
+						}
+
 					}
+
+
 				}
 
-			}
+				//gen trainer level
+				tLevel = Math.floor(Math.random() * (maxTLevel - minTLevel)) + minTLevel;
 
+				//gen pokemon
+
+				//generate 'em
+				for (var pk = 0; pk < pokeTotal; pk++) {
+					//gen poke level
+					var thisPLevel = Math.floor(Math.random() * (maxPLevel - minPLevel + 1) + minPLevel);
+
+					//pick random Pokemon out of options
+					var thisPName = pokeOptions[Math.floor(Math.random() * pokeOptions.length)];
+
+					//assign pokemon name and level to a string and toss into array
+					var thisFullString = "Lv" + thisPLevel + " " + thisPName;
+					tPokes.push(thisFullString);
+
+				}
+
+				//generate fatigue points; conscore 0-3 * 2
+				var fatigue = (Math.floor(Math.random() * 4) * 2);
+
+				//print the trainer out.
+
+				logger.info("[gentrainer] Sending embed interaction.")
+
+				let embed = {embed: {
+					color: 3447003,
+					author: {
+						name: interaction.client.user.username,
+						icon_url: interaction.client.user.avatarURL
+					},
+					title: `${tType} ${tName}  (Lv ${tLevel} ${tClass}) would like to Battle!`,
+					description: `**FATIGUE:** ${fatigue}\n**Feats:** ${tFeats.toString()}`,
+					fields: [
+						{
+							name: `${tPokes[0]}`,
+							value: `\n=================`
+						},
+						{
+							name: `${tPokes[1]}`,
+							value: `\n=================`
+						},
+						{
+							name: `${tPokes[2]}`,
+							value: `\n=================`
+						},
+						{
+							name: `${tPokes[3]}`,
+							value: `\n=================`
+						},
+						{
+							name: `${tPokes[4]}`,
+							value: `\n=================`
+						},
+						{
+							name: `${tPokes[5]}`,
+							value: `\n=================`
+						},
+					],
+					timestamp: new Date(),
+					footer: {
+						icon_url: interaction.client.user.avatarURL,
+						text: "Chambers and Charizard!"
+					}
+				}}
+				interaction.followUp({ embeds: [
+					embed.embed
+				]});
+			} catch (error) {
+				logger.error("[gentrainer] " + error)
+				interaction.followUp(`ChaCha Machine :b:roke :^(. ${error.message}`).catch(console.error);
+			}
+			
 
 		}
 
-		//gen trainer level
-		tLevel = Math.floor(Math.random() * maxTLevel) + minTLevel;
-
-		//gen pokemon
-
-		//generate 'em
-		for (var pk = 0; pk < pokeTotal; pk++) {
-			//gen poke level
-			var thisPLevel = Math.floor(Math.random() * (maxPLevel - minPLevel + 1) + minPLevel);
-
-			//pick random Pokemon out of options
-			var thisPName = pokeOptions[Math.floor(Math.random() * pokeOptions.length)];
-
-			//assign pokemon name and level to a string and toss into array
-			var thisFullString = "Lv" + thisPLevel + " " + thisPName;
-			tPokes.push(thisFullString);
-
-		}
-
-		//generate fatigue points; conscore 0-3 * 2
-		var fatigue = (Math.floor(Math.random() * 4) * 2);
-
-		//print the trainer out.
-
-		logger.info("[gentrainer] Sending embed message.")
-		message.channel.send({
-			embed: {
-				color: 3447003,
-				author: {
-					name: client.user.username,
-					icon_url: client.user.avatarURL
-				},
-				title: `${tType} ${tName}  (Lv ${tLevel} ${tClass}) would like to Battle!`,
-				description: `**FATIGUE:** ${fatigue}\n**Feats:** ${tFeats.toString()}`,
-				fields: [
-					{
-						name: `${tPokes[0]}`,
-						value: `\n=================`
-					},
-					{
-						name: `${tPokes[1]}`,
-						value: `\n=================`
-					},
-					{
-						name: `${tPokes[2]}`,
-						value: `\n=================`
-					},
-					{
-						name: `${tPokes[3]}`,
-						value: `\n=================`
-					},
-					{
-						name: `${tPokes[4]}`,
-						value: `\n=================`
-					},
-					{
-						name: `${tPokes[5]}`,
-						value: `\n=================`
-					},
-				],
-				timestamp: new Date(),
-				footer: {
-					icon_url: client.user.avatarURL,
-					text: "Chambers and Charizard!"
-				}
-			}
-		});
-	} catch (error) {
-		logger.error("[gentrainer] " + error)
-		message.channel.send(`ChaCha Machine :b:roke :^(. ${error.message}`).catch(console.error);
-	}
-};
+	};

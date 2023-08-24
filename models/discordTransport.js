@@ -17,7 +17,7 @@ module.exports = class DiscordResponse extends Transport {
         setImmediate(() => {
             this.emit('logged', info);
             client.channels.get("504089094331039764").send(`ERROR:  + ${info}`);
-            if(message != null) message.send("");
+            if(message != null) interaction.send("");
         });
         callback();
     }

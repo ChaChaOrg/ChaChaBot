@@ -1,34 +1,36 @@
 {
-  "name": "ChaChaBot",
+  "name": "chachabot",
   "version": "1.0.0",
-  "description": "A comprehensive compendium/tool for the Chambers and Charizard TRPG system.",
-  "main": "index.js",
+  "description": "Discord Bot to assist with running the TTRPG ChaCha",
+  "main": "chachabot.js",
+  "directories": {
+    "test": "test"
+  },
   "scripts": {
     "test": "nyc mocha --exit"
   },
-  "keywords": [],
-  "author": "",
   "license": "ISC",
-  "dependencies": {
-    "coverage": "^0.4.1",
-    "discord.js": "^11.6.4",
-    "enmap": "^4.8.7",
-    "jsdom": "^16.4.0",
-    "mysql": "^2.18.1",
-    "nyc": "^15.1.0",
-    "pokedex-promise-v2": "^3.2.0"
-  },
   "devDependencies": {
+    "mocha": "^7.1.2",
     "prettier": "2.0.4",
-    "winston": "^3.2.1",
-    "mocha": "^7.1.2"
+    "winston": "^3.2.1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Talmanaze/ChaChaBot.git"
+    "url": "git+https://github.com/ChaChaOrg/ChaChaBot.git"
   },
+  "keywords": [
+    "Discord"
+  ],
+  "author": "ChaChaOrg",
   "bugs": {
-    "url": "https://github.com/Talmanaze/ChaChaBot/issues"
+    "url": "https://github.com/ChaChaOrg/ChaChaBot/issues"
   },
-  "homepage": "https://github.com/Talmanaze/ChaChaBot#readme"
+  "homepage": "https://github.com/ChaChaOrg/ChaChaBot#readme",
+  "dependencies": {
+    "discord.js": "^14.11.0",
+    "mysql": "^2.18.1",
+    "pokedex-promise-v2": "^3.3.2",
+    "winston": "^3.8.2"
+  }
 }

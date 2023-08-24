@@ -1,17 +1,19 @@
 const logger = require('../logs/logger.js');
-
+const { SlashCommandBuilder } = require('@discordjs/builders');
 // JavaScript Document
-
+module.exports.data = new SlashCommandBuilder()
+    .setName('feat')
+    .setDescription('Returns feat info from a list of feats')
+    .addStringOption(option =>
+        option.setName('feat')
+        .setDescription('The feat you want info about')
+        .setRequired(true));
+;
+module.exports.run = async (interaction) => 
+{
 //run
-exports.run = (client, connection, P, message, args) => {
 
 
-	//check if asking for help
-	if (args[0].includes('help')) {
-		logger.info("[feat] Sending help message.")
-		message.channel.send('Feat finder, prints a given feat name. +feat [feat name]').catch(console.error);
-		return;
-	}
 
 	//function to get + send feat
 	function sendFeat(featName) {
@@ -626,7 +628,7 @@ exports.run = (client, connection, P, message, args) => {
 				name: "Symbiote",
 				cat: "Trainer Feat",
 				prereq: "n/a",
-				effect: "Only Grass type Pokémon may use this feat. As a standard action, the Pokémon chooses a target to recover from. Whenever the target Pokémon gains HP due to a move, an item being used on it, or eating a berry, the Pokémon using this feat also recovers 1/8th of its maximum HP. The symbiote effect lasts for a number of rounds equal to the Pokémon’s level. If the Pokémon using this feat is removed from battle, by fainting, being withdrawn, or otherwise, it ends Symbiote.",
+				effect: "Only Grass type Pokémon may use this feat. As a standard action, the Pokémon chooses a target to recover from. Whenever the target Pokémon gains HP due to a move, an item being used on it, or eating a berry, the Pokémon using this feat also recovers 1/8th of its maximum Hinteraction.pokedex. The symbiote effect lasts for a number of rounds equal to the Pokémon’s level. If the Pokémon using this feat is removed from battle, by fainting, being withdrawn, or otherwise, it ends Symbiote.",
 				normal: "This action cannot be done.",
 				special: "Fatigue Cost: 1"
 			},
@@ -694,7 +696,7 @@ exports.run = (client, connection, P, message, args) => {
 	try {	//feat name given
 
 		//elements.join('-')
-		let givenFeat = args.join(' ');
+		let givenFeat = interaction.options.getString("feat");
 
 
 		//try to find the feat
@@ -703,13 +705,12 @@ exports.run = (client, connection, P, message, args) => {
 		//if the feat isn't null, print it out
 
 		if (featFound !== null) {
-			logger.info("[feat] Sending embed message.")
-			message.channel.send({
-				embed: {
+			logger.info("[feat] Sending embed interaction.")
+			interaction.reply({ embeds: [{
 					color: 3447003,
 					author: {
-						name: client.user.username,
-						icon_url: client.user.avatarURL
+						name: interaction.user.username,
+						icon_url: interaction.user.avatarURL
 					},
 					title: `${featFound.name}`,
 					description: `**Category:** ${featFound.cat}`,
@@ -733,18 +734,18 @@ exports.run = (client, connection, P, message, args) => {
 					],
 					timestamp: new Date(),
 					footer: {
-						icon_url: client.user.avatarURL,
+                        icon_url: interaction.user.avatarURL,
 						text: "Chambers and Charizard!"
 					}
 				}
-			});
+            ]});
 		} else {
 			logger.info("[feat] No feat found.")
-			message.channel.send("No feat found, sorry :^(").catch(error);
+			interaction.reply("No feat found, sorry :^(");
 		}
 	} catch (error) {
 		logger.error("[feat] " + error)
-		message.channel.send(`No feat found, sorry :^( ${error}`).catch(error);
+		interaction.reply(`Error running command: ${error}`);
 	}
 };
 
