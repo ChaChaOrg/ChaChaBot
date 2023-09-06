@@ -12,7 +12,7 @@ const userCreatorPrivate = ":orange_circle:";
 //chacha database site
 const CHACHA_SITE = " **ChaCha Database Site:** http://34.226.119.6:7000/";
 
-const HELP_MESSAGE = "Lists all Pokemon you can see. \n\n`+listpoke` lists all Pokemon that are public or visible" +
+const HELP_MESSAGE = "Lists all Pokemon you can see. \n\n`/listpoke` lists all Pokemon that are public or visible" +
     " only" +
     " to you , while you can add a filter word & keyword afterwords to filter specific Pokemon. \n\n**Current" +
     " Filters:**" +
@@ -20,9 +20,9 @@ const HELP_MESSAGE = "Lists all Pokemon you can see. \n\n`+listpoke` lists all P
     " (ie Fire, Flying; list one per filter) \n>  -discordid (unique number for user- use +myid to get your ID if you" +
     " don't know it) \n>  -private (yes or no) \n>  -level (#+ for that level or higher, #- for that level or lower," +
     " or" +
-    " just # for only pokemon of that level) \n\n**Examples:** `+listpoke -species Talonflame`, `+listpoke -private" +
+    " just # for only pokemon of that level) \n\n**Examples:** `/listpoke -species Talonflame`, `/listpoke -private" +
     " yes" +
-    " -level 10+`, `+listpoke -type fire -type flying`, etc\n\nYou can view these in more comprehensive detail at" +
+    " -level 10+`, `/listpoke -type fire -type flying`, etc\n\nYou can view these in more comprehensive detail at" +
     " the" + CHACHA_SITE;
 
 // the first page that the user can be on

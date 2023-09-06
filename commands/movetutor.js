@@ -11,8 +11,8 @@ const {
 //help messages
 //const MOVETUTOR_HELP = '' +
 //	'The command to check the Train Pokemon DC to learn a new move.' +
-//	'\n\nTo learn a move: `+movetutor [Move_Name (Use _'s for spaces)]`' +
-//	'\n\nTo learn a skill: `+movetutor Skillpoint [PokeName] [IntMod] [SkillName]`'
+//	'\n\nTo learn a move: `/movetutor [Move_Name (Use _'s for spaces)]`' +
+//	'\n\nTo learn a skill: `/movetutor Skillpoint [PokeName] [IntMod] [SkillName]`'
 
 module.exports.data = new SlashCommandBuilder()
 	.setName('movetutor')
