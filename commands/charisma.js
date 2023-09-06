@@ -91,27 +91,27 @@ module.exports.data = new SlashCommandBuilder()
 				}))
 			.addIntegerOption(option => 
 				option.setName('beauty-moves')
-				.setDescription('Number of beauty moves a pokemon has')
+				.setDescription('Number of beauty moves a pokemon currently has')
 				.setRequired(true))
 			.addIntegerOption(option => 
 				option.setName('clever-moves')
-				.setDescription('Number of clever moves a pokemon has')
+				.setDescription('Number of clever moves a pokemon currently has')
 				.setRequired(true))
 			.addIntegerOption(option => 
 				option.setName('cool-moves')
-				.setDescription('Number of cool moves a pokemon has')
+				.setDescription('Number of cool moves a pokemon currently has')
 				.setRequired(true))
 			.addIntegerOption(option => 
 				option.setName('cute-moves')
-				.setDescription('Number of cute moves a pokemon has')
+				.setDescription('Number of cute moves a pokemon currently has')
 				.setRequired(true))
 			.addIntegerOption(option => 
 				option.setName('tough-moves')
-				.setDescription('Number of tough moves a pokemon has')
+				.setDescription('Number of tough moves a pokemon currently has')
 				.setRequired(true))
 			.addIntegerOption(option => 
 				option.setName('neutral-moves')
-				.setDescription('Number of neutral moves a pokemon has - typically those without a contest type')
+				.setDescription('Number of neutral moves a pokemon currently has - typically those without a contest type')
 				.setRequired(true)
 			))
 	.addSubcommand(subcommand =>
@@ -120,23 +120,23 @@ module.exports.data = new SlashCommandBuilder()
 			.setDescription('Old damage formula')
 			.addIntegerOption(option => 
 				option.setName('beauty-moves')
-				.setDescription('Number of beauty moves a pokemon has')
+				.setDescription('Number of beauty moves in the learnset of a Pokemon species')
 				.setRequired(true))
 			.addIntegerOption(option => 
 				option.setName('clever-moves')
-				.setDescription('Number of clever moves a pokemon has')
+				.setDescription('Number of clever moves in the learnset of a Pokemon species')
 				.setRequired(true))
 			.addIntegerOption(option => 
 				option.setName('cool-moves')
-				.setDescription('Number of cool moves a pokemon has')
+				.setDescription('Number of cool moves in the learnset of a Pokemon species')
 				.setRequired(true))
 			.addIntegerOption(option => 
 				option.setName('cute-moves')
-				.setDescription('Number of cute moves a pokemon has')
+				.setDescription('Number of cute moves in the learnset of a Pokemon species')
 				.setRequired(true))
 			.addIntegerOption(option => 
 				option.setName('tough-moves')
-				.setDescription('Number of cute moves a pokemon has')
+				.setDescription('Number of cute moves in the learnset of a Pokemon species')
 				.setRequired(true)
 			));
 
