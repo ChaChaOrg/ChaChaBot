@@ -9,7 +9,7 @@ module.exports.data = new SlashCommandBuilder()
   .setDescription('Used to get information for a specific move.')
   .addStringOption(option =>
     option.setName('move')
-      .setDescription('Move to fetch information for, lowercase with dashes instead of spaces. IE, "rock-smash"')
+      .setDescription('Move to fetch information for, lowercase with dashes instead of spaces, and apostrophes removed. IE, "rock-smash"')
       .setRequired(true)
   );
 
@@ -39,10 +39,22 @@ module.exports.run = async (interaction) => {
     movePP = moveData.pp;
     moveAccuracy = moveData.accuracy;
     moveTarget = moveData.target.name;
-    moveCCondition = moveData.contest_type.name;
+    if(!moveData.contest_type){
+      moveCCondition = "null";
+    }else {
+      moveCCondition = moveData.contest_type.name;
+    }
     movePriority = moveData.priority;
     effect_chance = moveData.effect_chance;
-    moveEffect = moveData.effect_entries[0].short_effect;
+    if(!moveData.effect_entries[0]){
+      moveEffect = "null";
+    }else {
+      moveEffect = moveData.effect_entries[0].short_effect;
+    }    
+
+    if(moveEffect.includes("$effect_chance")){
+      moveEffect = moveEffect.replace("$effect_chance", `${effect_chance}`);
+    }
 
 
     let moveHunger = (8 - movePP / 5) + 1;
@@ -78,7 +90,7 @@ module.exports.run = async (interaction) => {
         "-",
         "_"
       )}_(Move)`,
-      description: `${moveEffect}`,
+      description: `**Effect:** ${moveEffect}`,
       
       fields: [
         {
