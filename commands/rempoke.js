@@ -9,7 +9,7 @@ const { SlashCommandBuilder, ButtonBuilder, ActionRowBuilder } = require('@disco
 const { ButtonStyle } = require('discord.js')
 
 // The help message provided when requested by the user.
-const helpMessage = "\n`+rempoke [nickname]`\n\nDeletes the listed Pokemon from the SQL database, if it exists.\n\n((If found, confirm deletion by reaction to the posted interaction.))";
+const helpMessage = "\n`/rempoke [nickname]`\n\nDeletes the listed Pokemon from the SQL database, if it exists.\n\n((If found, confirm deletion by reaction to the posted interaction.))";
 
 module.exports.data = new SlashCommandBuilder()
                         .setName('rempoke')
@@ -108,7 +108,7 @@ module.exports.run = async (interaction) => {
                     interaction.editReply({
                         content: "No Pokemon found with name `" + pokeName +
                         "`, please check spelling and try again.\n" +
-                        "*Hint:* Use `+listpoke` to view all Pokemon you have access to.",
+                        "*Hint:* Use `/listpoke` to view all Pokemon you have access to.",
                         components: []
                     });
                 }

@@ -180,6 +180,7 @@ module.exports.run = async (interaction) => {
 		let promisearray = [];
 
 		names.forEach((element) => {
+
 			let tempPoke = new Pokemon;
 			let notFoundMessage = element + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `+listpoke` to view the Pokemon you can edit.)";
 			let sql = `SELECT * FROM pokemon WHERE name = '${element}';`;
@@ -204,6 +205,7 @@ module.exports.run = async (interaction) => {
 						.then(response => {
 	
 							logger.info("[move-beatup] Got Pokemon info.");
+
 							let math = tempPoke.statBlock.baseStats[1]/10;
 							math += 5;
 							followup += "Beat Up base power for " + element + " is " + math + ".\n";
@@ -215,7 +217,9 @@ module.exports.run = async (interaction) => {
 			
 	});
 	Promise.all(promisearray).then(() => {
+
 		interaction.followUp(followup + "This is the base power each strike should use with the Damage command - each strike can crit and STAB individually.");
+
 	  })
 	}else if (interaction.options.getSubcommand() === 'assist') {
 		let Pokemon = require(`../models/pokemon`);
@@ -228,6 +232,7 @@ module.exports.run = async (interaction) => {
 		let promisearray = [];
 
 		names.forEach((element) => {
+
 			let tempPoke = new Pokemon;
 			let notFoundMessage = element + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `+listpoke` to view the Pokemon you can edit.)";
 			let sql = `SELECT * FROM pokemon WHERE name = '${element}';`;

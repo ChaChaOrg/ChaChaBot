@@ -6,7 +6,7 @@ const SPA_ARRAY_INDEX = 3;
 const SPD_ARRAY_INDEX = 4;
 const SPE_ARRAY_INDEX = 5;
 
-const HELP_MESSAGE = "Displays a Pokemon as it appears in the database. Please do not name your Pokemon 'help'. \n+showpoke [Pokemon Name]"
+const HELP_MESSAGE = "Displays a Pokemon as it appears in the database. Please do not name your Pokemon 'help'. \n/showpoke [Pokemon Name]"
 
 const logger = require('../logs/logger.js');
 const { SlashCommandBuilder } = require('@discordjs/builders');
@@ -37,7 +37,7 @@ module.exports.run = async (interaction) => {
         let sql = `SELECT * FROM pokemon WHERE name = '${name}';`;
         logger.info(`[showpoke] SQL query: ${sql}`);
 
-        let notFoundMessage = name + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `+listpoke` to view the Pokemon you can edit.)";
+        let notFoundMessage = name + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `/listpoke` to view the Pokemon you can edit.)";
 
         //console.log(sql);
         interaction.client.mysqlConnection.query(sql, function (err, response) {

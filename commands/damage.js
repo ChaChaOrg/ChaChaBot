@@ -61,10 +61,10 @@ module.exports.data = new SlashCommandBuilder()
               .setDescription('Stages of defense/special defense the attacker has. Minimum -6, maximum +6')
               .setMaxValue(6)
               .setMinValue(-6))
-          .addIntegerOption(option =>
+          .addNumberOption(option =>
               option.setName('additive-bonus')
               .setDescription('Extra damage *added* to the base power. Usually done through ChaCha feats. Defaults to 0'))
-          .addIntegerOption(option =>
+          .addNumberOption(option =>
               option.setName('multiplicitive-bonus')
               .setDescription('Extra damage *multiplying* the base power.')
               .setMinValue(0))
@@ -154,10 +154,10 @@ module.exports.run = async (interaction) => {
       bonusAtk = interaction.options.getInteger('stages-of-attack'); //Stages Attack
     if(interaction.options.getInteger('stages-of-defense'))
     bonusDef = interaction.options.getInteger('stages-of-defense'); //Stages Defense    
-    if(interaction.options.getInteger('additive-bonus'))
-      other = interaction.options.getInteger('additive-bonus');
-    if(interaction.options.getInteger('multiplicitive-bonus'))
-      otherMult = interaction.options.getInteger('multiplicitive-bonus');
+    if(interaction.options.getNumber('additive-bonus'))
+      other = interaction.options.getNumber('additive-bonus');
+    if(interaction.options.getNumber('multiplicitive-bonus'))
+      otherMult = interaction.options.getNumber('multiplicitive-bonus');
     
 
     //values used for calculation

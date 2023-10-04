@@ -3,8 +3,8 @@ const { ButtonStyle } = require('discord.js')
 const logger = require('../logs/logger.js');
 
 // help message
-const HELP_MESSAGE = "\n`+modpoke  [nickname] [fieldToChange] [newValue]`\n\nModifies an existing Pokemon in the" +
-    " database. \nUse `+modpoke list` to view all available changeable fields.)";
+const HELP_MESSAGE = "\n`/modpoke  [nickname] [fieldToChange] [newValue]`\n\nModifies an existing Pokemon in the" +
+    " database. \nUse `/modpoke list` to view all available changeable fields.)";
 // list of editable fields
 const HELP_FIELDS_LIST = "Here's the list of all available fields on a Pokemon that can be manipulated. Fields marked with a ♢ will update other related stats upon being updated.\n" +
     "\n" +
@@ -203,7 +203,7 @@ module.exports.run = async (interaction) => {
         let sqlUpdateString = `UPDATE pokemon SET ${valName} = '${valString}' WHERE name = '${pokeName}'`;
         logger.info(`[modpoke] SQL update string: ${sqlUpdateString}`);
         // not found message
-        let notFoundMessage = pokeName + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `+listpoke` to view the Pokemon you can edit.)";
+        let notFoundMessage = pokeName + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `/listpoke` to view the Pokemon you can edit.)";
 
         // try to find the poke in the array first
         interaction.client.mysqlConnection.query(sqlFindPoke, function (err, rows, fields) {
@@ -584,7 +584,7 @@ module.exports.run = async (interaction) => {
 
                                         if (confirmation.customId == 'confirm') {
                                             newPoke.updatePokemon(interaction.client.mysqlConnection, null, rows[0].private).then(function (results) {
-                                                let successString = "Success! " + pokeName + "'s " + valName + " has been changed to " + valString + " and all related stats have been updated.\n\nHint: View Pokemon's stat's using `+showpoke [nickname]`";
+                                                let successString = "Success! " + pokeName + "'s " + valName + " has been changed to " + valString + " and all related stats have been updated.\n\nHint: View Pokemon's stat's using `/showpoke [nickname]`";
                                                 logger.info(`[modpoke] ${successString}`)
                                                 interaction.editReply({ components: []});
                                                 interaction.channel.send({ content: successString });
