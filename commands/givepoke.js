@@ -1,62 +1,92 @@
+const { EmbedBuilder, SlashCommandAssertions, SlashCommandBuilder, ButtonBuilder, ActionRowBuilder } = require('@discordjs/builders');
+const { ButtonStyle } = require('discord.js')
 const HELP_MESSAGE = "Allows a player to transfer ownership of a pokemon with another trainer. \
                      \n+givepoke [pokeName] @[username]"
 
 const logger = require('../logs/logger.js');
 
-module.exports.run = (client, connection, P, message, args) => {
+module.exports.data = new SlashCommandBuilder()
+    .setName('givepoke')
+    .setDescription('Give a pokemon to another trainer.')
+    .addSubcommand(subcommand =>
+        subcommand
+        .setName('help')
+        .setDescription('Tells user what fields are required')
+    )
+    .addSubcommand(subcommand =>
+        subcommand
+        .setName('pokemon')
+        .setDescription('Give a pokemon to another trainer.')
+        .addUserOption(option =>
+            option.setName('user')
+            .setDescription("Filter by discordID")
+            .setRequired(true)
+        )
+        .addStringOption(option =>
+            option.setName('pokename')
+            .setDescription('Name of the pokemon being transferred')
+            .setRequired(true)
+        )
+    )
+    
+
+module.exports.run = async (interaction) => {
+    await interaction.deferReply();
+
+    const confirm = new ButtonBuilder()
+        .setCustomId('confirm')
+        .setLabel('Confirm')
+        .setStyle(ButtonStyle.Success);
+
+    const cancel = new ButtonBuilder()
+        .setCustomId('cancel')
+        .setLabel('Cancel')
+        .setStyle(ButtonStyle.Secondary);
+
+    const row = new ActionRowBuilder()
+        .addComponents(cancel, confirm);
+
     try {
-        
-        let pokeName = args[0];
-        if (pokeName === "help" ) {
+        if (interaction.options.getSubcommand() === 'help') {
             logger.info("[givepoke] Sending trade help message.");
-            message.channel.send(HELP_MESSAGE);
+            interaction.editReply(HELP_MESSAGE);
             return;
         }
 
-        if (args.length < 2) {
-            logger.warn("[givepoke] User did not enter a user to trade with.");
-            message.reply("You forgot to pick someone to give your pokemon to with. You can't give it to me! ;)");
-            return;
-        }
-
-        let other_user = args[1].substring(2, args[1].length - 1);
+        let pokeName = interaction.options.getString('pokeName');
+        let other_user = interaction.options.getString('user');
 
         let sql = `UPDATE pokemon SET discordID = '${other_user}' WHERE name = '${pokeName}';`;
         logger.info(`[givepoke] SQL query: ${sql}`);
 
-        let send_msg = message.channel.send(`Please confirm that you want to transfer ${pokeName} to <@${other_user}>.`
-        ).then(function (response) {
-            // add reactions so user can just click on em
-            // CHECKMARK = CONFIRM, X = CANCEL
-            response.react('✅').then(response.react('❌'));
+        const response = await interaction.editReply({
+            content: `Please confirm that you want to transfer ${pokeName} to <@${other_user}>.\nUse showpoke if you'd like to see more details on the Pokemon.`,
+            components: [row]
+        })
 
-            // then listen for reactions
-            response.awaitReactions((reaction, user) => user.id == message.author.id && (reaction.emoji.name == '✅' || reaction.emoji.name == '❌'),
-                { max: 1, time: 30000 }).then(collected => {
-                    if (collected.first().emoji.name == '✅') {
-                        message.reply("Transferring " + pokeName + " to <@" + other_user + ">...");
-                        connection.query(sql, function (err, response) {
-                            if (err) throw err;
-                
-                            if (response.length == 0) {
-                                logger.info("[givepoke] Pokemon not found in database. Please check your spelling, or the Pokemon may not be there.")
-                            }
-                            else {
-                                message.channel.send(`Transfer complete!`) 
-                            }
-                        });
+        const collectorFilter = i => i.user.id === interaction.user.id;
+
+        try {
+            const confirmation = await response.awaitMessageComponent({ filter: collectorFilter, time: 60000 });
+            if (confirmation.customId == 'confirm') {
+                connection.query(sql, function (err, response) {
+                    if (err) throw err;
+        
+                    if (response.length == 0) {
+                        logger.info("[givepoke] Pokemon not found in database. Please check your spelling, or the Pokemon may not be there.")
                     }
                     else {
-                        logger.info("[givepoke] Action cancelled by user.");
-                        message.reply(pokeName + "'s transfer has been cancelled.");
+                        message.channel.send(`Transfer complete!`) 
                     }
-                }).catch(() => {
-                    logger.info("[givepoke] Action cancelled via timeout.");
-                    message.reply("Timed out after 30 seconds, so " + pokeName + "'s transfer has been cancelled.");
-                })
-        });
-        
-        
+                });
+            } else if (confirmation.customId == 'cancel') {
+                logger.info("[givepoke] Transfer cancelled.")
+                interaction.editReply(`${pokeName} will not be transferred to ${other_user}.`)
+            }
+        } catch (e) {
+            logger.error(`Error transferring: ${e}`)
+            interaction.editReply({ content: 'Confirmation not received within 1 minute, cancelling.', components: [] })
+        }
 
     } catch (error) {
         logger.error("[givepoke] " + error.toString());
