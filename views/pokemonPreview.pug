@@ -1,0 +1,171 @@
+tr.pokeTableDivider
+    td
+        img(src=pokemon.pokeObject.pokemonData.sprites.front_default class='spriteImage' width='96px')
+    td
+        span.pokeNickname #{pokemon.name}
+        if (pokemon.gender === 'male')
+            | &#9794;
+        else if (pokemon.gender === 'female')
+            | &#9792;
+        else
+            | &#9675;
+        - var pokeSpeciesURL = "https://bulbapedia.bulbagarden.net/wiki/" + pokemon.species + "_(Pok%C3%A9mon)"
+        a(href=pokeSpeciesURL).properCaps
+                span.properCaps <br/>Lv  #{pokemon.level}&nbsp;
+                if (pokemon.species == pokemon.pokeObject.form)
+                    span.properCaps #{pokemon.species}
+                else
+                    span.properCaps #{pokemon.pokeObject.form} (<i>#{pokemon.species}</i>)
+                | <br/><br/>
+        unless (pokemon.type2 === '')
+            span(class='type') #{pokemon.type1}
+            span(class='type') #{pokemon.type2}
+        else
+            span(class='type') #{pokemon.type1}
+        | <br/><br/>
+        span.emphasize Ability:
+        - var abilityURL = "https://bulbapedia.bulbagarden.net/wiki/" + pokemon.niceAbility + "_(Ability)"
+        a(href=abilityURL)
+            | #{pokemon.niceAbility}
+        if pokemon.pokeObject.ability.isHiddenAbility
+            | <sup> HA</sup>
+        | <br/>
+        span.emphasize Nature:
+        | #{pokemon.nature}
+        | <br/><br/>
+        a(href=`/lookAtMe?uniqueID=${pokemon.uniqueID}`)
+            | View Profile<br/>
+        if loggedIn && pokemon.discordID == currentDiscordID
+            a(href = `/editPoke?uniqueID=${pokemon.uniqueID}`)
+                | Edit Pokemon<br/>
+            if myPoke 
+                //- input(name="deletePoke" type="submit" onclick="deleteConfirmed(event)")
+                a(href=`javascript:deleteConfirmed("${pokemon.name}", "${pokemon.uniqueID}");`)
+                    | Delete Pokemon
+                script.
+                    function deleteConfirmed(pokeName, pokeId)
+                    {
+                        if(!confirm(`Are you ABSOLUTE CERTAIN you want to delete ${pokeName}?`)) {
+                            console.log("Delete pokemon cancelled")
+                        } else {
+                            location.assign(`/deletePoke?uniqueID=${pokeId}`);
+                        }
+                    }
+        else
+            | <br/>
+    td
+        span.emphasize BASE STATS
+        table(align='center')
+            tr
+                td
+                    span.emphasize HP #{pokemon.hp}
+                    | (IV #{pokemon.hpIV}) (EV #{pokemon.hpEV})<br/>
+                td
+                    span.emphasize SPA #{pokemon.spa}
+                    | (IV #{pokemon.spaIV}) (EV #{pokemon.spaEV})<br/>
+            tr
+                td
+                    span.emphasize ATK #{pokemon.atk}
+                    | (IV #{pokemon.atkIV}) (EV #{pokemon.atkEV})<br/>
+                td
+                    span.emphasize SPD #{pokemon.spd}
+                    | (IV #{pokemon.spdIV}) (EV #{pokemon.spdEV})<br/>
+            tr
+                td
+                    span.emphasize DEF #{pokemon.def}
+                    | (IV #{pokemon.defIV}) (EV #{pokemon.defEV})<br/>
+                td
+                    span.emphasize SPE #{pokemon.spe}
+                    | (IV #{pokemon.speIV}) (EV #{pokemon.speEV})<br/>
+        span.emphasize ABILITY SCORES
+        table
+            tr
+                td
+                    span.emphasize STR #{pokemon.pokeObject.statBlock.strBase}
+                    | (#{pokemon.pokeObject.statBlock.strMod})
+                td
+                    span.emphasize DEX #{pokemon.pokeObject.statBlock.dexBase}
+                    | (#{pokemon.pokeObject.statBlock.dexMod})
+                td
+                    span.emphasize CON #{pokemon.pokeObject.statBlock.conBase}
+                    | (#{pokemon.pokeObject.statBlock.conMod})
+            tr
+                td
+                    span.emphasize INT #{pokemon.pokeObject.statBlock.intBase}
+                    | (#{pokemon.pokeObject.statBlock.intMod})
+                td
+                    span.emphasize WIS #{pokemon.pokeObject.statBlock.wisBase}
+                    | (#{pokemon.pokeObject.statBlock.wisMod})
+                td
+                    span.emphasize CHA :3
+                    | (:3c)
+    td
+        span.emphasize SAVING THROWS
+        table
+            tr
+                td
+                    span.emphasize FORT:
+                    - var fortVal = pokemon.pokeObject.statBlock.fortSave
+                    if fortVal > 0
+                        | (+
+                    else
+                        | (
+                    | #{fortVal})
+                td
+                    span.emphasize REFLEX:
+                    - var refVal = pokemon.pokeObject.statBlock.refSave
+                    if refVal > 0
+                        | (+
+                    else
+                        | (
+                    | #{refVal})
+                td
+                    span.emphasize WILL:
+                    - var willVal = pokemon.pokeObject.statBlock.willSave
+                    if willVal > 0
+                        | (+
+                    else
+                        | (
+                    | #{willVal})
+        span.emphasize Armor Class (Pre-Size Bonus) & Move Speed
+        table
+            tr
+                td
+                    span.emphasize AC:
+                    | #{pokemon.pokeObject.statBlock.armorClass}
+                td
+                    span.emphasize Move Speed:
+                    | #{pokemon.pokeObject.statBlock.moveSpeed} ft/round
+        span.emphasize Moves & Move Progress
+        table
+            tr
+                td
+                    - var pokeMoves = [pokemon.pokeObject.moveSet.move1, pokemon.pokeObject.moveSet.move2, pokemon.pokeObject.moveSet.move3, pokemon.pokeObject.moveSet.move4, pokemon.pokeObject.moveSet.move5]
+                    - var pokeMoveURL = ['s', 's', 's', 's', 's']
+                    - var hasInProgressMove = false
+                    if pokeMoves[4]
+                        - hasInProgressMove = true
+                    - var i = 0;
+                    while i < 4
+                        if move == 'undefined'
+                            move = ''
+                        else if move == '-'
+                            move = ''
+                        else if move == 'n/a'
+                            move = ''
+                        - pokeMoveURL[i] = "https://bulbapedia.bulbagarden.net/wiki/" + pokeMoves[i].replace(/-/g,'_').toUpperCase() + "_(Move)"
+                        if pokeMoves[i]
+                            a(href=pokeMoveURL[i]).properCaps
+                                | #{pokeMoves[i]}
+                        else
+                            | -
+                        if i < 3
+                            | &nbsp;//&nbsp;
+                        - i++
+                    if hasInProgressMove
+                        span.properCaps <br/><b>In-Progress:</b>&nbsp;
+                        a(href=pokeMoveURL[4]).properCaps
+                            | #{pokeMoves[4]}
+                        | &nbsp;(#{pokemon.pokeObject.moveSet.moveProgress}/6)
+                    else
+                        | <br/>

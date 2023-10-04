@@ -1,0 +1,20 @@
+doctype html
+
+html
+    head
+        title My Pokemon Database
+        style
+            include style.css
+        script
+            include table_filter.js
+    body
+        include title
+        section.below-header.container
+            div.form-group
+                label(for='name') General Filter:<br/>
+                input#name.light-table-filter.form-control(type='search', placeholder='Filter' name='name' class='light-table-filter' data-table='order-table')
+            p <br/>
+            table.order-table.table#pokeTable
+                tbody
+                    for pokemon in pokemonList
+                        include pokemonPreview

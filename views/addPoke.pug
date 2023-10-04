@@ -1,0 +1,93 @@
+doctype html
+
+html
+    head
+        title Add Pokemon
+        style
+            include style.css
+    body
+            include title
+            section.below-header.container
+                form(action='/submitAddPoke', method='POST')
+                    table.table
+                        tr
+                            td
+                                //- img(src=pokemon.pokeObject.pokemonData.sprites.front_default border='1px solid black' align='left' height='98px')
+                                select(name='species' id='species' class='species')
+                                    each val in speciesList
+                                        if val === ''
+                                            // nothing happens
+                                        else
+                                            option(value=val) #{val}
+                            td
+                                input(name='uniqueID' type='hidden')
+                                input(name='name' type='text')
+                                select(name='gender' id='gender')
+                                    option(value='female') &#9792;
+                                    option(value='male') &#9794;
+                                    option(value='genderless') &#9675;
+                                <br/>
+                                select(name='level' id='level')
+                                    - var i = 1;
+                                    while i < (maxLevel + 1)
+                                        option(value=i) Lv #{i}
+                                        - i++;
+                        tr
+                            td
+                                input.checkbox-input(name='statsCheckbox', type='checkbox', value='true', id='statsCheckbox', onclick='check()')
+                                | Specify Stats?
+                        script. 
+                            var check = function () {
+                                if (document.getElementById("statsCheckbox").checked) {
+                                    document.getElementById("stats").style.display = "";
+                                }
+                                else {
+                                    document.getElementById("stats").style.display = "none";
+                                }
+                            }
+            
+                    div#stats(style='display:none;width:200px;')
+                        tr
+                            td
+                                | HP (IV
+                                input(name='hpIV' value=0 type='number' min='0' max='31' class='ivInput')
+                                | ) (EV
+                                input(name='hpEV' value=0 type='number' min='0' max='252' class='evInput')
+                                | )<br/>
+                            td
+                                | SPA (IV
+                                input(name='spaIV' value=0 type='number' min='0' max='31' class='ivInput')
+                                | ) (EV
+                                input(name='spaEV' value=0 type='number' min='0' max='252' class='evInput')
+                                | )<br/>
+                        tr
+                            td
+                                | ATK (IV
+                                input(name='atkIV' value=0 type='number' min='0' max='31' class='ivInput')
+                                | ) (EV
+                                input(name='atkEV' value=0 type='number' min='0' max='252' class='evInput')
+                                | )<br/>
+                            td
+                                | SPD (IV
+                                input(name='spdIV' value=0 type='number' min='0' max='31' class='ivInput')
+                                | ) (EV
+                                input(name='spdEV' value=0 type='number' min='0' max='252' class='evInput')
+                                | )<br/>
+                        tr
+                            td
+                                | DEF (IV
+                                input(name='defIV' value=0 type='number' min='0' max='31' class='ivInput')
+                                | ) (EV
+                                input(name='defEV' value=0 type='number' min='0' max='252' class='evInput')
+                                | )<br/>
+                            td
+                                | SPE (IV
+                                input(name='speIV' value=0 type='number' min='0' max='31' class='ivInput')
+                                | ) (EV
+                                input(name='speEV' value=0 type='number' min='0' max='252' class='evInput')
+                                | )
+
+                    <br/>
+                    input(value='Submit' type='submit')
+                form(action='/')
+                    button(type='submit') Return Home

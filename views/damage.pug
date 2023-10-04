@@ -1,0 +1,45 @@
+extends layout
+
+block header
+    include title
+    //- script
+    //-     include damageSelect.js
+    link(rel='stylesheet' href='https://jsuites.net/v4/jsuites.css')
+
+block content
+    p <br/>
+    span.emphasize Attacker
+    | &nbsp;&nbsp;
+    //- select(id="attacker")
+    script(type='text/javascript', src="https://jsuites.net/v4/jsuites.js").
+        var dropdownList = pokemonList.map(pokemon => ({ value: pokemon.name, text: pokemon.name }))
+        jSuites.dropdown(document.getElementById('attacker'),{
+            data: [],
+            autocomplete: true,
+            lazyLoading: true,
+            width: '280px'
+        });
+    //- select.searchDrop(name="attacker" id="attacker")
+    //-     for pokemon in pokemonList
+    //-         option(value=pokemon)
+    //-             span.properCaps #{pokemon.name}, Lv #{pokemon.level} #{pokemon.species}
+    
+            //- var atker = document.getElementById('attacker')
+            //- atker.onchange = function() {
+            //-     console.log(`${atker.value}`)
+            //- }
+    br
+    span.emphasize Defender
+    | &nbsp;
+    //- select.searchDrop(name="defender" id="defender")
+    //-     for pokemon in pokemonList
+    //-         option(value=pokemon)
+    //-             span.properCaps #{pokemon.name}, Lv #{pokemon.level} #{pokemon.species}
+    //- script(type='text/javascript').
+    //-         //- var dfder = document.getElementById('defender')
+    //-         //- atker.onchange = function() {
+    //-         //-     console.log(`${dfder.value}`)
+    //-         //- }
+    br
+    br
+    a.btn(href='#') Calculate!

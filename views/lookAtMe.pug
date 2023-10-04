@@ -1,0 +1,8 @@
+extends layout
+
+block content
+    include title
+    section.below-header
+        table.order-table.table#pokeTable
+            tbody
+                include pokemonPreview

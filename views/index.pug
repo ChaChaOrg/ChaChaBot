@@ -1,0 +1,54 @@
+doctype html
+
+html
+    head
+        title ChaCha Database
+        style
+            include style.css
+        script
+            include table_filter.js
+            //- include index.js
+    body
+        include title
+        section.below-header.container
+            if pokemonList.length == 0
+                | Please login to view the site.
+            if pokemonList.length > 0
+                div.form-group
+                    label(for='name') Search current page:<br/>
+                    input#name.light-table-filter.form-control(type='search', placeholder='Filter' name='name' class='light-table-filter' data-table='order-table')
+                br
+            
+                //- | Show per page: 
+                //- select(id="pageSize")
+                //-     - var n = 1;
+                //-     while n < 5
+                //-         option= 25*n++
+                //- script(type='text/javascript').
+                //-     var pokemonPerPage = document.getElementById('pageSize')
+                //-     console.log(pokemonPerPage.value)
+                //-     //- console.log(pageCount)
+                //-     pokemonPerPage.onchange = function(pageSize) {
+                //-         pageSize = pokemonPerPage.value
+                //-         console.log(pageSize)
+                //-         //- servFunctions.loadPokemon(currentPage, pokemonPerPage.value)
+                        
+                //-         window.location.search = `pageSize=${pokemonPerPage.value}`
+                //-     }
+                //- br
+                if parseInt(currentPage) > 1
+                    a(href=`/?currentPage=${parseInt(currentPage) - 1}`): button(type="button") Previous Page
+                |
+                |
+                if parseInt(currentPage) <= parseInt(pageCount) && parseInt(currentPage) > 0
+                    a(href=`/?currentPage=${parseInt(currentPage) + 1}`): button(type="button") Next Page
+            table.order-table.table#pokeTable
+                tbody
+                    for pokemon in pokemonList
+                        include pokemonPreview
+            if parseInt(currentPage) > 1
+                a(href=`/?currentPage=${parseInt(currentPage) - 1}`): button(type="button") Previous Page
+            |
+            |
+            if parseInt(currentPage) <= parseInt(pageCount) && parseInt(currentPage) > 0
+                a(href=`/?currentPage=${parseInt(currentPage) + 1}`): button(type="button") Next Page

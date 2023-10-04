@@ -1,0 +1,10 @@
+extends layout
+
+block content
+    div.login-form
+        div.login-title
+            | Log Into the ChaCha Database
+        form(action="/auth" method='POST')
+            input(type='text' name='username' placeholder='Username' required)
+            input(type='password' name='password' placeholder='Password' required)
+            input(type='submit')

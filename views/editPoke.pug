@@ -1,0 +1,110 @@
+doctype html
+
+html
+    head
+        title ChaCha Database
+        style
+            include style.css
+        script
+            include table_filter.js 
+
+    body
+            include title
+            section.below-header.container
+                p #{pokemon.name}
+                form(action='/updatePokemon', method='POST')
+                    table.table
+                        tr
+                            td
+                                img(src=pokemon.pokeObject.pokemonData.sprites.front_default border='1px solid black' align='left' height='98px')
+                            td
+                                input(name='uniqueID' type='hidden' value=pokemon.uniqueID)
+                                input(name='name' value=pokemon.name type='text')
+                                select(name='gender' id='gender')
+                                    if (pokemon.gender === 'male')
+                                        option(value='male') &#9794;
+                                        option(value='female') &#9792;
+                                    else if (pokemon.gender === 'female')
+                                        option(value='female') &#9792;
+                                        option(value='male') &#9794;
+                                    else
+                                        option(value='genderless') &#9675;
+                                | <br/>
+                                select(name='level' id='level')
+                                    - var i = 1;
+                                    while i < (maxLevel + 1)
+                                        if i !== pokemon.level
+                                            option(value=i) Lv #{i}
+                                        else
+                                            option(value=i selected) Lv #{i}
+                                        - i++;
+                                span.properCaps #{pokemon.species} <br/>
+                                select(name='type1' id='type1' class='type')
+                                    each val in typeList
+                                        if val === ''
+                                            // nothing happens
+                                        else if val !== pokemon.type1
+                                            option(value=val) #{val}
+                                        else
+                                            option(value=val selected) #{val}
+                                select(name='type2' id='type2' class='type')
+                                    each val in typeList
+                                        // check if types match
+                                        if val === pokemon.type2
+                                            // if blank, label as such
+                                            if val === ''
+                                                option(value=blank selected) 
+                                            else
+                                                option(value=val selected) #{val}
+                                        else
+                                            // check for blank
+                                            if val === ''
+                                                option(value=blank) 
+                                            else
+                                                option(value=val) #{val}
+                            td
+                                | STATS
+                                table
+                                    tr
+                                        td
+                                            | HP #{pokemon.hp} (IV
+                                            input(name='hpIV' value=pokemon.hpIV type='number' min='0' max='31' class='ivInput')
+                                            | ) (EV
+                                            input(name='hpEV' value=pokemon.hpEV type='number' min='0' max='252' class='evInput')
+                                            | )<br/>
+                                        td
+                                            | SPA #{pokemon.spa} (IV
+                                            input(name='spaIV' value=pokemon.spaIV type='number' min='0' max='31' class='ivInput')
+                                            | ) (EV
+                                            input(name='spaEV' value=pokemon.spaEV type='number' min='0' max='252' class='evInput')
+                                            | )<br/>
+                                    tr
+                                        td
+                                            | ATK #{pokemon.atk} (IV
+                                            input(name='atkIV' value=pokemon.atkIV type='number' min='0' max='31' class='ivInput')
+                                            | ) (EV
+                                            input(name='atkEV' value=pokemon.atkEV type='number' min='0' max='252' class='evInput')
+                                            | )<br/>
+                                        td
+                                            | SPD #{pokemon.spd} (IV
+                                            input(name='spdIV' value=pokemon.spdIV type='number' min='0' max='31' class='ivInput')
+                                            | ) (EV
+                                            input(name='spdEV' value=pokemon.spdEV type='number' min='0' max='252' class='evInput')
+                                            | )<br/>
+                                    tr
+                                        td
+                                            | DEF #{pokemon.def} (IV
+                                            input(name='defIV' value=pokemon.defIV type='number' min='0' max='31' class='ivInput')
+                                            | ) (EV
+                                            input(name='defEV' value=pokemon.defEV type='number' min='0' max='252' class='evInput')
+                                            | )<br/>
+                                        td
+                                            | SPE #{pokemon.spd} (IV
+                                            input(name='speIV' value=pokemon.speIV type='number' min='0' max='31' class='ivInput')
+                                            | ) (EV
+                                            input(name='speEV' value=pokemon.speEV type='number' min='0' max='252' class='evInput')
+                                            | )
+                    input(value='Submit Edits' type='submit')
+                    input(value='Reset Changes' type='reset')
+                form(action='/')
+                    button(type='submit') Return Home

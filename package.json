@@ -13,7 +13,8 @@
   "devDependencies": {
     "mocha": "^7.1.2",
     "prettier": "2.0.4",
-    "winston": "^3.2.1"
+    "winston": "^3.2.1",
+    "nodemon": "^2.0.22"
   },
   "repository": {
     "type": "git",
@@ -31,6 +32,19 @@
     "discord.js": "^14.11.0",
     "mysql": "^2.18.1",
     "pokedex-promise-v2": "^3.3.2",
-    "winston": "^3.8.2"
+    "winston": "^3.8.2",
+    "@okta/oidc-middleware": "^5.1.0",
+    "axios": "^0.21.1",
+    "body-parser": "^1.19.0",
+    "discord-oauth2": "^2.11.0",
+    "express": "^4.17.1",
+    "express-paginate": "^1.0.2",
+    "express-session": "^1.15.6",
+    "mssql": "^6.2.0",
+    "pokeapi": "0.0.1",
+    "pug": "^3.0.2",
+    "select2": "^4.0.13",
+    "wait.for": "^0.6.6",
+    "yarn": "^1.22.14"
   }
 }

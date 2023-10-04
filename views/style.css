@@ -1,0 +1,284 @@
+/* ==========================================================================
+   #STYLES
+   ========================================================================== */
+
+/* html general */
+html {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+*, *::before, *::after {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+/*  top zone */
+.stickTop {
+  position: -webkit-sticky;
+  position:sticky;
+  top: 0;
+}
+
+/* default page header */
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  padding: 2%;
+  background-color: #b06107;
+  color: white;
+  -webkit-text-stroke: 5px #0d315a;
+  paint-order: stroke fill;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 2em;
+}
+
+/* pokemon table label */
+.emphasize {
+  font-weight: bold;
+}
+
+/* NAVIGATION MENU
+============================
+ */
+
+.topnav {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #0d315a;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: .75em;
+}
+
+.topnav li {
+  float: left;
+}
+
+.topnav li a {
+  display: block;
+  padding: 5px 10px;
+  text-align: center;
+  color: white;
+  text-decoration: none;
+}
+
+.topnav li a:hover {
+  background-color: #051a34;
+}
+
+.below-header {
+  padding: 2%;
+}
+
+/* set all tables*/
+table, th, td, tr {
+  padding: 1px;
+  margin: 1px;
+}
+
+th {
+  font-weight: bold;
+}
+
+.pokeTableDivider {
+  border: 1px #0d315a;
+  border-style: none solid none dotted;
+  padding-top: 5px;
+}
+
+.type {
+  border: 1px solid black;
+  padding: 2px;
+  margin: 2px;
+  text-transform: uppercase;
+  font-size: 8px;
+}
+
+.spriteImage img {
+  height: 98px;
+}
+
+.tableHeader {
+  align: center;
+}
+
+.properCaps {
+  text-transform: capitalize;
+}
+
+.pokeNickname {
+  font-weight: bold;
+}
+
+.evInput, .ivInput {
+  width: 40px;
+  border: 1px black;
+  border-style: none solid none solid;
+}
+
+/* pokeTable, the table that holds our good ol pokes
+   ========================================================================== */
+
+#pokeTable {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #ddd;
+  font-size: .75em;
+}
+
+#pokeTable th, #pokeTable td {
+  text-align: left;
+  padding: .25em;
+}
+
+#pokeTable tr {
+  border-bottom: 1px solid #ddd;
+}
+
+#pokeTable tr.header, #pokeTable tr.hover {
+  background-color: #f1f1f1;
+}
+
+/* Buttons
+   ========================================================================== */
+
+.button {
+  height: 50px;
+  line-height: 50px;
+  width: 100%;
+  text-decoration: none;
+  text-align: center;
+  font-size: 20px
+}
+
+.button-twitter {
+  color: #FFFFFF;
+  background-color: #659AF1;
+  border-radius: 5px;
+}
+
+.btn {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+}
+
+.btn:hover{
+  border-left: 3px solid blue;
+}
+
+/* Login
+   ========================================================================== */
+
+
+.login-form {
+  width: 300px;
+  margin: 0 auto;
+  padding-top: 100px;
+  font-family: Tahoma, Geneva, sans-serif;
+}
+
+.login-title {
+  text-align: center;
+  padding: 20px;
+}
+
+.login-form h1 {
+  text-align: center;
+  color: #4d4d4d;
+  font-size: 24px;
+  padding: 20px 0 20px 0;
+}
+.login-form input[type="password"],
+.login-form input[type="text"] {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #dddddd;
+  margin-bottom: 15px;
+  box-sizing:border-box;
+}
+.login-form input[type="submit"] {
+  width: 100%;
+  padding: 15px;
+  background-color: #535b63;
+  border: 0;
+  box-sizing: border-box;
+  cursor: pointer;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+/* dropdown search for damage calculator */
+
+/* Dropdown Button */
+.dropbtn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Dropdown button on hover & focus */
+.dropbtn:hover, .dropbtn:focus {
+  background-color: #3e8e41;
+}
+
+/* The search field */
+#myInput {
+  box-sizing: border-box;
+  /* background-image: url('searchicon.png'); */
+  background-position: 14px 12px;
+  background-repeat: no-repeat;
+  font-size: 16px;
+  padding: 14px 20px 12px 45px;
+  border: none;
+  border-bottom: 1px solid #ddd;
+}
+
+/* The search field when it gets focus/clicked on */
+#myInput:focus {outline: 3px solid #ddd;}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdownSearch {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f6f6f6;
+  min-width: 230px;
+  border: 1px solid #ddd;
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.show {display:block;}

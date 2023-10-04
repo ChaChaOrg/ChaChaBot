@@ -1,0 +1,25 @@
+section.stickTop
+    h1.header Chambers & Charizard Gameplay Database
+    div.topnav
+        ul
+            li
+                a(href='/')
+                    | Home
+            
+            unless loggedIn
+                li
+                    a(href='https://discord.com/api/oauth2/authorize?client_id=875502120877563905&redirect_uri=http%3A%2F%2Fhalintar.us%3A7000%2Fdiscord_auth&response_type=code&scope=identify')
+                        | Discord Log In
+                    a(href='https://discord.com/api/oauth2/authorize?client_id=875502120877563905&redirect_uri=http%3A%2F%2Flocalhost%3A7000%2Fdiscord_auth&response_type=code&scope=identify')
+                        | Discord Localhost Log In
+            else
+                li
+                    a(href='/myPokemon')
+                        | My Pokemon
+                li
+                    a(href='/damage')
+                        | Damage Calculator
+                li
+                    a(href='/logout')
+                        | Log Out
+                
