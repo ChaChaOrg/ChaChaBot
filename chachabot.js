@@ -43,8 +43,9 @@ fs.readFile('data/Moves.txt', 'utf8', (err, data) => {
         //Split moves file into one String per line
         movelistArray = data.toString().split(/\r?\n/);
 
-        movelistArray.forEach(element => {
-            element = element.split('\t');
+        movelistArray.forEach((element, index) => {
+            tempElement = element.split('\t');
+            movelistArray[index] = tempElement;
         });
     }
     client.movelist = movelistArray;
