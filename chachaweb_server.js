@@ -177,17 +177,10 @@ app.get('/myPokemon', (req, res) => {
                 // grab filtered pokemon
                 let filteredPokes = filterPokemon(currentDiscordID);
 
-                // now, filter the pokemon list even more by only grabbing pokemon that were created by the user
-                let myPokeList = [];
-
-                filteredPokes.forEach(pokemon => {
-                    if (pokemon.discordID == currentDiscordID) myPokeList.push(pokemon);
-                })
-
                 // attempt to render the page properly
                 res.render('myPokemon', {
                     "title": "ChaCha Database",
-                    "pokemonList": myPokeList,
+                    "pokemonList": filteredPokes,
                     "loggedIn": req.session.loggedin,
                     "username": req.session.username,
                     "myPoke": true
@@ -304,13 +297,11 @@ app.post('/submitAddPoke', (req, res) => {
 		// initialize the Pokemon
 		/* istanbul ignore next */
         let P = new pokedex()
-        let message = {
-            author:
-            {
+        let message = { 
+            user: {
                 id: req.session.discordID
             }
         }
-        console.log(message.author.id)
 		genPokemon.init(pool, P)
 			.then(function (response) {
                 if (req.body.statsCheckbox) {
@@ -334,28 +325,14 @@ app.post('/submitAddPoke', (req, res) => {
 
                 // grab filtered pokemon
                 let filteredPokes = filterPokemon(req.session.discordID);
-
-                // now, filter the pokemon list even more by only grabbing pokemon that were created by the user
-                let myPokeList = [];
-
-                function callback() {
-                    res.render('myPokemon', {
-                        "title": "ChaCha Database",
-                        "pokemonList": myPokeList,
-                        "loggedIn": req.session.loggedin,
-                        "username": req.session.username,
-                        "myPoke": true
-                    });
-                }
-
-                var itemsProcessed = 0;
-                filteredPokes.forEach((pokemon, index) => {
-                    if (pokemon.discordID == req.session.discordID) myPokeList.push(pokemon);
-                    itemsProcessed++;
-                    if(itemsProcessed === array.length) {
-                        callback();
-                    }
-                })
+                res.redirect('myPokemon')
+                // res.render('myPokemon', {
+                //     "title": "ChaCha Database",
+                //     "pokemonList": filteredPokes,
+                //     "loggedIn": req.session.loggedin,
+                //     "username": req.session.username,
+                //     "myPoke": true
+                // });
                 
 			})
 			.catch(function (error) {
@@ -426,13 +403,15 @@ app.get('/deletePoke', (req, res) => {
                 let cantAccessSQLMessage = "SQL error, please try again later or contact a maintainer if the issue persists.";
                 console.log(cantAccessSQLMessage);
             } else {
-                res.render('myPokemon', {
-                    "title": "ChaCha Database",
-                    "pokemonList": myPokeList,
-                    "loggedIn": req.session.loggedin,
-                    "username": req.session.username,
-                    // "myPoke": true
-                });
+                let filteredPokes = filterPokemon(req.session.discordID);
+                res.redirect('myPokemon')
+                // res.render('myPokemon', {
+                //     "title": "ChaCha Database",
+                //     "pokemonList": filteredPokes,
+                //     "loggedIn": req.session.loggedin,
+                //     "username": req.session.username,
+                //     "myPoke": true
+                // });
             }
         })
     } else {
