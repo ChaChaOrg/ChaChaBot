@@ -33,6 +33,23 @@ client.mysqlConnection.getConnection(function (err) {
 client.commands = new Collection();
 client.pokedex = new Pokedex();
 
+let movelistArray;
+
+fs.readFile('data/Moves.txt', 'utf8', (err, data) => {
+    if (err) {
+        logger.error('[Startup] Error reading move file.\n' + err.toString());
+        interaction.followUp('Could not read move list. Please contact ChaChaBot devs.');
+    } else {
+        //Split moves file into one String per line
+        movelistArray = data.toString().split(/\r?\n/);
+
+        movelistArray.forEach(element => {
+            element = element.split('\t');
+        });
+    }
+    client.movelist = movelistArray;
+})
+
 
 //Load each command
 const commandsPath = path.join(__dirname, 'commands');

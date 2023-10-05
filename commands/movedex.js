@@ -9,14 +9,25 @@ module.exports.data = new SlashCommandBuilder()
   .setDescription('Used to get information for a specific move.')
   .addStringOption(option =>
     option.setName('move')
-      .setDescription('Move to fetch information for, lowercase with dashes instead of spaces, and apostrophes removed. IE, "rock-smash"')
+      .setDescription('Move to fetch information for.')
       .setRequired(true)
-  );
+      .setAutocomplete(true));
+
+module.exports.autocomplete = async (interaction) => {
+  const focusedValue = interaction.options.getFocused();
+  var choices = interaction.client.movelist;
+  const filtered = choices.filter(choice => choice[1].startsWith(focusedValue)).slice(0, 24);
+  await interaction.respond(
+    filtered.map(choice => ({ name: choice, value: choice })),
+  )
+};
 
 module.exports.run = async (interaction) => {
   await interaction.deferReply();
 
   let moveName = interaction.options.getString('move');
+  moveName = moveName.replace(' ', '-');
+  moveName = moveName.replace('\'', '');
 
   let moveType;
   let moveCategory;
@@ -28,8 +39,6 @@ module.exports.run = async (interaction) => {
   let movePriority;
   let effect_chance;
   let moveEffect;
-
-  //TODO: Learn DC, save DC
 
   interaction.client.pokedex.getMoveByName(moveName.toLowerCase()).then((moveData) => {
     moveName = moveData.name;
