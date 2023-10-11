@@ -12,13 +12,21 @@ html
                     table.table
                         tr
                             td
-                                //- img(src=pokemon.pokeObject.pokemonData.sprites.front_default border='1px solid black' align='left' height='98px')
+                                img(src="" border='1px solid black' align='left' height='98px' id="pokeSprite" hidden)
+                                <br/>
                                 select(name='species' id='species' class='species')
                                     each val in speciesList
                                         if val === ''
                                             // nothing happens
                                         else
                                             option(value=val) #{val}
+                                script(type='text/javascript').
+                                    var pokeDropdown = document.getElementById("species")
+                                    var pokeSpriteImg = document.getElementById("pokeSprite")
+                                    pokeDropdown.onchange = function() {
+                                        pokeSpriteImg.src = `https://img.pokemondb.net/sprites/home/normal/${pokeDropdown.value}.png`
+                                        pokeSpriteImg.hidden = false
+                                    }
                             td
                                 input(name='uniqueID' type='hidden')
                                 input(name='name' type='text')
