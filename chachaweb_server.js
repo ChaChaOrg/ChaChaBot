@@ -289,6 +289,15 @@ app.post('/submitAddPoke', (req, res) => {
     //console.log(req.body)
 
     try {
+        if (req.body.species == '')
+            throw new Error("Species must be defined!")
+
+        if (req.body.level == '')
+            throw new Error("Level must be defined!")
+
+        if (req.body.name == '')
+            throw new Error("Name must not be empty!")
+
 		let genPokemon = new Pokemon(req.body.species, req.body.level, req.body.name);
         
         
@@ -325,14 +334,7 @@ app.post('/submitAddPoke', (req, res) => {
 
                 // grab filtered pokemon
                 let filteredPokes = filterPokemon(req.session.discordID);
-                res.redirect('myPokemon')
-                // res.render('myPokemon', {
-                //     "title": "ChaCha Database",
-                //     "pokemonList": filteredPokes,
-                //     "loggedIn": req.session.loggedin,
-                //     "username": req.session.username,
-                //     "myPoke": true
-                // });
+                res.redirect('myPokemon');
                 
 			})
 			.catch(function (error) {
@@ -405,13 +407,6 @@ app.get('/deletePoke', (req, res) => {
             } else {
                 let filteredPokes = filterPokemon(req.session.discordID);
                 res.redirect('myPokemon')
-                // res.render('myPokemon', {
-                //     "title": "ChaCha Database",
-                //     "pokemonList": filteredPokes,
-                //     "loggedIn": req.session.loggedin,
-                //     "username": req.session.username,
-                //     "myPoke": true
-                // });
             }
         })
     } else {
