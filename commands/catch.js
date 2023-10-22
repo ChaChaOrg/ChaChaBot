@@ -32,13 +32,13 @@ module.exports.data = new SlashCommandBuilder()
 			option.setName('level')
 				.setDescription('Level of the Pokemon being caught')
 				.setRequired(true))
-		.addIntegerOption(option =>
+		.addNumberOption(option =>
 			option.setName('ball-bonus')
 				.setDescription('Bonus from Pokeball'))								
-		.addIntegerOption(option =>
+		.addNumberOption(option =>
 			option.setName('player-bonus')
 				.setDescription('Bonus from Player'))
-		.addIntegerOption(option =>
+		.addNumberOption(option =>
 			option.setName('cp-bonus')
 				.setDescription('Bonus from Capture Power'))
 		.addIntegerOption(option =>
@@ -56,7 +56,7 @@ module.exports.run = async (interaction) => {
 
 	try {		
 		var bball;
-		let pokeball_match = interaction.options.getInteger('ball-bonus');
+		let pokeball_match = interaction.options.getNumber('ball-bonus');
 		if (pokeball_match) {
 			bball = pokeball_match;
 		} else {
@@ -72,7 +72,7 @@ module.exports.run = async (interaction) => {
 		}
 
 		var cpfactor;
-		let capture_power_match = interaction.options.getInteger('cp-bonus');
+		let capture_power_match = interaction.options.getNumber('cp-bonus');
 		if (capture_power_match) {
 			cpfactor = capture_power_match;
 		} else {
@@ -80,7 +80,7 @@ module.exports.run = async (interaction) => {
 		}
 
 		var catchbonus;
-		let player_catch_match = interaction.options.getInteger('player-bonus');
+		let player_catch_match = interaction.options.getNumber('player-bonus');
 		if (player_catch_match) {
 			catchbonus = player_catch_match;
 		} else {
