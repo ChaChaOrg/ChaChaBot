@@ -24,7 +24,7 @@ module.exports.data = new SlashCommandBuilder()
 			option.setName('current-hp')
 				.setDescription('Current HP of the Pokemon being caught')
 				.setRequired(true))
-		.addIntegerOption(option =>
+		.addNumberOption(option =>
 			option.setName('capture-rate')
 				.setDescription('Capture Rate of the Pokemon being caught')
 				.setRequired(true))
@@ -41,7 +41,7 @@ module.exports.data = new SlashCommandBuilder()
 		.addNumberOption(option =>
 			option.setName('cp-bonus')
 				.setDescription('Bonus from Capture Power'))
-		.addIntegerOption(option =>
+		.addNumberOption(option =>
 			option.setName('status-bonus')
 				.setDescription('Bonus from Status'));
 
@@ -64,7 +64,7 @@ module.exports.run = async (interaction) => {
 		}
 
 		var bstatus;
-		let status_match = interaction.options.getInteger('status-bonus');
+		let status_match = interaction.options.getNumber('status-bonus');
 		if (status_match) {
 			bstatus = status_match;
 		} else {
@@ -91,7 +91,7 @@ module.exports.run = async (interaction) => {
 		let pokeName = interaction.options.getString('pokemon-name');
 		let maxHP = interaction.options.getInteger('max-hp');
 		let curHP = interaction.options.getInteger('current-hp');
-		let rate = interaction.options.getInteger('capture-rate');
+		let rate = interaction.options.getNumber('capture-rate');
 		// let bball = args[4];
 		// let bstatus = args[5];
 		// let cpfactor = args[6];
