@@ -176,22 +176,89 @@ module.exports.run = async (interaction) => {
             valString = newValue.charAt(0).toUpperCase() + newValue.slice(1);
         }
 
+        const userfilter = i => i.user.id === interaction.user.id;
+
         if (ALL_IVS.includes(valName) && (parseInt(valString) < 0 || parseInt(valString) > 31)) {
-            logger.error(`[modpoke] IV value (${valString}) for ${pokeName} is outside the bounds of 0 - 31! Modification canceled.`)
-            interaction.editReply(`IV value (${valString}) for ${pokeName} is outside the bounds of 0 - 31! Modification canceled.`)
-            return;
+            if (parseInt(valString) < 0) {
+                logger.error(`[modpoke] IV value (${valString}) for ${pokeName} is outside the bounds of 0 - 31! Modification canceled.`)
+                interaction.editReply(`IV value (${valString}) for ${pokeName} is outside the bounds of 0 - 31! Modification canceled.`)
+                return;
+            }
+            if (parseInt(valString) > 31) {
+                const response = await interaction.followUp({
+                    content: "IV values are normally capped at 31. Are you sure you want to do this?",
+                    components: row,
+                });
+
+                
+
+                try {
+                    const confirmation = await response.awaitMessageComponent({ filter: userfilter, time: 60000 });
+                    if (confirmation.customId() === 'cancel') {
+                        interaction.followUp('IV modification canceled.');
+                        return;
+                    }
+                } catch (e) {
+                    interaction.followUp("Modification canceled due to time out.");
+                    return;
+                }
+            }
         }
 
         if (ALL_EVS.includes(valName) && (parseInt(valString) < 0 || parseInt(valString) > 252)) {
-            logger.error(`[modpoke] EV value (${valString}) for ${pokeName} is outside the bounds of 0 - 252! Modification canceled.`)
-            interaction.editReply(`EV value (${valString}) for ${pokeName} is outside the bounds of 0 - 252! Modification canceled.`)
-            return;
+            if (parseInt(valString) < 0) {
+                logger.error(`[modpoke] EV value (${valString}) for ${pokeName} is outside the bounds of 0 - 252! Modification canceled.`)
+                interaction.editReply(`EV value (${valString}) for ${pokeName} is outside the bounds of 0 - 252! Modification canceled.`)
+                return;
+            }
+
+            if (parseInt(valString) > 252) {
+
+                try {
+                    const response = await interaction.followUp({
+                        content: "EV values are normally capped at 252. Are you sure you want to do this?",
+                        components: row,
+                    });
+
+                    const confirmation = await response.awaitMessageComponent({ filter: userfilter, time: 60000 });
+
+                    if (confirmation.customId() === 'cancel') {
+                        interaction.followUp("EV modification canceled.");
+                        return;
+                    }
+                } catch {
+                    interaction.followUp("Modification canceled due to time out.");
+                    return;
+                }
+            }
         }
 
         if (valName.toLowerCase() == 'level' && (parseInt(valString) < 1 || parseInt(valString) > 20)) {
-            logger.error(`[modpoke]Level value (${valString}) for ${pokeName} is outside the bounds of 1 - 20! Modification canceled.`)
-            interaction.editReply(`Level value (${valString}) for ${pokeName} is outside the bounds of 1 - 20! Modification canceled.`)
-            return;
+            
+            if (parseInt(valString) < 1) {
+                logger.error(`[modpoke]Level value (${valString}) for ${pokeName} is outside the bounds of 1 - 20! Modification canceled.`)
+                interaction.editReply(`Level value (${valString}) for ${pokeName} is outside the bounds of 1 - 20! Modification canceled.`)
+                return;
+            }
+
+            if (parseInt(valString) > 20) {
+                try {
+                    const response = await interaction.followUp({
+                        content: "The normal max level for a pokemon is 20. Are you sure you want to do this?",
+                        components: row,
+                    });
+
+                    const confirmation = await response.awaitMessageComponent({ filter: userfilter, time: 60000 });
+
+                    if (confirmation.customId() === 'cancel') {
+                        interaction.followUp("Level modification canceled.");
+                        return;
+                    }
+                } catch (e) {
+                    interaction.followUp("Modification canceled due to time out.");
+                    return;
+                }
+            }
         }
 
 
