@@ -51,6 +51,23 @@ fs.readFile('data/Moves.txt', 'utf8', (err, data) => {
     client.movelist = movelistArray;
 })
 
+let abilitylistArray;
+
+fs.readFile('data/Abilities.txt', 'utf8', (err, data) => {
+    if (err) {
+        logger.error('[Startup] Error reading abilities file.\n' + err.toString());
+        interaction.followUp('Could not read ability list. Please contact ChaChaBot devs.');
+    } else {
+        //Split moves file into one String per line
+        abilitylistArray = data.toString().split(/\r?\n/);
+
+        abilitylistArray.forEach((element, index) => {
+            tempElement = element.split('\t');
+            abilitylistArray[index] = tempElement;
+        });
+    }
+    client.abilitylist = abilitylistArray;
+})
 
 //Load each command
 const commandsPath = path.join(__dirname, 'commands');

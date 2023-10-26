@@ -81,8 +81,27 @@ module.exports.data = new SlashCommandBuilder()
                             .addStringOption(option =>
                                 option.setName('new-value')
                                     .setDescription('New value of the field being modified')
+                                    .setAutocomplete(true)
                                     .setRequired(true))
                         );
+
+module.exports.autocomplete = async (interaction) => {
+  const focusedValue = interaction.options.getFocused();
+  if(focusedValue.name = 'new-value'){
+    const field = interaction.options.getString('field-to-change')
+    if(field === 'ability'){
+        var choices = interaction.client.abilitylist;
+
+        const filtered = choices.filter(choice => choice[0].toLowerCase().startsWith(focusedValue.toLowerCase())).slice(0, 24);
+        await interaction.respond(
+            filtered.map(choice => ({ name: choice[0], value: choice[0] })),
+        )
+    }
+  }else{
+    //nothing?
+  }
+  
+};
 
 
 module.exports.run = async (interaction) => {
