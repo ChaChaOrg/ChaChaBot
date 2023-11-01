@@ -141,12 +141,21 @@ Statblock.prototype.calculateSaves = function (pokemon) {
   });
 
   //add type/level mod and ability score mod to final save
-  this.fortSave =
-    Math.floor(0.5 * pokemon.level + fortTypeBonus) + modGen(this.conBase);
-  this.refSave =
-    Math.floor(0.5 * pokemon.level + refTypeBonus) + modGen(this.dexBase);
-  this.willSave =
-    Math.floor(0.5 * pokemon.level + willTypeBonus) + modGen(this.wisBase);
+  if(fortTypeBonus == 2){
+    this.fortSave = Math.floor(0.5 * pokemon.level + fortTypeBonus) + modGen(this.conBase);
+  }else{
+    this.fortSave = Math.floor(0.33 * pokemon.level) + modGen(this.conBase);
+  }
+  if(refTypeBonus == 2){
+    this.refSave = Math.floor(0.5 * pokemon.level + refTypeBonus) + modGen(this.dexBase);
+  }else{
+    this.refSave = Math.floor(0.33 * pokemon.level) + modGen(this.dexBase);
+  }
+  if(willTypeBonus == 2){
+    this.willSave = Math.floor(0.5 * pokemon.level + willTypeBonus) + modGen(this.wisBase);
+  }else{
+    this.willSave = Math.floor(0.33 * pokemon.level) + modGen(this.wisBase);
+  }
 };
 
 Statblock.prototype.calculateStats = function (pokemon) {

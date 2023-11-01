@@ -31,7 +31,7 @@ module.exports.run = async (interaction) => {
             'IVs: [#] HP / [#] Atk / [#] Def / [#] SpA / [#] SpD / [#] Spe```').catch(console.error);
         /*
         Pokemon importer. Paste showdown export string or fill in as follows. Note that you can omit individual EVs or the entire EV line if they equal 0. Replace any instances of [] with the desired Pokemon's info.
-        ```+importpoke [Nickname] ([Species]) ([M/F/N])
+        ```/importpoke [Nickname] ([Species]) ([M/F/N])
             Ability: [Ability Name]
             Level: [Level]
             EVs: [#] HP / [#] Atk / [#] Def / [#] SpA / [#] SpD / [#] Spe
