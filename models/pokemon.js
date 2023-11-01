@@ -43,7 +43,7 @@ function Pokemon(tempSpecies, tempLevel, tempName, tempform) {
   else this.form = tempform;
 
   //level
-  if (tempLevel > 0 && tempLevel <= 100)
+  if (tempLevel > 0)
     this.level = tempLevel;
   else this.level = 1;
 

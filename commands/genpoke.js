@@ -1,5 +1,6 @@
 const logger = require('../logs/logger.js');
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('@discordjs/builders');
+const { ActionRowBuilder, ButtonBuilder, SlashCommandBuilder } = require('@discordjs/builders');
+const { ButtonStyle } = require('discord.js');
 
 // Generates a new ChaCha Pokemon, given level & base stats
 
@@ -44,9 +45,9 @@ module.exports.data = new SlashCommandBuilder()
 				.setRequired(true))
 		.addIntegerOption(option =>
 			option.setName('level')
-				.setDescription('Level of the Pokemon being generated. Minimum 1, maximum 20')
+				.setDescription('Level of the Pokemon being generated. Minimum 0, maximum 20')
 				.setRequired(true)
-				.setMinValue(1))
+				.setMinValue(0))
 		.addStringOption(option =>
 			option.setName('nickname')
 				.setDescription('Nickname of the Pokemon being generated. Do not use spaces or special characters!')

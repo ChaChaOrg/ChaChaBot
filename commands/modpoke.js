@@ -98,7 +98,7 @@ module.exports.run = async (interaction) => {
 			.setStyle(ButtonStyle.Secondary);
     
     const row = new ActionRowBuilder()
-			.addComponents(cancel, confirm);
+			.addComponents(confirm, cancel);
 
     let Pokemon = require('../models/pokemon.js');
     try {
@@ -128,7 +128,7 @@ module.exports.run = async (interaction) => {
         //grab the value to be changed
         let valName = fieldToChange;
         let lowerCase_OTHERFIELDS = OTHER_FIELDS.map(field => field.toLowerCase()); //copy of OTHER_FIELDS all lowercase
-
+        console.log("other fields mapped");
         // check whether the field they want to change exists
         if (!STATIC_FIELDS.includes(valName) && !OTHER_FIELDS.includes(valName) &&
             !STATIC_FIELDS.includes(valName.toLowerCase()) && !lowerCase_OTHERFIELDS.includes(valName.toLowerCase())) {
@@ -177,24 +177,26 @@ module.exports.run = async (interaction) => {
         }
 
         const userfilter = i => i.user.id === interaction.user.id;
-
+        console.log("start IV's");
         if (ALL_IVS.includes(valName) && (parseInt(valString) < 0 || parseInt(valString) > 31)) {
+            console.log("IV value range checked");
             if (parseInt(valString) < 0) {
                 logger.error(`[modpoke] IV value (${valString}) for ${pokeName} is outside the bounds of 0 - 31! Modification canceled.`)
                 interaction.editReply(`IV value (${valString}) for ${pokeName} is outside the bounds of 0 - 31! Modification canceled.`)
                 return;
             }
             if (parseInt(valString) > 31) {
+                console.log("IV over 31");
                 const response = await interaction.followUp({
                     content: "IV values are normally capped at 31. Are you sure you want to do this?",
-                    components: row,
+                    components: [row],
                 });
 
                 
 
                 try {
                     const confirmation = await response.awaitMessageComponent({ filter: userfilter, time: 60000 });
-                    if (confirmation.customId() === 'cancel') {
+                    if (confirmation.customId === 'cancel') {
                         interaction.followUp('IV modification canceled.');
                         return;
                     }
@@ -204,7 +206,7 @@ module.exports.run = async (interaction) => {
                 }
             }
         }
-
+        console.log("start eevees");
         if (ALL_EVS.includes(valName) && (parseInt(valString) < 0 || parseInt(valString) > 252)) {
             if (parseInt(valString) < 0) {
                 logger.error(`[modpoke] EV value (${valString}) for ${pokeName} is outside the bounds of 0 - 252! Modification canceled.`)
@@ -213,26 +215,26 @@ module.exports.run = async (interaction) => {
             }
 
             if (parseInt(valString) > 252) {
-
+                const response = await interaction.followUp({
+                    content: "EV values are normally capped at 252. Are you sure you want to do this?",
+                    components: [row],
+                });
                 try {
-                    const response = await interaction.followUp({
-                        content: "EV values are normally capped at 252. Are you sure you want to do this?",
-                        components: row,
-                    });
+                   
 
                     const confirmation = await response.awaitMessageComponent({ filter: userfilter, time: 60000 });
 
-                    if (confirmation.customId() === 'cancel') {
+                    if (confirmation.customId === 'cancel') {
                         interaction.followUp("EV modification canceled.");
                         return;
                     }
-                } catch {
+                } catch (e) {
                     interaction.followUp("Modification canceled due to time out.");
                     return;
                 }
             }
         }
-
+        console.log("stealing levels");
         if (valName.toLowerCase() == 'level' && (parseInt(valString) < 1 || parseInt(valString) > 20)) {
             
             if (parseInt(valString) < 1) {
@@ -242,15 +244,16 @@ module.exports.run = async (interaction) => {
             }
 
             if (parseInt(valString) > 20) {
+                const response = await interaction.followUp({
+                    content: "The normal max level for a pokemon is 20. Are you sure you want to do this?",
+                    components: [row],
+                });
                 try {
-                    const response = await interaction.followUp({
-                        content: "The normal max level for a pokemon is 20. Are you sure you want to do this?",
-                        components: row,
-                    });
+                    
 
                     const confirmation = await response.awaitMessageComponent({ filter: userfilter, time: 60000 });
 
-                    if (confirmation.customId() === 'cancel') {
+                    if (confirmation.customId === 'cancel') {
                         interaction.followUp("Level modification canceled.");
                         return;
                     }
@@ -261,7 +264,7 @@ module.exports.run = async (interaction) => {
             }
         }
 
-
+        console.log("Made it this far.");
         // ================= SQL statements  =================
         // sql statement to check if the Pokemon exists
         let sqlFindPoke = `SELECT * FROM pokemon WHERE name = '${pokeName}'`;
