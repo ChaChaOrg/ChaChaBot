@@ -3,8 +3,8 @@ const { ButtonStyle } = require('discord.js')
 const logger = require('../logs/logger.js');
 
 // help message
-const HELP_MESSAGE = "\n`+modpoke  [nickname] [fieldToChange] [newValue]`\n\nModifies an existing Pokemon in the" +
-    " database. \nUse `+modpoke list` to view all available changeable fields.)";
+const HELP_MESSAGE = "\n`/modpoke  [nickname] [fieldToChange] [newValue]`\n\nModifies an existing Pokemon in the" +
+    " database. \nUse `/modpoke list` to view all available changeable fields.)";
 // list of editable fields
 const HELP_FIELDS_LIST = "Here's the list of all available fields on a Pokemon that can be manipulated. Fields marked with a ♢ will update other related stats upon being updated.\n" +
     "\n" +
@@ -177,16 +177,13 @@ module.exports.run = async (interaction) => {
         }
 
         const userfilter = i => i.user.id === interaction.user.id;
-        console.log("start IV's");
         if (ALL_IVS.includes(valName) && (parseInt(valString) < 0 || parseInt(valString) > 31)) {
-            console.log("IV value range checked");
             if (parseInt(valString) < 0) {
                 logger.error(`[modpoke] IV value (${valString}) for ${pokeName} is outside the bounds of 0 - 31! Modification canceled.`)
                 interaction.editReply(`IV value (${valString}) for ${pokeName} is outside the bounds of 0 - 31! Modification canceled.`)
                 return;
             }
             if (parseInt(valString) > 31) {
-                console.log("IV over 31");
                 const response = await interaction.followUp({
                     content: "IV values are normally capped at 31. Are you sure you want to do this?",
                     components: [row],
@@ -206,7 +203,6 @@ module.exports.run = async (interaction) => {
                 }
             }
         }
-        console.log("start eevees");
         if (ALL_EVS.includes(valName) && (parseInt(valString) < 0 || parseInt(valString) > 252)) {
             if (parseInt(valString) < 0) {
                 logger.error(`[modpoke] EV value (${valString}) for ${pokeName} is outside the bounds of 0 - 252! Modification canceled.`)
@@ -234,7 +230,6 @@ module.exports.run = async (interaction) => {
                 }
             }
         }
-        console.log("stealing levels");
         if (valName.toLowerCase() == 'level' && (parseInt(valString) < 1 || parseInt(valString) > 20)) {
             
             if (parseInt(valString) < 1) {
@@ -264,7 +259,6 @@ module.exports.run = async (interaction) => {
             }
         }
 
-        console.log("Made it this far.");
         // ================= SQL statements  =================
         // sql statement to check if the Pokemon exists
         let sqlFindPoke = `SELECT * FROM pokemon WHERE name = '${pokeName}'`;
@@ -273,7 +267,7 @@ module.exports.run = async (interaction) => {
         let sqlUpdateString = `UPDATE pokemon SET ${valName} = '${valString}' WHERE name = '${pokeName}'`;
         logger.info(`[modpoke] SQL update string: ${sqlUpdateString}`);
         // not found message
-        let notFoundMessage = pokeName + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `+listpoke` to view the Pokemon you can edit.)";
+        let notFoundMessage = pokeName + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `/listpoke` to view the Pokemon you can edit.)";
 
         // try to find the poke in the array first
         interaction.client.mysqlConnection.query(sqlFindPoke, function (err, rows, fields) {
@@ -654,7 +648,7 @@ module.exports.run = async (interaction) => {
 
                                         if (confirmation.customId == 'confirm') {
                                             newPoke.updatePokemon(interaction.client.mysqlConnection, null, rows[0].private).then(function (results) {
-                                                let successString = "Success! " + pokeName + "'s " + valName + " has been changed to " + valString + " and all related stats have been updated.\n\nHint: View Pokemon's stat's using `+showpoke [nickname]`";
+                                                let successString = "Success! " + pokeName + "'s " + valName + " has been changed to " + valString + " and all related stats have been updated.\n\nHint: View Pokemon's stat's using `/showpoke [nickname]`";
                                                 logger.info(`[modpoke] ${successString}`)
                                                 interaction.editReply({ components: []});
                                                 interaction.channel.send({ content: successString });

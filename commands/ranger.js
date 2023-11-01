@@ -65,7 +65,7 @@ module.exports.run = async (interaction) => {
             let sql = `SELECT * FROM pokemon WHERE name = '${pokeName}';`;
             logger.info(`[ranger] SQL query: ${sql}`);
 
-             let notFoundMessage = pokeName + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `+listpoke` to view the Pokemon you can edit.)";
+             let notFoundMessage = pokeName + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `/listpoke` to view the Pokemon you can edit.)";
 
                 //console.log(sql);
                 interaction.client.mysqlConnection.query(sql, function (err, response) {

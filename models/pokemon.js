@@ -679,11 +679,11 @@ Pokemon.prototype.updatePokemon = function (connection, message, pokePrivate) {
             speEV = ${this.statBlock.evStats[SPE_ARRAY_INDEX]},
             exp = ${this.exp},
             
-            move1 = "${this.moveSet.move1.name}",
-            move2 = "${this.moveSet.move2.name}",
-            move3 = "${this.moveSet.move3.name}",
-            move4 = "${this.moveSet.move4.name}",
-            move5 = "${this.moveSet.move5.name}",
+            move1 = "${this.moveSet.move1}",
+            move2 = "${this.moveSet.move2}",
+            move3 = "${this.moveSet.move3}",
+            move4 = "${this.moveSet.move4}",
+            move5 = "${this.moveSet.move5}",
             moveProgress = ${this.moveSet.moveProgress},
             private = ${pokePrivate},
             
