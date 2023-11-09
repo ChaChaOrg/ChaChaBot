@@ -1,4 +1,5 @@
 let logger = require("../logs/logger.js");
+const { SlashCommandBuilder } = require('@discordjs/builders')
 const STAT_ARRAY_MAX = 6;
 const HP_ARRAY_INDEX = 0;
 const ATK_ARRAY_INDEX = 1;
@@ -7,27 +8,38 @@ const SPA_ARRAY_INDEX = 3;
 const SPD_ARRAY_INDEX = 4;
 const SPE_ARRAY_INDEX = 5;
 
-module.exports.run = (client, connection, P, message, args) => {
-    try{
-        if (args[0] === "help") {
-            logger.info("[clonepoke] Displaying help message.");
-            message.reply("Creates a copy of a pokemon in the bot. Just give the command the pokemon's name.");
-        } else {
-            let name = args[0];
-            logger.info("Searching database for " + name);
+module.exports.data = new SlashCommandBuilder()
+	.setName('clonepoke')
+	.setDescription("'Creates a copy of a pokemon in the bot. Just give the command the pokemon's name.")
+	.addStringOption(option =>
+		option.setName('name')
+		.setDescription("Pokemon you're copying")
+		.setRequired(true)
+        );
+
+
+module.exports.run = async (interaction) => {
+	try {
+        /*if (args[0] === "help") {
+            logger.info("[clonepoke] Displaying help interaction.");
+            interaction.reply("Creates a copy of a pokemon in the bot. Just give the command the pokemon's name.");
+        */
+        
+            let name = interaction.options.getString("name");
+            logger.info("[clonepoke] Searching database for " + name);
             let Pokemon = require("../models/pokemon");
             let basePoke = new Pokemon();
             let clonePoke = new Pokemon();
             let sql = `SELECT * FROM pokemon WHERE name = '${name}';`;
             logger.info(`[showpoke] SQL query: ${sql}`);
 
-            connection.query(sql, function (err, response) {
+            interaction.client.mysqlConnection.query(sql, function (err, response) {
 
                 if (err) throw err;
 
                 if (response.length == 0) {
                     logger.info("[clonepoke] " + name + " not found.");
-                    message.reply("Your pokemon wasn't found. Can't clone something that isn't there.");
+                    interaction.reply("Your pokemon wasn't found. Can't clone something that isn't there.");
                 } else {
                     logger.info("[clonepoke] Pokemon found.");
                     let cloneName = name + "Clone";
@@ -47,11 +59,11 @@ module.exports.run = (client, connection, P, message, args) => {
                         //});
                    // }                    
                     
-                    message.reply("Extracting " + name + "'s DNA sequence....");
-                    basePoke.loadFromSQL(P, response[0]).then(response => {
+                    interaction.reply("Extracting " + name + "'s DNA sequence....");
+                    basePoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, response[0]).then(response => {
 
                         let clonesql = `SELECT * FROM pokemon WHERE name LIKE '${cloneName}%';`;
-                        connection.query(clonesql, function (err, response) {
+                        interaction.client.mysqlConnection.query(clonesql, function (err, response) {
                             iterations = response.length + 1;
                             console.log("Clone Count: " + iterations);
                             if (iterations >= 2) {
@@ -82,15 +94,15 @@ module.exports.run = (client, connection, P, message, args) => {
                                 basePoke.statBlock.ivStats[SPD_ARRAY_INDEX] + " SpD / " + basePoke.statBlock.ivStats[SPE_ARRAY_INDEX] + " Spe\n";
 
                             importString += nameLine + ability + level + evs + nature + ivs;
-                            //message.reply("DNA sequencing complete.");
-                            //message.reply("Beginning incubation procedure....");
+                            //interaction.reply("DNA sequencing complete.");
+                            //interaction.reply("Beginning incubation procedure....");
                             logger.info("[clonepoke] Importing clone.");
-                            clonePoke.importPokemon(connection, P, importString).then(response => {
-                                clonePoke.uploadPokemon(connection, message);
+                            clonePoke.importPokemon(interaction.client.mysqlConnection, interaction.client.pokedex, importString).then(response => {
+                                clonePoke.uploadPokemon(interaction.client.mysqlConnection, interaction);
                             });
-                            //message.reply("We tried to create a perfect copy of your pokemon.....");
-                            //message.reply("We suceeded.");
-                            message.reply("Cloning procedure complete. Use +showpoke " + cloneName + " to view your new old friend.");
+                            //interaction.reply("We tried to create a perfect copy of your pokemon.....");
+                            //interaction.reply("We suceeded.");
+                            interaction.followUp("Cloning procedure complete. Use /showpoke " + cloneName + " to view your new old friend.");
                             logger.info("[clonepoke] Cloning completed.");
                         });
 
@@ -100,10 +112,12 @@ module.exports.run = (client, connection, P, message, args) => {
                 }
             });
         }
-    }catch (error) {
+    catch (error) {
         logger.error("[clonepoke] Error: " + error.toString());
-        message.channel.send(error.toString());
-        message.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);
+        console.log("[clonepoke] Error: " + error.toString());
+        throw error;
+        interaction.channel.send(error.toString());
+        interaction.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);
     }
     
 }

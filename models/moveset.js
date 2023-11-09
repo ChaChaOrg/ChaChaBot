@@ -55,7 +55,7 @@ Move.prototype.createFromName = function (moveName, P) {
     //takes pokedex P and grabs move data from the name;
     return new Promise(function () {
         logger.info("[moveset] Getting move by name.")
-        return P.getMoveByName(moveName)
+        return interaction.pokedex.getMoveByName(moveName)
             .then(function (response) {
                 logger.info("[moveset] Got move by name, setting fields.")
                 let moveData = response;
