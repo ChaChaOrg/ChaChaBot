@@ -14,7 +14,7 @@ module.exports.data = new SlashCommandBuilder()
             .setDescription('imports a pokemon from a pokemon showdown export')
             .addStringOption(option => option.setName('import-data').setDescription('The import string. CHECK HELP FOR FORMAT').setRequired(true)));
 
-module.exports.run = async (interaction) => {
+module.exports.run = async(interaction) => {
     let Pokemon = require('../models/pokemon.js');
     let importPoke = new Pokemon();
 
