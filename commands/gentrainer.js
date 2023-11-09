@@ -1688,7 +1688,7 @@ module.exports.run = async (interaction) => {
 			var randT2 = Math.floor(Math.random() * trainerTypes[randT1].length);
 
 			logger.info("[gentrainer] " + `Watch out! It's ${trainerTypes[randT1][randT2]} ${nameOptions[randName]}!`)
-			interaction.reply(`Watch out! It's ${trainerTypes[randT1][randT2]} ${nameOptions[randName]}!`);
+			interaction.followUp(`Watch out! It's ${trainerTypes[randT1][randT2]} ${nameOptions[randName]}!`);
 			return;
 		} else if (interaction.options.getSubcommand() === 'showtypes'){
 			//If Trainer Types are requested, return possible values
@@ -1698,13 +1698,13 @@ module.exports.run = async (interaction) => {
 				allTypes = allTypes + "\n";
 			}
 			logger.info("[gentrainer] Sending all trainer types.")
-			interaction.reply(`All trainer types: \n${allTypes}`).catch(console.error);
+			interaction.followUp(`All trainer types: \n${allTypes}`).catch(console.error);
 			return;
 		} else if (interaction.options.getSubcommand() === 'randomname'){
 			//If Random Name is requested, return a random name
 			var randName = Math.floor(Math.random() * nameOptions.length);
 			logger.info("[gentrainer] " + `Watch out! It's Trainer ${nameOptions[randName]}!`)
-			interaction.reply(`Watch out! It's Trainer ${nameOptions[randName]}!`);
+			interaction.followUp(`Watch out! It's Trainer ${nameOptions[randName]}!`);
 			return;
 		} else if (interaction.options.getSubcommand() === 'generatetrainer'){
 			try{
