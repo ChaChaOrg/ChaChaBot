@@ -51,7 +51,7 @@ module.exports.run = async (interaction) => {
 
 		ability = Math.ceil((value * 0.15) + 1.5);
 		logger.info("[statconversion] converted HP to CON.");
-		interaction.followUp("An HP stat of " + value + " becomes a Constitution score of " + ability);
+		interaction.followUp("An HP stat of " + value + " becomes a Constitution score of " + ability + " Note: Final HP value used should be equal to the base stat plus HP IVs.");
 
 	} else if (option === 'Attack') {
 
