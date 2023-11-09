@@ -711,7 +711,9 @@ Pokemon.prototype.importPokemon = function (connection, P, importString) {
   return new Promise((resolve,reject) => {
   logger.info("[pokemon] Importing Pokemon.");
   //splits the message into lines then splits the lines into words separated by spaces.
-  let lines = importString.split("\n");
+  let lines = ""
+  if (importString.includes("\n")) lines = importString.split("\n");
+  else lines = importString.split("   ")
   let nameLineVals = lines[0].split(" ");
   let evLineVals;
   let natureLineVals;

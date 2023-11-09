@@ -10,7 +10,12 @@ const logger = require('./logs/logger');
 const mysql = require("mysql");
 const Pokedex = require('pokedex-promise-v2');
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({ intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildMessageReactions,
+    GatewayIntentBits.MessageContent
+] });
 const config = require("./config-test.json");
 
 //Create the Connection with the mysql Database

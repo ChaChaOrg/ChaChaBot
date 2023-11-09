@@ -18,9 +18,11 @@ module.exports.run = async(interaction) => {
     let Pokemon = require('../models/pokemon.js');
     let importPoke = new Pokemon();
 
+    interaction.deferReply();
+
     if (interaction.options.getSubcommand() === 'help') {
         logger.info("[importpoke] Sending help interaction.")
-        interaction.reply('Pokemon importer. Paste showdown export string or fill in as follows.\nNote that you can omit individual EVs or the entire EV line if they all equal 0.\nReplace any instances of [] with the desired Pokemon\'s info (without the brackets themselves), and make sure that each piece of info is on its own line.\n Showdown Teambuilder: https://play.pokemonshowdown.com/teambuilder\n' +
+        interaction.followUp('Pokemon importer. Paste showdown export string or fill in as follows.\nNote that you can omit individual EVs or the entire EV line if they all equal 0.\nReplace any instances of [] with the desired Pokemon\'s info (without the brackets themselves), and make sure that each piece of info is on its own line.\n Showdown Teambuilder: https://play.pokemonshowdown.com/teambuilder\n' +
             '```[Nickname] ([Species]) ([M/F/N])\n' +
             'Ability: [Ability Name]\n' +
             'Level: [Level]\n' +
@@ -42,7 +44,8 @@ module.exports.run = async(interaction) => {
     logger.info("[importpoke] " + importContent);
     importPoke.importPokemon(interaction.client.mysqlConnection, interaction.client.pokedex, importContent).then(() => { 
         logger.info("[importpoke] Sending summary interaction.");
-        interaction.reply({ embeds: [importPoke.sendSummaryMessage(interaction).embed] });
+        interaction.followUp({ embeds: [importPoke.sendSummaryMessage(interaction).embed] });
         importPoke.uploadPokemon(interaction.client.mysqlConnection, interaction);
+        interaction.followUp("Your pokemon has been added!")
     })
 };
