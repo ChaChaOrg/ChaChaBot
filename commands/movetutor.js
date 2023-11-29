@@ -8,6 +8,14 @@ const {
 	SlashCommandBuilder, SlashCommandSubcommandBuilder
 } = require('@discordjs/builders');
 
+//List of Skills for autocomplete
+const skillList = ["Acrobatics", "Appraise", "Athletics", 
+"Bluff", "Break", "Concentration", "Cooking", "Craft", "Diplomacy", 
+"Disguise", "Heal", "Intimidate", "Knowledge (Any)", "Motivate", 
+"Perception", "Perform (Any)", "Profession (Any)", "Ride", 
+"Search", "Sense Motive", "Sleight of Hand", "Spellcraft", 
+"Stealth", "Survival", "Tinker", "Train Pokemon"];
+
 //help messages
 //const MOVETUTOR_HELP = '' +
 //	'The command to check the Train Pokemon DC to learn a new move.' +
@@ -23,10 +31,11 @@ module.exports.data = new SlashCommandBuilder()
 			.addStringOption(option =>
 				option.setName('move-name')
 					.setDescription("The name of what you're trying to learn.")
+					.setAutocomplete(true)
 					.setRequired(true))
 			.addStringOption(option =>
 				option.setName('formula')
-					.setDescription('Which move DC forula to use.')
+					.setDescription('Which move DC formula to use.')
 					.setRequired(false)
 					.addChoices({
 						name: 'Normal',
@@ -43,6 +52,7 @@ module.exports.data = new SlashCommandBuilder()
 			.addStringOption(option =>
 				option.setName('skill-name')
 					.setDescription("The name of what you're trying to learn.")
+					.setAutocomplete(true)
 					.setRequired(true)
 			)
 			.addIntegerOption(option =>
@@ -65,7 +75,7 @@ module.exports.data = new SlashCommandBuilder()
 		)
 		.addStringOption(option =>
 			option.setName('formula')
-				.setDescription('Which move DC forula to use.')
+				.setDescription('Which move DC formula to use.')
 				.setRequired(false)
 				.addChoices({
 					name: 'Normal',
@@ -75,6 +85,26 @@ module.exports.data = new SlashCommandBuilder()
 					value: 'original'
 				})
 		));
+
+module.exports.autocomplete = async (interaction) => {
+	const focusedValue = interaction.options.getFocused(true);
+	
+	if(focusedValue.name === 'skill-name'){
+		const filtered = skillList.filter(choice => choice.toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
+		await interaction.respond(
+			filtered.map(choice => ({ name: choice, value: choice })),
+		)
+	}else if(focusedValue.name === 'move-name'){
+		var choices = interaction.client.movelist;
+
+		const filtered = choices.filter(choice => choice[1].toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
+		await interaction.respond(
+			filtered.map(choice => ({ name: choice[1], value: choice[1] })),
+		)
+	}else{
+		//Nothing
+	}
+};
 
 module.exports.run = async (interaction) => {
 	try {
