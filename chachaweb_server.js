@@ -71,6 +71,20 @@ const pool = mysql.createPool({
 // Load all the pokemon ONCE before starting up
 loadAllPokemon()
 
+// Load all moves
+let fs = require('fs');
+let dataArray = [];
+let movesList = []
+//Load Moves file
+fs.readFile('./data/Moves.txt', (err, data) => {
+    if (err) {
+        console.log('Error reading move file.\n' + err.toString());
+    } else {
+        //Split moves file into one String per line
+        dataArray = data.toString().split(/\r?\n/);
+        dataArray.forEach((move) => movesList.push(move.split(/\s+/)[1]));
+    }
+});
 
 //import express
 const app = express();
@@ -217,7 +231,8 @@ app.get('/damage', (req, res) => {
             "title": "ChaCha Damage Calculator",
             "pokemonList": allPokemonList,
             "loggedIn": req.session.loggedin,
-            "username": req.session.username
+            "username": req.session.username,
+            "movesList": movesList
         });
         // loadPokemonForUser(currentDiscordID).then(function () {// will either hold 0 or yoink the current discord ID
         //     // let currentDiscordID = 0;
@@ -242,6 +257,80 @@ app.get('/damage', (req, res) => {
         res.status(80085).json({
             "status_code": 80085,
             "status_message": "Index page couldn't load the pokemon database"
+        });
+    }
+})
+
+app.post('/damage', (req, res) => {
+    if (req.session.discordID) currentDiscordID = req.session.discordID;
+    else {
+        res.render("error", {
+            "title": "Not Logged In",
+            "message": "You must be logged in to use the damage calculator!"
+        })
+    }
+    try {
+        console.log(req.body.attackerName)
+        console.log(req.body.defenderName)
+        console.log(req.body.moveName)
+        interaction = {
+            client : {
+                mysqlConnection: pool,
+                pokedex: P,
+                user: {
+                    avatarURL: ""
+                }
+            },
+            deferReply : function() {},
+            options : {
+                getSubcommand : function() {},
+                getString : function(string) {
+                    if(string === "attacker-name" )
+                        return req.body.attackerName
+                    if(string === "defender-name" )
+                        return req.body.defenderName
+                    if(string === "move-name" )
+                        return req.body.moveName
+                },
+                getBoolean : function(critHit) {
+                    return false
+                },
+                getInteger : function(stages) {
+                    return null
+                },
+                getNumber : function(bonus) {
+                    return null
+                },
+                "attacker-name" : req.body.attackerName,
+                "defender-name" : req.body.defenderName,
+                "move-name" : req.body.moveName
+            },
+            editReply : function() {},
+            followUp : function(object) {
+                console.log(object)
+                function catch()
+            },
+            channel : {
+                send : function() {}
+            },
+            catch : function(err) {
+                console.log(err)
+            },
+            user : {
+                username: "",
+                avatarURL: ""
+            }
+            
+        }
+        
+        let damage = require('./commands/damage')
+        damage.run(interaction)
+        
+    } catch(err) {
+        console.log(err);
+        res.status(500).json({
+            "status_code": 500,
+            "status_message": "Page didn't load properly"
         });
     }
 })

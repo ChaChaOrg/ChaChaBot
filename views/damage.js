@@ -1,5 +1,9 @@
-function calculateDamage() {
-    const dmgCall = require("../commands/damage.js")
+
+
+function calculateDamage(document) {
+    // const dmgCall = require("../commands/damage.js")
+    
+
     var attacker = document.getElementById("attackerName")
     var defender = document.getElementById("defenderName")
     var moveName = document.getElementById("moveName")
@@ -12,7 +16,8 @@ function calculateDamage() {
         port: config.mysql_port,
         supportBigNumbers: true,
         bigNumberStrings: true
-      });
+        
+    });
     mysqlConnection.connect();
 
     interaction = {
@@ -33,5 +38,5 @@ function calculateDamage() {
         
     }
 
-    dmgCall.run(interaction)
+    console.log(dmgCall.run(interaction))
 }

@@ -2,32 +2,46 @@ extends layout
 
 block header
     include title
-    script 
-        include damage.js
-    //- script
-    //-     include damageSelect.js
+    style
+        include style.css
 
 block content
-    script 
-        include damage.js
+    style
+        include style.css
     p <br/>
-    table 
-        tbody 
+    form(action='/damage', method='POST')
+        table 
+            tbody 
             tr 
                 td 
                     span.emphasize Attacker
                 td
-                    input(name='attackerName' type='text' id="attackerName")
+                    //- input(name='attackerName' type='text' id="attackerName")
+                    select(name='attackerName' id='attackerName')
+                        each val in pokemonList
+                            if val === ''
+                                // nothing happens
+                            else
+                                option(value=val.name) #{val.name} - #{val.species}
             tr
                 td
                     span.emphasize Move Name
                 td
-                    input(name='moveName' type='text' id="moveName")
+                    //- input(name='moveName' type='text' id="moveName")
+                    select(name='moveName' id='moveName')
+                        each val in movesList
+                            if val === ''
+                                // nothing happens
+                            else
+                                option(value=val) #{val}
             tr 
                 td 
                     span.emphasize Defender
                 td
-                    input(name='defenderName' type='text' id="defenderName")
-
-    a.btn(href='' id="calculateBtn") Calculate!
-    script(type='text/javascript' src="./damage.js").
+                    select(name='defenderName' id='defenderName')
+                        each val in pokemonList
+                            if val === ''
+                                // nothing happens
+                            else
+                                option(value=val.name) #{val.name} - #{val.species}
+        input(value='Calculate' type='submit')
