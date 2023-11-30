@@ -35,6 +35,7 @@ const HELP_FIELDS_LIST = "Here's the list of all available fields on a Pokemon t
     "\n" +
     "**Other**\n" +
     "> `originalTrainer` // The Pokemon's trainer\n" +
+    "> `campaign` // The Pokemon's campaign\n" +
     "> `shiny` // Shiny status (0 = false, 1 = true)\n" +
     "> `private` // Private marker, generated pokemon set to private (1) by default. (0 = false, 1 = true) (*Private" +
     " Pokemon can only be seen by their creator*)";
@@ -46,7 +47,7 @@ const FEWARGS_MESSAGE = "Too few arguments submitted. Check your submission for 
 const NONEXISTENT_FIELD_MESSAGE = "That isn't a valid field to change! Please check your spelling and try again."
 
 // array of variables that can go straight to being updated
-const STATIC_FIELDS = ["ability", "name", "gender", "hp", "atk", "def", "spa", "spd", "spe", "move1", "move2", "move3", "move4", "move5", "moveProgress", "originalTrainer", "shiny", "private"];
+const STATIC_FIELDS = ["ability", "name", "gender", "hp", "atk", "def", "spa", "spd", "spe", "move1", "move2", "move3", "move4", "move5", "moveProgress", "originalTrainer", "shiny", "private", "campaign"];
 const OTHER_FIELDS = ["species", "form", "level", "nature", "type1", "type2", "hpIV", "hpEV", "atkIV", "atkEV", "defIV", "defEV", "spaIV", "spaEV", "spdIV", "spdEV", "speIV", "speEV"]
 const ALL_NATURES = ["adamant", "bashful", "bold", "brave", "calm", "careful", "docile", "gentle", "hardy", "hasty", "impish", "jolly", 
                         "lax", "lonely", "mild", "modest", "naive", "naughty", "quiet", "quirky", "rash", "relaxed", "sassy", "serious", "timid"]
@@ -77,12 +78,46 @@ module.exports.data = new SlashCommandBuilder()
                             .addStringOption(option =>
                                 option.setName('field-to-change')
                                     .setDescription('Field that is going to be modified.')
+                                    .setAutocomplete(true)
                                     .setRequired(true))
                             .addStringOption(option =>
                                 option.setName('new-value')
                                     .setDescription('New value of the field being modified')
+                                    .setAutocomplete(true)
                                     .setRequired(true))
                         );
+
+module.exports.autocomplete = async (interaction) => {
+  const focusedValue = interaction.options.getFocused(true);
+  if(focusedValue.name === 'field-to-change'){
+    var choices = STATIC_FIELDS.concat(OTHER_FIELDS);
+    const filtered = choices.filter(choice => choice.toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
+    await interaction.respond(
+           filtered.map(choice => ({ name: choice, value: choice })),
+    )
+  }else if(focusedValue.name === 'new-value'){
+    const field = interaction.options.getString('field-to-change').toLowerCase();
+    
+    if(field === 'ability'){
+        var choices = interaction.client.abilitylist;
+
+        const filtered = choices.filter(choice => choice[0].toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
+        await interaction.respond(
+            filtered.map(choice => ({ name: choice[0], value: choice[0] })),
+        )
+    }else if(field === 'nature'){
+        var choices = ALL_NATURES;
+
+        const filtered = choices.filter(choice => choice.toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
+        await interaction.respond(
+           filtered.map(choice => ({ name: choice, value: choice })),
+        )
+    }
+  }else{
+    //nothing
+  }
+  
+};
 
 
 module.exports.run = async (interaction) => {
