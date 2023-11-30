@@ -47,13 +47,16 @@ const NONEXISTENT_FIELD_MESSAGE = "That isn't a valid field to change! Please ch
 
 // array of variables that can go straight to being updated
 const STATIC_FIELDS = ["ability", "name", "gender", "hp", "atk", "def", "spa", "spd", "spe", "move1", "move2", "move3", "move4", "move5", "moveProgress", "originalTrainer", "shiny", "private"];
-const OTHER_FIELDS = ["species", "form", "level", "nature", "type1", "type2", "hpIV", "hpEV", "atkIV", "atkEV", "defIV", "defEV", "spaIV", "spaEV", "spdIV", "spdEV", "speIV", "speEV"]
+const OTHER_FIELDS = ["species", "form", "level", "nature", "type1", "type2", "hpIV", "hpEV", "atkIV", "atkEV", "defIV", "defEV", "spaIV", "spaEV", "spdIV", "spdEV", "speIV", "speEV","exp","friendship"]
 const ALL_NATURES = ["adamant", "bashful", "bold", "brave", "calm", "careful", "docile", "gentle", "hardy", "hasty", "impish", "jolly", 
                         "lax", "lonely", "mild", "modest", "naive", "naughty", "quiet", "quirky", "rash", "relaxed", "sassy", "serious", "timid"]
 
 const ALL_IVS = ["hpIV", "atkIV", "defIV", "spaIV", "spdIV", "speIV"]
 const ALL_EVS = ["hpEV", "atkEV", "defEV", "spaEV", "spdEV", "speEV"]
 
+const EXP_TRESH = [0, 6, 24, 54, 96, 150, 216, 294, 384, 486, 600, 726, 864, 1014, 1176, 1350, 1536, 1734, 1944, 2166]
+const FRIEND_TRESH = [35, 70, 120, 170, 220]
+const FRIEND_VAL = ["Hostile","Unfriendly"]
 // code formatting variables for the embed
 const CODE_FORMAT_START = "```diff\n";
 const CODE_FORMAT_END = "\n```"
@@ -228,6 +231,12 @@ module.exports.run = async (interaction) => {
             return;
         }
 
+        if (valName.toLowerCase() == 'exp' && isNaN(parseInt(valString))) {
+            logger.error('[modpoke]Exp value recieved is NAN.');
+            interaction.editReply('Exp value improperly formatted. Expecting a number.');
+            return;
+        }
+
 
         // ================= SQL statements  =================
         // sql statement to check if the Pokemon exists
@@ -329,6 +338,16 @@ module.exports.run = async (interaction) => {
                                 else if (valName === "nature") thisPoke[valName] = valString;
                                 else thisPoke[valName] = parseInt(valString);
 
+                                if (valName === "exp") {
+                                    let exp = parseInt(valString);
+                                    let iter = 1;
+                                    while (iter < 20 && exp >= EXP_TRESH[iter]) {
+                                        iter++;
+                                    }
+                                    thisPoke["level"] = iter;
+                                    thisPoke["exp"] = exp;
+                                }
+                                console.log("level: " + thisPoke["level"] + " exp: " + thisPoke["exp"]);
                                 //Make new empty Pokemon object
                                 let newPoke = new Pokemon();
 
@@ -491,6 +510,20 @@ module.exports.run = async (interaction) => {
                                                 value: `${CODE_FORMAT_START}Level${fieldChanged(oldPoke.level, newPoke.level, true)}Species${fieldChanged(oldSpecies, newSpecies, false)}${CODE_FORMAT_END}`,
                                                 inline: true
                                             },
+                                            {
+                                                name: "=====",
+                                                value: "**GROWTH STATS**"
+                                            },
+                                            {
+                                                name: "Experience Points",
+                                                value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.exp, newPoke.exp, true)}${CODE_FORMAT_END}`,
+                                                inline: true
+                                            },
+                                           /// {
+                                             ///   name: "Friendship",
+                                              //  value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.friendship, newPoke.friendship, true)}${CODE_FORMAT_END}`,
+                                              //  inline: true
+                                           // },
                                             {
                                                 name: "=====",
                                                 value: "**BASE STATS**"
