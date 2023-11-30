@@ -90,27 +90,27 @@ module.exports.data = new SlashCommandBuilder()
                         );
 
 module.exports.autocomplete = async (interaction) => {
-  const focusedValue = interaction.options.getFocused();
-  if(focusedValue.name = 'field-to-change'){
+  const focusedValue = interaction.options.getFocused(true);
+  if(focusedValue.name === 'field-to-change'){
     var choices = STATIC_FIELDS.concat(OTHER_FIELDS);
-    const filtered = choices.filter(choice => choice.toLowerCase().startsWith(focusedValue.toLowerCase())).slice(0, 24);
+    const filtered = choices.filter(choice => choice.toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
     await interaction.respond(
            filtered.map(choice => ({ name: choice, value: choice })),
     )
-  }else if(focusedValue.name = 'new-value'){
-    const field = interaction.options.getString('field-to-change').toLowerCase;
+  }else if(focusedValue.name === 'new-value'){
+    const field = interaction.options.getString('field-to-change').toLowerCase();
     
     if(field === 'ability'){
         var choices = interaction.client.abilitylist;
 
-        const filtered = choices.filter(choice => choice[0].toLowerCase().startsWith(focusedValue.toLowerCase())).slice(0, 24);
+        const filtered = choices.filter(choice => choice[0].toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
         await interaction.respond(
             filtered.map(choice => ({ name: choice[0], value: choice[0] })),
         )
     }else if(field === 'nature'){
         var choices = ALL_NATURES;
 
-        const filtered = choices.filter(choice => choice.toLowerCase().startsWith(focusedValue.toLowerCase())).slice(0, 24);
+        const filtered = choices.filter(choice => choice.toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
         await interaction.respond(
            filtered.map(choice => ({ name: choice, value: choice })),
         )
