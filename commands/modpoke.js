@@ -77,12 +77,46 @@ module.exports.data = new SlashCommandBuilder()
                             .addStringOption(option =>
                                 option.setName('field-to-change')
                                     .setDescription('Field that is going to be modified.')
+                                    .setAutocomplete(true)
                                     .setRequired(true))
                             .addStringOption(option =>
                                 option.setName('new-value')
                                     .setDescription('New value of the field being modified')
+                                    .setAutocomplete(true)
                                     .setRequired(true))
                         );
+
+module.exports.autocomplete = async (interaction) => {
+  const focusedValue = interaction.options.getFocused(true);
+  if(focusedValue.name === 'field-to-change'){
+    var choices = STATIC_FIELDS.concat(OTHER_FIELDS);
+    const filtered = choices.filter(choice => choice.toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
+    await interaction.respond(
+           filtered.map(choice => ({ name: choice, value: choice })),
+    )
+  }else if(focusedValue.name === 'new-value'){
+    const field = interaction.options.getString('field-to-change').toLowerCase();
+    
+    if(field === 'ability'){
+        var choices = interaction.client.abilitylist;
+
+        const filtered = choices.filter(choice => choice[0].toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
+        await interaction.respond(
+            filtered.map(choice => ({ name: choice[0], value: choice[0] })),
+        )
+    }else if(field === 'nature'){
+        var choices = ALL_NATURES;
+
+        const filtered = choices.filter(choice => choice.toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
+        await interaction.respond(
+           filtered.map(choice => ({ name: choice, value: choice })),
+        )
+    }
+  }else{
+    //nothing
+  }
+  
+};
 
 
 module.exports.run = async (interaction) => {
@@ -192,6 +226,25 @@ module.exports.run = async (interaction) => {
             logger.error(`[modpoke]Level value (${valString}) for ${pokeName} is outside the bounds of 1 - 20! Modification canceled.`)
             interaction.editReply(`Level value (${valString}) for ${pokeName} is outside the bounds of 1 - 20! Modification canceled.`)
             return;
+        }
+
+        // Duplicate check
+        if (valName.toLowerCase() == 'nickname'){
+            let dupecheck = `SELECT * FROM pokemon WHERE name = '${newValue}'`;
+            interaction.client.mysqlConnection.query(dupecheck, function (err, rows, fields) {
+                if (err) {
+                    let cantAccessSQLMessage = "SQL error, please try again later or contact a maintainer if the issue persists.";
+                    logger.error("[modpoke]" + cantAccessSQLMessage + ` ${err}`)
+                    interaction.editReply(cantAccessSQLMessage);
+                    return;
+                } else if (rows.length > 0) {
+                    // Duplicate found
+                    logger.info(`[modpoke] ${pokeName} - Attempted duplicate rename.`)
+                    interaction.editReply(`Nickname (${valString}) Already in use! Modification canceled.`)
+                    return;
+                }
+            });
+
         }
 
 

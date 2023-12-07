@@ -69,8 +69,39 @@ module.exports.run = async (interaction) => {
 	let Pokemon = require('../models/pokemon.js');
 
 	if (interaction.options.getString('nickname').match(/[-\/\\^$*+?.()|[\]{}'"\s]/)) {
-		logger.warn("[showpoke] User put special character in pokemon name, sending warning.");
+		logger.warn("[genpoke] User put special character in pokemon name, sending warning.");
 		interaction.followUp("Please do not use special characters when using generating Pokemon.");
+		return;
+	}
+
+	let namecheck = interaction.options.getString('nickname');
+	
+	//Duplicate check
+
+	let dupeSQL = `SELECT * FROM pokemon WHERE name = '${namecheck}'`;
+	
+	let results = new Promise((resolve, reject) => interaction.client.mysqlConnection.query(dupeSQL, function (err, rows, fields) {
+      if (err) {
+		reject(err);
+      } else {
+        resolve(rows.length);
+      }
+    }));
+
+	let dupecheck = await results.catch((err) => {
+		logger.info("[genpoke] " + err);
+		interaction.followUp("SQL error, please try again later or contact a maintainer if the issue persists.");
+		return;
+	})
+	
+	if (!dupecheck){
+		logger.info("[genpoke] Logging SQL error from Catch block.");
+		interaction.followUp("SQL error, please try again later or contact a maintainer if the issue persists.");
+		return;
+	}
+	if (dupecheck > 0) {
+		logger.warn("[genpoke] Duplicate Pokemon name. Sending warning..");
+		interaction.followUp("Duplicate name exists - please choose another name!");
 		return;
 	}
 
