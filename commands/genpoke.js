@@ -80,6 +80,7 @@ module.exports.run = async (interaction) => {
 
 	let dupeSQL = `SELECT * FROM pokemon WHERE name = '${namecheck}'`;
 	
+	// Function to return SQL info in a promise, for use with await.
 	let results = new Promise((resolve, reject) => interaction.client.mysqlConnection.query(dupeSQL, function (err, rows, fields) {
       if (err) {
 		reject(err);
@@ -88,17 +89,14 @@ module.exports.run = async (interaction) => {
       }
     }));
 
+	// Call promise with await
 	let dupecheck = await results.catch((err) => {
 		logger.info("[genpoke] " + err);
 		interaction.followUp("SQL error, please try again later or contact a maintainer if the issue persists.");
 		return;
 	})
 	
-	if (!dupecheck){
-		logger.info("[genpoke] Logging SQL error from Catch block.");
-		interaction.followUp("SQL error, please try again later or contact a maintainer if the issue persists.");
-		return;
-	}
+	// If duplicate, stop
 	if (dupecheck > 0) {
 		logger.warn("[genpoke] Duplicate Pokemon name. Sending warning..");
 		interaction.followUp("Duplicate name exists - please choose another name!");

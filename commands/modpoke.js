@@ -150,12 +150,6 @@ module.exports.run = async (interaction) => {
         //     return;
         // }
 
-        if (nickname.match(/[-\/\\^$*+?.()|[\]{}'"\s]/)) {
-            logger.warn("[modpoke] User put special character in pokemon name, sending warning.");
-            interaction.editReply("Please do not use special characters when using renaming Pokemon.");
-            return;
-        }
-
         // grab the pokemon's name
         let pokeName = nickname;
 
@@ -228,22 +222,38 @@ module.exports.run = async (interaction) => {
             return;
         }
 
-        // Duplicate check
-        if (valName.toLowerCase() == 'nickname'){
-            let dupecheck = `SELECT * FROM pokemon WHERE name = '${newValue}'`;
-            interaction.client.mysqlConnection.query(dupecheck, function (err, rows, fields) {
+        // Duplicate check and name special character check
+        if (valName.toLowerCase() == 'name') {
+
+            if (valString.match(/[-\/\\^$*+?.()|[\]{}'"\s]/)) {
+                logger.warn("[modpoke] User put special character in pokemon name, sending warning.");
+                interaction.editReply("Please do not use special characters when using renaming Pokemon. Modification canceled.");
+                return;
+            }
+
+            let dupeSQL = `SELECT * FROM pokemon WHERE name = '${valString}'`;
+
+            let results = new Promise((resolve, reject) => interaction.client.mysqlConnection.query(dupeSQL, function (err, rows, fields) {
                 if (err) {
-                    let cantAccessSQLMessage = "SQL error, please try again later or contact a maintainer if the issue persists.";
-                    logger.error("[modpoke]" + cantAccessSQLMessage + ` ${err}`)
-                    interaction.editReply(cantAccessSQLMessage);
-                    return;
-                } else if (rows.length > 0) {
-                    // Duplicate found
-                    logger.info(`[modpoke] ${pokeName} - Attempted duplicate rename.`)
-                    interaction.editReply(`Nickname (${valString}) Already in use! Modification canceled.`)
-                    return;
+                    reject(err);
+                } else {
+                    resolve(rows.length);
                 }
-            });
+            }));
+
+            // Call promise with await
+            let dupecheck = await results.catch((err) => {
+                logger.info("[modpoke] " + err);
+                interaction.followUp("SQL error, please try again later or contact a maintainer if the issue persists. Modification canceled.");
+                return;
+            })
+
+            // If duplicate, stop
+            if (dupecheck > 0) {
+                logger.warn("[modpoke] Duplicate Pokemon name. Sending warning..");
+                interaction.followUp("Duplicate name exists - please choose another name! Modification canceled.");
+                return;
+            }
 
         }
 
