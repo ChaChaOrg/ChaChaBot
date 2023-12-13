@@ -68,7 +68,7 @@ module.exports.run = async (interaction) => {
 
 	let Pokemon = require('../models/pokemon.js');
 
-	if (interaction.options.getString('nickname').match(/[-\/\\^$*+?.()|[\]{}'"\s]/)) {
+	if (!interaction.options.getString('nickname').match(/^\w+$/)) {
 		logger.warn("[genpoke] User put special character in pokemon name, sending warning.");
 		interaction.followUp("Please do not use special characters when using generating Pokemon.");
 		return;
