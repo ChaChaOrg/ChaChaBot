@@ -39,7 +39,8 @@ module.exports.data = new SlashCommandBuilder()
           .addStringOption(option =>
             option.setName('attacker-name')
               .setDescription('The name of the attacker, as listed in the database')
-              .setRequired(true))
+              .setRequired(true)
+              .setAutocomplete(true))
           .addStringOption(option => 
             option.setName('move-name')
               .setDescription('The move used (gen 1-7 only sorry :<) lowercase with dashes instead of spaces. Ie, "rock-smash"')
@@ -47,7 +48,8 @@ module.exports.data = new SlashCommandBuilder()
           .addStringOption(option => 
             option.setName('defender-name')
               .setDescription('The name of the pokemon being hit by the attack, as listed in the database')
-              .setRequired(true))
+              .setRequired(true)
+              .setAutocomplete(true))
           .addBooleanOption(option =>
             option.setName('critical-hit')
             .setDescription('If the attacker struck a critical hit Defaults to no.'))
@@ -69,6 +71,19 @@ module.exports.data = new SlashCommandBuilder()
               .setDescription('Extra damage *multiplying* the base power.')
               .setMinValue(0))
       );
+
+module.exports.autocomplete = async (interaction) => {
+  const focusedValue = interaction.options.getFocused(true);
+  if (focusedValue.name === 'attacker-name' || focusedValue.name === 'defender-name') {
+    var choices = interaction.client.pokemonCache;
+    const filtered = choices.filter(choice => (!choice.private || (choice.discordID == interaction.user)) && choice.name.toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
+    await interaction.respond(
+      filtered.map(choice => ({ name: choice.name, value: choice.name })),
+    )
+  } else {
+    //nothing
+  }
+};
 
 module.exports.run = async (interaction) => {
       try{

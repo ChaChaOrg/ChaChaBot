@@ -91,7 +91,13 @@ module.exports.data = new SlashCommandBuilder()
 
 module.exports.autocomplete = async (interaction) => {
   const focusedValue = interaction.options.getFocused(true);
-  if(focusedValue.name === 'field-to-change'){
+  if(focusedValue.name === 'nickname'){
+    var choices = interaction.client.pokemonCache;
+    const filtered = choices.filter(choice => (!choice.private || (choice.discordID == interaction.user)) && choice.name.toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24) ;
+    await interaction.respond(
+           filtered.map(choice => ({ name: choice.name, value: choice.name })),
+    )
+  }else if(focusedValue.name === 'field-to-change'){
     var choices = STATIC_FIELDS.concat(OTHER_FIELDS);
     const filtered = choices.filter(choice => choice.toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
     await interaction.respond(
