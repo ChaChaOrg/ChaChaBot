@@ -15,7 +15,7 @@ let Statblock = require("./statblock.js");
 let fs = require('fs');
 
 const MIN_EXP = 0;
-
+const BASE_FRIEND = 70;
 
 
 module.exports = Pokemon;
@@ -58,6 +58,9 @@ function Pokemon(tempSpecies, tempLevel, tempName, tempform) {
 
   // pokemon's exp
   this.exp = MIN_EXP;
+
+    // pokemon's default friendship value
+    this.friendship = BASE_FRIEND;
 
   //hidden ability percentile
   this.haChance = 0;
@@ -503,6 +506,10 @@ Pokemon.prototype.sendSummaryMessage = function (interaction) {
               name: "Experience Points",
               value: `${this.exp}`,
              
+        },
+        {
+            name: "Friendship",
+            value: `${this.friendship}`,
         },
         {
             name: "Basic Info",

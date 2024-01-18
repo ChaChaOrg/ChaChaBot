@@ -237,6 +237,12 @@ module.exports.run = async (interaction) => {
             return;
         }
 
+        if (valName.toLowerCase() == 'friendship' && isNaN(parseInt(valString))) {
+            logger.error('[modpoke]Friendship value is NAN');
+            interaction.editReply('Friendship value improperly formatted. Expecting a number.');
+            return;
+        }
+
 
         // ================= SQL statements  =================
         // sql statement to check if the Pokemon exists
@@ -348,6 +354,17 @@ module.exports.run = async (interaction) => {
                                     thisPoke["exp"] = exp;
                                 }
                                 console.log("level: " + thisPoke["level"] + " exp: " + thisPoke["exp"]);
+
+                                if (valName === "friendship") {
+                                    let frnd = parseInt(valString);
+                                    if (frnd < 0) {
+                                        frnd = 0;
+                                    }
+                                    if (frnd > 255) {
+                                        frnd = 255;
+                                    }
+                                    thisPoke["friendship"] = frnd;
+                                }
                                 //Make new empty Pokemon object
                                 let newPoke = new Pokemon();
 
@@ -519,11 +536,11 @@ module.exports.run = async (interaction) => {
                                                 value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.exp, newPoke.exp, true)}${CODE_FORMAT_END}`,
                                                 inline: true
                                             },
-                                           /// {
-                                             ///   name: "Friendship",
-                                              //  value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.friendship, newPoke.friendship, true)}${CODE_FORMAT_END}`,
-                                              //  inline: true
-                                           // },
+                                            {
+                                                name: "Friendship",
+                                                value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.friendship, newPoke.friendship, true)}${CODE_FORMAT_END}`,
+                                                inline: true
+                                            },
                                             {
                                                 name: "=====",
                                                 value: "**BASE STATS**"
@@ -622,7 +639,7 @@ module.exports.run = async (interaction) => {
                                             },
                                             {
                                                 name: "Move Speed (measured in feet)",
-                                                value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.statBlock.armorClass, newPoke.statBlock.armorClass, true)}${CODE_FORMAT_END}`,
+                                                value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.statBlock.moveSpeed, newPoke.statBlock.moveSpeed, true)}${CODE_FORMAT_END}`,
                                                 inline: true
                                             },
                                         )
