@@ -2,6 +2,33 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const logger = require('../logs/logger.js');
 // Generates a random trainer
 
+//trainer types
+const trainerTypes = [
+	["Preschooler", "SchoolKid", "Youngster", "Lass"],
+	["Beauty", "RichBoy"],
+	["BlackBelt", "BattleGirl", "CrushGirl"],
+	["BirdKeeper"],
+	["BugCatcher", "BugManiac"],
+	["AceTrainer", "Veteran"],
+	["Fisherman", "Swimmer", "Tuber"],
+	["Hiker", "Backpacker"],
+	["PokeManiac", "Pokefan"],
+	["Psychic", "Medium"],
+	["Officer"],
+	["AromaLady", "Gardener"],
+	["HexManiac"],
+	["Breeder", "Rancher"],
+	["Ranger"],
+	["Painter", "Artist"],
+	["Musician", "Dancer", "Idol", "Guitarist"],
+	["Clown", "Harlequin", "Juggler", "Firebreather"],
+	["Cowgirl", "Cowboy", "Tourist"],
+	["Cameraman", "Interviewer"],
+	["Waiter", "Waitress", "Butler", "Maid", "Janitor"],
+	["Doctor", "Nurse", "Scientist"],
+	["Punk", "Hooligan", "Biker"]
+];
+
 // Build slash command
 module.exports.data	= new SlashCommandBuilder()
 	.setName('gentrainer')
@@ -25,6 +52,7 @@ module.exports.data	= new SlashCommandBuilder()
 			.addStringOption(option =>
 				option.setName('trainertype')
 				.setDescription('Type of Trainer - No Spaces')
+				.setAutocomplete(true)
 				.setRequired(true))
 			.addIntegerOption(option =>
 				option.setName('numfeats')
@@ -52,43 +80,31 @@ module.exports.data	= new SlashCommandBuilder()
 				.setRequired(true))
 			.addStringOption(option =>
 				option.setName('pokeoptions')
-				.setDescription('List of Pokemon that can be assigned, seperated by spaces')
+				.setDescription('List of Pokemon (species) that can be assigned, seperated by spaces')
 				.setRequired(true)));
 		//Figure out how to include Pokeoptions (IE various Pokemon are listed and chosen from at random)
 		//include option for Random and option to return list of types. Name?
 
 // JavaScript Document
+module.exports.autocomplete = async (interaction) => {
+	const focusedValue = interaction.options.getFocused(true);
+	if (focusedValue.name === 'trainertype') {
+		var allTypes = [];
+		trainerTypes.forEach(typeArray => typeArray.forEach(suboption => allTypes.push(suboption)));
+
+		const filtered = allTypes.filter(choice => choice.toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
+		await interaction.respond(
+			filtered.map(choice => ({ name: choice, value: choice })),
+		)
+	} else {
+		//nothing
+	}
+	
+  };
 
 module.exports.run = async (interaction) => {
 
 	await interaction.deferReply();
-
-	//trainer types
-	var trainerTypes = [
-		["Preschooler", "SchoolKid", "Youngster", "Lass"],
-		["Beauty", "RichBoy"],
-		["BlackBelt", "BattleGirl", "CrushGirl"],
-		["BirdKeeper"],
-		["BugCatcher", "BugManiac"],
-		["AceTrainer", "Veteran"],
-		["Fisherman", "Swimmer", "Tuber"],
-		["Hiker", "Backpacker"],
-		["PokeManiac", "Pokefan"],
-		["Psychic", "Medium"],
-		["Officer"],
-		["AromaLady", "Gardener"],
-		["HexManiac"],
-		["Breeder", "Rancher"],
-		["Ranger"],
-		["Painter", "Artist"],
-		["Musician", "Dancer", "Idol", "Guitarist"],
-		["Clown", "Harlequin", "Juggler", "Firebreather"],
-		["Cowgirl", "Cowboy", "Tourist"],
-		["Cameraman", "Interviewer"],
-		["Waiter", "Waitress", "Butler", "Maid", "Janitor"],
-		["Doctor", "Nurse", "Scientist"],
-		["Punk", "Hooligan", "Biker"]
-	];
 
 	//names
 	var nameOptions = [
