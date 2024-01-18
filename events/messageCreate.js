@@ -1,7 +1,11 @@
 // Message Event
 
-module.exports = (client, message) => {
-  // Ignore all bots
+const { Events } = require('discord.js');
+
+module.exports = {
+	name: Events.MessageCreate,
+	run(interaction){
+		// Ignore all bots
   if (interaction.author.bot) {return;}
 	
 	// ---------------------- PHRASE ANSWERS ----------------------
@@ -40,12 +44,12 @@ module.exports = (client, message) => {
 	} else
 	//bofa
 	if (sentence.includes('bofa')) {
-        interaction.react('504175902393892875').catch(console.error);
+        interaction.react('<:nut:504175902393892875>').catch(console.error);
 		interaction.channel.send('BOFA DEEZ NUTS!!!');
 	} else
 	//nut
 	if (sentence.includes('nut')) {
-        interaction.react('504175902393892875').catch(console.error);
+        interaction.react(interaction.client.emojis.cache.get('504175902393892875')).catch(console.error);
 	} else
 	//ditto
 	if (sentence.includes('ditto')) {
@@ -84,4 +88,5 @@ module.exports = (client, message) => {
  return;
 
 
+},
 };

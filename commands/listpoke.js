@@ -108,6 +108,16 @@ module.exports.data = new SlashCommandBuilder()
 		.setDescription("Filter by discordID")
 		.setRequired(false)
         )
+    .addStringOption(option =>
+        option.setName('original-trainer')
+        .setDescription("Filter by Original Trainer")
+        .setRequired(false)
+    )
+    .addStringOption(option =>
+        option.setName('campaign')
+        .setDescription("Filter by Campaign")
+        .setRequired(false)
+    )
     .addIntegerOption(option =>
 		option.setName('lower-level')
 		.setDescription("Filter below this level level")
@@ -142,6 +152,8 @@ module.exports.run = async (interaction) => {
             let filterType1 = interaction.options.getString("type1") ?? "";
             let filterType2 = interaction.options.getString("type2") ?? "";
             let filterDiscordID = interaction.options.getUser("user") ?? "";
+            let filterOT = interaction.options.getString("original-trainer") ?? "";
+            let filterCampaign = interaction.options.getString("campaign") ?? "";
             let filterUpperLevel = interaction.options.getInteger("upper-level") ?? "";
             let filterLowerLevel = interaction.options.getInteger("lower-level") ?? "";
             let filterPrivate = interaction.options.getBoolean("private") ?? "";
@@ -191,7 +203,7 @@ module.exports.run = async (interaction) => {
             let countQuery = 0;
             initialQuery = initialQuery + filterQuery;
 
-            if (filterSpecies || filterForm || filterType1 || filterType2 || filterDiscordID || filterUpperLevel || filterLowerLevel ||filterPrivate) {
+            if (filterSpecies || filterForm || filterType1 || filterType2 || filterDiscordID || filterUpperLevel || filterLowerLevel || filterPrivate || filterOT || filterCampaign) {
 
                 if (filterSpecies !== ""){ 
                     if (countQuery>0) { initialQuery += " AND ";} 
@@ -216,7 +228,16 @@ module.exports.run = async (interaction) => {
                     initialQuery += `(type1 = "${filterType2}" OR type2="${filterType2}")`; 
                     countQuery++;
                 }
-                
+                if (filterOT !== "") { 
+                    if (countQuery>0) { initialQuery += " AND ";} 
+                    initialQuery += `(originalTrainer = "${filterOT}")`; 
+                    countQuery++;
+                }
+                if (filterCampaign !== "") { 
+                    if (countQuery>0) { initialQuery += " AND ";} 
+                    initialQuery += `(campaign = "${filterCampaign}")`; 
+                    countQuery++;
+                }
                 if (filterDiscordID !== "") { 
                     if (countQuery>0) { initialQuery += " AND ";} 
                     initialQuery += `discordID = "${filterDiscordID.id}"`; 
