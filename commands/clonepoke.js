@@ -15,8 +15,17 @@ module.exports.data = new SlashCommandBuilder()
 		option.setName('name')
 		.setDescription("Pokemon you're copying")
 		.setRequired(true)
+        .setAutocomplete(true)
         );
 
+module.exports.autocomplete = async (interaction) => {
+    const focusedValue = interaction.options.getFocused(true);
+    var choices = interaction.client.pokemonCache;
+    const filtered = choices.filter(choice => (!choice.private || (choice.discordID == interaction.user)) && choice.name.toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
+    await interaction.respond(
+        filtered.map(choice => ({ name: choice.name, value: choice.name })),
+    )
+}
 
 module.exports.run = async (interaction) => {
 	try {
@@ -59,7 +68,7 @@ module.exports.run = async (interaction) => {
                         //});
                    // }                    
                     
-                    interaction.reply("Extracting " + name + "'s DNA sequence....");
+                    interaction.deferReply("Extracting " + name + "'s DNA sequence....");
                     basePoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, response[0]).then(response => {
 
                         let clonesql = `SELECT * FROM pokemon WHERE name LIKE '${cloneName}%';`;

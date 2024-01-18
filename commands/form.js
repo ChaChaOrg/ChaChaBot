@@ -1,9 +1,31 @@
 const { EmbedBuilder, SlashCommandAssertions, SlashCommandBuilder, ButtonBuilder, ActionRowBuilder } = require('@discordjs/builders');
 const { ButtonStyle } = require('discord.js')
 const logger = require('../logs/logger.js');
-const helpMessage = "Form is a command for managing the various forms of a pokemon, such as regional variants or alternate forms. This command has the list and add subcommands.\n";
-const listMessage = "The list subcommand lists all forms avaiable to a given pokemon species. Use: form list <speciesName>\n";
-const addMessage = "The add subcommand adds a form to the list of available forms for a pokemon species. Use: form add <speciesName> <formName> <ability1> <ability2> <abilitly3> <hp-base-stat> <attackBaseStat> <defenseBaseStat> <specialattackBaseStat> <specialdefenseBaseStat> <speedBaseStat> <type1> <secondType> <genderratio> <capturerate> <egggroup1> <eggGroup2> <private>\n";
+const helpMessage = "Form is a command for managing the various forms of a Pokemon, such as regional variants or" +
+    " alternate forms. This command has the \"list\" and \"add\" subcommands.\n";
+const listMessage = "The \"list\" subcommand lists all forms available to a given pokemon species. Use: form list" +
+    " <speciesName>\n";
+const addMessage = "The \"add\" subcommand adds a form to the list of available forms for a Pokemon species. Write" +
+    " \"null\" if there is nothing to input for a field. \n\nField Explanations:" +
+    "> `speciesName` // Name of the species/overall group, ie Vulpix for Kantonian or Alolan Vulpix\n" +
+    "> `formName` // The name of the specific form. Preferred format of `species-form`, ie \"vulpix-alola\"\n" +
+    "> `ability1` // `ability2` // `ability3` // The Pokemon's abilities; 1 & 2 are the main abilities while 3 is" +
+    " the hidden one. Put \"null\" in 2 or 3 if it does not have a secondary or hidden ability\n" +
+    "> `hpBaseStat` // `attackBaseStat` // ... // `speedBaseStat` Base Stats of the Pokemon\n" +
+    "> `firstType` // `secondType` // Type(s) of the Pokemon. Set \"null\" for type two if it's a monotype.\n" +
+    "> `genderRatio` // -1 = genderless; 1 = all male; 8 = all female. 50% either or = 4\n" +
+    "> `captureRate` // 1-255; the capture rate of the Pokemon.\n" +
+    "> `eggGroup1` // `eggGroup2`// Egg groups for the Pokemon. If it has only one or no egg groups, put \"null\"" +
+    " for the latter group or for both, respectively.\n" +
+    "> `private` // Default 0 for public, 1 for private. Used to hide forms, ie if trying to avoid spoiling them" +
+    " for players in a campaign.\n" +
+    "\n\n Empty template: +form" +
+    " add <speciesName> <formName> <ability1> <ability2> <ability3> <hp-base-stat> <attackBaseStat>" +
+    " <defenseBaseStat> <specialattackBaseStat> <specialdefenseBaseStat> <speedBaseStat> <type1> <secondType>" +
+    " <genderratio> <capturerate> <egggroup1> <eggGroup2> <private>\n\n" +
+    "Sample Pokemon (Alolan Ninetales): +form add Vulpix vulpix-alola Snow-Cloak null Snow-Warning 38" +
+    " 41 40 50 65 65 Ice null" +
+    " 6 190 Field null 0\n";
 
 // JavaScript Document
 module.exports.data = new SlashCommandBuilder()
