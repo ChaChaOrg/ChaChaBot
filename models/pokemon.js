@@ -498,12 +498,18 @@ Pokemon.prototype.sendSummaryMessage = function (interaction) {
       
 
       fields: [
+       
         {
-          name: "Basic Info",
-          value: `**Ability:** [${tempAbility}](${tempAbilityURL}) | **Gender:** ${this.gender} \n**Nature: ** ${this.nature.natureFinal} | ` +
-              `**Shiny: ** ${shiny} ` + `\n**OT:** ${this.originalTrainer} | **Campaign:** ${this.campaign}` +
-              `\n**Type 1:** [${capitalizeWord(this.type1)}](https://bulbapedia.bulbagarden.net/wiki/${this.type1}_(type)) ` +
-              `**Type 2:** [${capitalizeWord(this.type2)}](https://bulbapedia.bulbagarden.net/wiki/${this.type2}_(type))\n=================`,
+              name: "Experience Points",
+              value: `${this.exp}`,
+             
+        },
+        {
+            name: "Basic Info",
+            value: `**Ability:** [${tempAbility}](${tempAbilityURL}) | **Gender:** ${this.gender} \n**Nature: ** ${this.nature.natureFinal} | ` +
+            `**Shiny: ** ${shiny} ` + `\n**OT:** ${this.originalTrainer} | **Campaign:** ${this.campaign}` +
+            `\n**Type 1:** [${capitalizeWord(this.type1)}](https://bulbapedia.bulbagarden.net/wiki/${this.type1}_(type)) ` +
+            `**Type 2:** [${capitalizeWord(this.type2)}](https://bulbapedia.bulbagarden.net/wiki/${this.type2}_(type))\n=================`,
         },
         {
           name: "HP",
@@ -634,6 +640,7 @@ Pokemon.prototype.uploadPokemon = function (connection, interaction) {
       logger.error(err);
       throw err;
     }
+    interaction.client.pokemonCacheUpdate();
     console.log("1 record inserted");
     logger.info("[pokemon] upload SQL was successful.")
   });
@@ -679,11 +686,11 @@ Pokemon.prototype.updatePokemon = function (connection, message, pokePrivate) {
             speEV = ${this.statBlock.evStats[SPE_ARRAY_INDEX]},
             exp = ${this.exp},
             
-            move1 = "${this.moveSet.move1.name}",
-            move2 = "${this.moveSet.move2.name}",
-            move3 = "${this.moveSet.move3.name}",
-            move4 = "${this.moveSet.move4.name}",
-            move5 = "${this.moveSet.move5.name}",
+            move1 = "${this.moveSet.move1}",
+            move2 = "${this.moveSet.move2}",
+            move3 = "${this.moveSet.move3}",
+            move4 = "${this.moveSet.move4}",
+            move5 = "${this.moveSet.move5}",
             moveProgress = ${this.moveSet.moveProgress},
             private = ${pokePrivate},
             
@@ -700,6 +707,7 @@ Pokemon.prototype.updatePokemon = function (connection, message, pokePrivate) {
       }
       logger.info("[pokemon] update SQL query was successful.");
       console.log("1 record updated.");
+      interaction.client.pokemonCacheUpdate();
       return resolve(result);
     });
   });
@@ -711,7 +719,9 @@ Pokemon.prototype.importPokemon = function (connection, P, importString) {
   return new Promise((resolve,reject) => {
   logger.info("[pokemon] Importing Pokemon.");
   //splits the message into lines then splits the lines into words separated by spaces.
-  let lines = importString.split("\n");
+  let lines = ""
+  if (importString.includes("\n")) lines = importString.split("\n");
+  else lines = importString.split("   ")
   let nameLineVals = lines[0].split(" ");
   let evLineVals;
   let natureLineVals;

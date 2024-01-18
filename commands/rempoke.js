@@ -17,7 +17,17 @@ module.exports.data = new SlashCommandBuilder()
                         .addStringOption(option =>
                             option.setName('nickname')
                                 .setDescription('Nickname of the Pokemon being removed.')
-                                .setRequired(true))
+                                .setRequired(true)
+                                .setAutocomplete(true));
+
+module.exports.autocomplete = async (interaction) => {
+    const focusedValue = interaction.options.getFocused(true);
+    var choices = interaction.client.pokemonCache;
+    const filtered = choices.filter(choice => (!choice.private || (choice.discordID == interaction.user)) && choice.name.toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
+    await interaction.respond(
+        filtered.map(choice => ({ name: choice.name, value: choice.name })),
+    )
+}
 
 module.exports.run = async (interaction) => {
     await interaction.deferReply();
@@ -88,6 +98,7 @@ module.exports.run = async (interaction) => {
                                     });
                                     throw err;
                                 } else {
+                                    interaction.client.pokemonCacheUpdate();
                                     logger.info("[rempoke] " + pokeName + " has been deleted successfully.");
                                 }
                             });
