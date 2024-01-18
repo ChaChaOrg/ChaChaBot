@@ -44,7 +44,8 @@ module.exports.data = new SlashCommandBuilder()
           .addStringOption(option => 
             option.setName('move-name')
               .setDescription('The move used (gen 1-7 only sorry :<) lowercase with dashes instead of spaces. Ie, "rock-smash"')
-              .setRequired(true))
+              .setRequired(true)
+              .setAutocomplete(true))
           .addStringOption(option => 
             option.setName('defender-name')
               .setDescription('The name of the pokemon being hit by the attack, as listed in the database')
@@ -80,10 +81,16 @@ module.exports.autocomplete = async (interaction) => {
     await interaction.respond(
       filtered.map(choice => ({ name: choice.name, value: choice.name })),
     )
-  } else {
-    //nothing
+  } else if(focusedValue.name === 'move-name') {
+    var choices = interaction.client.movelist;
+    const filtered = choices.filter(choice => choice[1].toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
+    await interaction.respond(
+      filtered.map(choice => ({ name: choice[1], value: choice[1].replace(' ', '-').replace('\'', '') })),
+  )
   }
 };
+
+
 
 module.exports.run = async (interaction) => {
       try{
