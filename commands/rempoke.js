@@ -98,6 +98,7 @@ module.exports.run = async (interaction) => {
                                     });
                                     throw err;
                                 } else {
+                                    interaction.client.pokemonCacheUpdate();
                                     logger.info("[rempoke] " + pokeName + " has been deleted successfully.");
                                 }
                             });

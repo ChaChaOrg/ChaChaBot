@@ -76,6 +76,7 @@ module.exports.data = new SlashCommandBuilder()
                             .addStringOption(option =>
                                 option.setName('nickname')
                                     .setDescription('Nickname of the Pokemon being modified. Do not use spaces or special characters!')
+                                    .setAutocomplete(true)
                                     .setRequired(true))
                             .addStringOption(option =>
                                 option.setName('field-to-change')
@@ -297,6 +298,7 @@ module.exports.run = async (interaction) => {
                                         let successMessage = "**" + pokeName + "'s** " + valName + " has been changed to " + valString + "!";
                                         logger.info(`[modpoke] ${successMessage}`)
                                         interaction.editReply(successMessage + "\nNOTE: Any updates to base stats will be overwritten if related variables (such as IVs, EVs, and level) are changed.");
+                                        interaction.client.pokemonCacheUpdate();
                                         resolve();
                                     }
                                 });

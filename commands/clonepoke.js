@@ -68,7 +68,7 @@ module.exports.run = async (interaction) => {
                         //});
                    // }                    
                     
-                    interaction.reply("Extracting " + name + "'s DNA sequence....");
+                    interaction.deferReply("Extracting " + name + "'s DNA sequence....");
                     basePoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, response[0]).then(response => {
 
                         let clonesql = `SELECT * FROM pokemon WHERE name LIKE '${cloneName}%';`;

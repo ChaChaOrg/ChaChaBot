@@ -640,6 +640,7 @@ Pokemon.prototype.uploadPokemon = function (connection, interaction) {
       logger.error(err);
       throw err;
     }
+    interaction.client.pokemonCacheUpdate();
     console.log("1 record inserted");
     logger.info("[pokemon] upload SQL was successful.")
   });
@@ -706,6 +707,7 @@ Pokemon.prototype.updatePokemon = function (connection, message, pokePrivate) {
       }
       logger.info("[pokemon] update SQL query was successful.");
       console.log("1 record updated.");
+      interaction.client.pokemonCacheUpdate();
       return resolve(result);
     });
   });
