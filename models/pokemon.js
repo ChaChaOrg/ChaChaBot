@@ -648,7 +648,7 @@ Pokemon.prototype.uploadPokemon = function (connection, interaction) {
 
 //Instead of uploading a new pokemon, instead updates the existing entry BASED OFF OF POKEMON NAME
 //BE CAREFUL
-Pokemon.prototype.updatePokemon = function (connection, message, pokePrivate) {
+Pokemon.prototype.updatePokemon = function (connection, message, pokePrivate, interaction) {
   if (pokePrivate === null) pokePrivate = false;
 
   //uses SQL UPDATE to alter the existing entry

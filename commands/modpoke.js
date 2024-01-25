@@ -434,6 +434,9 @@ module.exports.run = async (interaction) => {
                                         }
                                     };
 
+                                    // If species was updated, update types to match
+                                    if (valName === "species") newPoke.assignTypes();
+
                                     // formatted species names (old + new) for formatting purposes
                                     let oldSpecies = capitalize(oldPoke.species);
                                     let newSpecies = capitalize(newPoke.species);
@@ -685,7 +688,7 @@ module.exports.run = async (interaction) => {
                                         const confirmation = await response.awaitMessageComponent({ filter: collectorFilter, time: 60000 });
 
                                         if (confirmation.customId == 'confirm') {
-                                            newPoke.updatePokemon(interaction.client.mysqlConnection, null, rows[0].private).then(function (results) {
+                                            newPoke.updatePokemon(interaction.client.mysqlConnection, null, rows[0].private, interaction).then(function (results) {
                                                 let successString = "Success! " + pokeName + "'s " + valName + " has been changed to " + valString + " and all related stats have been updated.\n\nHint: View Pokemon's stat's using `/showpoke [nickname]`";
                                                 logger.info(`[modpoke] ${successString}`)
                                                 interaction.editReply({ components: []});
