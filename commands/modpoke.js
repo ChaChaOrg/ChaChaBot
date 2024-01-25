@@ -575,7 +575,7 @@ module.exports.run = async (interaction) => {
                                     ];
 
                                     // TODO update above array with charisma calculator when that's done and ready
-
+                                    console.log("Embedding");
                                     // Create embed with old/new updates
                                     let comparisonEmbed = new EmbedBuilder()
                                         .setColor(0x3498DB)
@@ -606,15 +606,15 @@ module.exports.run = async (interaction) => {
                                                 value: "**GROWTH STATS**"
                                             },
                                             {
-                                                name: "Experience Points",
-                                                value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.exp, newPoke.exp, true)}${CODE_FORMAT_END}`,
+                                                name: "Experience Points/Friendship",
+                                                value: `${CODE_FORMAT_START}Exp: ${fieldChanged(oldPoke.exp, newPoke.exp, true)}Friendship: ${fieldChanged(oldPoke.friendship, newPoke.friendship, true)}${CODE_FORMAT_END}`,
                                                 inline: true
                                             },
-                                            {
-                                                name: "Friendship",
-                                                value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.friendship, newPoke.friendship, true)}${CODE_FORMAT_END}`,
-                                                inline: true
-                                            },
+                                            //{
+                                                //name: "Friendship",
+                                                //value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.friendship, newPoke.friendship, true)}${CODE_FORMAT_END}`,
+                                                //inline: true
+                                            //},
                                             {
                                                 name: "=====",
                                                 value: "**BASE STATS**"
@@ -771,6 +771,7 @@ module.exports.run = async (interaction) => {
                                 }).catch(function (error) {
                                     let loadNewPokeMessage = "Error loading new Pokemon to object. Please make sure you've entered a valid field and value.";
                                     interaction.editReply(loadNewPokeMessage);
+                                    console.log(error);
                                     logger.error(`[modpoke] ${loadNewPokeMessage}\n\t${error.toString()}`)
                                 });
                             }).catch(function (error) {
