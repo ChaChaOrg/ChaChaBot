@@ -369,8 +369,7 @@ module.exports.run = async (interaction) => {
 
                                 // if the valName is species, assign directly, otherwise convert it into a number
 
-                                if (valName === "species") thisPoke[valName] = valString.toLowerCase();
-                                else if (valName === "nature") thisPoke[valName] = valString;
+                                if (valName === "species"|| valName === "form"||valName === "nature") thisPoke[valName] = valString.toLowerCase();
                                 else thisPoke[valName] = parseInt(valString);
 
                                 if (valName === "exp") {

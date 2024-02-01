@@ -509,7 +509,8 @@ Pokemon.prototype.sendSummaryMessage = function (interaction) {
             value: `**Ability:** [${tempAbility}](${tempAbilityURL}) | **Gender:** ${this.gender} \n**Nature: ** ${this.nature.natureFinal} | ` +
             `**Shiny: ** ${shiny} ` + `\n**OT:** ${this.originalTrainer} | **Campaign:** ${this.campaign}` +
             `\n**Type 1:** [${capitalizeWord(this.type1)}](https://bulbapedia.bulbagarden.net/wiki/${this.type1}_(type)) ` +
-            `**Type 2:** [${capitalizeWord(this.type2)}](https://bulbapedia.bulbagarden.net/wiki/${this.type2}_(type))\n=================`,
+            `**Type 2:** [${capitalizeWord(this.type2)}](https://bulbapedia.bulbagarden.net/wiki/${this.type2}_(type))`+
+            `\n**Form:** ${capitalizeWord(this.form)} **Species:** ${capitalizeWord(this.species)}\n=================`,
         },
         {
           name: "HP",
