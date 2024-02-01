@@ -369,8 +369,7 @@ module.exports.run = async (interaction) => {
 
                                 // if the valName is species, assign directly, otherwise convert it into a number
 
-                                if (valName === "species") thisPoke[valName] = valString.toLowerCase();
-                                else if (valName === "nature") thisPoke[valName] = valString;
+                                if (valName === "species"|| valName === "form"||valName === "nature") thisPoke[valName] = valString.toLowerCase();
                                 else thisPoke[valName] = parseInt(valString);
 
                                 if (valName === "exp") {
@@ -433,6 +432,9 @@ module.exports.run = async (interaction) => {
                                             return capitalize(ability);
                                         }
                                     };
+
+                                    // If species was updated, update types to match
+                                    if (valName === "species" || valName === "form") newPoke.assignTypes();
 
                                     // formatted species names (old + new) for formatting purposes
                                     let oldSpecies = capitalize(oldPoke.species);
@@ -685,7 +687,7 @@ module.exports.run = async (interaction) => {
                                         const confirmation = await response.awaitMessageComponent({ filter: collectorFilter, time: 60000 });
 
                                         if (confirmation.customId == 'confirm') {
-                                            newPoke.updatePokemon(interaction.client.mysqlConnection, null, rows[0].private).then(function (results) {
+                                            newPoke.updatePokemon(interaction.client.mysqlConnection, null, rows[0].private, interaction).then(function (results) {
                                                 let successString = "Success! " + pokeName + "'s " + valName + " has been changed to " + valString + " and all related stats have been updated.\n\nHint: View Pokemon's stat's using `/showpoke [nickname]`";
                                                 logger.info(`[modpoke] ${successString}`)
                                                 interaction.editReply({ components: []});
