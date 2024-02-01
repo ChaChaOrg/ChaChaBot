@@ -435,7 +435,7 @@ module.exports.run = async (interaction) => {
                                     };
 
                                     // If species was updated, update types to match
-                                    if (valName === "species") newPoke.assignTypes();
+                                    if (valName === "species" || valName === "form") newPoke.assignTypes();
 
                                     // formatted species names (old + new) for formatting purposes
                                     let oldSpecies = capitalize(oldPoke.species);
