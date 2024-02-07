@@ -94,6 +94,7 @@ module.exports.data = new SlashCommandBuilder()
 
 module.exports.autocomplete = async (interaction) => {
   const focusedValue = interaction.options.getFocused(true);
+
   if(focusedValue.name === 'nickname'){
     var choices = interaction.client.pokemonCache;
     const filtered = choices.filter(choice => (!choice.private || (choice.discordID == interaction.user)) && choice.name.toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24) ;
@@ -161,12 +162,6 @@ module.exports.run = async (interaction) => {
         //     interaction.channel.send(HELP_FIELDS_LIST);
         //     return;
         // }
-
-        if (nickname.match(/[-\/\\^$*+?.()|[\]{}'"\s]/)) {
-            logger.warn("[modpoke] User put special character in pokemon name, sending warning.");
-            interaction.editReply("Please do not use special characters when using renaming Pokemon.");
-            return;
-        }
 
         // grab the pokemon's name
         let pokeName = nickname;
@@ -305,10 +300,40 @@ module.exports.run = async (interaction) => {
             }
         }
 
-        if (valName.toLowerCase() == 'exp' && isNaN(parseInt(valString))) {
-            logger.error('[modpoke]Exp value recieved is NAN.');
-            interaction.editReply('Exp value improperly formatted. Expecting a number.');
-            return;
+
+        // Duplicate check and name special character check
+        if (valName.toLowerCase() == 'name') {
+
+            if (!valString.match(/^\w+$/)) {
+                logger.warn("[modpoke] User put special character in pokemon name, sending warning.");
+                interaction.editReply("Please do not use special characters when using renaming Pokemon. Modification canceled.");
+                return;
+            }
+
+            let dupeSQL = `SELECT * FROM pokemon WHERE name = '${valString}'`;
+
+            let results = new Promise((resolve, reject) => interaction.client.mysqlConnection.query(dupeSQL, function (err, rows, fields) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(rows.length);
+                }
+            }));
+
+            // Call promise with await
+            let dupecheck = await results.catch((err) => {
+                logger.info("[modpoke] " + err);
+                interaction.followUp("SQL error, please try again later or contact a maintainer if the issue persists. Modification canceled.");
+                return;
+            })
+
+            // If duplicate, stop
+            if (dupecheck > 0) {
+                logger.warn("[modpoke] Duplicate Pokemon name. Sending warning..");
+                interaction.followUp("Duplicate name exists - please choose another name! Modification canceled.");
+                return;
+            }
+
         }
 
         if (valName.toLowerCase() == 'friendship' && isNaN(parseInt(valString))) {
@@ -414,8 +439,7 @@ module.exports.run = async (interaction) => {
 
                                 // if the valName is species, assign directly, otherwise convert it into a number
 
-                                if (valName === "species") thisPoke[valName] = valString.toLowerCase();
-                                else if (valName === "nature") thisPoke[valName] = valString;
+                                if (valName === "species"|| valName === "form"||valName === "nature") thisPoke[valName] = valString.toLowerCase();
                                 else thisPoke[valName] = parseInt(valString);
 
                                 if (valName === "exp") {
@@ -489,6 +513,9 @@ module.exports.run = async (interaction) => {
                                             return capitalize(ability);
                                         }
                                     };
+
+                                    // If species was updated, update types to match
+                                    if (valName === "species" || valName === "form") newPoke.assignTypes();
 
                                     // formatted species names (old + new) for formatting purposes
                                     let oldSpecies = capitalize(oldPoke.species);
@@ -741,7 +768,7 @@ module.exports.run = async (interaction) => {
                                         const confirmation = await response.awaitMessageComponent({ filter: collectorFilter, time: 60000 });
 
                                         if (confirmation.customId == 'confirm') {
-                                            newPoke.updatePokemon(interaction.client.mysqlConnection, null, rows[0].private).then(function (results) {
+                                            newPoke.updatePokemon(interaction.client.mysqlConnection, null, rows[0].private, interaction).then(function (results) {
                                                 let successString = "Success! " + pokeName + "'s " + valName + " has been changed to " + valString + " and all related stats have been updated.\n\nHint: View Pokemon's stat's using `/showpoke [nickname]`";
                                                 logger.info(`[modpoke] ${successString}`)
                                                 interaction.editReply({ components: []});
