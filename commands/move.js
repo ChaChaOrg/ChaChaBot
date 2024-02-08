@@ -36,17 +36,40 @@ module.exports.data = new SlashCommandBuilder()
 				.setDescription('Calculate damage for beat up base power for given Pokemon. Must be in bot.')
 				.addStringOption(option =>
 					option.setName('beatuppokemon')
-						.setDescription('Names of Pokemon to calculate base power, seperated by spaces - must be in bot.')
-						.setRequired(true))
+						.setDescription('Name of a Pokemon to calculate base power of beatup for - must be in bot.')
+						.setRequired(true)
+						.setAutocomplete(true))
 				)
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName('assist')
 				.setDescription('Provides a random assist-compatible move from those known by the input Pokemon. Must be in bot.')
 				.addStringOption(option =>
-					option.setName('party-members')
-					.setDescription('Party members to pull valid Assist move from, seperated by a space.')
-					.setRequired(true)))
+					option.setName('party-member1')
+						.setDescription('Party member to pull valid Assist move from.')
+						.setRequired(true)
+						.setAutocomplete(true))
+				.addStringOption(option =>
+					option.setName('party-member2')
+						.setDescription('Party member to pull valid Assist move from.')
+						.setRequired(false)
+						.setAutocomplete(true))
+				.addStringOption(option =>
+					option.setName('party-member3')
+						.setDescription('Party member to pull valid Assist move from.')
+						.setRequired(false)
+						.setAutocomplete(true))
+				.addStringOption(option =>
+					option.setName('party-member4')
+						.setDescription('Party member to pull valid Assist move from.')
+						.setRequired(false)
+						.setAutocomplete(true))
+				.addStringOption(option =>
+					option.setName('party-member5')
+						.setDescription('Party member to pull valid Assist move from.')
+						.setRequired(false)
+						.setAutocomplete(true))
+					)
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName('confusion')
@@ -54,7 +77,8 @@ module.exports.data = new SlashCommandBuilder()
 				.addStringOption(option =>
 					option.setName('pokemon')
 					.setDescription('Pokemon that is hitting itself.')
-					.setRequired(true))
+					.setRequired(true)
+					.setAutocomplete(true))
 				.addIntegerOption(option =>
 					option.setName('stages-of-attack')
 					.setDescription('Stages of attack the Pokemon has. Minimum -6, maximum +6')
@@ -67,60 +91,71 @@ module.exports.data = new SlashCommandBuilder()
 					.setMinValue(-6))
 				);
 
+module.exports.autocomplete = async (interaction) => {
+	const focusedValue = interaction.options.getFocused(true);
+	if (focusedValue.name === 'pokemon' || focusedValue.name === 'beatuppokemon' || focusedValue.name === 'party-member1' || focusedValue.name === 'party-member2' || focusedValue.name === 'party-member3' || focusedValue.name === 'party-member4' || focusedValue.name === 'party-member5') {
+		var choices = interaction.client.pokemonCache;
+		const filtered = choices.filter(choice => (!choice.private || (choice.discordID == interaction.user)) && choice.name.toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
+		await interaction.respond(
+			filtered.map(choice => ({ name: choice.name, value: choice.name })),
+		)
+	}
+};
+
 module.exports.run = async (interaction) => {
 
 	var metronomeunselectable = [
-		["After You", "Apple Acid", "Armor Cannon", "Astral Barrage"],
-		["Baneful Bunker", "Behemoth Bash", "Behemoth Blade", "Belch"],
-		["Blazing Torque", "Body Press", "Branch Poke", "Breaking Swipe"],
-		["Celebrate", "Chilling Water", "Chilly Reception", "Collision Course"]
-		["Combat Torque", "Comeuppance", "Copycat", "Counter"],
-		["Covet", "Destiny Bond", "Detect", "Diamond Storm"],
-		["Doodle", "Double Shock", "Dragon Ascent", "Dragon Energy"],
-		["Drum Beating", "Dynamax Cannon", "Electro Drift", "Endure"],
-		["False Surrender", "Feint", "Fiery Wrath", "Fillet Away"],
-		["Fleur Cannon", "Freezing Glare", "Grav Apple", "Helping Hand"],
-		["Hold Hands", "Hyper Drill", "Instruct", "Jet Punch"],
-		["Jungle Healing", "Life Dew", "Make It Rain", "Magical Torque"],
-		["Mimic", "Mirror Coat", "Noxious Torque", "Order Up"],
-		["Origin Pulse", "Overdrive", "Population Bomb", "Pounce"],
-		["Power Shift", "Precipice Blades", "Protect", "Pyro Ball"],
-		["Quash", "Quick Guard", "Rage Fist", "Rage Powder"],
-		["Raging Bull", "Raging Fury", "Relic Song", "Revival Blessing"],
-		["Ruination", "Salt Cure", "Shed Tail", "Silk Trap"],
-		["Sleep Talk", "Snarl", "Snore", "Snowscape"],
-		["Spicy Extract", "Spiky Shield", "Spirit Break", "Steam Eruption"],
-		["Steel Beam", "Struggle", "Surging Strikes", "Switcheroo"],
-		["Thief", "Thunder Cage", "Thunderous Kick", "Tidy Up"],
-		["Trailblaze", "Transform", "Trick", "Twin Beam"],
-		["Wicket Blow", "Wicked Torque", "Wide Guard"],
-		["Assist", "Aura Wheel", "Beak Blast", "Bestow"],
-		["Chatter", "Clangorous Soul", "Crafty Shield", "Decorate"],
-		["Double Iron Bash", "Eternabeam", "Focus Punch", "Follow Me"],
-		["Freeze Shock", "Glacial Lance", "Hyperspace Fury", "Hyperspace Hole"],
-		["King's Shield", "Light of Ruin", "Mat Block", "Me First"],
-		["Meteor Assault", "Mind Blown", "Mirro Move", "Moongeist Beam"],
-		["Nature Power", "Nature's Madness", "Obstruct", "Photon Geyser"],
-		["Plasma Fists", "Secret Sword", "Shell Trap", "Sketch"],
-		["Snap Trap", "Snatch", "Spectral Thief", "Spotlight"],
-		["Strange Steam", "Sunsteel Strike", "Techno Blast", "Thousand Arrows"],
-		["Thousand Waves", "V-create", "Metronome"]
+		["After You", "Apple Acid", "Armor Cannon", "Astral Barrage",
+		"Baneful Bunker", "Behemoth Bash", "Behemoth Blade", "Belch",
+		"Blazing Torque", "Body Press", "Branch Poke", "Breaking Swipe",
+		"Celebrate", "Chilling Water", "Chilly Reception", "Collision Course",
+		"Combat Torque", "Comeuppance", "Copycat", "Counter",
+		"Covet", "Destiny Bond", "Detect", "Diamond Storm",
+		"Doodle", "Double Shock", "Dragon Ascent", "Dragon Energy",
+		"Drum Beating", "Dynamax Cannon", "Electro Drift", "Endure",
+		"False Surrender", "Feint", "Fiery Wrath", "Fillet Away",
+		"Fleur Cannon", "Freezing Glare", "Grav Apple", "Helping Hand",
+		"Hold Hands", "Hyper Drill", "Instruct", "Jet Punch",
+		"Jungle Healing", "Life Dew", "Make It Rain", "Magical Torque",
+		"Mimic", "Mirror Coat", "Noxious Torque", "Order Up",
+		"Origin Pulse", "Overdrive", "Population Bomb", "Pounce",
+		"Power Shift", "Precipice Blades", "Protect", "Pyro Ball",
+		"Quash", "Quick Guard", "Rage Fist", "Rage Powder",
+		"Raging Bull", "Raging Fury", "Relic Song", "Revival Blessing",
+		"Ruination", "Salt Cure", "Shed Tail", "Silk Trap",
+		"Sleep Talk", "Snarl", "Snore", "Snowscape",
+		"Spicy Extract", "Spiky Shield", "Spirit Break", "Steam Eruption",
+		"Steel Beam", "Struggle", "Surging Strikes", "Switcheroo",
+		"Thief", "Thunder Cage", "Thunderous Kick", "Tidy Up",
+		"Trailblaze", "Transform", "Trick", "Twin Beam",
+		"Wicket Blow", "Wicked Torque", "Wide Guard",
+		"Assist", "Aura Wheel", "Beak Blast", "Bestow",
+		"Chatter", "Clangorous Soul", "Crafty Shield", "Decorate",
+		"Double Iron Bash", "Eternabeam", "Focus Punch", "Follow Me",
+		"Freeze Shock", "Glacial Lance", "Hyperspace Fury", "Hyperspace Hole",
+		"King's Shield", "Light of Ruin", "Mat Block", "Me First",
+		"Meteor Assault", "Mind Blown", "Mirro Move", "Moongeist Beam",
+		"Nature Power", "Nature's Madness", "Obstruct", "Photon Geyser",
+		"Plasma Fists", "Secret Sword", "Shell Trap", "Sketch",
+		"Snap Trap", "Snatch", "Spectral Thief", "Spotlight",
+		"Strange Steam", "Sunsteel Strike", "Techno Blast", "Thousand Arrows",
+		"Thousand Waves", "V-create", "Metronome"]
 	];
 
 	var assistunselectable = [
-		["Baneful Bunker", "Beak Blast", "Belch", "Bestow"],
-		["Bounce", "Celebrate", "Chatter", "Circle Throw"],
-		["Copycat", "Counter", "Covet", "Destiny Bond"],
-		["Detect", "Dig", "Dive", "Dragon Tail"],
-		["Endure", "Feint", "Fly", "Focus Punch"],
-		["Follow Me", "Helping Hand", "Hold Hands", "King's Shield"],
-		["Mat Block", "Me First", "Metronome", "Mimic"],
-		["Mirror Coat", "Mirror Move", "Nature Power", "Phantom Force"],
-		["Protect", "Rage Powder", "Roar", "Shadow Force"],
-		["Shell Trap", "Sketch", "Sky Drop", "Sleep Talk"],
-		["Snatch", "Spiky Shield", "Spotlight", "Struggle"],
-		["Switcheroo", "Thief", "Transform", "Trick"],
-		["Whirlwind", "Assist"]
+		["baneful-bunker", "beak-blast", "belch", "bestow",
+		"bounce", "celebrate", "chatter", "circle-throw",
+		"copycat", "counter", "covet", "destiny-bond",
+		"detect", "dig", "dive", "dragon-tail",
+		"endure", "feint", "fly", "focus-punch",
+		"follow-me", "helping-hand", "hold-hands", "kings-shield",
+		"mat-block", "me-first", "metronome", "mimic",
+		"mirror-coat", "mirror-move", "nature-power", "phantom-force",
+		"protect", "rage-powder", "roar", "shadow-force",
+		"shell-trap", "sketch", "sky-drop", "sleep-talk",
+		"snatch", "spiky-shield", "spotlight", "struggle",
+		"switcheroo", "thief", "transform", "trick",
+		"whirlwind", "assist", "-", "undefined"]
 	];
 
 	await interaction.deferReply();
@@ -172,22 +207,19 @@ module.exports.run = async (interaction) => {
 			});
 	} else if (interaction.options.getSubcommand() === 'beatup') {
 		let Pokemon = require(`../models/pokemon`);
-        
+
 
 		let followup = "";
-		let inputstring = interaction.options.getString('beatuppokemon');
-		let names = inputstring.split(" ");
-		let promisearray = [];
+		let name = interaction.options.getString('beatuppokemon');
 
-		names.forEach((element) => {
-
-			let tempPoke = new Pokemon;
-			let notFoundMessage = element + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `+listpoke` to view the Pokemon you can edit.)";
-			let sql = `SELECT * FROM pokemon WHERE name = '${element}';`;
-			logger.info('[move-beatup] SQL query: ${sql}');
-			promisearray.push(new Promise(async function(resolve, reject){ interaction.client.mysqlConnection.query(sql, async function (err, response) {
+		let tempPoke = new Pokemon;
+		let notFoundMessage = name + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `+listpoke` to view the Pokemon you can edit.)";
+		let sql = `SELECT * FROM pokemon WHERE name = '${name}';`;
+		logger.info('[move-beatup] SQL query: ${sql}');
+		let beatUpPromise = new Promise(async function (resolve, reject) {
+			interaction.client.mysqlConnection.query(sql, async function (err, response) {
 				if (err) throw err;
-	
+
 				if (response.length == 0) {
 					logger.info("[move-beatup] Pokemon not found in database. Please check your spelling, or the Pokemon may not be there.")
 					followup += notFoundMessage + "\n";
@@ -203,31 +235,43 @@ module.exports.run = async (interaction) => {
 
 					await tempPoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, response[0])
 						.then(response => {
-	
+
 							logger.info("[move-beatup] Got Pokemon info.");
 
-							let math = tempPoke.statBlock.baseStats[1]/10;
+							let math = tempPoke.statBlock.baseStats[1] / 10;
 							math += 5;
-							followup += "Beat Up base power for " + element + " is " + math + ".\n";
-	
+							followup += "Beat Up base power for " + name + " is " + math + ".\n";
+
 						});
 				}
 				resolve();
-			})}))
-			
-	});
-	Promise.all(promisearray).then(() => {
+			})
+		})
+		beatUpPromise.then(() => {
 
-		interaction.followUp(followup + "This is the base power each strike should use with the Damage command - each strike can crit and STAB individually.");
+			interaction.followUp(followup + "This is the base power each strike should use with the Damage command - each strike can crit and STAB individually.");
 
-	  })
+		})
 	}else if (interaction.options.getSubcommand() === 'assist') {
 		let Pokemon = require(`../models/pokemon`);
         
 
 		let followup = "";
-		let partynames = interaction.options.getString('party-members');
-		let names = partynames.split(" ");
+
+		let names = []
+		names.push(interaction.options.getString('party-member1'));
+		if(interaction.options.getString('party-member2')){
+			names.push(interaction.options.getString('party-member2'));
+		}
+		if(interaction.options.getString('party-member3')){
+			names.push(interaction.options.getString('party-member3'));
+		}
+		if(interaction.options.getString('party-member4')){
+			names.push(interaction.options.getString('party-member4'));
+		}
+		if(interaction.options.getString('party-member5')){
+			names.push(interaction.options.getString('party-member5'));
+		}
 		let movelist = [];
 		let promisearray = [];
 
@@ -280,9 +324,14 @@ module.exports.run = async (interaction) => {
 			let move = '';
 			let validmoves = [];
 			movelist.forEach((element) => {
-				let badmove = assistunselectable.includes(element);
-				if(!badmove){
-					validmoves.push(element);
+				if (typeof element === "string") {
+					let clean = element.toLowerCase();
+					clean = clean.replace(' ', '-');
+					clean = clean.replace('\'', '');
+					let badmove = assistunselectable.includes(clean);
+					if (!badmove) {
+						validmoves.push(element);
+					}
 				}
 			});
 			if(validmoves.length == 0){
