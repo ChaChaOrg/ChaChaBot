@@ -442,6 +442,21 @@ module.exports.run = async (interaction) => {
                                 if (valName === "species"|| valName === "form"||valName === "nature") thisPoke[valName] = valString.toLowerCase();
                                 else thisPoke[valName] = parseInt(valString);
 
+                                if (valName === "level") {
+                                    let exp = thisPoke["exp"];
+                                    let lvl = parseInt(valString);
+                                    if (lvl > 20) {
+                                        //we in homebrew territory, exp no longer matters
+                                        thisPoke["exp"] = 9999;
+                                    } else {
+                                        if (exp >= EXP_TRESH[lvl] || exp < EXP_TRESH[lvl - 1]) {
+                                            //exp bounds correction
+                                            thisPoke["exp"] = EXP_TRESH[lvl - 1];
+                                        }
+                                    }
+                                    
+                                }
+
                                 if (valName === "exp") {
                                     let exp = parseInt(valString);
                                     let iter = 1;
