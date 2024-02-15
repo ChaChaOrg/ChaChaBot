@@ -104,7 +104,7 @@ module.exports.autocomplete = async (interaction) => {
 
 module.exports.run = async (interaction) => {
 
-	var metronomeunselectable = [
+	var metronomeunselectable = 
 		["After You", "Apple Acid", "Armor Cannon", "Astral Barrage",
 		"Baneful Bunker", "Behemoth Bash", "Behemoth Blade", "Belch",
 		"Blazing Torque", "Body Press", "Branch Poke", "Breaking Swipe",
@@ -139,10 +139,9 @@ module.exports.run = async (interaction) => {
 		"Plasma Fists", "Secret Sword", "Shell Trap", "Sketch",
 		"Snap Trap", "Snatch", "Spectral Thief", "Spotlight",
 		"Strange Steam", "Sunsteel Strike", "Techno Blast", "Thousand Arrows",
-		"Thousand Waves", "V-create", "Metronome"]
-	];
+		"Thousand Waves", "V-create", "Metronome"];
 
-	var assistunselectable = [
+	var assistunselectable = 
 		["baneful-bunker", "beak-blast", "belch", "bestow",
 		"bounce", "celebrate", "chatter", "circle-throw",
 		"copycat", "counter", "covet", "destiny-bond",
@@ -156,7 +155,7 @@ module.exports.run = async (interaction) => {
 		"snatch", "spiky-shield", "spotlight", "struggle",
 		"switcheroo", "thief", "transform", "trick",
 		"whirlwind", "assist", "-", "undefined"]
-	];
+	;
 
 	await interaction.deferReply();
 	if (interaction.options.getSubcommand() === 'metronome') {
