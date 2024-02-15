@@ -271,6 +271,11 @@ module.exports.run = async (interaction) => {
                 }
             }
         }
+        if (valName.toLowerCase() === 'level' && Math.isNaN(parseInt(valString))) {
+            logger.error("[modpoke] Attempted to change level to something NaN.");
+            interaction.editReply("Your pokemon's level can't be changed to that. Please double check your inputs.");
+            return;
+        }
         if (valName.toLowerCase() == 'level' && (parseInt(valString) < 1 || parseInt(valString) > 20)) {
             
             if (parseInt(valString) < 1) {
@@ -337,8 +342,13 @@ module.exports.run = async (interaction) => {
         }
 
         if (valName.toLowerCase() == 'friendship' && isNaN(parseInt(valString))) {
-            logger.error('[modpoke]Friendship value is NAN');
+            logger.error('[modpoke] Friendship value is NAN');
             interaction.editReply('Friendship value improperly formatted. Expecting a number.');
+            return;
+        }
+        if (valName.toLowerCase() === 'friendship' && (parseInt(valString) < 0 || parseInt(valString) > 255)) {
+            logger.error("[modpoke] Friendship outside of bounds.");
+            interaction.editReply("Given Friendship value was outside of valid range 0-255.");
             return;
         }
 
@@ -469,6 +479,7 @@ module.exports.run = async (interaction) => {
                                 console.log("level: " + thisPoke["level"] + " exp: " + thisPoke["exp"]);
 
                                 if (valName === "friendship") {
+                                    console.log("We even in the friendship block?");
                                     let frnd = parseInt(valString);
                                     if (frnd < 0) {
                                         frnd = 0;
@@ -496,7 +507,7 @@ module.exports.run = async (interaction) => {
                                     console.log(`"${newPoke.pokemonData.stats[3].stat.name}": "${newPoke.pokemonData.stats[3].base_stat}"`);
                                     console.log(`"${newPoke.pokemonData.stats[4].stat.name}": "${newPoke.pokemonData.stats[4].base_stat}"`);
                                     console.log(`"${newPoke.pokemonData.stats[5].stat.name}": "${newPoke.pokemonData.stats[5].base_stat}"`);
-
+                                    console.log("Friendship: " + newPoke.friendship);
 
 
                                     logger.info("SQL has been converted to a Pokemon Object\nAll values recalculated as necessary\nProviding user with comparison embed & awaiting change confirmation...")

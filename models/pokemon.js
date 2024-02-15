@@ -693,7 +693,8 @@ Pokemon.prototype.updatePokemon = function (connection, message, pokePrivate, in
             spdEV = ${this.statBlock.evStats[SPD_ARRAY_INDEX]},
             speEV = ${this.statBlock.evStats[SPE_ARRAY_INDEX]},
             exp = ${this.exp},
-            
+            friendship = ${this.friendship},
+
             move1 = "${this.moveSet.move1}",
             move2 = "${this.moveSet.move2}",
             move3 = "${this.moveSet.move3}",
@@ -1075,6 +1076,7 @@ Pokemon.prototype.loadFromSQL = function (connection, P, sqlObject) {
                     ];
 
                     this.exp = sqlObject.exp;
+                    this.friendship = sqlObject.friendship;
 
                     this.moveSet.move1 = sqlObject.move1;
                     this.moveSet.move2 = sqlObject.move2;
