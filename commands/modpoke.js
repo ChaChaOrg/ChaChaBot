@@ -271,7 +271,7 @@ module.exports.run = async (interaction) => {
                 }
             }
         }
-        if (valName.toLowerCase() === 'level' && Math.isNaN(parseInt(valString))) {
+        if (valName.toLowerCase() === 'level' && isNaN(parseInt(valString))) {
             logger.error("[modpoke] Attempted to change level to something NaN.");
             interaction.editReply("Your pokemon's level can't be changed to that. Please double check your inputs.");
             return;
@@ -341,7 +341,19 @@ module.exports.run = async (interaction) => {
 
         }
 
-        if (valName.toLowerCase() == 'friendship' && isNaN(parseInt(valString))) {
+        if (valName.toLowerCase() === 'exp') {
+            if (isNaN(parseInt(valString))) {
+                logger.error('[modpoke] NAN exp value detected.');
+                interaction.editReply("Please double check your input. Exp should be a number, 0 or above.");
+                return;
+            }
+            if (parseInt(valString) < 0) {
+                logger.error('[modpoke] Negative exp value detected.');
+                interaction.editReply("Are you some kind of cooltrainer? A pokemon should have 0 or more exp.");
+                return;
+            }
+        }
+        if (valName.toLowerCase() === 'friendship' && isNaN(parseInt(valString))) {
             logger.error('[modpoke] Friendship value is NAN');
             interaction.editReply('Friendship value improperly formatted. Expecting a number.');
             return;
