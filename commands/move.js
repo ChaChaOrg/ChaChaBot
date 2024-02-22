@@ -142,19 +142,19 @@ module.exports.run = async (interaction) => {
 		"Thousand Waves", "V-create", "Metronome"];
 
 	var assistunselectable = 
-		["baneful-bunker", "beak-blast", "belch", "bestow",
-		"bounce", "celebrate", "chatter", "circle-throw",
-		"copycat", "counter", "covet", "destiny-bond",
-		"detect", "dig", "dive", "dragon-tail",
-		"endure", "feint", "fly", "focus-punch",
-		"follow-me", "helping-hand", "hold-hands", "kings-shield",
-		"mat-block", "me-first", "metronome", "mimic",
-		"mirror-coat", "mirror-move", "nature-power", "phantom-force",
-		"protect", "rage-powder", "roar", "shadow-force",
-		"shell-trap", "sketch", "sky-drop", "sleep-talk",
-		"snatch", "spiky-shield", "spotlight", "struggle",
-		"switcheroo", "thief", "transform", "trick",
-		"whirlwind", "assist", "-", "undefined"]
+		["Baneful Bunker", "Beak Blast", "Belch", "Bestow",
+		"Bounce", "Celebrate", "Chatter", "Circle Throw",
+		"Copycat", "Counter", "Covet", "Destiny Bond",
+		"Detect", "Dig", "Dive", "Dragon Tail",
+		"Endure", "Feint", "Fly", "Focus Punch",
+		"Follow Me", "Helping Hand", "Hold Hands", "King's Shield",
+		"Mat Block", "Me First", "Metronome", "Mimic",
+		"Mirror Coat", "Mirror Move", "Nature Power", "Phantom Force",
+		"Protect", "Rage Powder", "Roar", "Shadow Force",
+		"Shell Trap", "Sketch", "Sky Drop", "Sleep Talk",
+		"Snatch", "Spiky Shield", "Spotlight", "Struggle",
+		"Switcheroo", "Thief", "Transform", "Trick",
+		"Whirlwind", "Assist", "-", "undefined"]
 	;
 
 	await interaction.deferReply();
@@ -180,21 +180,19 @@ module.exports.run = async (interaction) => {
 						//Get a random index to pull a random move
 						let moveindex = Math.floor(Math.random() * (dataArray.length - 1));
 						move = dataArray[moveindex].split('\t');
+
 						let valid = true;
-						let i = 0;
+
 						//Test to see if random move meets criteria
-						while (valid && i < metronomeunselectable.length){
-							if(move[1] === metronomeunselectable[i]){
-								valid = false;
-								logger.info('[move] Selected move not allowed, retrying');
-							}else if(limitoption === 'damage' && (move[3]==="Status")){
-								valid = false;
-								logger.info('[move] Selected move is Status, Damage requested - retrying');
-							}else if(limitoption === 'status' && (move[3]==="Physical" || move[3]==="Special")){
-								valid = false;
-								logger.info('[move] Selected move is Damage, Status requested - retrying');
-							}
-							i++;
+						if (metronomeunselectable.includes(move[1])) {
+							valid = false;
+							logger.info('[move] Selected move not allowed, retrying');
+						} else if (limitoption === 'damage' && (move[3] === "Status")) {
+							valid = false;
+							logger.info('[move] Selected move is Status, Damage requested - retrying');
+						} else if (limitoption === 'status' && (move[3] === "Physical" || move[3] === "Special")) {
+							valid = false;
+							logger.info('[move] Selected move is Damage, Status requested - retrying');
 						}
 						if (valid){
 							found = true;
@@ -324,10 +322,7 @@ module.exports.run = async (interaction) => {
 			let validmoves = [];
 			movelist.forEach((element) => {
 				if (typeof element === "string") {
-					let clean = element.toLowerCase();
-					clean = clean.replace(' ', '-');
-					clean = clean.replace('\'', '');
-					let badmove = assistunselectable.includes(clean);
+					let badmove = assistunselectable.includes(element);
 					if (!badmove) {
 						validmoves.push(element);
 					}

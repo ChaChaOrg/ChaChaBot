@@ -127,7 +127,7 @@ module.exports.autocomplete = async (interaction) => {
     }else if(field === "move1" || field === "move2" || field === "move3" || field === "move4" || field === "move5"){
         var choices = interaction.client.movelist;
 
-        const filtered = choices.filter(choice => choice[1].toLowerCase().startsWith(focusedValue.toLowerCase())).slice(0, 24);
+        const filtered = choices.filter(choice => choice[1].toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
         await interaction.respond(
             filtered.map(choice => ({ name: choice[1], value: choice[1] })),
         )
