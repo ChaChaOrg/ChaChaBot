@@ -139,7 +139,7 @@ module.exports.run = async (interaction) => {
 
 							// post embed
 							logger.info("[genpoke] Sending summary interaction.");
-							interaction.channel.send({ embeds: [genPokemon.sendSummaryMessage(interaction).embed] });
+							interaction.followUp({ embeds: [genPokemon.sendSummaryMessage(interaction).embed] });
 
 							// alert user that their poke has been added to the database
 							logger.info("[genpoke] Sending upload confirmation and how to remove pokemon.");
@@ -170,7 +170,7 @@ module.exports.run = async (interaction) => {
 
 					// post embed
 					logger.info("[genpoke] Sending summary interaction.");
-					interaction.channel.send({ embeds: [genPokemon.sendSummaryMessage(interaction).embed] });
+					interaction.followUp({ embeds: [genPokemon.sendSummaryMessage(interaction).embed] });
 
 					// alert user that their poke has been added to the database
 					logger.info("[genpoke] Sending upload confirmation and how to remove pokemon.");
@@ -186,7 +186,7 @@ module.exports.run = async (interaction) => {
 	/* istanbul ignore next */
 	catch (error) {
 		logger.error(error);
-		interaction.channel.send('ChaCha machine :b:roke while attempting to generate a Pokemon, please try again later').catch(console.error);
+		interaction.followUp('ChaCha machine :b:roke while attempting to generate a Pokemon, please try again later').catch(console.error);
 	}
 
 };
