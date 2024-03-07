@@ -15,7 +15,7 @@ let Statblock = require("./statblock.js");
 let fs = require('fs');
 
 const MIN_EXP = 0;
-
+const BASE_FRIEND = 70;
 
 
 module.exports = Pokemon;
@@ -43,7 +43,7 @@ function Pokemon(tempSpecies, tempLevel, tempName, tempform) {
   else this.form = tempform;
 
   //level
-  if (tempLevel > 0 && tempLevel <= 100)
+  if (tempLevel > 0)
     this.level = tempLevel;
   else this.level = 1;
 
@@ -58,6 +58,9 @@ function Pokemon(tempSpecies, tempLevel, tempName, tempform) {
 
   // pokemon's exp
   this.exp = MIN_EXP;
+
+    // pokemon's default friendship value
+    this.friendship = BASE_FRIEND;
 
   //hidden ability percentile
   this.haChance = 0;
@@ -505,6 +508,10 @@ Pokemon.prototype.sendSummaryMessage = function (interaction) {
              
         },
         {
+            name: "Friendship",
+            value: `${this.friendship}`,
+        },
+        {
             name: "Basic Info",
             value: `**Ability:** [${tempAbility}](${tempAbilityURL}) | **Gender:** ${this.gender} \n**Nature: ** ${this.nature.natureFinal} | ` +
             `**Shiny: ** ${shiny} ` + `\n**OT:** ${this.originalTrainer} | **Campaign:** ${this.campaign}` +
@@ -686,7 +693,8 @@ Pokemon.prototype.updatePokemon = function (connection, message, pokePrivate, in
             spdEV = ${this.statBlock.evStats[SPD_ARRAY_INDEX]},
             speEV = ${this.statBlock.evStats[SPE_ARRAY_INDEX]},
             exp = ${this.exp},
-            
+            friendship = ${this.friendship},
+
             move1 = "${this.moveSet.move1}",
             move2 = "${this.moveSet.move2}",
             move3 = "${this.moveSet.move3}",
@@ -1068,6 +1076,7 @@ Pokemon.prototype.loadFromSQL = function (connection, P, sqlObject) {
                     ];
 
                     this.exp = sqlObject.exp;
+                    this.friendship = sqlObject.friendship;
 
                     this.moveSet.move1 = sqlObject.move1;
                     this.moveSet.move2 = sqlObject.move2;
