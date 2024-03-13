@@ -143,7 +143,7 @@ module.exports.run = async (interaction) => {
 		
 	} else if (option === 'Move Speed'){
 
-		ability = Math.floor((value-1.5) * (20/3));
+		ability = Math.floor((value-4) * (50/19));
 		logger.info("[statconversion] converted Move Speed to Speed.");
 		interaction.followUp("A Move Speed of " + value + " becomes a maximum Speed stat of " + ability + ", which may not match with a conversion from Dexterity");
 		
