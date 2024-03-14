@@ -57,8 +57,9 @@ const ALL_IVS = ["hpIV", "atkIV", "defIV", "spaIV", "spdIV", "speIV"]
 const ALL_EVS = ["hpEV", "atkEV", "defEV", "spaEV", "spdEV", "speEV"]
 
 const EXP_TRESH = [0, 6, 24, 54, 96, 150, 216, 294, 384, 486, 600, 726, 864, 1014, 1176, 1350, 1536, 1734, 1944, 2166]
-const FRIEND_TRESH = [35, 70, 120, 170, 220]
-const FRIEND_VAL = ["Hostile","Unfriendly"]
+//these seem to be floors
+const FRIEND_TRESH = [35, 71, 121, 171, 221]
+const FRIEND_VAL = ["Hostile","Unfriendly","Indifferent","Friendly","Helpful","Fanatic"]
 // code formatting variables for the embed
 const CODE_FORMAT_START = "```diff\n";
 const CODE_FORMAT_END = "\n```"
@@ -641,6 +642,22 @@ module.exports.run = async (interaction) => {
 
                                     // TODO update above array with charisma calculator when that's done and ready
                                     console.log("Embedding");
+                                    //Converting friendship value to words based on thresholds in FRIEND_THRESH
+                                    let frndwrd = "";
+                                    let val = newPoke.friendship;
+                                    if (val >= FRIEND_TRESH[4]) {
+                                        frndwrd = FRIEND_VAL[5];
+                                    } else if (val >= FRIEND_TRESH[3]) {
+                                        frndwrd = FRIEND_VAL[4];
+                                    } else if (val >= FRIEND_TRESH[2]) {
+                                        frndwrd = FRIEND_VAL[3];
+                                    } else if (val >= FRIEND_TRESH[1]) {
+                                        frndwrd = FRIEND_VAL[2];
+                                    } else if (val >= FRIEND_TRESH[0]) {
+                                        frndwrd = FRIEND_VAL[1];
+                                    }else{
+                                        frndwrd = FRIEND_VAL[0];
+                                    }
                                     // Create embed with old/new updates
                                     let comparisonEmbed = new EmbedBuilder()
                                         .setColor(0x3498DB)
@@ -672,7 +689,7 @@ module.exports.run = async (interaction) => {
                                             },
                                             {
                                                 name: "Experience Points/Friendship",
-                                                value: `${CODE_FORMAT_START}Exp: ${fieldChanged(oldPoke.exp, newPoke.exp, true)}Friendship: ${fieldChanged(oldPoke.friendship, newPoke.friendship, true)}${CODE_FORMAT_END}`,
+                                                value: `${CODE_FORMAT_START}Exp: ${fieldChanged(oldPoke.exp, newPoke.exp, true)}Friendship: ${fieldChanged(oldPoke.friendship, newPoke.friendship, true)} --> ${frndwrd}${CODE_FORMAT_END} `,
                                                 inline: true
                                             },
                                             //{
