@@ -420,7 +420,11 @@ module.exports.run = async (interaction) => {
 			if (XP > 0 && finalXP == 0) {
 				finalXP = 1;
 			}
-			reply += "Pokemon " + (index+1) + " receives " + finalXP + " experience.\n"
+			reply += "Pokemon " + (index+1) + " receives " + finalXP + " experience."
+			if (winnercount > 1){
+				reply += " This was " + XP + " divided by " + winnercount + " Pokemon earning experience.";
+			}
+			reply += "\n"
 		}
 	});
 
