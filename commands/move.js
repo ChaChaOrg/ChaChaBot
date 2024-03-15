@@ -35,37 +35,57 @@ module.exports.data = new SlashCommandBuilder()
 				.setName('beatup')
 				.setDescription('Calculate damage for beat up base power for given Pokemon. Must be in bot.')
 				.addStringOption(option =>
-					option.setName('beatuppokemon')
-						.setDescription('Name of a Pokemon to calculate base power of beatup for - must be in bot.')
+					option.setName('party-member1beatup')
+						.setDescription('Party member to calculate base damage of Beat Up for.')
 						.setRequired(true)
 						.setAutocomplete(true))
-				)
+				.addStringOption(option =>
+					option.setName('party-member2beatup')
+						.setDescription('Party member to calculate base damage of Beat Up for.')
+						.setRequired(false)
+						.setAutocomplete(true))
+				.addStringOption(option =>
+					option.setName('party-member3beatup')
+						.setDescription('Party member to calculate base damage of Beat Up for.')
+						.setRequired(false)
+						.setAutocomplete(true))
+				.addStringOption(option =>
+					option.setName('party-member4beatup')
+						.setDescription('Party member to calculate base damage of Beat Up for.')
+						.setRequired(false)
+						.setAutocomplete(true))
+				.addStringOption(option =>
+					option.setName('party-member5beatup')
+						.setDescription('Party member to calculate base damage of Beat Up for.')
+						.setRequired(false)
+						.setAutocomplete(true))
+					)
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName('assist')
 				.setDescription('Provides a random assist-compatible move from those known by the input Pokemon. Must be in bot.')
 				.addStringOption(option =>
-					option.setName('party-member1')
+					option.setName('party-member1assist')
 						.setDescription('Party member to pull valid Assist move from.')
 						.setRequired(true)
 						.setAutocomplete(true))
 				.addStringOption(option =>
-					option.setName('party-member2')
+					option.setName('party-member2assist')
 						.setDescription('Party member to pull valid Assist move from.')
 						.setRequired(false)
 						.setAutocomplete(true))
 				.addStringOption(option =>
-					option.setName('party-member3')
+					option.setName('party-member3assist')
 						.setDescription('Party member to pull valid Assist move from.')
 						.setRequired(false)
 						.setAutocomplete(true))
 				.addStringOption(option =>
-					option.setName('party-member4')
+					option.setName('party-member4assist')
 						.setDescription('Party member to pull valid Assist move from.')
 						.setRequired(false)
 						.setAutocomplete(true))
 				.addStringOption(option =>
-					option.setName('party-member5')
+					option.setName('party-member5assist')
 						.setDescription('Party member to pull valid Assist move from.')
 						.setRequired(false)
 						.setAutocomplete(true))
@@ -93,7 +113,11 @@ module.exports.data = new SlashCommandBuilder()
 
 module.exports.autocomplete = async (interaction) => {
 	const focusedValue = interaction.options.getFocused(true);
-	if (focusedValue.name === 'pokemon' || focusedValue.name === 'beatuppokemon' || focusedValue.name === 'party-member1' || focusedValue.name === 'party-member2' || focusedValue.name === 'party-member3' || focusedValue.name === 'party-member4' || focusedValue.name === 'party-member5') {
+	if (focusedValue.name === 'pokemon' || focusedValue.name === 'party-member1beatup' || focusedValue.name === 'party-member2beatup' || focusedValue.name === 'party-member3beatup' ||
+		focusedValue.name === 'party-member4beatup' || focusedValue.name === 'party-member5beatup' ||
+		focusedValue.name === 'party-member1assist' || focusedValue.name === 'party-member2assist' ||
+		focusedValue.name === 'party-member3assist' || focusedValue.name === 'party-member4assist' ||
+		focusedValue.name === 'party-member5assist') {
 		var choices = interaction.client.pokemonCache;
 		const filtered = choices.filter(choice => (!choice.private || (choice.discordID == interaction.user)) && choice.name.toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
 		await interaction.respond(
@@ -154,8 +178,7 @@ module.exports.run = async (interaction) => {
 		"Shell Trap", "Sketch", "Sky Drop", "Sleep Talk",
 		"Snatch", "Spiky Shield", "Spotlight", "Struggle",
 		"Switcheroo", "Thief", "Transform", "Trick",
-		"Whirlwind", "Assist", "-", "undefined"]
-	;
+		"Whirlwind", "Assist", "-", "undefined"];
 
 	await interaction.deferReply();
 	if (interaction.options.getSubcommand() === 'metronome') {
@@ -207,18 +230,34 @@ module.exports.run = async (interaction) => {
 
 
 		let followup = "";
-		let name = interaction.options.getString('beatuppokemon');
+		let names = []
+		names.push(interaction.options.getString('party-member1beatup'));
+		if(interaction.options.getString('party-member2beatup')){
+			names.push(interaction.options.getString('party-member2beatup'));
+		}
+		if(interaction.options.getString('party-member3beatup')){
+			names.push(interaction.options.getString('party-member3beatup'));
+		}
+		if(interaction.options.getString('party-member4beatup')){
+			names.push(interaction.options.getString('party-member4beatup'));
+		}
+		if(interaction.options.getString('party-member5beatup')){
+			names.push(interaction.options.getString('party-member5beatup'));
+		}
 
-		let tempPoke = new Pokemon;
-		let notFoundMessage = name + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `+listpoke` to view the Pokemon you can edit.)";
-		let sql = `SELECT * FROM pokemon WHERE name = '${name}';`;
-		logger.info('[move-beatup] SQL query: ${sql}');
-		let beatUpPromise = new Promise(async function (resolve, reject) {
-			interaction.client.mysqlConnection.query(sql, async function (err, response) {
+		let promisearray = [];
+
+		names.forEach((element) => {
+
+			let tempPoke = new Pokemon;
+			let notFoundMessage = element + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `/listpoke` to view the Pokemon you can edit.)";
+			let sql = `SELECT * FROM pokemon WHERE name = '${element}';`;
+			logger.info('[move-assist] SQL query: ${sql}');
+			promisearray.push(new Promise(async function(resolve, reject){ interaction.client.mysqlConnection.query(sql, async function (err, response) {
 				if (err) throw err;
-
+	
 				if (response.length == 0) {
-					logger.info("[move-beatup] Pokemon not found in database. Please check your spelling, or the Pokemon may not be there.")
+					logger.info("[move-assist] Pokemon not found in database. Please check your spelling, or the Pokemon may not be there.")
 					followup += notFoundMessage + "\n";
 				}
 				else {
@@ -226,29 +265,26 @@ module.exports.run = async (interaction) => {
 					if (response[0].private > 0 && interaction.user.id !== response[0].discordID) {
 						logger.info("[modpoke] Detected user attempting to access private Pokemon.")
 						// If user found a pokemon that was marked private and belongs to another user, act as if the pokemon doesn't exist in messages
-						interaction.followUp(notFoundMessage);
+						interaction.reply(notFoundMessage);
 						return;
 					}
 
 					await tempPoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, response[0])
 						.then(response => {
-
+	
 							logger.info("[move-beatup] Got Pokemon info.");
-
 							let math = tempPoke.statBlock.baseStats[1] / 10;
-							math += 5;
-							followup += "Beat Up base power for " + name + " is " + math + ".\n";
-
+							math += 5
+							followup += "Beat Up base power for " + element + " is " + math + ".\n";
+	
 						});
 				}
 				resolve();
-			})
-		})
-		beatUpPromise.then(() => {
-
+			})}))
+		});
+		Promise.all(promisearray).then(() => {
 			interaction.followUp(followup + "This is the base power each strike should use with the Damage command - each strike can crit and STAB individually.");
-
-		})
+	 	 })
 	}else if (interaction.options.getSubcommand() === 'assist') {
 		let Pokemon = require(`../models/pokemon`);
         
@@ -256,18 +292,18 @@ module.exports.run = async (interaction) => {
 		let followup = "";
 
 		let names = []
-		names.push(interaction.options.getString('party-member1'));
-		if(interaction.options.getString('party-member2')){
-			names.push(interaction.options.getString('party-member2'));
+		names.push(interaction.options.getString('party-member1assist'));
+		if(interaction.options.getString('party-member2assist')){
+			names.push(interaction.options.getString('party-member2assist'));
 		}
-		if(interaction.options.getString('party-member3')){
-			names.push(interaction.options.getString('party-member3'));
+		if(interaction.options.getString('party-member3assist')){
+			names.push(interaction.options.getString('party-member3assist'));
 		}
-		if(interaction.options.getString('party-member4')){
-			names.push(interaction.options.getString('party-member4'));
+		if(interaction.options.getString('party-member4assist')){
+			names.push(interaction.options.getString('party-member4assist'));
 		}
-		if(interaction.options.getString('party-member5')){
-			names.push(interaction.options.getString('party-member5'));
+		if(interaction.options.getString('party-member5assist')){
+			names.push(interaction.options.getString('party-member5assist'));
 		}
 		let movelist = [];
 		let promisearray = [];
@@ -275,7 +311,7 @@ module.exports.run = async (interaction) => {
 		names.forEach((element) => {
 
 			let tempPoke = new Pokemon;
-			let notFoundMessage = element + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `+listpoke` to view the Pokemon you can edit.)";
+			let notFoundMessage = element + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `/listpoke` to view the Pokemon you can edit.)";
 			let sql = `SELECT * FROM pokemon WHERE name = '${element}';`;
 			logger.info('[move-assist] SQL query: ${sql}');
 			promisearray.push(new Promise(async function(resolve, reject){ interaction.client.mysqlConnection.query(sql, async function (err, response) {
