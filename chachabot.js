@@ -16,7 +16,7 @@ const client = new Client({ intents: [
     GatewayIntentBits.GuildMessageReactions,
     GatewayIntentBits.MessageContent
 ] });
-const config = require("./config-test.json");
+const config = require("./config.json");
 
 //Create the Connection with the mysql Database
 //Append the pool to the Client object
