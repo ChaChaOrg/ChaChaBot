@@ -8,6 +8,9 @@ const SPD_ARRAY_INDEX = 4;
 const SPE_ARRAY_INDEX = 5;
 const SHINY_CHANCE = 4096;
 
+const FRIEND_TRESH = [35, 71, 121, 171, 221]
+const FRIEND_VAL = ["Hostile", "Unfriendly", "Indifferent", "Friendly", "Helpful", "Fanatic"]
+
 const logger = require('../logs/logger.js');
 let Nature = require("./nature.js");
 let Moveset = require("./moveset.js");
@@ -485,6 +488,23 @@ Pokemon.prototype.sendSummaryMessage = function (interaction) {
     let avatarURL = interaction.user.avatarURL();
     let username = interaction.user.username;
 
+    //Converting friendship value to words based on thresholds in FRIEND_THRESH
+    let frndwrd = "";
+    let val = this.friendship;
+    if (val >= FRIEND_TRESH[4]) {
+        frndwrd = FRIEND_VAL[5];
+    } else if (val >= FRIEND_TRESH[3]) {
+        frndwrd = FRIEND_VAL[4];
+    } else if (val >= FRIEND_TRESH[2]) {
+        frndwrd = FRIEND_VAL[3];
+    } else if (val >= FRIEND_TRESH[1]) {
+        frndwrd = FRIEND_VAL[2];
+    } else if (val >= FRIEND_TRESH[0]) {
+        frndwrd = FRIEND_VAL[1];
+    } else {
+        frndwrd = FRIEND_VAL[0];
+    }
+
   return {
     embed: {
       description: 'Click the link for the Bulbapedia page, or use !data to call info using the Pokedex bot.',
@@ -509,7 +529,7 @@ Pokemon.prototype.sendSummaryMessage = function (interaction) {
         },
         {
             name: "Friendship",
-            value: `${this.friendship}`,
+            value: `${this.friendship} : ${frndwrd}`,
         },
         {
             name: "Basic Info",
