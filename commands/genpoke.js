@@ -72,7 +72,7 @@ module.exports.run = async (interaction) => {
 
 	let namecheck = interaction.options.getString('nickname');
 
-	if (namecheck.match(SQL_SANITATION_REGEX)){
+	if (namecheck.match(SQL_SANITATION_REGEX) || interaction.options.getString('species').match(SQL_SANITATION_REGEX) || interaction.options.getString('form').match(SQL_SANITATION_REGEX)){
 		logger.error("[genpoke] User tried to put in invalid string input.");
 		interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
 		return;
