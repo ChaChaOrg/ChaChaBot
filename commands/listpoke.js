@@ -9,6 +9,8 @@ const userCreator = ":small_orange_diamond:";
 // created by you, private
 const userCreatorPrivate = ":orange_circle:";
 
+const SQL_SANITATION_REGEX = /[^a-zA-Z0-9-'_]/;
+
 //chacha database site
 const CHACHA_SITE = " **ChaCha Database Site:** http://34.226.119.6:7000/";
 
@@ -134,6 +136,15 @@ module.exports.data = new SlashCommandBuilder()
 		.setRequired(false)
         );
 
+
+function testAgainstREGX(stringToTest){
+    if (stringToTest.match(SQL_SANITATION_REGEX) || stringToTest.match(SQL_SANITATION_REGEX)){
+        logger.error("[modpoke] User tried to put in invalid string input.");
+        throw "That is not a valid string input, please keep input alphanumeric, ', - or _";
+    }
+    return
+}
+
 module.exports.run = async (interaction) => {
 
     try {
@@ -147,16 +158,16 @@ module.exports.run = async (interaction) => {
 
             // items to filter for
             // ?? checks if the option is null, and if it is sets the vaule to ""
-            let filterSpecies = interaction.options.getString("species") ?? "";
-            let filterForm = interaction.options.getString("form") ?? "";
-            let filterType1 = interaction.options.getString("type1") ?? "";
-            let filterType2 = interaction.options.getString("type2") ?? "";
-            let filterDiscordID = interaction.options.getUser("user") ?? "";
-            let filterOT = interaction.options.getString("original-trainer") ?? "";
-            let filterCampaign = interaction.options.getString("campaign") ?? "";
-            let filterUpperLevel = interaction.options.getInteger("upper-level") ?? "";
-            let filterLowerLevel = interaction.options.getInteger("lower-level") ?? "";
-            let filterPrivate = interaction.options.getBoolean("private") ?? "";
+            let filterSpecies = testAgainstREGX(interaction.options.getString("species") ?? "");
+            let filterForm = testAgainstREGX(interaction.options.getString("form") ?? "");
+            let filterType1 = testAgainstREGX(interaction.options.getString("type1") ?? "");
+            let filterType2 = testAgainstREGX(interaction.options.getString("type2") ?? "");
+            let filterDiscordID = testAgainstREGX(interaction.options.getUser("user") ?? "");
+            let filterOT = testAgainstREGX(interaction.options.getString("original-trainer") ?? "");
+            let filterCampaign = testAgainstREGX(interaction.options.getString("campaign") ?? "");
+            let filterUpperLevel = testAgainstREGX(interaction.options.getInteger("upper-level") ?? "");
+            let filterLowerLevel = testAgainstREGX(interaction.options.getInteger("lower-level") ?? "");
+            let filterPrivate = testAgainstREGX(interaction.options.getBoolean("private") ?? "");
 
             /**
              * The function to get the exact string needed from the given Pokemon object
@@ -196,6 +207,7 @@ module.exports.run = async (interaction) => {
                 return pokeString;
             }
 
+            
 
             //Build SQL Query
             let initialQuery = "SELECT * FROM pokemon"
@@ -360,9 +372,9 @@ module.exports.run = async (interaction) => {
                     })
     } catch (err) {
         // if you're here, there was a broad error that wasn't caught by the other stuff!
-        let broadErrMessage = "Error while attempting to execute the listpoke command.";
+        let broadErrMessage = "Error while attempting to execute the listpoke command. Check your input";
         console.log("[listpoke] " + broadErrMessage + "\n" + err);
         logger.info("[listpoke] " + broadErrMessage + "\n" + err);
-        interaction.followUp(broadErrMessage);
+        interaction.followUp(broadErrMessage + err);
     }
 };
