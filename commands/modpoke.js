@@ -63,6 +63,8 @@ const FRIEND_VAL = ["Hostile","Unfriendly"]
 const CODE_FORMAT_START = "```diff\n";
 const CODE_FORMAT_END = "\n```"
 
+const SQL_SANITATION_REGEX = /[^a-zA-Z0-9-'_]/;
+
 module.exports.data = new SlashCommandBuilder()
                         .setName('modpoke')
                         .setDescription("Modifies an existing Pokemon in the database. Use /modpoke help for available fields.")
@@ -158,6 +160,12 @@ module.exports.run = async (interaction) => {
         let fieldToChange = interaction.options.getString("field-to-change");
         let newValue = interaction.options.getString("new-value");
 
+        if (nickname.match(SQL_SANITATION_REGEX) || newValue.match(SQL_SANITATION_REGEX)){
+            logger.error("[modpoke] User tried to put in invalid string input.");
+            interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+            return;
+        }
+
         // if (nickname == fieldToChange == newValue == 'help') {
         //     interaction.channel.send(HELP_FIELDS_LIST);
         //     return;
@@ -239,7 +247,7 @@ module.exports.run = async (interaction) => {
         // Duplicate check and name special character check
         if (valName.toLowerCase() == 'name') {
 
-            if (!valString.match(/^\w+$/)) {
+            if (!valString.match("([A-Z-'_])\w+)")){
                 logger.warn("[modpoke] User put special character in pokemon name, sending warning.");
                 interaction.editReply("Please do not use special characters when using renaming Pokemon. Modification canceled.");
                 return;
