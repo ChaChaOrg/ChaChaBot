@@ -247,12 +247,6 @@ module.exports.run = async (interaction) => {
         // Duplicate check and name special character check
         if (valName.toLowerCase() == 'name') {
 
-            if (!valString.match("([A-Z-'_])\w+)")){
-                logger.warn("[modpoke] User put special character in pokemon name, sending warning.");
-                interaction.editReply("Please do not use special characters when using renaming Pokemon. Modification canceled.");
-                return;
-            }
-
             let dupeSQL = `SELECT * FROM pokemon WHERE name = '${valString}'`;
 
             let results = new Promise((resolve, reject) => interaction.client.mysqlConnection.query(dupeSQL, function (err, rows, fields) {
