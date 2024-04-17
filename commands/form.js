@@ -27,6 +27,8 @@ const addMessage = "The \"add\" subcommand adds a form to the list of available 
     " 41 40 50 65 65 Ice null" +
     " 6 190 Field null 0\n";
 
+const REGEX_SANI_STRING = /[^a-zA-Z0-9'_]/;
+
 // JavaScript Document
 module.exports.data = new SlashCommandBuilder()
     .setName('form')
@@ -89,6 +91,12 @@ module.exports.run = async (interaction) =>
         if (interaction.options.getSubcommand() === 'list') {
             //throw "Work in Progress";
             let species = interaction.options.getString('species-name').toLowerCase();
+            if (species.match(REGEX_SANI_STRING)) {
+                logger.error("[form] User attempted to use invalid character in species name.");
+                console.log("Invalid character detected.");
+                interaction.followUp("Please double check the spelling on the species name.");
+                return;
+            }
             logger.info("[form] Listing forms for " + species);
             let sql = 'SELECT form FROM pokeForms WHERE species = \'' + species + '\'';
             logger.info("[form] List sql query");
@@ -159,13 +167,30 @@ module.exports.run = async (interaction) =>
 
         } else if (interaction.options.getSubcommand() === 'add'){
             let species = interaction.options.getString("species-name").toLowerCase();
-            let check = `SELECT * from pokeForms WHERE species = \'` + species + `\' AND form = \'` + interaction.options.getString("form-name").toLowerCase() + `\'`;
+            let form = interaction.options.getString("form-name").toLowerCase();
+            if (form.match(REGEX_SANI_STRING) || species.match(REGEX_SANI_STRING)) {
+                
+                logger.error("[form add] User attempted to use invalid character.");
+                console.log("Invalid character detected.");
+                interaction.followUp("Please double check the spelling on your form/species names.");
+                return;
+                
+            }
+            let check = `SELECT * from pokeForms WHERE species = \'` + species + `\' AND form = \'` + form + `\'`;
 
 
-            let form = interaction.options.getString("form-name") ?? ''; 
+            form = interaction.options.getString("form-name") ?? ''; 
             let ability1 = interaction.options.getString("ability1") ?? '';  
             let ability2 = interaction.options.getString("ability2") ?? '';
             let ability3 = interaction.options.getString("ability3") ?? '';
+            if (form.match(REGEX_SANI_STRING) || ability1.match(REGEX_SANI_STRING) || ability2.match(REGEX_SANI_STRING) || ability3.match(REGEX_SANI_STRING)) {
+
+                logger.error("[form add] User attempted to use invalid character. Ability block.");
+                console.log("Invalid character detected.");
+                interaction.followUp("Please double check the spelling on your ability inputs.");
+                return;
+
+            }
             let hpBST = interaction.options.getInteger("hp-base-stat") ?? '';
             let atkBST = interaction.options.getInteger("attack-base-stat") ?? '';
             let defBST = interaction.options.getInteger("defense-base-stat") ?? '';
@@ -174,10 +199,26 @@ module.exports.run = async (interaction) =>
             let speBST = interaction.options.getInteger("speed-base-stat") ?? '';
             let type1 = interaction.options.getString("type1") ?? '';
             let type2 = interaction.options.getString("type2") ?? '';
+            if (type1.match(REGEX_SANI_STRING) || type2.match(REGEX_SANI_STRING)) {
+
+                logger.error("[form add] User attempted to use invalid character. Type block.");
+                console.log("Invalid character detected.");
+                interaction.followUp("Please double check the spelling on your type inputs.");
+                return;
+
+            }
             let genderrate = interaction.options.getInteger("genderRate") ?? 0;
             let capturerate = interaction.options.getInteger("captureRate") ?? 0;
             let egggroup1 = interaction.options.getString("eggGroup1") ?? '';
             let egggroup2 = interaction.options.getString("eggGroup2") ?? '';
+            if (egggroup1.match(REGEX_SANI_STRING) || egggroup2.match(REGEX_SANI_STRING)) {
+
+                logger.error("[form add] User attempted to use invalid character. Egg block.");
+                console.log("Invalid character detected.");
+                interaction.followUp("Please double check the spelling on your egg group imputs.");
+                return;
+
+            }
             let private = interaction.options.getBoolean("private") ?? false;
 
             if(private) private = 1; else private = 0;
@@ -236,7 +277,14 @@ module.exports.run = async (interaction) =>
             //in future, may want to add a confirmation step to the deletion process
             let species = interaction.options.getString("species-name").toLowerCase();
             let form = interaction.options.getString("form-name").toLowerCase();
+            if (form.match(REGEX_SANI_STRING) || species.match(REGEX_SANI_STRING)) {
 
+                logger.error("[form remove] User attempted to use invalid character.");
+                console.log("Invalid character detected.");
+                interaction.followUp("Please double check the spelling on your inputs.");
+                return;
+
+            }
             const collectorFilter = i => {
                 i.deferUpdate();
                 return i.user.id === interaction.user.id;
