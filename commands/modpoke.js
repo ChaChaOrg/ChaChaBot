@@ -321,6 +321,16 @@ module.exports.run = async (interaction) => {
             }
         }
 
+        // Move formatting
+        if (valName.toLowerCase() == 'move1' || valName.toLowerCase() == 'move2' || valName.toLowerCase() == 'move3' || valName.toLowerCase() == 'move4' || valName.toLowerCase() == 'move5') {
+            valString = valString.replace("_", " ");
+            if (valString.match(/[^A-Za-z-' 0-9]/)){
+                logger.error(`[modpoke] Move has illegal character(s). Modification canceled.`)
+                interaction.editReply(`[modpoke] Move has illegal character. Modification canceled.`)
+                return;
+            }
+            valString = valString.charAt(0).toUpperCase() + valString.slice(1);
+        }
 
         // Duplicate check and name special character check
         if (valName.toLowerCase() == 'name') {
