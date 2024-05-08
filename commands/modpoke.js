@@ -147,7 +147,7 @@ module.exports.run = async (interaction) => {
 			.setStyle(ButtonStyle.Secondary);
     
     const row = new ActionRowBuilder()
-			.addComponents(cancel, confirm);
+			.addComponents(confirm, cancel);
 
     let Pokemon = require('../models/pokemon.js');
     try {

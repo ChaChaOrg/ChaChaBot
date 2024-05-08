@@ -28,6 +28,7 @@ const addMessage = "The \"add\" subcommand adds a form to the list of available 
     " 6 190 Field null 0\n";
 
 const REGEX_SANI_STRING = /[^a-zA-Z0-9'_]/;
+const REGEX_FORBID = /(^\s*DROP\s*$)|(\s+DROP\s+)|(\s+DROP\s*$)|(^\s*DROP\s+)|(^\s*TABLE\s*$)|(\s+TABLE\s*$)|(\s+TABLE\s+)|(^\s*TABLE\s+)|(^\s*INSERT\s*$)|(\s+INSERT\s+)|(\s+INSERT\s*$)|(^\s*INSERT\s+)|(^\s*DELETE\s*$)|(\s+DELETE\s+)|(\s+DELETE\s*$)|(^\s*DELETE\s+)/i;
 
 // JavaScript Document
 module.exports.data = new SlashCommandBuilder()
@@ -97,8 +98,14 @@ module.exports.run = async (interaction) =>
                 interaction.followUp("Please double check the spelling on the species name.");
                 return;
             }
+            if (species.match(REGEX_FORBID)) {
+                logger.error("[form] Forbidden name detected.");
+                console.log("SQL command detected.");
+                interaction.followUp("I'm afraid I can't let you do that. Please use a different name.");
+                return;
+            }
             logger.info("[form] Listing forms for " + species);
-            let sql = 'SELECT form FROM pokeForms WHERE species = \'' + species + '\'';
+            let sql = 'SELECT form, discordID, private FROM pokeForms WHERE species = \'' + species + '\'';
             logger.info("[form] List sql query");
 
             //insert api search here
@@ -111,10 +118,13 @@ module.exports.run = async (interaction) =>
                     logger.info("[form] Main form(s) founds");
                     let names ="";
                     for (let i = 0; i < response.varieties.length; i++) {
+                        
                         names += response.varieties[i].pokemon.name;
                         if (i != response.varieties.length - 1) {
                             names += ", ";
                         }
+                        
+                        
                     }
                     //interaction.reply("The " + species + " species has the following forms in game: " + names);
                     output += "The " + species + " species has the following forms in game: " + names;
@@ -147,10 +157,13 @@ module.exports.run = async (interaction) =>
                             let cust = "The " + species + " species has the following custom forms: ";
                             for (let i = 0; i < result.length; i++) {
                                 //console.log(result[i]);
-                                if (i != 0) {
-                                    cust += ", "
+                                if (result[i].private == 0 || result[i].discordID == interaction.user.id) {
+                                   
+                                    cust += result[i].form;
+                                    if (i != result.length-1) {
+                                        cust += ", "
+                                    }
                                 }
-                                cust += result[i].form;
                             }
                             console.log("Forms: " + cust);
                             //interaction.reply(output);
@@ -176,6 +189,12 @@ module.exports.run = async (interaction) =>
                 return;
                 
             }
+            if (form.match(REGEX_FORBID) || species.match(REGEX_FORBID)) {
+                logger.error("[form] Forbidden form detected.");
+                console.log("SQL command detected.");
+                interaction.followUp("I'm afraid I can't let you do that. Please use a different name.");
+                return;
+            }
             let check = `SELECT * from pokeForms WHERE species = \'` + species + `\' AND form = \'` + form + `\'`;
 
 
@@ -190,6 +209,12 @@ module.exports.run = async (interaction) =>
                 interaction.followUp("Please double check the spelling on your ability inputs.");
                 return;
 
+            }
+            if (ability1.match(REGEX_FORBID) || ability2.match(REGEX_FORBID) || ability3.match(REGEX_FORBID)) {
+                logger.error("[form] Forbidden ability name detected.");
+                console.log("SQL command detected.");
+                interaction.followUp("I'm afraid I can't let you do that. One of those isn't an ability name.");
+                return;
             }
             let hpBST = interaction.options.getInteger("hp-base-stat") ?? '';
             let atkBST = interaction.options.getInteger("attack-base-stat") ?? '';
@@ -207,6 +232,12 @@ module.exports.run = async (interaction) =>
                 return;
 
             }
+            if (type1.match(REGEX_FORBID) || type2.match(REGEX_FORBID)) {
+                logger.error("[form] Forbidden type detected.");
+                console.log("SQL command detected.");
+                interaction.followUp("I'm afraid I can't let you do that. Please use a different type.");
+                return;
+            }
             let genderrate = interaction.options.getInteger("genderRate") ?? 0;
             let capturerate = interaction.options.getInteger("captureRate") ?? 0;
             let egggroup1 = interaction.options.getString("eggGroup1") ?? '';
@@ -218,6 +249,12 @@ module.exports.run = async (interaction) =>
                 interaction.followUp("Please double check the spelling on your egg group imputs.");
                 return;
 
+            }
+            if (egggroup1.match(REGEX_FORBID) || egggroup2.match(REGEX_FORBID)) {
+                logger.error("[form] Forbidden egggroup detected.");
+                console.log("SQL command detected.");
+                interaction.followUp("I'm afraid I can't let you do that. Please use a different egg group.");
+                return;
             }
             let private = interaction.options.getBoolean("private") ?? false;
 
