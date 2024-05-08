@@ -1,6 +1,9 @@
 const logger = require('../logs/logger.js');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 
+const REGEX_SANI_STRING = /[^a-zA-Z0-9'_()\/:\n]/;
+const REGEX_FORBID = /(DROP)|(TABLE)|(SELECT)/i;
+
 module.exports.data = new SlashCommandBuilder()
     .setName('import')
     .setDescription('Imports pokemon from a pokemon showdown export. Use help to check formatting')
@@ -41,6 +44,12 @@ module.exports.run = async(interaction) => {
         return;
     }
     let importContent = interaction.options.getString('import-data');
+    if (importContent.match(REGEX_SANI_STRING)) {
+        logger.error("[importpoke] Invalid characters detected.");
+        console.log("String format error: invalid characters.");
+        interaction.followUp("Invalid format detected. Please refer to the help subcommand for proper formatting.");
+        return;
+    }
     logger.info("[importpoke] " + importContent);
     importPoke.importPokemon(interaction.client.mysqlConnection, interaction.client.pokedex, importContent).then(() => { 
         logger.info("[importpoke] Sending summary interaction.");

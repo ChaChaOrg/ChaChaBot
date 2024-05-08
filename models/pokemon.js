@@ -912,10 +912,18 @@ Pokemon.prototype.importPokemon = function (connection, P, importString) {
       }
     }.bind(this)
   );
+    
+  if (this.name.match(SQL_SANITATION_REGEX) || this.name.match(SQL_SANITATION_REGEX)){
+    logger.error("[modpoke] User tried to put in invalid string input.");
+    interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+    reject();
+    return;
+  }
+
 
   let sql = `SELECT * FROM pokemon WHERE name = '${this.name}';`;
 
-  //console.log(sql);
+  console.log(sql);
   connection.query(sql, function (err, response) {
       if (err) throw err;
 
@@ -936,11 +944,11 @@ Pokemon.prototype.importPokemon = function (connection, P, importString) {
 
 
   
-    connection.query(sql, function (err, response) {
-      if (err) reject(err);
+  connection.query(sql, function (err, response) {
+    if (err) reject(err);
 
-      if (response.length != 0) {
-          resolve(this.name = this.name + ('' + (response.length + 1)))
+    if (response.length != 0) {
+      resolve(this.name = this.name + ('' + (response.length + 1)))
       }
 
       resolve()
@@ -957,6 +965,8 @@ Pokemon.prototype.importPokemon = function (connection, P, importString) {
       }.bind(this)
     );
   })
+
+  
 };
 
 Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
