@@ -898,3 +898,22 @@
 898	Noxious Torque	Poison	Physical	10	100	100%	IX
 899	Combat Torque	Fighting	Physical	10	100	100%	IX
 900	Magical Torque	Fairy	Physical	10	100	100%	IX
+901	Blood Moon	Normal	Special	5	140	100%	IX
+902	Matcha Gotcha	Grass	Special	15	80	90%	IX
+903	Syrup Bomb	Grass	Special	10	60	85%	IX
+904	Ivy Cudgel	Grass	Physical	10	100	100%	IX
+905	Electro Shot	Electric	Special	10	130	100%	IX
+906	Tera Starstorm	Normal	Special	5	120	100%	IX
+907	Fickle Beam	Dragon	Special	5	80	100%	IX
+908	Burning Bulwark	Fire	Status	10	—	—%	IX
+909	Thunderclap	Electric	Special	5	70	100%	IX
+910	Mighty Cleave	Rock	Physical	5	95	100%	IX
+911	Tachyon Cutter	Steel	Special	10	50	—%	IX
+912	Hard Press	Steel	Physical	10	—	100	IX
+913	Dragon Cheer	Dragon	Status	15	—	—%	IX
+914	Alluring Voice	Fairy	Special	10	80	100%	IX
+915	Temper Flare	Fire	Physical	10	75	100%	IX
+916	Supercell Slam	Electric	Physical	15	100	95%	IX
+917	Psychic Noise	Psychic	Special	10	75	100%	IX
+918	Upper Hand	Fighting	Physical	15	65	100%	IX
+919	Malignant Chain	Poison	Special	5	100	100%	IX
