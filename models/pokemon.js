@@ -8,6 +8,9 @@ const SPD_ARRAY_INDEX = 4;
 const SPE_ARRAY_INDEX = 5;
 const SHINY_CHANCE = 4096;
 
+const FRIEND_TRESH = [35, 71, 121, 171, 221]
+const FRIEND_VAL = ["Hostile", "Unfriendly", "Indifferent", "Friendly", "Helpful", "Fanatic"]
+
 const logger = require('../logs/logger.js');
 let Nature = require("./nature.js");
 let Moveset = require("./moveset.js");
@@ -15,7 +18,7 @@ let Statblock = require("./statblock.js");
 let fs = require('fs');
 
 const MIN_EXP = 0;
-
+const BASE_FRIEND = 70;
 
 
 module.exports = Pokemon;
@@ -43,7 +46,7 @@ function Pokemon(tempSpecies, tempLevel, tempName, tempform) {
   else this.form = tempform;
 
   //level
-  if (tempLevel > 0 && tempLevel <= 100)
+  if (tempLevel > 0)
     this.level = tempLevel;
   else this.level = 1;
 
@@ -58,6 +61,9 @@ function Pokemon(tempSpecies, tempLevel, tempName, tempform) {
 
   // pokemon's exp
   this.exp = MIN_EXP;
+
+    // pokemon's default friendship value
+    this.friendship = BASE_FRIEND;
 
   //hidden ability percentile
   this.haChance = 0;
@@ -482,6 +488,23 @@ Pokemon.prototype.sendSummaryMessage = function (interaction) {
     let avatarURL = interaction.user.avatarURL();
     let username = interaction.user.username;
 
+    //Converting friendship value to words based on thresholds in FRIEND_THRESH
+    let frndwrd = "";
+    let val = this.friendship;
+    if (val >= FRIEND_TRESH[4]) {
+        frndwrd = FRIEND_VAL[5];
+    } else if (val >= FRIEND_TRESH[3]) {
+        frndwrd = FRIEND_VAL[4];
+    } else if (val >= FRIEND_TRESH[2]) {
+        frndwrd = FRIEND_VAL[3];
+    } else if (val >= FRIEND_TRESH[1]) {
+        frndwrd = FRIEND_VAL[2];
+    } else if (val >= FRIEND_TRESH[0]) {
+        frndwrd = FRIEND_VAL[1];
+    } else {
+        frndwrd = FRIEND_VAL[0];
+    }
+
   return {
     embed: {
       description: 'Click the link for the Bulbapedia page, or use !data to call info using the Pokedex bot.',
@@ -503,6 +526,10 @@ Pokemon.prototype.sendSummaryMessage = function (interaction) {
               name: "Experience Points",
               value: `${this.exp}`,
              
+        },
+        {
+            name: "Friendship",
+            value: `${this.friendship} : ${frndwrd}`,
         },
         {
             name: "Basic Info",
@@ -686,7 +713,8 @@ Pokemon.prototype.updatePokemon = function (connection, message, pokePrivate, in
             spdEV = ${this.statBlock.evStats[SPD_ARRAY_INDEX]},
             speEV = ${this.statBlock.evStats[SPE_ARRAY_INDEX]},
             exp = ${this.exp},
-            
+            friendship = ${this.friendship},
+
             move1 = "${this.moveSet.move1}",
             move2 = "${this.moveSet.move2}",
             move3 = "${this.moveSet.move3}",
@@ -1078,6 +1106,7 @@ Pokemon.prototype.loadFromSQL = function (connection, P, sqlObject) {
                     ];
 
                     this.exp = sqlObject.exp;
+                    this.friendship = sqlObject.friendship;
 
                     this.moveSet.move1 = sqlObject.move1;
                     this.moveSet.move2 = sqlObject.move2;

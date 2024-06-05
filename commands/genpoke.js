@@ -1,5 +1,6 @@
 const logger = require('../logs/logger.js');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { ActionRowBuilder, ButtonBuilder, SlashCommandBuilder } = require('@discordjs/builders');
+const { ButtonStyle } = require('discord.js');
 
 const SQL_SANITATION_REGEX = /[^a-zA-Z0-9-'_]/;
 
@@ -48,8 +49,7 @@ module.exports.data = new SlashCommandBuilder()
 			option.setName('level')
 				.setDescription('Level of the Pokemon being generated. Minimum 1, maximum 20')
 				.setRequired(true)
-				.setMinValue(1)
-				.setMaxValue(20))
+				.setMinValue(1))
 		.addStringOption(option =>
 			option.setName('nickname')
 				.setDescription('Nickname of the Pokemon being generated. Do not use spaces or special characters!')
@@ -67,6 +67,16 @@ module.exports.data = new SlashCommandBuilder()
 
 module.exports.run = async (interaction) => {
 	await interaction.deferReply();
+	const confirm = new ButtonBuilder()
+		.setCustomId('confirm')
+		.setLabel('Do It!')
+		.setStyle(ButtonStyle.Success);
+	const cancel = new ButtonBuilder()
+		.setCustomId('cancel')
+		.setLabel('Cancel')
+		.setStyle(ButtonStyle.Danger);
+	const row = new ActionRowBuilder()
+		.addComponents(confirm, cancel);
 
 	let Pokemon = require('../models/pokemon.js');
 
@@ -106,35 +116,79 @@ module.exports.run = async (interaction) => {
 	}
 
 	try {
-		let genPokemon = new Pokemon(interaction.options.getString('species'), interaction.options.getInteger('level'),
-			interaction.options.getString('nickname'), interaction.options.getString('form'));
-		// assign hidden ability chance, if listed
-		//if (args[3] !== null) genPokemon.haChance = args[3];
-		// initialize the Pokemon
-		/* istanbul ignore next */
-		genPokemon.init(interaction.client.mysqlConnection, interaction.client.pokedex)
-			.then(function (response) {
-				// upload pokemon to database
-				logger.info("[genpoke] Uploading pokemon to database.");
-				genPokemon.uploadPokemon(interaction.client.mysqlConnection, interaction);
-
-				// post embed
-				logger.info("[genpoke] Sending summary interaction.");
-				interaction.channel.send({ embeds: [genPokemon.sendSummaryMessage(interaction).embed] });
-
-				// alert user that their poke has been added to the database
-				logger.info("[genpoke] Sending upload confirmation and how to remove pokemon.");
-				interaction.followUp(genPokemon.name + " has been added to the database.\nTo remove it, use this command: `/rempoke " + genPokemon.name + "`");
-			})
-			.catch(function (error) {
-				logger.error(error);
-				interaction.followUp(error);
+		
+		if (interaction.options.getInteger('level') > 20) {
+			const response = await interaction.followUp({
+				content: 'You are about to generate a pokemon that is above the maximum level. Are you sure you want to do this?',
+				components: [row],
 			});
+
+			const userfilter = i => i.user.id === interaction.user.id;
+			try {
+				const confirmation = await response.awaitMessageComponent({ filter: userfilter, time: 60000 });
+				if (confirmation.customId === 'confirm') {
+					let genPokemon = new Pokemon(interaction.options.getString('species'), interaction.options.getInteger('level'),
+						interaction.options.getString('nickname'), interaction.options.getString('form'));
+					// assign hidden ability chance, if listed
+					//if (args[3] !== null) genPokemon.haChance = args[3];
+					// initialize the Pokemon
+					/* istanbul ignore next */
+					genPokemon.init(interaction.client.mysqlConnection, interaction.client.pokedex)
+						.then(function (response) {
+							// upload pokemon to database
+							logger.info("[genpoke] Uploading pokemon to database.");
+							genPokemon.uploadPokemon(interaction.client.mysqlConnection, interaction);
+
+							// post embed
+							logger.info("[genpoke] Sending summary interaction.");
+							interaction.followUp({ embeds: [genPokemon.sendSummaryMessage(interaction).embed] });
+
+							// alert user that their poke has been added to the database
+							logger.info("[genpoke] Sending upload confirmation and how to remove pokemon.");
+							interaction.followUp(genPokemon.name + " has been added to the database.\nTo remove it, use this command: `+rempoke " + genPokemon.name + "`");
+						})
+						.catch(function (error) {
+							logger.error(error);
+							interaction.followUp(error);
+						});
+				} else {
+					interacton.followUp("Generation cancelled.");
+				}
+			} catch (e) {
+				interaction.followUp("Action timed out after 1 minute. Pokemon not generated.");
+			}
+		} else {
+			let genPokemon = new Pokemon(interaction.options.getString('species'), interaction.options.getInteger('level'),
+				interaction.options.getString('nickname'), interaction.options.getString('form'));
+			// assign hidden ability chance, if listed
+			//if (args[3] !== null) genPokemon.haChance = args[3];
+			// initialize the Pokemon
+			/* istanbul ignore next */
+			genPokemon.init(interaction.client.mysqlConnection, interaction.client.pokedex)
+				.then(function (response) {
+					// upload pokemon to database
+					logger.info("[genpoke] Uploading pokemon to database.");
+					genPokemon.uploadPokemon(interaction.client.mysqlConnection, interaction);
+
+					// post embed
+					logger.info("[genpoke] Sending summary interaction.");
+					interaction.followUp({ embeds: [genPokemon.sendSummaryMessage(interaction).embed] });
+
+					// alert user that their poke has been added to the database
+					logger.info("[genpoke] Sending upload confirmation and how to remove pokemon.");
+					interaction.followUp(genPokemon.name + " has been added to the database.\nTo remove it, use this command: `+rempoke " + genPokemon.name + "`");
+				})
+				.catch(function (error) {
+					logger.error(error);
+					interaction.followUp(error);
+				});
+        }
+		
 	}
 	/* istanbul ignore next */
 	catch (error) {
 		logger.error(error);
-		interaction.channel.send('ChaCha machine :b:roke while attempting to generate a Pokemon, please try again later').catch(console.error);
+		interaction.followUp('ChaCha machine :b:roke while attempting to generate a Pokemon, please try again later').catch(console.error);
 	}
 
 };

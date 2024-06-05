@@ -63,7 +63,7 @@ module.exports.data = new SlashCommandBuilder()
               .setMinValue(-6))
           .addIntegerOption(option =>
               option.setName('stages-of-defense')
-              .setDescription('Stages of defense/special defense the attacker has. Minimum -6, maximum +6')
+              .setDescription('Stages of defense/special defense the defender has. Minimum -6, maximum +6')
               .setMaxValue(6)
               .setMinValue(-6))
           .addNumberOption(option =>

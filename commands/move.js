@@ -269,6 +269,7 @@ module.exports.run = async (interaction) => {
 				interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
 				return;
 			}
+
 			names.push(interaction.options.getString('party-member5beatup'));
 		}
 
@@ -319,6 +320,7 @@ module.exports.run = async (interaction) => {
 		let followup = "";
 
 		let names = []
+
 		if (interaction.options.getString('party-member1assist').match(SQL_SANITATION_REGEX)){
             logger.error("[move] User tried to put in invalid string input.");
             interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
@@ -355,6 +357,7 @@ module.exports.run = async (interaction) => {
 				interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
 				return;
 			}
+
 			names.push(interaction.options.getString('party-member5assist'));
 		}
 		let movelist = [];

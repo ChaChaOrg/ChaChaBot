@@ -57,8 +57,9 @@ const ALL_IVS = ["hpIV", "atkIV", "defIV", "spaIV", "spdIV", "speIV"]
 const ALL_EVS = ["hpEV", "atkEV", "defEV", "spaEV", "spdEV", "speEV"]
 
 const EXP_TRESH = [0, 6, 24, 54, 96, 150, 216, 294, 384, 486, 600, 726, 864, 1014, 1176, 1350, 1536, 1734, 1944, 2166]
-const FRIEND_TRESH = [35, 70, 120, 170, 220]
-const FRIEND_VAL = ["Hostile","Unfriendly"]
+//these seem to be floors
+const FRIEND_TRESH = [35, 71, 121, 171, 221]
+const FRIEND_VAL = ["Hostile","Unfriendly","Indifferent","Friendly","Helpful","Fanatic"]
 // code formatting variables for the embed
 const CODE_FORMAT_START = "```diff\n";
 const CODE_FORMAT_END = "\n```"
@@ -126,6 +127,13 @@ module.exports.autocomplete = async (interaction) => {
         await interaction.respond(
            filtered.map(choice => ({ name: choice, value: choice })),
         )
+    }else if(field === "move1" || field === "move2" || field === "move3" || field === "move4" || field === "move5"){
+        var choices = interaction.client.movelist;
+
+        const filtered = choices.filter(choice => choice[1].toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
+        await interaction.respond(
+            filtered.map(choice => ({ name: choice[1], value: choice[1] })),
+        )
     }
   }else{
     //nothing
@@ -177,7 +185,7 @@ module.exports.run = async (interaction) => {
         //grab the value to be changed
         let valName = fieldToChange;
         let lowerCase_OTHERFIELDS = OTHER_FIELDS.map(field => field.toLowerCase()); //copy of OTHER_FIELDS all lowercase
-
+        console.log("other fields mapped");
         // check whether the field they want to change exists
         if (!STATIC_FIELDS.includes(valName) && !OTHER_FIELDS.includes(valName) &&
             !STATIC_FIELDS.includes(valName.toLowerCase()) && !lowerCase_OTHERFIELDS.includes(valName.toLowerCase())) {
@@ -225,22 +233,92 @@ module.exports.run = async (interaction) => {
             valString = newValue.charAt(0).toUpperCase() + newValue.slice(1);
         }
 
+        const userfilter = i => i.user.id === interaction.user.id;
         if (ALL_IVS.includes(valName) && (parseInt(valString) < 0 || parseInt(valString) > 31)) {
-            logger.error(`[modpoke] IV value (${valString}) for ${pokeName} is outside the bounds of 0 - 31! Modification canceled.`)
-            interaction.editReply(`IV value (${valString}) for ${pokeName} is outside the bounds of 0 - 31! Modification canceled.`)
-            return;
-        }
+            if (parseInt(valString) < 0) {
+                logger.error(`[modpoke] IV value (${valString}) for ${pokeName} is outside the bounds of 0 - 31! Modification canceled.`)
+                interaction.editReply(`IV value (${valString}) for ${pokeName} is outside the bounds of 0 - 31! Modification canceled.`)
+                return;
+            }
+            if (parseInt(valString) > 31) {
+                const response = await interaction.followUp({
+                    content: "IV values are normally capped at 31. Are you sure you want to do this?",
+                    components: [row],
+                });
 
+                
+
+                try {
+                    const confirmation = await response.awaitMessageComponent({ filter: userfilter, time: 60000 });
+                    if (confirmation.customId === 'cancel') {
+                        interaction.followUp('IV modification canceled.');
+                        return;
+                    }
+                } catch (e) {
+                    interaction.followUp("Modification canceled due to time out.");
+                    return;
+                }
+            }
+        }
         if (ALL_EVS.includes(valName) && (parseInt(valString) < 0 || parseInt(valString) > 252)) {
-            logger.error(`[modpoke] EV value (${valString}) for ${pokeName} is outside the bounds of 0 - 252! Modification canceled.`)
-            interaction.editReply(`EV value (${valString}) for ${pokeName} is outside the bounds of 0 - 252! Modification canceled.`)
+            if (parseInt(valString) < 0) {
+                logger.error(`[modpoke] EV value (${valString}) for ${pokeName} is outside the bounds of 0 - 252! Modification canceled.`)
+                interaction.editReply(`EV value (${valString}) for ${pokeName} is outside the bounds of 0 - 252! Modification canceled.`)
+                return;
+            }
+
+            if (parseInt(valString) > 252) {
+                const response = await interaction.followUp({
+                    content: "EV values are normally capped at 252. Are you sure you want to do this?",
+                    components: [row],
+                });
+                try {
+                   
+
+                    const confirmation = await response.awaitMessageComponent({ filter: userfilter, time: 60000 });
+
+                    if (confirmation.customId === 'cancel') {
+                        interaction.followUp("EV modification canceled.");
+                        return;
+                    }
+                } catch (e) {
+                    interaction.followUp("Modification canceled due to time out.");
+                    return;
+                }
+            }
+        }
+        if (valName.toLowerCase() === 'level' && isNaN(parseInt(valString))) {
+            logger.error("[modpoke] Attempted to change level to something NaN.");
+            interaction.editReply("Your pokemon's level can't be changed to that. Please double check your inputs.");
             return;
         }
-
         if (valName.toLowerCase() == 'level' && (parseInt(valString) < 1 || parseInt(valString) > 20)) {
-            logger.error(`[modpoke]Level value (${valString}) for ${pokeName} is outside the bounds of 1 - 20! Modification canceled.`)
-            interaction.editReply(`Level value (${valString}) for ${pokeName} is outside the bounds of 1 - 20! Modification canceled.`)
-            return;
+            
+            if (parseInt(valString) < 1) {
+                logger.error(`[modpoke]Level value (${valString}) for ${pokeName} is outside the bounds of 1 - 20! Modification canceled.`)
+                interaction.editReply(`Level value (${valString}) for ${pokeName} is outside the bounds of 1 - 20! Modification canceled.`)
+                return;
+            }
+
+            if (parseInt(valString) > 20) {
+                const response = await interaction.followUp({
+                    content: "The normal max level for a pokemon is 20. Are you sure you want to do this?",
+                    components: [row],
+                });
+                try {
+                    
+
+                    const confirmation = await response.awaitMessageComponent({ filter: userfilter, time: 60000 });
+
+                    if (confirmation.customId === 'cancel') {
+                        interaction.followUp("Level modification canceled.");
+                        return;
+                    }
+                } catch (e) {
+                    interaction.followUp("Modification canceled due to time out.");
+                    return;
+                }
+            }
         }
 
 
@@ -273,6 +351,28 @@ module.exports.run = async (interaction) => {
 
         }
 
+        if (valName.toLowerCase() === 'exp') {
+            if (isNaN(parseInt(valString))) {
+                logger.error('[modpoke] NAN exp value detected.');
+                interaction.editReply("Please double check your input. Exp should be a number, 0 or above.");
+                return;
+            }
+            if (parseInt(valString) < 0) {
+                logger.error('[modpoke] Negative exp value detected.');
+                interaction.editReply("Are you some kind of cooltrainer? A pokemon should have 0 or more exp.");
+                return;
+            }
+        }
+        if (valName.toLowerCase() === 'friendship' && isNaN(parseInt(valString))) {
+            logger.error('[modpoke] Friendship value is NAN');
+            interaction.editReply('Friendship value improperly formatted. Expecting a number.');
+            return;
+        }
+        if (valName.toLowerCase() === 'friendship' && (parseInt(valString) < 0 || parseInt(valString) > 255)) {
+            logger.error("[modpoke] Friendship outside of bounds.");
+            interaction.editReply("Given Friendship value was outside of valid range 0-255.");
+            return;
+        }
 
         // ================= SQL statements  =================
         // sql statement to check if the Pokemon exists
@@ -374,6 +474,21 @@ module.exports.run = async (interaction) => {
                                 if (valName === "species"|| valName === "form"||valName === "nature") thisPoke[valName] = valString.toLowerCase();
                                 else thisPoke[valName] = parseInt(valString);
 
+                                if (valName === "level") {
+                                    let exp = thisPoke["exp"];
+                                    let lvl = parseInt(valString);
+                                    if (lvl > 20) {
+                                        //we in homebrew territory, exp no longer matters
+                                        thisPoke["exp"] = 9999;
+                                    } else {
+                                        if (exp >= EXP_TRESH[lvl] || exp < EXP_TRESH[lvl - 1]) {
+                                            //exp bounds correction
+                                            thisPoke["exp"] = EXP_TRESH[lvl - 1];
+                                        }
+                                    }
+                                    
+                                }
+
                                 if (valName === "exp") {
                                     let exp = parseInt(valString);
                                     let iter = 1;
@@ -384,6 +499,18 @@ module.exports.run = async (interaction) => {
                                     thisPoke["exp"] = exp;
                                 }
                                 console.log("level: " + thisPoke["level"] + " exp: " + thisPoke["exp"]);
+
+                                if (valName === "friendship") {
+                                    console.log("We even in the friendship block?");
+                                    let frnd = parseInt(valString);
+                                    if (frnd < 0) {
+                                        frnd = 0;
+                                    }
+                                    if (frnd > 255) {
+                                        frnd = 255;
+                                    }
+                                    thisPoke["friendship"] = frnd;
+                                }
                                 //Make new empty Pokemon object
                                 let newPoke = new Pokemon();
 
@@ -402,7 +529,7 @@ module.exports.run = async (interaction) => {
                                     console.log(`"${newPoke.pokemonData.stats[3].stat.name}": "${newPoke.pokemonData.stats[3].base_stat}"`);
                                     console.log(`"${newPoke.pokemonData.stats[4].stat.name}": "${newPoke.pokemonData.stats[4].base_stat}"`);
                                     console.log(`"${newPoke.pokemonData.stats[5].stat.name}": "${newPoke.pokemonData.stats[5].base_stat}"`);
-
+                                    console.log("Friendship: " + newPoke.friendship);
 
 
                                     logger.info("SQL has been converted to a Pokemon Object\nAll values recalculated as necessary\nProviding user with comparison embed & awaiting change confirmation...")
@@ -523,7 +650,23 @@ module.exports.run = async (interaction) => {
                                     ];
 
                                     // TODO update above array with charisma calculator when that's done and ready
-
+                                    console.log("Embedding");
+                                    //Converting friendship value to words based on thresholds in FRIEND_THRESH
+                                    let frndwrd = "";
+                                    let val = newPoke.friendship;
+                                    if (val >= FRIEND_TRESH[4]) {
+                                        frndwrd = FRIEND_VAL[5];
+                                    } else if (val >= FRIEND_TRESH[3]) {
+                                        frndwrd = FRIEND_VAL[4];
+                                    } else if (val >= FRIEND_TRESH[2]) {
+                                        frndwrd = FRIEND_VAL[3];
+                                    } else if (val >= FRIEND_TRESH[1]) {
+                                        frndwrd = FRIEND_VAL[2];
+                                    } else if (val >= FRIEND_TRESH[0]) {
+                                        frndwrd = FRIEND_VAL[1];
+                                    }else{
+                                        frndwrd = FRIEND_VAL[0];
+                                    }
                                     // Create embed with old/new updates
                                     let comparisonEmbed = new EmbedBuilder()
                                         .setColor(0x3498DB)
@@ -554,15 +697,15 @@ module.exports.run = async (interaction) => {
                                                 value: "**GROWTH STATS**"
                                             },
                                             {
-                                                name: "Experience Points",
-                                                value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.exp, newPoke.exp, true)}${CODE_FORMAT_END}`,
+                                                name: "Experience Points/Friendship",
+                                                value: `${CODE_FORMAT_START}Exp: ${fieldChanged(oldPoke.exp, newPoke.exp, true)}Friendship: ${fieldChanged(oldPoke.friendship, newPoke.friendship, true)} --> ${frndwrd}${CODE_FORMAT_END} `,
                                                 inline: true
                                             },
-                                           /// {
-                                             ///   name: "Friendship",
-                                              //  value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.friendship, newPoke.friendship, true)}${CODE_FORMAT_END}`,
-                                              //  inline: true
-                                           // },
+                                            //{
+                                                //name: "Friendship",
+                                                //value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.friendship, newPoke.friendship, true)}${CODE_FORMAT_END}`,
+                                                //inline: true
+                                            //},
                                             {
                                                 name: "=====",
                                                 value: "**BASE STATS**"
@@ -661,7 +804,7 @@ module.exports.run = async (interaction) => {
                                             },
                                             {
                                                 name: "Move Speed (measured in feet)",
-                                                value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.statBlock.armorClass, newPoke.statBlock.armorClass, true)}${CODE_FORMAT_END}`,
+                                                value: `${CODE_FORMAT_START}${fieldChanged(oldPoke.statBlock.moveSpeed, newPoke.statBlock.moveSpeed, true)}${CODE_FORMAT_END}`,
                                                 inline: true
                                             },
                                         )
@@ -719,6 +862,7 @@ module.exports.run = async (interaction) => {
                                 }).catch(function (error) {
                                     let loadNewPokeMessage = "Error loading new Pokemon to object. Please make sure you've entered a valid field and value.";
                                     interaction.editReply(loadNewPokeMessage);
+                                    console.log(error);
                                     logger.error(`[modpoke] ${loadNewPokeMessage}\n\t${error.toString()}`)
                                 });
                             }).catch(function (error) {
