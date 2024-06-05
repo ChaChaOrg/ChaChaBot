@@ -253,6 +253,7 @@ module.exports.run = async (interaction) => {
         //
         // Now that the pokemon have been found, grab the move information and the relevant type information.
         //
+        if (attackerMove.toLowerCase == "vise-grip") attackerMove = "vice-grip";
         interaction.client.pokedex.getMoveByName(attackerMove.toLowerCase()).then((moveData) => {
           interaction.client.pokedex.getTypeByName(moveData.type.name).then((typeData) => {
 
