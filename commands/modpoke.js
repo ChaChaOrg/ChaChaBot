@@ -319,7 +319,7 @@ module.exports.run = async (interaction) => {
 
             if (!valString.match(/^\w+$/)) {
                 logger.warn("[modpoke] User put special character in pokemon name, sending warning.");
-                interaction.editReply("Please do not use special characters when using renaming Pokemon. Modification canceled.");
+                interaction.editReply("Please do not use special characters when renaming Pokemon. Modification canceled.");
                 return;
             }
 
@@ -466,11 +466,18 @@ module.exports.run = async (interaction) => {
                                 console.log(`"${oldPoke.pokemonData.stats[5].stat.name}": "${oldPoke.pokemonData.stats[5].base_stat}"`);
                                 // grab the row and stow it
                                 let thisPoke = rows[0];
-
+                                console.log("This poke.");
+                                console.log(rows[0]);
                                 // if the valName is species, assign directly, otherwise convert it into a number
 
-                                if (valName === "species"|| valName === "form"||valName === "nature") thisPoke[valName] = valString.toLowerCase();
-                                else thisPoke[valName] = parseInt(valString);
+                                if (valName === "species") {
+                                    thisPoke[valName] = valString.toLowerCase();
+                                    thisPoke["form"] = valString.toLowerCase();
+                                } else if ( valName === "form" || valName === "nature") {
+                                    thisPoke[valName] = valString.toLowerCase();
+                                } else {
+                                    thisPoke[valName] = parseInt(valString);
+                                }
 
                                 if (valName === "level") {
                                     let exp = thisPoke["exp"];
