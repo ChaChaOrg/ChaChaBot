@@ -985,7 +985,7 @@ Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
                             //fill out the dummy json file-
                             this.pokemonData = JSON.parse(formtemplate);
                             this.speciesData = JSON.parse(speciestemplate);
-
+                          
                             this.pokemonData.types[0].name = pokeForm.type1;
                             this.pokemonData.types[1].name = pokeForm.type2;
 

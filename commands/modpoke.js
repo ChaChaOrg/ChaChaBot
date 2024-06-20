@@ -837,6 +837,10 @@ module.exports.run = async (interaction) => {
                                         const confirmation = await response.awaitMessageComponent({ filter: collectorFilter, time: 60000 });
 
                                         if (confirmation.customId == 'confirm') {
+                                            
+                                            if (newPoke.pokemonData.types.length <= 1) {
+                                                newPoke.type2 = "";
+                                            }
                                             newPoke.updatePokemon(interaction.client.mysqlConnection, null, rows[0].private, interaction).then(function (results) {
                                                 let successString = "Success! " + pokeName + "'s " + valName + " has been changed to " + valString + " and all related stats have been updated.\n\nHint: View Pokemon's stat's using `/showpoke [nickname]`";
                                                 logger.info(`[modpoke] ${successString}`)
