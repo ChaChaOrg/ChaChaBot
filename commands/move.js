@@ -4,7 +4,7 @@ const databaseURL = 'https://bulbapedia.bulbagarden.net/wiki/List_of_moves';
 // Commands for moves that require randomization or calculation
 
 const HELP_MESSAGE = "Move helper. Variables depend on subcommand"
-	+ "Current subcommands: Metronome, Beat Up, Confusion"
+	+ "Current subcommands: Metronome, Beat Up, Confusion, Multi-strike"
 
 const ATK_ARRAY_INDEX = 1;
 const DEF_ARRAY_INDEX = 2;
@@ -109,7 +109,34 @@ module.exports.data = new SlashCommandBuilder()
 					.setDescription('Stages of defens the Pokemon has. Minimum -6, maximum +6')
 					.setMaxValue(6)
 					.setMinValue(-6))
-				);
+				)
+		.addSubcommand(subcommand =>
+			subcommand
+				.setName('multistrike')
+				.setDescription('Assists with getting multiple hits and/or accuracy for moves that strike multiple times.')
+				.addStringOption(option =>
+					option.setName('movetype')
+					.setDescription('Type of Multi-strike move')
+					.setRequired(true)
+					.addChoices({
+						name: 'Fixed Count',
+						value: 'fixed'
+					}, {
+						name: 'Variable Count',
+						value: 'variable'
+					}, {
+						name: 'Accuracy-dependent',
+						value: 'accuracy-dependent'
+					}					))
+				.addIntegerOption(option =>
+					option.setName('accuracy')
+					.setDescription('Base accuracy of move')
+					.setRequired(true))
+				.addIntegerOption(option =>
+					option.setName('stages')
+					.setDescription('Stages of accuracy - positive or negative')
+					.setRequired(false)
+				));
 
 module.exports.autocomplete = async (interaction) => {
 	const focusedValue = interaction.options.getFocused(true);
