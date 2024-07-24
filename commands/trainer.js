@@ -3,8 +3,8 @@ const logger = require('../logs/logger.js');
 const databaseURL = 'https://bulbapedia.bulbagarden.net/wiki/List_of_moves';
 // Commands for moves that require randomization or calculation
 
-const HELP_MESSAGE = "Move helper. Variables depend on subcommand"
-	+ "Current subcommands: Metronome, Beat Up, Confusion"
+const HELP_MESSAGE = "allows you to group pokemon by trainer. Add, set, or modify a trainer here"
+	+ "Current subcommands: set, add, mod"
 
 const ATK_ARRAY_INDEX = 1;
 const DEF_ARRAY_INDEX = 2;
@@ -16,17 +16,17 @@ module.exports.data = new SlashCommandBuilder()
 		.setDescription('allows you to group pokemon by trainer. Add, set, or modify a trainer here')
 		.addSubcommand(subcommand =>
 			subcommand
-				.setName('set')
-				.setDescription('sets your current trainer')
+				.setName('switch')
+				.setDescription('switches your current trainer')
 				.addStringOption(option =>
 					option.setName('name')
-						.setDescription('Name of the trainer you are setting as your current')
+						.setDescription('Name of the trainer you are setting as your active')
 						.setRequired(true)
 				))
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName('add')
-				.setDescription('adds a new trainer ')
+				.setDescription('adds a new trainer')
 				.addStringOption(option =>
 					option.setName('name')
 						.setDescription('name of your new trainer')
@@ -38,31 +38,27 @@ module.exports.data = new SlashCommandBuilder()
 				)
 		.addSubcommand(subcommand =>
 			subcommand
+				.setName('clear')
+				.setDescription('Clears your current trainer field')
+				)
+		.addSubcommand(subcommand =>
+			subcommand
+				.setName('delete')
+				.setDescription(`deletes a trainer and clears their pokemons' owner`)
+				.addStringOption(option =>
+					option.setName('name')
+						.setDescription('name of the trainer to delete')
+						.setRequired(true))
+		.addSubcommand(subcommand =>
+			subcommand
 				.setName('mod')
 				.setDescription('modify a trainer property (just campaign for now)')
 				.addStringOption(option =>
-					option.setName('party-members')
-					.setDescription('Party members to pull valid Assist move from, seperated by a space.')
+					option.setName('property')
+					.setDescription('property to modify')
 					.setRequired(true)))
-		.addSubcommand(subcommand =>
-			subcommand
-				.setName('confusion')
-				.setDescription('Calculates confusion damage for a given Pokemon.')
-				.addStringOption(option =>
-					option.setName('pokemon')
-					.setDescription('Pokemon that is hitting itself.')
-					.setRequired(true))
-				.addIntegerOption(option =>
-					option.setName('stages-of-attack')
-					.setDescription('Stages of attack the Pokemon has. Minimum -6, maximum +6')
-              		.setMaxValue(6)
-              		.setMinValue(-6))
-				.addIntegerOption(option =>
-					option.setName('stages-of-defense')
-					.setDescription('Stages of defens the Pokemon has. Minimum -6, maximum +6')
-					.setMaxValue(6)
-					.setMinValue(-6))
-				);
+				)
+		
 
 module.exports.run = async (interaction) => {
 
