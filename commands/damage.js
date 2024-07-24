@@ -328,13 +328,23 @@ module.exports.run = async (interaction) => {
             } else if (effective < 1) {
               effectiveString = "*It's not very effective.*\n";
             }
-            //
-            // calculate damage dice roll
-            //
-            let numDice = (moveData.power + other) * 0.2;
 
-            for (numDice; numDice > 0; numDice--) {
-              dice += Math.floor(Math.random() * 8 + 1);
+            //
+            // Check for mult-hit move
+            //
+            let numHits = moveData.meta.max_hits ?? 1;
+            let dicePool = new Array(numHits);
+
+            for (let hitNum = 0; hitNum < numHits; hitNum++) {
+              dice = 0;
+              //
+              // calculate damage dice roll
+              //
+
+              for (let numDice = (moveData.power + other) * 0.2; numDice > 0; numDice--) {
+                dice += Math.floor(Math.random() * 8 + 1);
+              }
+              dicePool[hitNum] = dice;
             }
 
             //critical hit - done manually, checks first letter only
@@ -361,55 +371,57 @@ module.exports.run = async (interaction) => {
             //
             // Final damage calculation
             //
-            damageTotal =
-              ((10 * attackPoke.level + 10) / 250) *
-              ((tempAttack * stageModAtk) /
-                (tempDefense * stageModDef)) *
-              dice *
-              stab *
-              effective *
-              critical *
-              otherMult;
 
-            damageTotal = damageTotal.toFixed(2);
+            if (numHits < 2) {
+              damageTotal =
+                ((10 * attackPoke.level + 10) / 250) *
+                ((tempAttack * stageModAtk) /
+                  (tempDefense * stageModDef)) *
+                dice *
+                stab *
+                effective *
+                critical *
+                otherMult;
 
-            combatString =
-              `**${attackerName}** (level ${attackPoke.level} ${attackPoke.species}) used ${moveData.name} on ${defenderName} (level ${defendPoke.level} ${defendPoke.species})\n` +
-              effectiveString +
-              criticalString +
-              `${attackerName} deals ${damageTotal} damage to the defending ${defenderName}\n(Base Power: ${moveData.power} - damage roll: ${dice}`;
+              damageTotal = damageTotal.toFixed(2);
 
-            // Embed for damage
+              combatString =
+                `**${attackerName}** (level ${attackPoke.level} ${attackPoke.species}) used ${moveData.name} on ${defenderName} (level ${defendPoke.level} ${defendPoke.species})\n` +
+                effectiveString +
+                criticalString +
+                `${attackerName} deals ${damageTotal} damage to the defending ${defenderName}\n(Base Power: ${moveData.power} - damage roll: ${dice}`;
 
-            //format pokemon names
-            let atkPokeSpecies_formatted =
-              attackPoke.form.charAt(0).toUpperCase() +
-              attackPoke.form.slice(1);
-            let defPokeSpecies_formatted =
-              defendPoke.form.charAt(0).toUpperCase() +
-              defendPoke.form.slice(1);
+              // Embed for damage
 
-            // get # of dice rolled
-            let diceRolled = moveData.power / 5;
-            diceRolled += "d8";
+              //format pokemon names
+              let atkPokeSpecies_formatted =
+                attackPoke.form.charAt(0).toUpperCase() +
+                attackPoke.form.slice(1);
+              let defPokeSpecies_formatted =
+                defendPoke.form.charAt(0).toUpperCase() +
+                defendPoke.form.slice(1);
 
-            //format move
-            let tempMove = moveData.name;
-            if (~tempMove.indexOf("-")) {
-              let tempA = tempMove.slice(0, tempMove.indexOf("-"));
-              let tempB = tempMove.slice(
-                tempMove.indexOf("-") + 1,
-                tempMove.length
-              );
-              tempA = capitalizeWord(tempA);
-              tempB = capitalizeWord(tempB);
-              tempMove = tempA + " " + tempB;
-            } else
-              tempMove = tempMove.charAt(0).toUpperCase() + tempMove.slice(1);
+              // get # of dice rolled
+              let diceRolled = moveData.power / 5;
+              diceRolled += "d8";
 
-            let moveHungerCost = (8 - moveData.pp / 5) + 1;
-            
-            let combatEmbedString = {
+              //format move
+              let tempMove = moveData.name;
+              if (~tempMove.indexOf("-")) {
+                let tempA = tempMove.slice(0, tempMove.indexOf("-"));
+                let tempB = tempMove.slice(
+                  tempMove.indexOf("-") + 1,
+                  tempMove.length
+                );
+                tempA = capitalizeWord(tempA);
+                tempB = capitalizeWord(tempB);
+                tempMove = tempA + " " + tempB;
+              } else
+                tempMove = tempMove.charAt(0).toUpperCase() + tempMove.slice(1);
+
+              let moveHungerCost = (8 - moveData.pp / 5) + 1;
+
+              let combatEmbedString = {
                 color: 3447003,
                 author: {
                   name: interaction.user.username,
@@ -439,7 +451,7 @@ module.exports.run = async (interaction) => {
                   {
                     name: `${tempMove} Info`,
                     value: `**Move Info:** ${capitalizeWord(moveData.damage_class.name)} ${capitalizeWord(moveData.type.name)} Attack` +
-                        `\n**Base Power:** ${moveData.power} pw\n**Damage Roll:** ${dice} (${diceRolled})\n**Hunger Cost:** ${moveHungerCost}`,
+                      `\n**Base Power:** ${moveData.power} pw\n**Damage Roll:** ${dice} (${diceRolled})\n**Hunger Cost:** ${moveHungerCost}`,
                   },
                 ],
                 timestamp: new Date(),
@@ -449,12 +461,125 @@ module.exports.run = async (interaction) => {
                 },
               };
 
-            // comment out embed if necessary
+              // comment out embed if necessary
 
-            //embed message
-            logger.info("[damage] Sending combat embed string.");
-            interaction.followUp({ embeds: [combatEmbedString] }).catch(console.error);
-          });
+              //embed message
+              logger.info("[damage] Sending combat embed string.");
+              interaction.followUp({ embeds: [combatEmbedString] }).catch(console.error);
+            } else {
+              let damageArray = new Array (numHits);
+              let critArray = new Array (numHits);
+              for (let hitNum = 0; hitNum < numHits; hitNum++) {
+                damageTotal =
+                  ((10 * attackPoke.level + 10) / 250) *
+                  ((tempAttack * stageModAtk) /
+                    (tempDefense * stageModDef)) *
+                  dicePool[hitNum] *
+                  stab *
+                  effective *
+                  otherMult;
+
+                let critTotal = 
+                ((10 * attackPoke.level + 10) / 250) *
+                ((tempAttack * stageModAtk) /
+                  (tempDefense * stageModDef)) *
+                dicePool[hitNum] *
+                stab *
+                effective *
+                CRITICAL_HIT_MULTIPLIER *
+                otherMult;
+
+                damageTotal = damageTotal.toFixed(2);
+                critTotal = critTotal.toFixed(2);
+                damageArray[hitNum] = damageTotal;
+                critArray[hitNum] = critTotal;
+                combatString +=
+                `For hit ${hitNum}: \n` + 
+                `**${attackerName}** (level ${attackPoke.level} ${attackPoke.species}) used ${moveData.name} on ${defenderName} (level ${defendPoke.level} ${defendPoke.species})\n` +
+                effectiveString +
+                `${attackerName} deals ${damageArray[hitNum]} damage to the defending ${defenderName}\n(Base Power: ${moveData.power} - damage roll: ${dicePool[hitNum]}\n` +
+                `For a crit, instead ${attackerName} deals ${critArray[hitNum]} damage to the defending ${defenderName}\n(Base Power: ${moveData.power} - damage roll: ${dicePool[hitNum]}\n`;
+              }
+
+              
+              // Embed for damage
+
+              //format pokemon names
+              let atkPokeSpecies_formatted =
+                attackPoke.form.charAt(0).toUpperCase() +
+                attackPoke.form.slice(1);
+              let defPokeSpecies_formatted =
+                defendPoke.form.charAt(0).toUpperCase() +
+                defendPoke.form.slice(1);
+
+              // get # of dice rolled
+              let diceRolled = moveData.power / 5;
+              diceRolled += "d8";
+
+              //format move
+              let tempMove = moveData.name;
+              if (~tempMove.indexOf("-")) {
+                let tempA = tempMove.slice(0, tempMove.indexOf("-"));
+                let tempB = tempMove.slice(
+                  tempMove.indexOf("-") + 1,
+                  tempMove.length
+                );
+                tempA = capitalizeWord(tempA);
+                tempB = capitalizeWord(tempB);
+                tempMove = tempA + " " + tempB;
+              } else
+                tempMove = tempMove.charAt(0).toUpperCase() + tempMove.slice(1);
+
+              let moveHungerCost = (8 - moveData.pp / 5) + 1;
+
+              let combatEmbedString = {
+                color: 3447003,
+                author: {
+                  name: interaction.user.username,
+                  icon_url: interaction.user.avatarURL,
+                },
+                title: `**${attackerName}** used ${tempMove} on **${defenderName}**!`,
+                url: `https://bulbapedia.bulbagarden.net/wiki/${tempMove.replace(
+                  " ",
+                  ""
+                )}_(Move)`,
+                // thumbnail: { url:  `${this.pokemonData.sprites.front_default}`,
+                description: `${effectiveString}${criticalString}`,
+
+                fields: [
+                  {
+                    name: "Damage Dealt",
+                    value: `${defenderName} takes ${damageArray} damage.`,
+                  },
+                  {
+                    name: "Attacker Info",
+                    value: `**${attackerName}**, Lv ${attackPoke.level} ${atkPokeSpecies_formatted}\n=================`,
+                  },
+                  {
+                    name: "Defender Info",
+                    value: `**${defenderName}**, Lv ${defendPoke.level} ${defPokeSpecies_formatted}\n=================`,
+                  },
+                  {
+                    name: `${tempMove} Info`,
+                    value: `**Move Info:** ${capitalizeWord(moveData.damage_class.name)} ${capitalizeWord(moveData.type.name)} Attack` +
+                      `\n**Base Power:** ${moveData.power} pw\n**Damage Roll:** ${dicePool} (${diceRolled} for ${numHits} hits)\n**Hunger Cost:** ${moveHungerCost}`,
+                  },
+                ],
+                timestamp: new Date(),
+                footer: {
+                  icon_url: interaction.client.user.avatarURL,
+                  text: "Chambers and Charizard!",
+                },
+              };
+
+              // comment out embed if necessary
+
+              //embed message
+              logger.info("[damage] Sending combat embed string.");
+              interaction.followUp({ embeds: [combatEmbedString] }).catch(console.error);
+            }
+          }
+          );
         }).catch(function (error) {
           if (error.response.status == 404) {
             logger.error("[damage] Move not found. " + error)
