@@ -186,6 +186,7 @@ module.exports.run = async (interaction) => {
     let stageModAtk = 0;
     let stageModDef = 0;
     let damageTotal = 0;
+    let critTotal = 0;
 
     let effectiveString = "";
     let criticalString = "";
@@ -332,7 +333,13 @@ module.exports.run = async (interaction) => {
             //
             // Check for mult-hit move
             //
-            let numHits = moveData.meta.max_hits ?? 1;
+            let numHits = 1;
+            try{
+              numHits = moveData.meta.max_hits ?? 1;
+            }catch{
+              // Catch for any mvoes that don't have meta (from recent gens)
+              numHits = 1;
+            };
             let dicePool = new Array(numHits);
 
             for (let hitNum = 0; hitNum < numHits; hitNum++) {
@@ -341,7 +348,7 @@ module.exports.run = async (interaction) => {
               // calculate damage dice roll
               //
 
-              for (let numDice = (moveData.power + other) * 0.2; numDice > 0; numDice--) {
+              for (let numDice = Math.floor((moveData.power + other) * 0.2); numDice > 0; numDice--) {
                 dice += Math.floor(Math.random() * 8 + 1);
               }
               dicePool[hitNum] = dice;
@@ -372,8 +379,9 @@ module.exports.run = async (interaction) => {
             // Final damage calculation
             //
 
-            let damageArray = new Array(numHits);
-            let critArray = new Array(numHits);
+            let multiHitString = ``;
+            let multiHitTotal = 0;
+            let critBonus = 0;
             for (let hitNum = 0; hitNum < numHits; hitNum++) {
               damageTotal =
                 ((10 * attackPoke.level + 10) / 250) *
@@ -384,17 +392,19 @@ module.exports.run = async (interaction) => {
                 effective *
                 otherMult;
 
-              damageTotal = damageTotal.toFixed(2);
-              let critTotal = (damageTotal * CRITICAL_HIT_MULTIPLIER).toFixed(2);
-              damageArray[hitNum] = damageTotal;
-              critArray[hitNum] = critTotal;
+              multiHitTotal += damageTotal;
+              damageTotal = damageTotal.toFixed(0);
+              critTotal = (damageTotal * CRITICAL_HIT_MULTIPLIER).toFixed(0);
+              critBonus = critTotal - damageTotal;
+              multiHitString += `Hit #` + (hitNum + 1) + ` -- **` + damageTotal + `** -- (+` + critBonus + `)\n`
               combatString +=
                 `For hit ${hitNum}: \n` +
                 `**${attackerName}** (level ${attackPoke.level} ${attackPoke.species}) used ${moveData.name} on ${defenderName} (level ${defendPoke.level} ${defendPoke.species})\n` +
                 effectiveString +
-                `${attackerName} deals ${damageArray[hitNum]} damage to the defending ${defenderName}\n(Base Power: ${moveData.power} - damage roll: ${dicePool[hitNum]}\n` +
-                `For a crit, instead ${attackerName} deals ${critArray[hitNum]} damage to the defending ${defenderName}\n(Base Power: ${moveData.power} - damage roll: ${dicePool[hitNum]}\n`;
+                `${attackerName} deals ${damageTotal} damage to the defending ${defenderName}\n(Base Power: ${moveData.power} - damage roll: ${dicePool[hitNum]}\n` +
+                `For a crit, instead ${attackerName} deals ${critTotal} damage to the defending ${defenderName}\n(Base Power: ${moveData.power} - damage roll: ${dicePool[hitNum]}\n`;
             }
+            multiHitString += `**Total: ` + multiHitTotal.toFixed(0) + `**`;
 
 
             // Embed for damage
@@ -408,7 +418,7 @@ module.exports.run = async (interaction) => {
               defendPoke.form.slice(1);
 
             // get # of dice rolled
-            let diceRolled = moveData.power / 5;
+            let diceRolled = Math.floor(moveData.power / 5);
             diceRolled += "d8";
 
             //format move
@@ -427,7 +437,10 @@ module.exports.run = async (interaction) => {
 
             let moveHungerCost = (8 - moveData.pp / 5) + 1;
 
-            let combatEmbedString = {
+            let combatEmbedString = {};
+
+            if (numHits > 1){
+            combatEmbedString = {
               color: 3447003,
               author: {
                 name: interaction.user.username,
@@ -444,11 +457,11 @@ module.exports.run = async (interaction) => {
               fields: [
                 {
                   name: "Damage Dealt",
-                  value: `${defenderName} takes ${damageArray} damage.`,
+                  value: `${tempMove} hits ${defenderName} up to ${numHits} times!`,
                 },
                 {
-                  name: "Critical Hit Damage",
-                  value: `${defenderName} takes ${critArray} damage.`,
+                  name: "HITS -- **DAMAGE** -- (EXTRA DAMAGE IF CRIT)",
+                  value: `${multiHitString}`,
                 },
                 {
                   name: "Attacker Info",
@@ -470,6 +483,51 @@ module.exports.run = async (interaction) => {
                 text: "Chambers and Charizard!",
               },
             };
+          }else{
+            combatEmbedString = {
+              color: 3447003,
+              author: {
+                name: interaction.user.username,
+                icon_url: interaction.user.avatarURL,
+              },
+              title: `**${attackerName}** used ${tempMove} on **${defenderName}**!`,
+              url: `https://bulbapedia.bulbagarden.net/wiki/${tempMove.replace(
+                " ",
+                ""
+              )}_(Move)`,
+              // thumbnail: { url:  `${this.pokemonData.sprites.front_default}`,
+              description: `${effectiveString}${criticalString}`,
+
+              fields: [
+                {
+                  name: "Damage Dealt",
+                  value: `${defenderName} takes ${damageTotal} damage.`,
+                },
+                {
+                  name: "Critical Hit Damage",
+                  value: `${defenderName} takes ${critTotal} damage.`,
+                },
+                {
+                  name: "Attacker Info",
+                  value: `**${attackerName}**, Lv ${attackPoke.level} ${atkPokeSpecies_formatted}\n=================`,
+                },
+                {
+                  name: "Defender Info",
+                  value: `**${defenderName}**, Lv ${defendPoke.level} ${defPokeSpecies_formatted}\n=================`,
+                },
+                {
+                  name: `${tempMove} Info`,
+                  value: `**Move Info:** ${capitalizeWord(moveData.damage_class.name)} ${capitalizeWord(moveData.type.name)} Attack` +
+                    `\n**Base Power:** ${moveData.power} pw\n**Damage Roll:** ${dicePool} (${diceRolled} for ${numHits} hit(s))\n**Hunger Cost:** ${moveHungerCost}`,
+                },
+              ],
+              timestamp: new Date(),
+              footer: {
+                icon_url: interaction.client.user.avatarURL,
+                text: "Chambers and Charizard!",
+              },
+            };
+          }
 
             // comment out embed if necessary
 
