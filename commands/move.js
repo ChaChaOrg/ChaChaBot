@@ -241,6 +241,7 @@ module.exports.run = async (interaction) => {
             interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
             return;
         }
+		names.push(interaction.options.getString('userbeatup'));
 
 		if (interaction.options.getString('party-member1beatup').match(SQL_SANITATION_REGEX)){
             logger.error("[move] User tried to put in invalid string input.");
