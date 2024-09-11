@@ -64,6 +64,8 @@ const FRIEND_VAL = ["Hostile","Unfriendly","Indifferent","Friendly","Helpful","F
 const CODE_FORMAT_START = "```diff\n";
 const CODE_FORMAT_END = "\n```"
 
+const SQL_SANITATION_REGEX = /[^a-zA-Z0-9-'_]/;
+
 module.exports.data = new SlashCommandBuilder()
                         .setName('modpoke')
                         .setDescription("Modifies an existing Pokemon in the database. Use /modpoke help for available fields.")
@@ -165,6 +167,12 @@ module.exports.run = async (interaction) => {
         let nickname = interaction.options.getString("nickname");
         let fieldToChange = interaction.options.getString("field-to-change");
         let newValue = interaction.options.getString("new-value");
+
+        if (nickname.match(SQL_SANITATION_REGEX) || newValue.match(SQL_SANITATION_REGEX)){
+            logger.error("[modpoke] User tried to put in invalid string input.");
+            interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+            return;
+        }
 
         // if (nickname == fieldToChange == newValue == 'help') {
         //     interaction.channel.send(HELP_FIELDS_LIST);
@@ -313,15 +321,19 @@ module.exports.run = async (interaction) => {
             }
         }
 
+        // Move formatting
+        if (valName.toLowerCase() == 'move1' || valName.toLowerCase() == 'move2' || valName.toLowerCase() == 'move3' || valName.toLowerCase() == 'move4' || valName.toLowerCase() == 'move5') {
+            valString = valString.replace("_", " ");
+            if (valString.match(/[^A-Za-z-' 0-9]/)){
+                logger.error(`[modpoke] Move has illegal character(s). Modification canceled.`)
+                interaction.editReply(`[modpoke] Move has illegal character. Modification canceled.`)
+                return;
+            }
+            valString = valString.charAt(0).toUpperCase() + valString.slice(1);
+        }
 
         // Duplicate check and name special character check
         if (valName.toLowerCase() == 'name') {
-
-            if (!valString.match(/^\w+$/)) {
-                logger.warn("[modpoke] User put special character in pokemon name, sending warning.");
-                interaction.editReply("Please do not use special characters when using renaming Pokemon. Modification canceled.");
-                return;
-            }
 
             let dupeSQL = `SELECT * FROM pokemon WHERE name = '${valString}'`;
 

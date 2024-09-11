@@ -10,6 +10,8 @@ const SPD_ARRAY_INDEX = 4;
 const SPE_ARRAY_INDEX = 5;
 const CRITICAL_HIT_MULTIPLIER = 1.5;
 
+const SQL_SANITATION_REGEX = /[^a-zA-Z0-9-'_]/;
+
 // help message
 const HELP_MESSAGE = "A damage calculator that uses the Pokemon in the database. (★ = required)\n\n" +
   "**Attacker Name ★** \n> The name of the attacker, as listed in the database\n" +
@@ -195,13 +197,19 @@ module.exports.run = async (interaction) => {
     //
     // Grabs the SQL entry for both attacking and defending pokemon.
     //
+
+
     let sql = `SELECT * FROM pokemon WHERE name = '${attackerName}' OR name = '${defenderName}';`;
     logger.info(`[damage] SQL query: ${sql}`)
     //console.log(sql);
 
     let loadSQLPromise = [];
 
-    /* istanbul ignore next */
+    if (attackerName.match(SQL_SANITATION_REGEX) || defenderName.match(SQL_SANITATION_REGEX)){
+      logger.error("[modpoke] User tried to put in invalid string input.");
+      interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+      return;
+    }
     interaction.client.mysqlConnection.query(sql, function (err, response) {
       if (err) {
         let errMsg = `Error with SQL query: ${err}`;
