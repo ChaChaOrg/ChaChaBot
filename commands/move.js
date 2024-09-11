@@ -4,12 +4,12 @@ const databaseURL = 'https://bulbapedia.bulbagarden.net/wiki/List_of_moves';
 // Commands for moves that require randomization or calculation
 
 const HELP_MESSAGE = "Move helper. Variables depend on subcommand"
-	+ "Current subcommands: Metronome, Beat Up, Confusion, Multi-strike"
+	+ "Current subcommands: Metronome, Beat Up, Confusion"
 
 const ATK_ARRAY_INDEX = 1;
 const DEF_ARRAY_INDEX = 2;
 
-
+const SQL_SANITATION_REGEX = /[^a-zA-Z0-9-'_]/;
 
 module.exports.data = new SlashCommandBuilder()
 		.setName('move')
@@ -109,34 +109,7 @@ module.exports.data = new SlashCommandBuilder()
 					.setDescription('Stages of defens the Pokemon has. Minimum -6, maximum +6')
 					.setMaxValue(6)
 					.setMinValue(-6))
-				)
-		.addSubcommand(subcommand =>
-			subcommand
-				.setName('multistrike')
-				.setDescription('Assists with getting multiple hits and/or accuracy for moves that strike multiple times.')
-				.addStringOption(option =>
-					option.setName('movetype')
-					.setDescription('Type of Multi-strike move')
-					.setRequired(true)
-					.addChoices({
-						name: 'Fixed Count',
-						value: 'fixed'
-					}, {
-						name: 'Variable Count',
-						value: 'variable'
-					}, {
-						name: 'Accuracy-dependent',
-						value: 'accuracy-dependent'
-					}					))
-				.addIntegerOption(option =>
-					option.setName('accuracy')
-					.setDescription('Base accuracy of move')
-					.setRequired(true))
-				.addIntegerOption(option =>
-					option.setName('stages')
-					.setDescription('Stages of accuracy - positive or negative')
-					.setRequired(false)
-				));
+				);
 
 module.exports.autocomplete = async (interaction) => {
 	const focusedValue = interaction.options.getFocused(true);
@@ -258,17 +231,45 @@ module.exports.run = async (interaction) => {
 
 		let followup = "";
 		let names = []
+
+		if (interaction.options.getString('party-member1beatup').match(SQL_SANITATION_REGEX)){
+            logger.error("[move] User tried to put in invalid string input.");
+            interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+            return;
+        }
 		names.push(interaction.options.getString('party-member1beatup'));
+		
 		if(interaction.options.getString('party-member2beatup')){
+			if (interaction.options.getString('party-member2beatup').match(SQL_SANITATION_REGEX)){
+				logger.error("[move] User tried to put in invalid string input.");
+				interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+				return;
+			}
 			names.push(interaction.options.getString('party-member2beatup'));
 		}
 		if(interaction.options.getString('party-member3beatup')){
+			if (interaction.options.getString('party-member3beatup').match(SQL_SANITATION_REGEX)){
+				logger.error("[move] User tried to put in invalid string input.");
+				interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+				return;
+			}
 			names.push(interaction.options.getString('party-member3beatup'));
 		}
 		if(interaction.options.getString('party-member4beatup')){
+			if (interaction.options.getString('party-member4beatup').match(SQL_SANITATION_REGEX)){
+				logger.error("[move] User tried to put in invalid string input.");
+				interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+				return;
+			}
 			names.push(interaction.options.getString('party-member4beatup'));
 		}
 		if(interaction.options.getString('party-member5beatup')){
+			if (interaction.options.getString('party-member5beatup').match(SQL_SANITATION_REGEX)){
+				logger.error("[move] User tried to put in invalid string input.");
+				interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+				return;
+			}
+
 			names.push(interaction.options.getString('party-member5beatup'));
 		}
 
@@ -319,17 +320,44 @@ module.exports.run = async (interaction) => {
 		let followup = "";
 
 		let names = []
+
+		if (interaction.options.getString('party-member1assist').match(SQL_SANITATION_REGEX)){
+            logger.error("[move] User tried to put in invalid string input.");
+            interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+            return;
+        }
 		names.push(interaction.options.getString('party-member1assist'));
 		if(interaction.options.getString('party-member2assist')){
+			if (interaction.options.getString('party-member2assist').match(SQL_SANITATION_REGEX)){
+				logger.error("[move] User tried to put in invalid string input.");
+				interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+				return;
+			}
 			names.push(interaction.options.getString('party-member2assist'));
 		}
 		if(interaction.options.getString('party-member3assist')){
+			if (interaction.options.getString('party-member3assist').match(SQL_SANITATION_REGEX)){
+				logger.error("[move] User tried to put in invalid string input.");
+				interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+				return;
+			}
 			names.push(interaction.options.getString('party-member3assist'));
 		}
 		if(interaction.options.getString('party-member4assist')){
+			if (interaction.options.getString('party-member4assist').match(SQL_SANITATION_REGEX)){
+				logger.error("[move] User tried to put in invalid string input.");
+				interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+				return;
+			}
 			names.push(interaction.options.getString('party-member4assist'));
 		}
 		if(interaction.options.getString('party-member5assist')){
+			if (interaction.options.getString('party-member5assist').match(SQL_SANITATION_REGEX)){
+				logger.error("[move] User tried to put in invalid string input.");
+				interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+				return;
+			}
+
 			names.push(interaction.options.getString('party-member5assist'));
 		}
 		let movelist = [];
@@ -403,6 +431,11 @@ module.exports.run = async (interaction) => {
         let Pokemon = require(`../models/pokemon`);
         let tempPoke = new Pokemon;
 		let pokeName = interaction.options.getString('pokemon');
+		if (pokeName.match(SQL_SANITATION_REGEX)){
+            logger.error("[move] User tried to put in invalid string input.");
+            interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+            return;
+        }
 		let atkStages = 0;
 		let defStages = 0;
 		let numDice = 8;
