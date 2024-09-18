@@ -236,12 +236,15 @@ module.exports.run = async (interaction) => {
 
 		let followup = "";
 		let names = []
+<<<<<<< HEAD
 		if (interaction.options.getString('userbeatup').match(SQL_SANITATION_REGEX)){
             logger.error("[move] User tried to put in invalid string input.");
             interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
             return;
         }
 		names.push(interaction.options.getString('userbeatup'));
+=======
+>>>>>>> 75168de (Reverted changes to move.js)
 
 		if (interaction.options.getString('party-member1beatup').match(SQL_SANITATION_REGEX)){
             logger.error("[move] User tried to put in invalid string input.");
