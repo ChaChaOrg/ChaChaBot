@@ -1178,6 +1178,7 @@ Pokemon.prototype.loadFromSQL = function (connection, P, sqlObject) {
                         "Error when retrieving pokemon species Data :C  ERROR: ",
                         error
                     );
+                    reject(error);
                     //interaction.channel.send("Error when retrieving pokemon species Data :C  ERROR: ");
                 });
         }.bind(this)

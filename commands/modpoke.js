@@ -868,6 +868,9 @@ module.exports.run = async (interaction) => {
                                     //and a one-off fix here would be messy since hp might change in another part of the bot
 
 
+                                }, function (rejected) {
+                                        logger.error("[modpoke] Promise rejected during modification. Message: " + rejected);
+                                        interaction.editReply(rejected);
                                 }).catch(function (error) {
                                     let loadNewPokeMessage = "Error loading new Pokemon to object. Please make sure you've entered a valid field and value.";
                                     interaction.editReply(loadNewPokeMessage);
