@@ -35,9 +35,14 @@ module.exports.data = new SlashCommandBuilder()
 				.setName('beatup')
 				.setDescription('Calculate damage for beat up base power for given Pokemon. Must be in bot.')
 				.addStringOption(option =>
+					option.setName('userbeatup')
+						.setDescription('User of Beat Up to calculate base damage of Beat Up for.')
+						.setRequired(true)
+						.setAutocomplete(true))
+				.addStringOption(option =>
 					option.setName('party-member1beatup')
 						.setDescription('Party member to calculate base damage of Beat Up for.')
-						.setRequired(true)
+						.setRequired(false)
 						.setAutocomplete(true))
 				.addStringOption(option =>
 					option.setName('party-member2beatup')
@@ -113,7 +118,7 @@ module.exports.data = new SlashCommandBuilder()
 
 module.exports.autocomplete = async (interaction) => {
 	const focusedValue = interaction.options.getFocused(true);
-	if (focusedValue.name === 'pokemon' || focusedValue.name === 'party-member1beatup' || focusedValue.name === 'party-member2beatup' || focusedValue.name === 'party-member3beatup' ||
+	if (focusedValue.name === 'pokemon' || focusedValue.name === 'userbeatup' || focusedValue.name === 'party-member1beatup' || focusedValue.name === 'party-member2beatup' || focusedValue.name === 'party-member3beatup' ||
 		focusedValue.name === 'party-member4beatup' || focusedValue.name === 'party-member5beatup' ||
 		focusedValue.name === 'party-member1assist' || focusedValue.name === 'party-member2assist' ||
 		focusedValue.name === 'party-member3assist' || focusedValue.name === 'party-member4assist' ||
@@ -231,6 +236,12 @@ module.exports.run = async (interaction) => {
 
 		let followup = "";
 		let names = []
+		if (interaction.options.getString('userbeatup').match(SQL_SANITATION_REGEX)){
+            logger.error("[move] User tried to put in invalid string input.");
+            interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+            return;
+        }
+		names.push(interaction.options.getString('userbeatup'));
 
 		if (interaction.options.getString('party-member1beatup').match(SQL_SANITATION_REGEX)){
             logger.error("[move] User tried to put in invalid string input.");
