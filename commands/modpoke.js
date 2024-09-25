@@ -335,6 +335,12 @@ module.exports.run = async (interaction) => {
         // Duplicate check and name special character check
         if (valName.toLowerCase() == 'name') {
 
+            if (!valString.match(/^\w+$/)) {
+                logger.warn("[modpoke] User put special character in pokemon name, sending warning.");
+                interaction.editReply("Please do not use special characters when renaming Pokemon. Modification canceled.");
+                return;
+            }
+
             let dupeSQL = `SELECT * FROM pokemon WHERE name = '${valString}'`;
 
             let results = new Promise((resolve, reject) => interaction.client.mysqlConnection.query(dupeSQL, function (err, rows, fields) {
@@ -478,11 +484,18 @@ module.exports.run = async (interaction) => {
                                 console.log(`"${oldPoke.pokemonData.stats[5].stat.name}": "${oldPoke.pokemonData.stats[5].base_stat}"`);
                                 // grab the row and stow it
                                 let thisPoke = rows[0];
-
+                                console.log("This poke.");
+                                console.log(rows[0]);
                                 // if the valName is species, assign directly, otherwise convert it into a number
 
-                                if (valName === "species"|| valName === "form"||valName === "nature") thisPoke[valName] = valString.toLowerCase();
-                                else thisPoke[valName] = parseInt(valString);
+                                if (valName === "species") {
+                                    thisPoke[valName] = valString.toLowerCase();
+                                    thisPoke["form"] = valString.toLowerCase();
+                                } else if ( valName === "form" || valName === "nature") {
+                                    thisPoke[valName] = valString.toLowerCase();
+                                } else {
+                                    thisPoke[valName] = parseInt(valString);
+                                }
 
                                 if (valName === "level") {
                                     let exp = thisPoke["exp"];
@@ -842,6 +855,10 @@ module.exports.run = async (interaction) => {
                                         const confirmation = await response.awaitMessageComponent({ filter: collectorFilter, time: 60000 });
 
                                         if (confirmation.customId == 'confirm') {
+                                            
+                                            if (newPoke.pokemonData.types.length <= 1) {
+                                                newPoke.type2 = "";
+                                            }
                                             newPoke.updatePokemon(interaction.client.mysqlConnection, null, rows[0].private, interaction).then(function (results) {
                                                 let successString = "Success! " + pokeName + "'s " + valName + " has been changed to " + valString + " and all related stats have been updated.\n\nHint: View Pokemon's stat's using `/showpoke [nickname]`";
                                                 logger.info(`[modpoke] ${successString}`)
@@ -869,6 +886,9 @@ module.exports.run = async (interaction) => {
                                     //and a one-off fix here would be messy since hp might change in another part of the bot
 
 
+                                }, function (rejected) {
+                                        logger.error("[modpoke] Promise rejected during modification. Message: " + rejected);
+                                        interaction.editReply(rejected);
                                 }).catch(function (error) {
                                     let loadNewPokeMessage = "Error loading new Pokemon to object. Please make sure you've entered a valid field and value.";
                                     interaction.editReply(loadNewPokeMessage);
