@@ -6,6 +6,8 @@ const SPA_ARRAY_INDEX = 3;
 const SPD_ARRAY_INDEX = 4;
 const SPE_ARRAY_INDEX = 5;
 
+const SQL_SANITATION_REGEX = /[^a-zA-Z0-9-'_]/;
+
 const HELP_MESSAGE = "Displays a Pokemon as it appears in the database. Please do not name your Pokemon 'help'. \n/showpoke [Pokemon Name]"
 
 const logger = require('../logs/logger.js');
@@ -41,6 +43,12 @@ module.exports.run = async (interaction) => {
         // }
 
         let name = interaction.options.getString('nickname');
+
+        if (name.match(SQL_SANITATION_REGEX)){
+            logger.error("[showpoke] User tried to put in invalid string input.");
+            interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+            return;
+        }
 
         let Pokemon = require(`../models/pokemon`);
         let tempPoke = new Pokemon;
