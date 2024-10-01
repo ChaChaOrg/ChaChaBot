@@ -53,7 +53,7 @@ Nature.prototype.assignNature = function (pokemon, nature) {
     NATURE_NAMES.forEach(function (natureY, natureYIndex) {
         let natureX = -1;
         natureX = natureY.findIndex(element => {
-            return element === nature;
+            return element.toString().toLowerCase() === nature.toString().toLowerCase();
         });
         if (natureX > -1) {
             this.natureXCoord = natureX;
