@@ -61,7 +61,22 @@ module.exports.data = new SlashCommandBuilder()
 		
 
 module.exports.run = async (interaction) => {
+	if (interaction.options.getSubcommand() === 'switch') {
 
+	}
+	if (interaction.options.getSubcommand() === 'add') {
+		trainerName = interaction.
+		addSql = "INSERT INTO trainers (name, private, discordID, dateCreated)"
+	}
+	if (interaction.options.getSubcommand() === 'clear') {
+
+	}
+	if (interaction.options.getSubcommand() === 'delete') {
+
+	}
+	if (interaction.options.getSubcommand() === 'mod') {
+
+	}
 return;
 
 }
