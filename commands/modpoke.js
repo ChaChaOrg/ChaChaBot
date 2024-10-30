@@ -47,8 +47,8 @@ const FEWARGS_MESSAGE = "Too few arguments submitted. Check your submission for 
 const NONEXISTENT_FIELD_MESSAGE = "That isn't a valid field to change! Please check your spelling and try again."
 
 // array of variables that can go straight to being updated
-const STATIC_FIELDS = ["ability", "name", "gender", "hp", "atk", "def", "spa", "spd", "spe", "move1", "move2", "move3", "move4", "move5", "moveProgress", "originalTrainer", "shiny", "private"];
-const OTHER_FIELDS = ["species", "form", "level", "nature", "type1", "type2", "hpIV", "hpEV", "atkIV", "atkEV", "defIV", "defEV", "spaIV", "spaEV", "spdIV", "spdEV", "speIV", "speEV","exp","friendship"]
+const STATIC_FIELDS = ["ability", "name", "gender", "hp", "atk", "def", "spa", "spd", "spe", "move1", "move2", "move3", "move4", "move5", "moveProgress", "originalTrainer", "shiny", "private", "type1", "type2"];
+const OTHER_FIELDS = ["species", "form", "level", "nature", "hpIV", "hpEV", "atkIV", "atkEV", "defIV", "defEV", "spaIV", "spaEV", "spdIV", "spdEV", "speIV", "speEV","exp","friendship"]
 
 const ALL_NATURES = ["adamant", "bashful", "bold", "brave", "calm", "careful", "docile", "gentle", "hardy", "hasty", "impish", "jolly", 
                         "lax", "lonely", "mild", "modest", "naive", "naughty", "quiet", "quirky", "rash", "relaxed", "sassy", "serious", "timid"]
@@ -134,7 +134,13 @@ module.exports.autocomplete = async (interaction) => {
         await interaction.respond(
             filtered.map(choice => ({ name: choice[1], value: choice[1] })),
         )
-    }
+    }else if(field === "private"){
+        var choices = [0,1];
+
+        const filtered = choices.filter(choice => choice[1].toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
+        await interaction.respond(
+            filtered.map(choice => ({ name: choice[1], value: choice[1] })),
+        )
   }else{
     //nothing
   }
