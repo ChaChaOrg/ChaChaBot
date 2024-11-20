@@ -144,17 +144,17 @@ Statblock.prototype.calculateSaves = function (pokemon) {
   if(fortTypeBonus == 2){
     this.fortSave = Math.floor(0.5 * pokemon.level + fortTypeBonus) + modGen(this.conBase);
   }else{
-    this.fortSave = Math.floor(0.33 * pokemon.level) + modGen(this.conBase);
+    this.fortSave = Math.floor(pokemon.level / 3) + modGen(this.conBase);
   }
   if(refTypeBonus == 2){
     this.refSave = Math.floor(0.5 * pokemon.level + refTypeBonus) + modGen(this.dexBase);
   }else{
-    this.refSave = Math.floor(0.33 * pokemon.level) + modGen(this.dexBase);
+    this.refSave = Math.floor(pokemon.level / 3) + modGen(this.dexBase);
   }
   if(willTypeBonus == 2){
     this.willSave = Math.floor(0.5 * pokemon.level + willTypeBonus) + modGen(this.wisBase);
   }else{
-    this.willSave = Math.floor(0.33 * pokemon.level) + modGen(this.wisBase);
+    this.willSave = Math.floor(pokemon.level / 3) + modGen(this.wisBase);
   }
 };
 
@@ -230,7 +230,7 @@ Statblock.prototype.calculateStats = function (pokemon) {
     AC_BASE +
     this.natArmor +
     this.sizeBonus +
-    (this.dexBase - DEX_AC_CALC_BASE) / DEX_AC_CALC_MULT
+    modGen(this.dexBase)
   ).toFixed(0);
 
   //get move speed
