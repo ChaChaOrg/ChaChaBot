@@ -36,13 +36,13 @@ module.exports.data = new SlashCommandBuilder()
         .setName('list')
         .setDescription('List all forms for a species')
         .addStringOption(option =>
-            option.setName('species-name').setDescription('the Species name').setRequired(true)))
+            option.setName('species-name').setDescription('the Species name').setRequired(true).setAutocomplete(true)))
         .addSubcommand(subcommand =>
             subcommand
             .setName('add')
             .setDescription('adds a form to the database')
-            .addStringOption(option => option.setName('species-name').setDescription('Species Name').setRequired(true))
-            .addStringOption(option => option.setName('form-name').setDescription('Form Name').setRequired(true))
+                .addStringOption(option => option.setName('species-name').setDescription('Species Name').setRequired(true).setAutocomplete(true))
+                .addStringOption(option => option.setName('form-name').setDescription('Form Name').setRequired(true).setAutocomplete(true))
             .addStringOption(option => option.setName('ability1').setDescription('First Ability').setRequired(true))
             .addIntegerOption(option => option.setName('hp-base-stat').setDescription('HP Base Stat').setRequired(true))
             .addIntegerOption(option => option.setName('attack-base-stat').setDescription('ATK Base Stat').setRequired(true))
@@ -63,8 +63,27 @@ module.exports.data = new SlashCommandBuilder()
             subcommand
             .setName('remove')
             .setDescription('removes a form from the database')
-            .addStringOption(option => option.setName('species-name').setDescription('Species Name').setRequired(true))
-            .addStringOption(option => option.setName('form-name').setDescription('Form Name').setRequired(true)));
+                .addStringOption(option => option.setName('species-name').setDescription('Species Name').setRequired(true).setAutocomplete(true))
+                .addStringOption(option => option.setName('form-name').setDescription('Form Name').setRequired(true).setAutocomplete(true)));
+
+module.exports.autocomplete = async (interaction) => {
+    const focused = interaction.options.getFocused(true);
+    if (focused.name === 'species-name') {
+        let choices = interaction.client.formCache;
+        const filtered = choices.filter(choice => (!choice.private || (choice.discordID == interaction.user)) && choice.species.toLowerCase().startsWith(focused.value.toLowerCase())).slice(0,24);
+        await interaction.respond(
+            filtered.map(choice => ({name:choice.species,value:choice.species})),
+        );
+    } else if (focused.name === 'form-name') {
+        let choices = interaction.client.formCache;
+        const filtered = choices.filter(choice => (!choice.private || (choice.discordID == interaction.user)) && choice.form.toLowerCase().startsWith(focused.value.toLowerCase())).slice(0,24);
+        await interaction.respond(
+            filtered.map(choice => ({name:choice.form, value:choice.form})),
+        );
+    } else {
+        //nope, not auto completed
+    }
+}
 
 module.exports.run = async (interaction) => 
 {
