@@ -9,7 +9,7 @@ const HELP_MESSAGE = "Move helper. Variables depend on subcommand"
 const ATK_ARRAY_INDEX = 1;
 const DEF_ARRAY_INDEX = 2;
 
-
+const SQL_SANITATION_REGEX = /[^a-zA-Z0-9-'_]/;
 
 module.exports.data = new SlashCommandBuilder()
 		.setName('move')
@@ -231,17 +231,45 @@ module.exports.run = async (interaction) => {
 
 		let followup = "";
 		let names = []
+
+		if (interaction.options.getString('party-member1beatup').match(SQL_SANITATION_REGEX)){
+            logger.error("[move] User tried to put in invalid string input.");
+            interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+            return;
+        }
 		names.push(interaction.options.getString('party-member1beatup'));
+		
 		if(interaction.options.getString('party-member2beatup')){
+			if (interaction.options.getString('party-member2beatup').match(SQL_SANITATION_REGEX)){
+				logger.error("[move] User tried to put in invalid string input.");
+				interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+				return;
+			}
 			names.push(interaction.options.getString('party-member2beatup'));
 		}
 		if(interaction.options.getString('party-member3beatup')){
+			if (interaction.options.getString('party-member3beatup').match(SQL_SANITATION_REGEX)){
+				logger.error("[move] User tried to put in invalid string input.");
+				interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+				return;
+			}
 			names.push(interaction.options.getString('party-member3beatup'));
 		}
 		if(interaction.options.getString('party-member4beatup')){
+			if (interaction.options.getString('party-member4beatup').match(SQL_SANITATION_REGEX)){
+				logger.error("[move] User tried to put in invalid string input.");
+				interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+				return;
+			}
 			names.push(interaction.options.getString('party-member4beatup'));
 		}
 		if(interaction.options.getString('party-member5beatup')){
+			if (interaction.options.getString('party-member5beatup').match(SQL_SANITATION_REGEX)){
+				logger.error("[move] User tried to put in invalid string input.");
+				interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+				return;
+			}
+
 			names.push(interaction.options.getString('party-member5beatup'));
 		}
 
@@ -292,17 +320,44 @@ module.exports.run = async (interaction) => {
 		let followup = "";
 
 		let names = []
+
+		if (interaction.options.getString('party-member1assist').match(SQL_SANITATION_REGEX)){
+            logger.error("[move] User tried to put in invalid string input.");
+            interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+            return;
+        }
 		names.push(interaction.options.getString('party-member1assist'));
 		if(interaction.options.getString('party-member2assist')){
+			if (interaction.options.getString('party-member2assist').match(SQL_SANITATION_REGEX)){
+				logger.error("[move] User tried to put in invalid string input.");
+				interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+				return;
+			}
 			names.push(interaction.options.getString('party-member2assist'));
 		}
 		if(interaction.options.getString('party-member3assist')){
+			if (interaction.options.getString('party-member3assist').match(SQL_SANITATION_REGEX)){
+				logger.error("[move] User tried to put in invalid string input.");
+				interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+				return;
+			}
 			names.push(interaction.options.getString('party-member3assist'));
 		}
 		if(interaction.options.getString('party-member4assist')){
+			if (interaction.options.getString('party-member4assist').match(SQL_SANITATION_REGEX)){
+				logger.error("[move] User tried to put in invalid string input.");
+				interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+				return;
+			}
 			names.push(interaction.options.getString('party-member4assist'));
 		}
 		if(interaction.options.getString('party-member5assist')){
+			if (interaction.options.getString('party-member5assist').match(SQL_SANITATION_REGEX)){
+				logger.error("[move] User tried to put in invalid string input.");
+				interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+				return;
+			}
+
 			names.push(interaction.options.getString('party-member5assist'));
 		}
 		let movelist = [];
@@ -376,6 +431,11 @@ module.exports.run = async (interaction) => {
         let Pokemon = require(`../models/pokemon`);
         let tempPoke = new Pokemon;
 		let pokeName = interaction.options.getString('pokemon');
+		if (pokeName.match(SQL_SANITATION_REGEX)){
+            logger.error("[move] User tried to put in invalid string input.");
+            interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+            return;
+        }
 		let atkStages = 0;
 		let defStages = 0;
 		let numDice = 8;

@@ -2,6 +2,8 @@ const logger = require('../logs/logger.js');
 const { ActionRowBuilder, ButtonBuilder, SlashCommandBuilder } = require('@discordjs/builders');
 const { ButtonStyle } = require('discord.js');
 
+const SQL_SANITATION_REGEX = /[^a-zA-Z0-9-'_]/;
+
 // Generates a new ChaCha Pokemon, given level & base stats
 
 //message template
@@ -78,13 +80,13 @@ module.exports.run = async (interaction) => {
 
 	let Pokemon = require('../models/pokemon.js');
 
-	if (!interaction.options.getString('nickname').match(/^\w+$/)) {
-		logger.warn("[genpoke] User put special character in pokemon name, sending warning.");
-		interaction.followUp("Please do not use special characters when using generating Pokemon.");
+	let namecheck = interaction.options.getString('nickname');
+
+	if (namecheck.match(SQL_SANITATION_REGEX) || interaction.options.getString('species').match(SQL_SANITATION_REGEX) || (interaction.options.getString('form') && interaction.options.getString('form').match(SQL_SANITATION_REGEX))) {
+		logger.error("[genpoke] User tried to put in invalid string input.");
+		interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
 		return;
 	}
-
-	let namecheck = interaction.options.getString('nickname');
 	
 	//Duplicate check
 

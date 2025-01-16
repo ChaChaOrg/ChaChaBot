@@ -10,6 +10,8 @@ const SPD_ARRAY_INDEX = 4;
 const SPE_ARRAY_INDEX = 5;
 const CRITICAL_HIT_MULTIPLIER = 1.5;
 
+const SQL_SANITATION_REGEX = /[^a-zA-Z0-9-'_]/;
+
 // help message
 const HELP_MESSAGE = "A damage calculator that uses the Pokemon in the database. (★ = required)\n\n" +
   "**Attacker Name ★** \n> The name of the attacker, as listed in the database\n" +
@@ -25,53 +27,53 @@ const HELP_MESSAGE = "A damage calculator that uses the Pokemon in the database.
 //  [Attacker (A) Name] [Attacker Move] [Defender (D) Name] [Stages of Attack] [Stages of Defense] [Extra Base Power (min 0)] [MultDamage (min 1)] [Critical Hit (y/n)]
 
 module.exports.data = new SlashCommandBuilder()
-      .setName('damage')
-      .setDescription('A damage calculator that uses the Pokemon in the database.')
-      .addSubcommand(subcommand =>
-        subcommand
-        .setName('help')
-        .setDescription('Tells the user more about the command.')
-      )
-      .addSubcommand(subcommand =>
-          subcommand
-          .setName('battle')
-          .setDescription('Simulate a battle between two pokemon.')
-          .addStringOption(option =>
-            option.setName('attacker-name')
-              .setDescription('The name of the attacker, as listed in the database')
-              .setRequired(true)
-              .setAutocomplete(true))
-          .addStringOption(option => 
-            option.setName('move-name')
-              .setDescription('The move used (gen 1-7 only sorry :<) lowercase with dashes instead of spaces. Ie, "rock-smash"')
-              .setRequired(true)
-              .setAutocomplete(true))
-          .addStringOption(option => 
-            option.setName('defender-name')
-              .setDescription('The name of the pokemon being hit by the attack, as listed in the database')
-              .setRequired(true)
-              .setAutocomplete(true))
-          .addBooleanOption(option =>
-            option.setName('critical-hit')
-            .setDescription('If the attacker struck a critical hit Defaults to no.'))
-          .addIntegerOption(option =>
-              option.setName('stages-of-attack')
-              .setDescription('Stages of attack/special attack the attacker has. Minimum -6, maximum +6')
-              .setMaxValue(6)
-              .setMinValue(-6))
-          .addIntegerOption(option =>
-              option.setName('stages-of-defense')
-              .setDescription('Stages of defense/special defense the defender has. Minimum -6, maximum +6')
-              .setMaxValue(6)
-              .setMinValue(-6))
-          .addNumberOption(option =>
-              option.setName('additive-bonus')
-              .setDescription('Extra damage *added* to the base power. Usually done through ChaCha feats. Defaults to 0'))
-          .addNumberOption(option =>
-              option.setName('multiplicitive-bonus')
-              .setDescription('Extra damage *multiplying* the base power.')
-              .setMinValue(0))
-      );
+  .setName('damage')
+  .setDescription('A damage calculator that uses the Pokemon in the database.')
+  .addSubcommand(subcommand =>
+    subcommand
+      .setName('help')
+      .setDescription('Tells the user more about the command.')
+  )
+  .addSubcommand(subcommand =>
+    subcommand
+      .setName('battle')
+      .setDescription('Simulate a battle between two pokemon.')
+      .addStringOption(option =>
+        option.setName('attacker-name')
+          .setDescription('The name of the attacker, as listed in the database')
+          .setRequired(true)
+          .setAutocomplete(true))
+      .addStringOption(option =>
+        option.setName('move-name')
+          .setDescription('The move used (gen 1-7 only sorry :<) lowercase with dashes instead of spaces. Ie, "rock-smash"')
+          .setRequired(true)
+          .setAutocomplete(true))
+      .addStringOption(option =>
+        option.setName('defender-name')
+          .setDescription('The name of the pokemon being hit by the attack, as listed in the database')
+          .setRequired(true)
+          .setAutocomplete(true))
+      .addBooleanOption(option =>
+        option.setName('critical-hit')
+          .setDescription('If the attacker struck a critical hit Defaults to no.'))
+      .addIntegerOption(option =>
+        option.setName('stages-of-attack')
+          .setDescription('Stages of attack/special attack the attacker has. Minimum -6, maximum +6')
+          .setMaxValue(6)
+          .setMinValue(-6))
+      .addIntegerOption(option =>
+        option.setName('stages-of-defense')
+          .setDescription('Stages of defense/special defense the attacker has. Minimum -6, maximum +6')
+          .setMaxValue(6)
+          .setMinValue(-6))
+      .addNumberOption(option =>
+        option.setName('additive-bonus')
+          .setDescription('Extra damage *added* to the base power. Usually done through ChaCha feats. Defaults to 0'))
+      .addNumberOption(option =>
+        option.setName('multiplicitive-bonus')
+          .setDescription('Extra damage *multiplying* the base power.')
+          .setMinValue(0))
+  );
 
 module.exports.autocomplete = async (interaction) => {
   const focusedValue = interaction.options.getFocused(true);
@@ -81,29 +83,29 @@ module.exports.autocomplete = async (interaction) => {
     await interaction.respond(
       filtered.map(choice => ({ name: choice.name, value: choice.name })),
     )
-  } else if(focusedValue.name === 'move-name') {
+  } else if (focusedValue.name === 'move-name') {
     var choices = interaction.client.movelist;
     const filtered = choices.filter(choice => choice[1].toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
     await interaction.respond(
       filtered.map(choice => ({ name: choice[1], value: choice[1].replace(' ', '-').replace('\'', '') })),
-  )
+    )
   }
 };
 
 
 
 module.exports.run = async (interaction) => {
-      try{
+  try {
 
 
-        await interaction.deferReply();
+    await interaction.deferReply();
 
-        if (interaction.options.getSubcommand() === 'help') {
-          interaction.editReply(HELP_MESSAGE);
-          return;
-        }
+    if (interaction.options.getSubcommand() === 'help') {
+      interaction.editReply(HELP_MESSAGE);
+      return;
+    }
 
-      //clause for helping!
+    //clause for helping!
     /* if (args[0].includes("help")) {
       logger.info("[damage] Sending help interaction.");
       interaction.reply(HELP_MESSAGE)
@@ -155,7 +157,7 @@ module.exports.run = async (interaction) => {
     // Checks if an arg is there, than assigns it. This keeps null values out of the way.
     // This means that if an arg is left off, it will just keep the defaults, but you CAN'T put them out of order.
     //
-    
+
     attackerName = interaction.options.getString('attacker-name');
     attackerMove = interaction.options.getString('move-name');
     defenderName = interaction.options.getString('defender-name');
@@ -171,21 +173,22 @@ module.exports.run = async (interaction) => {
       critHit = true; //critical hit
     else
       critHit = false;
-    
-    if(interaction.options.getInteger('stages-of-attack'))
+
+    if (interaction.options.getInteger('stages-of-attack'))
       bonusAtk = interaction.options.getInteger('stages-of-attack'); //Stages Attack
-    if(interaction.options.getInteger('stages-of-defense'))
-    bonusDef = interaction.options.getInteger('stages-of-defense'); //Stages Defense    
-    if(interaction.options.getNumber('additive-bonus'))
+    if (interaction.options.getInteger('stages-of-defense'))
+      bonusDef = interaction.options.getInteger('stages-of-defense'); //Stages Defense    
+    if (interaction.options.getNumber('additive-bonus'))
       other = interaction.options.getNumber('additive-bonus');
-    if(interaction.options.getNumber('multiplicitive-bonus'))
+    if (interaction.options.getNumber('multiplicitive-bonus'))
       otherMult = interaction.options.getNumber('multiplicitive-bonus');
-    
+
 
     //values used for calculation
     let stageModAtk = 0;
     let stageModDef = 0;
     let damageTotal = 0;
+    let critTotal = 0;
 
     let effectiveString = "";
     let criticalString = "";
@@ -194,13 +197,19 @@ module.exports.run = async (interaction) => {
     //
     // Grabs the SQL entry for both attacking and defending pokemon.
     //
+
+
     let sql = `SELECT * FROM pokemon WHERE name = '${attackerName}' OR name = '${defenderName}';`;
     logger.info(`[damage] SQL query: ${sql}`)
     //console.log(sql);
 
     let loadSQLPromise = [];
 
-    /* istanbul ignore next */
+    if (attackerName.match(SQL_SANITATION_REGEX) || defenderName.match(SQL_SANITATION_REGEX)){
+      logger.error("[modpoke] User tried to put in invalid string input.");
+      interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+      return;
+    }
     interaction.client.mysqlConnection.query(sql, function (err, response) {
       if (err) {
         let errMsg = `Error with SQL query: ${err}`;
@@ -328,13 +337,29 @@ module.exports.run = async (interaction) => {
             } else if (effective < 1) {
               effectiveString = "*It's not very effective.*\n";
             }
-            //
-            // calculate damage dice roll
-            //
-            let numDice = (moveData.power + other) * 0.2;
 
-            for (numDice; numDice > 0; numDice--) {
-              dice += Math.floor(Math.random() * 8 + 1);
+            //
+            // Check for mult-hit move
+            //
+            let numHits = 1;
+            try{
+              numHits = moveData.meta.max_hits ?? 1;
+            }catch{
+              // Catch for any mvoes that don't have meta (from recent gens)
+              numHits = 1;
+            };
+            let dicePool = new Array(numHits);
+
+            for (let hitNum = 0; hitNum < numHits; hitNum++) {
+              dice = 0;
+              //
+              // calculate damage dice roll
+              //
+
+              for (let numDice = Math.floor((moveData.power + other) * 0.2); numDice > 0; numDice--) {
+                dice += Math.floor(Math.random() * 8 + 1);
+              }
+              dicePool[hitNum] = dice;
             }
 
             //critical hit - done manually, checks first letter only
@@ -361,23 +386,34 @@ module.exports.run = async (interaction) => {
             //
             // Final damage calculation
             //
-            damageTotal =
-              ((10 * attackPoke.level + 10) / 250) *
-              ((tempAttack * stageModAtk) /
-                (tempDefense * stageModDef)) *
-              dice *
-              stab *
-              effective *
-              critical *
-              otherMult;
 
-            damageTotal = damageTotal.toFixed(2);
+            let multiHitString = ``;
+            let multiHitTotal = 0;
+            let critBonus = 0;
+            for (let hitNum = 0; hitNum < numHits; hitNum++) {
+              damageTotal =
+                ((10 * attackPoke.level + 10) / 250) *
+                ((tempAttack * stageModAtk) /
+                  (tempDefense * stageModDef)) *
+                dicePool[hitNum] *
+                stab *
+                effective *
+                otherMult;
 
-            combatString =
-              `**${attackerName}** (level ${attackPoke.level} ${attackPoke.species}) used ${moveData.name} on ${defenderName} (level ${defendPoke.level} ${defendPoke.species})\n` +
-              effectiveString +
-              criticalString +
-              `${attackerName} deals ${damageTotal} damage to the defending ${defenderName}\n(Base Power: ${moveData.power} - damage roll: ${dice}`;
+              multiHitTotal += damageTotal;
+              damageTotal = damageTotal.toFixed(0);
+              critTotal = (damageTotal * CRITICAL_HIT_MULTIPLIER).toFixed(0);
+              critBonus = critTotal - damageTotal;
+              multiHitString += `Hit #` + (hitNum + 1) + ` -- **` + damageTotal + `** -- (+` + critBonus + `)\n`
+              combatString +=
+                `For hit ${hitNum}: \n` +
+                `**${attackerName}** (level ${attackPoke.level} ${attackPoke.species}) used ${moveData.name} on ${defenderName} (level ${defendPoke.level} ${defendPoke.species})\n` +
+                effectiveString +
+                `${attackerName} deals ${damageTotal} damage to the defending ${defenderName}\n(Base Power: ${moveData.power} - damage roll: ${dicePool[hitNum]}\n` +
+                `For a crit, instead ${attackerName} deals ${critTotal} damage to the defending ${defenderName}\n(Base Power: ${moveData.power} - damage roll: ${dicePool[hitNum]}\n`;
+            }
+            multiHitString += `**Total: ` + multiHitTotal.toFixed(0) + `**`;
+
 
             // Embed for damage
 
@@ -390,7 +426,7 @@ module.exports.run = async (interaction) => {
               defendPoke.form.slice(1);
 
             // get # of dice rolled
-            let diceRolled = moveData.power / 5;
+            let diceRolled = Math.floor(moveData.power / 5);
             diceRolled += "d8";
 
             //format move
@@ -408,53 +444,106 @@ module.exports.run = async (interaction) => {
               tempMove = tempMove.charAt(0).toUpperCase() + tempMove.slice(1);
 
             let moveHungerCost = (8 - moveData.pp / 5) + 1;
-            
-            let combatEmbedString = {
-                color: 3447003,
-                author: {
-                  name: interaction.user.username,
-                  icon_url: interaction.user.avatarURL,
-                },
-                title: `**${attackerName}** used ${tempMove} on **${defenderName}**!`,
-                url: `https://bulbapedia.bulbagarden.net/wiki/${tempMove.replace(
-                  " ",
-                  ""
-                )}_(Move)`,
-                // thumbnail: { url:  `${this.pokemonData.sprites.front_default}`,
-                description: `${effectiveString}${criticalString}`,
 
-                fields: [
-                  {
-                    name: "Damage Dealt",
-                    value: `${defenderName} takes ${damageTotal} damage.`,
-                  },
-                  {
-                    name: "Attacker Info",
-                    value: `**${attackerName}**, Lv ${attackPoke.level} ${atkPokeSpecies_formatted}\n=================`,
-                  },
-                  {
-                    name: "Defender Info",
-                    value: `**${defenderName}**, Lv ${defendPoke.level} ${defPokeSpecies_formatted}\n=================`,
-                  },
-                  {
-                    name: `${tempMove} Info`,
-                    value: `**Move Info:** ${capitalizeWord(moveData.damage_class.name)} ${capitalizeWord(moveData.type.name)} Attack` +
-                        `\n**Base Power:** ${moveData.power} pw\n**Damage Roll:** ${dice} (${diceRolled})\n**Hunger Cost:** ${moveHungerCost}`,
-                  },
-                ],
-                timestamp: new Date(),
-                footer: {
-                  icon_url: interaction.client.user.avatarURL,
-                  text: "Chambers and Charizard!",
+            let combatEmbedString = {};
+
+            if (numHits > 1){
+            combatEmbedString = {
+              color: 3447003,
+              author: {
+                name: interaction.user.username,
+                icon_url: interaction.user.avatarURL,
+              },
+              title: `**${attackerName}** used ${tempMove} on **${defenderName}**!`,
+              url: `https://bulbapedia.bulbagarden.net/wiki/${tempMove.replace(
+                " ",
+                ""
+              )}_(Move)`,
+              // thumbnail: { url:  `${this.pokemonData.sprites.front_default}`,
+              description: `${effectiveString}${criticalString}`,
+
+              fields: [
+                {
+                  name: "Damage Dealt",
+                  value: `${tempMove} hits ${defenderName} up to ${numHits} times!`,
                 },
-              };
+                {
+                  name: "HITS -- **DAMAGE** -- (EXTRA DAMAGE IF CRIT)",
+                  value: `${multiHitString}`,
+                },
+                {
+                  name: "Attacker Info",
+                  value: `**${attackerName}**, Lv ${attackPoke.level} ${atkPokeSpecies_formatted}\n=================`,
+                },
+                {
+                  name: "Defender Info",
+                  value: `**${defenderName}**, Lv ${defendPoke.level} ${defPokeSpecies_formatted}\n=================`,
+                },
+                {
+                  name: `${tempMove} Info`,
+                  value: `**Move Info:** ${capitalizeWord(moveData.damage_class.name)} ${capitalizeWord(moveData.type.name)} Attack` +
+                    `\n**Base Power:** ${moveData.power} pw\n**Damage Roll:** ${dicePool} (${diceRolled} for ${numHits} hits)\n**Hunger Cost:** ${moveHungerCost}`,
+                },
+              ],
+              timestamp: new Date(),
+              footer: {
+                icon_url: interaction.client.user.avatarURL,
+                text: "Chambers and Charizard!",
+              },
+            };
+          }else{
+            combatEmbedString = {
+              color: 3447003,
+              author: {
+                name: interaction.user.username,
+                icon_url: interaction.user.avatarURL,
+              },
+              title: `**${attackerName}** used ${tempMove} on **${defenderName}**!`,
+              url: `https://bulbapedia.bulbagarden.net/wiki/${tempMove.replace(
+                " ",
+                ""
+              )}_(Move)`,
+              // thumbnail: { url:  `${this.pokemonData.sprites.front_default}`,
+              description: `${effectiveString}${criticalString}`,
+
+              fields: [
+                {
+                  name: "Damage Dealt",
+                  value: `${defenderName} takes ${damageTotal} damage.`,
+                },
+                {
+                  name: "Critical Hit Damage",
+                  value: `${defenderName} takes ${critTotal} damage.`,
+                },
+                {
+                  name: "Attacker Info",
+                  value: `**${attackerName}**, Lv ${attackPoke.level} ${atkPokeSpecies_formatted}\n=================`,
+                },
+                {
+                  name: "Defender Info",
+                  value: `**${defenderName}**, Lv ${defendPoke.level} ${defPokeSpecies_formatted}\n=================`,
+                },
+                {
+                  name: `${tempMove} Info`,
+                  value: `**Move Info:** ${capitalizeWord(moveData.damage_class.name)} ${capitalizeWord(moveData.type.name)} Attack` +
+                    `\n**Base Power:** ${moveData.power} pw\n**Damage Roll:** ${dicePool} (${diceRolled} for ${numHits} hit(s))\n**Hunger Cost:** ${moveHungerCost}`,
+                },
+              ],
+              timestamp: new Date(),
+              footer: {
+                icon_url: interaction.client.user.avatarURL,
+                text: "Chambers and Charizard!",
+              },
+            };
+          }
 
             // comment out embed if necessary
 
             //embed message
             logger.info("[damage] Sending combat embed string.");
             interaction.followUp({ embeds: [combatEmbedString] }).catch(console.error);
-          });
+          }
+          );
         }).catch(function (error) {
           if (error.response.status == 404) {
             logger.error("[damage] Move not found. " + error)

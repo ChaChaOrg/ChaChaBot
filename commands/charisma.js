@@ -15,79 +15,79 @@ module.exports.data = new SlashCommandBuilder()
 				.setRequired(true)
 				.addChoices({
 					name: 'Hardy',
-					value: 'neutral-nature'
+					value: 'hardy'
 				}, {
 					name: 'Lonely',
-					value: 'cool-nature'
+					value: 'lonely'
 				}, {
 					name: 'Brave',
-					value: 'cool-nature'
+					value: 'brave'
 				}, {
 					name: 'Adamant',
-					value: 'cool-nature'
+					value: 'adamant'
 				}, {
 					name: 'Naughty',
-					value: 'cool-nature'
+					value: 'naughty'
 				}, {
 					name: 'Bold',
-					value: 'tough-nature'
+					value: 'bold'
 				}, {
 					name: 'Docile',
-					value: 'neutral-nature'
+					value: 'docile'
 				}, {
 					name: 'Relaxed',
-					value: 'tough-nature'
+					value: 'relaxed'
 				}, {
 					name: 'Impish',
-					value: 'tough-nature'
+					value: 'impish'
 				}, {
 					name: 'Lax',
-					value: 'tough-nature'
+					value: 'lax'
 				}, {
 					name: 'Timid',
-					value: 'cute-nature'
+					value: 'timid'
 				}, {
 					name: 'Hasty',
-					value: 'cute-nature'
+					value: 'hasty'
 				}, {
 					name: 'Serious',
-					value: 'neutral-nature'
+					value: 'serious'
 				}, {
 					name: 'Jolly',
-					value: 'cute-nature'
+					value: 'jolly'
 				}, {
 					name: 'Naive',
-					value: 'cute-nature'
+					value: 'naive'
 				}, {
 					name: 'Modest',
-					value: 'beauty-nature'
+					value: 'modest'
 				}, {
 					name: 'Mild',
-					value: 'beauty-nature'
+					value: 'mild'
 				}, {
 					name: 'Quiet',
-					value: 'beauty-nature'
+					value: 'quiet'
 				}, {
 					name: 'Bashful',
-					value: 'neutral-nature'
+					value: 'bashful'
 				}, {
 					name: 'Rash',
-					value: 'beauty-nature'
+					value: 'rash'
 				}, {
 					name: 'Calm',
-					value: 'clever-nature'
+					value: 'calm'
 				}, {
 					name: 'Gentle',
-					value: 'clever-nature'
+					value: 'gentle'
 				}, {
 					name: 'Sassy',
-					value: 'clever-nature'
+					value: 'sassy'
 				}, {
 					name: 'Careful',
-					value: 'clever-nature'
+					value: 'careful'
 				}, {
 					name: 'Quirky',
-					value: 'neutral-nature'
+					value: 'quirky'
 				}))
 			.addIntegerOption(option => 
 				option.setName('beauty-moves')
@@ -151,11 +151,27 @@ module.exports.run = async (interaction) => {
 		let toughmoves = interaction.options.getInteger('tough-moves');
 		let neutralmoves = interaction.options.getInteger('neutral-moves');
 
-		let naturetype = interaction.options.getString('nature');
+		let naturestring = interaction.options.getString('nature');
 
 		let same = 0;
 		let adjacent = 0;
 		let opposite = 0;
+
+		let naturetype;
+		if(naturestring === 'modest' || naturestring === 'mild' || naturestring === 'quiet' || naturestring === 'rash'){
+			naturetype = 'beauty-nature';
+		}else if(naturestring === 'lonely' || naturestring === 'brave' || naturestring === 'adamant' || naturestring === 'naughty'){
+			naturetype = 'cool-nature';
+		}else if(naturestring === 'bold' || naturestring === 'relaxed' || naturestring === 'impish' || naturestring === 'lax'){
+			naturetype = 'tough-nature';
+		}else if(naturestring === 'calm' || naturestring === 'gentle' || naturestring === 'sassy' || naturestring === 'careful'){
+			naturetype = 'clever-nature';
+		}else if(naturestring === 'timid' || naturestring === 'hasty' || naturestring === 'jolly' || naturestring === 'naive'){
+			naturetype = 'cute-nature';
+		}else{
+			naturetype = 'neutral-nature';
+		}
+
 
 		//Calculate same, adjacent, and opposite values based on nature;
 		if (naturetype == "beauty-nature"){
