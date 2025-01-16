@@ -42,7 +42,7 @@ module.exports.data = new SlashCommandBuilder()
             .setName('add')
             .setDescription('adds a form to the database')
                 .addStringOption(option => option.setName('species-name').setDescription('Species Name').setRequired(true).setAutocomplete(true))
-                .addStringOption(option => option.setName('form-name').setDescription('Form Name').setRequired(true).setAutocomplete(true))
+                .addStringOption(option => option.setName('form-name').setDescription('Form Name').setRequired(true))
             .addStringOption(option => option.setName('ability1').setDescription('First Ability').setRequired(true))
             .addIntegerOption(option => option.setName('hp-base-stat').setDescription('HP Base Stat').setRequired(true))
             .addIntegerOption(option => option.setName('attack-base-stat').setDescription('ATK Base Stat').setRequired(true))
@@ -101,7 +101,7 @@ module.exports.run = async (interaction) =>
         .setStyle(ButtonStyle.Secondary);
 
     const row = new ActionRowBuilder()
-        .addComponents(cancel, confirm)
+        .addComponents(confirm, cancel)
 
 
     try {
