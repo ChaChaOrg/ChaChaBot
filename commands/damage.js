@@ -9,6 +9,7 @@ const SPA_ARRAY_INDEX = 3;
 const SPD_ARRAY_INDEX = 4;
 const SPE_ARRAY_INDEX = 5;
 const CRITICAL_HIT_MULTIPLIER = 1.5;
+const SAVING_THROW_MULTIPLIER = 0.5;
 
 const SQL_SANITATION_REGEX = /[^a-zA-Z0-9-'_]/;
 
@@ -71,8 +72,8 @@ module.exports.data = new SlashCommandBuilder()
           .setDescription('Extra damage *added* to the base power. Usually done through ChaCha feats. Defaults to 0'))
       .addNumberOption(option =>
         option.setName('multiplicitive-bonus')
-          .setDescription('Extra damage *multiplying* the base power.')
-          .setMinValue(0))
+          .setDescription('Extra damage *multiplying* the base power. Must be at least 0.001')
+          .setMinValue(0.001))
   )
   .addSubcommand(subcommand => 
     subcommand
@@ -104,8 +105,8 @@ module.exports.data = new SlashCommandBuilder()
           .setDescription('Extra damage *added* to the base power. Usually done through ChaCha feats. Defaults to 0'))
       .addNumberOption(option =>
         option.setName('multiplicitive-bonus')
-          .setDescription('Extra damage *multiplying* the base power.')
-          .setMinValue(0))
+          .setDescription('Extra damage *multiplying* the base power. Must be at least 0.001')
+          .setMinValue(0.001))
   );
 
 module.exports.autocomplete = async (interaction) => {
@@ -631,6 +632,8 @@ module.exports.run = async (interaction) => {
       //values used for calculation
       let damageTotal = 0;
       let critTotal = 0;
+      let saveTotal = 0;
+      let saveCrit = 0;
 
       let effectiveString = "";
       let criticalString = "";
@@ -781,6 +784,18 @@ module.exports.run = async (interaction) => {
               }
 
               //Attack and defense don't matter for hitting trainers.
+              // Calculate Save info instead
+              let saveType = "";
+              let saveDC = 20;
+              saveDC -= (moveData.pp)/5;
+
+              if (moveData.damage_class.name === "physical") {
+                saveType = "Fortitude";
+                saveDC += parseInt(attackPoke.statBlock.strMod);
+              } else {
+                saveType = "Reflex";
+                saveDC += parseInt(attackPoke.statBlock.intMod);
+              }
 
               //
               // Final damage calculation
@@ -800,14 +815,16 @@ module.exports.run = async (interaction) => {
                 multiHitTotal += damageTotal;
                 damageTotal = damageTotal.toFixed(0);
                 critTotal = (damageTotal * CRITICAL_HIT_MULTIPLIER).toFixed(0);
+                saveTotal = Math.floor((damageTotal * SAVING_THROW_MULTIPLIER)).toFixed(0);
+                saveCrit = Math.floor((damageTotal * CRITICAL_HIT_MULTIPLIER * SAVING_THROW_MULTIPLIER)).toFixed(0);
                 critBonus = critTotal - damageTotal;
                 multiHitString += `Hit #` + (hitNum + 1) + ` -- **` + damageTotal + `** -- (+` + critBonus + `)\n`
                 combatString +=
                   `For hit ${hitNum}: \n` +
                   `**${attackerName}** (level ${attackPoke.level} ${attackPoke.species}) used ${moveData.name} on a trainer\n` +
                   effectiveString +
-                  `${attackerName} deals ${damageTotal} damage to the defending trainer\n(Base Power: ${moveData.power} - damage roll: ${dicePool[hitNum]}\n` +
-                  `For a crit, instead ${attackerName} deals ${critTotal} damage to the defending trainer\n(Base Power: ${moveData.power} - damage roll: ${dicePool[hitNum]}\n`;
+                  `${attackerName} deals ${damageTotal} damage to the defending trainer, or ${saveTotal} if the trainer passes a DC ${saveDC} ${saveType} save. \n(Base Power: ${moveData.power} - damage roll: ${dicePool[hitNum]}\n` +
+                  `For a crit, instead ${attackerName} deals ${critTotal} damage to the defending trainer, or ${saveCrit} if the trainer passes a DC ${saveDC} ${saveType} save.\n(Base Power: ${moveData.power} - damage roll: ${dicePool[hitNum]}\n`;
               }
               multiHitString += `**Total: ` + multiHitTotal.toFixed(0) + `**`;
 
@@ -872,6 +889,10 @@ module.exports.run = async (interaction) => {
                     {
                       name: "Defender Info",
                       value: `**Trainer**\n=================`,
+                    },     
+                    {
+                      name: "Saving Throw",
+                      value: `**DC ${saveDC} ${saveType} save**\n=================`,
                     },
                     {
                       name: `${tempMove} Info`,
@@ -903,11 +924,11 @@ module.exports.run = async (interaction) => {
                   fields: [
                     {
                       name: "Damage Dealt",
-                      value: `Trainer takes ${damageTotal} damage.`,
+                      value: `Trainer takes ${damageTotal} damage (${saveTotal} if save succeeded).`,
                     },
                     {
                       name: "Critical Hit Damage",
-                      value: `Trainer takes ${critTotal} damage.`,
+                      value: `Trainer takes ${critTotal} damage (${saveCrit} if save succeeded).`,
                     },
                     {
                       name: "Attacker Info",
@@ -916,6 +937,10 @@ module.exports.run = async (interaction) => {
                     {
                       name: "Defender Info",
                       value: `**Trainer**\n=================`,
+                    },
+                    {
+                      name: "Saving Throw",
+                      value: `**DC ${saveDC} ${saveType} save**\n=================`,
                     },
                     {
                       name: `${tempMove} Info`,
