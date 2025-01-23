@@ -7,3 +7,4 @@ launch.json
 package-lock.json
 *.log
 .vs/
+deploy-testcommands.js
