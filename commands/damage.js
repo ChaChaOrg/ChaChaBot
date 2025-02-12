@@ -107,6 +107,39 @@ module.exports.data = new SlashCommandBuilder()
         option.setName('multiplicitive-bonus')
           .setDescription('Extra damage *multiplying* the base power. Must be at least 0.001')
           .setMinValue(0.001))
+  )
+  .addSubcommand(subcommand => 
+    subcommand
+      .setName('arceusgiftVpokemon')
+      .setDescription('For users of Arceus Gift or other times humans might use a Move against a Pokemon.')
+      .addStringOption(option =>
+        option.setName('basestat')
+          .setDescription('The relevant attribute - strength for physical moves, ')
+          .setRequired(true))
+      .addStringOption(option =>
+        option.setName('move-name')
+          .setDescription('The move used (gen 1-7 only sorry :<) lowercase with dashes instead of spaces. Ie, "rock-smash"')
+          .setRequired(true)
+          .setAutocomplete(true))
+      .addStringOption(option =>
+        option.setName('defender-name')
+          .setDescription('The name of the defending Pokemon, as listed in the database')
+          .setRequired(true)
+          .setAutocomplete(true))  
+      .addBooleanOption(option =>
+        option.setName('stab')
+          .setDescription('Whether the trainer gets STAB for this move. Defaults to false.')
+          .setRequired(false))
+      .addBooleanOption(option =>
+        option.setName('critical-hit')
+          .setDescription('If the attacker struck a critical hit Defaults to no.'))
+      .addNumberOption(option =>
+        option.setName('additive-bonus')
+          .setDescription('Extra damage *added* to the base power. Usually done through ChaCha feats. Defaults to 0'))
+      .addNumberOption(option =>
+        option.setName('multiplicitive-bonus')
+          .setDescription('Extra damage *multiplying* the base power. Must be at least 0.001')
+          .setMinValue(0.001))
   );
 
 module.exports.autocomplete = async (interaction) => {
