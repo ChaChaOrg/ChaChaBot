@@ -18,7 +18,6 @@ const HELP_MESSAGE = "A damage calculator that uses the Pokemon in the database.
   "**Attacker Name ★** \n> The name of the attacker, as listed in the database\n" +
   "**Move Used ★** \n> The move used (gen 1-7 only sorry :<) lowercase with dashes instead of spaces. Ie, 'rock-smash'\n" +
   "**Defender Name ★** \n> The name of the pokemon being hit by the attack, as listed in the database\n" +
-  "**Critical Hit** \n> If the attacker struck a critical hit, as 'y' for yes and 'n' for no. Defaults to no. A critical hit multiplies the total damage done by 1.5\n" +
   "**Stages of Attack** \n> Stages of attack/special attack the attacker has. Minimum -6, maximum +6\n" +
   "**Stages of Defense** \n> Stages of defense/special defense (matching the attack) the defender has. Minimum -6, maximum +6\n" +
   "**Additive Damage Bonus** \n> Extra damage *added* to the base power. Usually done through ChaCha feats. Defaults to 0\n" +
@@ -54,9 +53,6 @@ module.exports.data = new SlashCommandBuilder()
           .setDescription('The name of the pokemon being hit by the attack, as listed in the database')
           .setRequired(true)
           .setAutocomplete(true))
-      .addBooleanOption(option =>
-        option.setName('critical-hit')
-          .setDescription('If the attacker struck a critical hit Defaults to no.'))
       .addIntegerOption(option =>
         option.setName('stages-of-attack')
           .setDescription('Stages of attack/special attack the attacker has. Minimum -6, maximum +6')
@@ -97,9 +93,6 @@ module.exports.data = new SlashCommandBuilder()
         option.setName('type2')
           .setDescription('Trainers are usually typeless. If they have _two_ types, set the second here.')
           .setRequired(false))
-      .addBooleanOption(option =>
-        option.setName('critical-hit')
-          .setDescription('If the attacker struck a critical hit Defaults to no.'))
       .addNumberOption(option =>
         option.setName('additive-bonus')
           .setDescription('Extra damage *added* to the base power. Usually done through ChaCha feats. Defaults to 0'))
@@ -112,9 +105,15 @@ module.exports.data = new SlashCommandBuilder()
     subcommand
       .setName('arceusgift')
       .setDescription('For users of Arceus Gift or other times humans might use a Move against a Pokemon.')
-      .addStringOption(option =>
+      .addIntegerOption(option =>
         option.setName('basestat')
           .setDescription('The relevant attribute - strength for physical moves, intelligence for special.')
+          .setMinValue(0)
+          .setRequired(true))
+      .addIntegerOption(option =>
+        option.setName('level')
+          .setDescription('The character level of the trainer using the move')
+          .setMinValue(1)
           .setRequired(true))
       .addStringOption(option =>
         option.setName('move-name')
@@ -130,9 +129,6 @@ module.exports.data = new SlashCommandBuilder()
         option.setName('stab')
           .setDescription('Whether the trainer gets STAB for this move. Defaults to false.')
           .setRequired(false))
-      .addBooleanOption(option =>
-        option.setName('critical-hit')
-          .setDescription('If the attacker struck a critical hit Defaults to no.'))
       .addIntegerOption(option =>
         option.setName('stages-of-attack')
           .setDescription('Stages of attack/special attack the attacker has. Minimum -6, maximum +6')
@@ -218,8 +214,6 @@ module.exports.run = async (interaction) => {
       let other = 0;
       let otherMult = 1;
 
-      var critHit;
-
 
       //variables required
       let Pokemon = require("../models/pokemon.js");
@@ -229,7 +223,6 @@ module.exports.run = async (interaction) => {
       let dice = 0;
       let stab = 1;
       let effective = 1;
-      let critical = 1;
       //
       // Checks if an arg is there, than assigns it. This keeps null values out of the way.
       // This means that if an arg is left off, it will just keep the defaults, but you CAN'T put them out of order.
@@ -245,11 +238,6 @@ module.exports.run = async (interaction) => {
         interaction.followUp(errMsg);
         return;
       }
-
-      if (interaction.options.getBoolean('critical-hit'))
-        critHit = true; //critical hit
-      else
-        critHit = false;
 
       if (interaction.options.getInteger('stages-of-attack'))
         bonusAtk = interaction.options.getInteger('stages-of-attack'); //Stages Attack
@@ -268,7 +256,6 @@ module.exports.run = async (interaction) => {
       let critTotal = 0;
 
       let effectiveString = "";
-      let criticalString = "";
       let combatString = "";
 
       //
@@ -439,12 +426,6 @@ module.exports.run = async (interaction) => {
                 dicePool[hitNum] = dice;
               }
 
-              //critical hit - done manually, checks first letter only
-
-              if (critHit) {
-                critical = CRITICAL_HIT_MULTIPLIER;
-                criticalString = "**A critical hit!**\n";
-              }
 
               //Checks if the move does physical or special damage.
               // then grabs the relevant stat.
@@ -537,7 +518,7 @@ module.exports.run = async (interaction) => {
                     ""
                   )}_(Move)`,
                   // thumbnail: { url:  `${this.pokemonData.sprites.front_default}`,
-                  description: `${effectiveString}${criticalString}`,
+                  description: `${effectiveString}`,
 
                   fields: [
                     {
@@ -581,7 +562,7 @@ module.exports.run = async (interaction) => {
                     ""
                   )}_(Move)`,
                   // thumbnail: { url:  `${this.pokemonData.sprites.front_default}`,
-                  description: `${effectiveString}${criticalString}`,
+                  description: `${effectiveString}`,
 
                   fields: [
                     {
@@ -642,8 +623,6 @@ module.exports.run = async (interaction) => {
       let other = 0;
       let otherMult = 1;
 
-      var critHit;
-
 
       //variables required
       let Pokemon = require("../models/pokemon.js");
@@ -652,7 +631,6 @@ module.exports.run = async (interaction) => {
       let dice = 0;
       let stab = 1;
       let effective = 1;
-      let critical = 1;
       //
       // Checks if an arg is there, than assigns it. This keeps null values out of the way.
       // This means that if an arg is left off, it will just keep the defaults, but you CAN'T put them out of order.
@@ -661,10 +639,6 @@ module.exports.run = async (interaction) => {
       attackerName = interaction.options.getString('attacker-name');
       attackerMove = interaction.options.getString('move-name');
 
-      if (interaction.options.getBoolean('critical-hit'))
-        critHit = true; //critical hit
-      else
-        critHit = false;
 
       if (interaction.options.getNumber('additive-bonus'))
         other = interaction.options.getNumber('additive-bonus');
@@ -679,7 +653,6 @@ module.exports.run = async (interaction) => {
       let saveCrit = 0;
 
       let effectiveString = "";
-      let criticalString = "";
       let combatString = "";
 
       //
@@ -819,13 +792,6 @@ module.exports.run = async (interaction) => {
                 dicePool[hitNum] = dice;
               }
 
-              //critical hit - done manually, checks first letter only
-
-              if (critHit) {
-                critical = CRITICAL_HIT_MULTIPLIER;
-                criticalString = "**A critical hit!**\n";
-              }
-
               //Attack and defense don't matter for hitting trainers.
               // Calculate Save info instead
               let saveType = "";
@@ -914,7 +880,7 @@ module.exports.run = async (interaction) => {
                     ""
                   )}_(Move)`,
                   // thumbnail: { url:  `${this.pokemonData.sprites.front_default}`,
-                  description: `${effectiveString}${criticalString}`,
+                  description: `${effectiveString}`,
 
                   fields: [
                     {
@@ -962,7 +928,7 @@ module.exports.run = async (interaction) => {
                     ""
                   )}_(Move)`,
                   // thumbnail: { url:  `${this.pokemonData.sprites.front_default}`,
-                  description: `${effectiveString}${criticalString}`,
+                  description: `${effectiveString}`,
 
                   fields: [
                     {
@@ -1024,13 +990,10 @@ module.exports.run = async (interaction) => {
 
       let attackerMove;
       let defenderName;
-      let baseStat;
       let bonusDef = 0;
       let bonusAtk = 0;
       let other = 0;
       let otherMult = 1;
-
-      var critHit;
 
 
       //variables required
@@ -1040,7 +1003,6 @@ module.exports.run = async (interaction) => {
       let dice = 0;
       let stab = 1;
       let effective = 1;
-      let critical = 1;
       //
       // Checks if an arg is there, than assigns it. This keeps null values out of the way.
       // This means that if an arg is left off, it will just keep the defaults, but you CAN'T put them out of order.
@@ -1049,13 +1011,6 @@ module.exports.run = async (interaction) => {
       attackerName = "Trainer";
       attackerMove = interaction.options.getString('move-name');
       defenderName = interaction.options.getString('defender-name');
-      baseStat = interaction.options.getString('basestat');
-
-
-      if (interaction.options.getBoolean('critical-hit'))
-        critHit = true; //critical hit
-      else
-        critHit = false;
 
       if (interaction.options.getInteger('stages-of-attack'))
         bonusAtk = interaction.options.getInteger('stages-of-attack'); //Stages Attack
@@ -1074,8 +1029,9 @@ module.exports.run = async (interaction) => {
       let critTotal = 0;
 
       let effectiveString = "";
-      let criticalString = "";
       let combatString = "";
+
+      let level = interaction.options.getInteger('level');
 
       //
       // Grabs the SQL entry for both attacking and defending pokemon.
@@ -1108,16 +1064,13 @@ module.exports.run = async (interaction) => {
           return;
         }
 
-        logger.info('[damage] Defender: ' + response[1].name + ' retrieved from SQL database.');
+        logger.info('[damage] Defender: ' + response[0].name + ' retrieved from SQL database.');
 
         //
-        // Load the found pokemon into pokemon objects, then wait til they both complete before continuing.
+        // Load the found pokemon into a pokemon object, then wait til then wait to complete
         //
-        response.forEach((element) => {
-          if (element["name"].toLowerCase() === attackerName.toLowerCase())
-            loadSQLPromise.push(attackPoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, element));
-          else loadSQLPromise.push(defendPoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, element));
-        });
+
+        loadSQLPromise.push(defendPoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, response[0]));
 
         Promise.all(loadSQLPromise).then((response) => {
           //
@@ -1145,16 +1098,13 @@ module.exports.run = async (interaction) => {
               //
               // Grab each pokemon's types into a temporary object
               //
-              let attackerTypes = [attackPoke.type1, attackPoke.type2];
               let defenderTypes = [defendPoke.type1, defendPoke.type2];
 
               //Set STAB bonus
               //If either of the Pokemon's types are the same as the move, stab is set to 1.5. Other wise it is 1.0
               //
-              if (
-                attackerTypes[0] === moveData.type.name ||
-                attackerTypes[1] === moveData.type.name
-              ) {
+              if (interaction.options.getBoolean('stab'))
+              {
                 stab = 1.5;
               }
 
@@ -1231,24 +1181,18 @@ module.exports.run = async (interaction) => {
                 dicePool[hitNum] = dice;
               }
 
-              //critical hit - done manually, checks first letter only
-
-              if (critHit) {
-                critical = CRITICAL_HIT_MULTIPLIER;
-                criticalString = "**A critical hit!**\n";
-              }
-
               //Checks if the move does physical or special damage.
               // then grabs the relevant stat.
               //
               let tempAttack = 0;
               let tempDefense = 0;
 
+              tempAttack = interaction.options.getInteger('basestat');
+              tempAttack = Math.floor((tempAttack-1.5) * (20/3));
+
               if (moveData.damage_class.name === "physical") {
-                tempAttack = attackPoke.statBlock.finalStats[ATK_ARRAY_INDEX];
                 tempDefense = defendPoke.statBlock.finalStats[DEF_ARRAY_INDEX];
               } else {
-                tempAttack = attackPoke.statBlock.finalStats[SPA_ARRAY_INDEX];
                 tempDefense = defendPoke.statBlock.finalStats[SPD_ARRAY_INDEX];
               }
 
@@ -1261,7 +1205,7 @@ module.exports.run = async (interaction) => {
               let critBonus = 0;
               for (let hitNum = 0; hitNum < numHits; hitNum++) {
                 damageTotal =
-                  ((10 * attackPoke.level + 10) / 250) *
+                  ((10 * level + 10) / 250) *
                   ((tempAttack * stageModAtk) /
                     (tempDefense * stageModDef)) *
                   dicePool[hitNum] *
@@ -1276,10 +1220,10 @@ module.exports.run = async (interaction) => {
                 multiHitString += `Hit #` + (hitNum + 1) + ` -- **` + damageTotal + `** -- (+` + critBonus + `)\n`
                 combatString +=
                   `For hit ${hitNum}: \n` +
-                  `**${attackerName}** (level ${attackPoke.level} ${attackPoke.species}) used ${moveData.name} on ${defenderName} (level ${defendPoke.level} ${defendPoke.species})\n` +
+                  `**$Trainer** (level ${level}) used ${moveData.name} on ${defenderName} (level ${defendPoke.level} ${defendPoke.species})\n` +
                   effectiveString +
-                  `${attackerName} deals ${damageTotal} damage to the defending ${defenderName}\n(Base Power: ${moveData.power} - damage roll: ${dicePool[hitNum]}\n` +
-                  `For a crit, instead ${attackerName} deals ${critTotal} damage to the defending ${defenderName}\n(Base Power: ${moveData.power} - damage roll: ${dicePool[hitNum]}\n`;
+                  `Trainer deals ${damageTotal} damage to the defending ${defenderName}\n(Base Power: ${moveData.power} - damage roll: ${dicePool[hitNum]}\n` +
+                  `For a crit, instead Trainer deals ${critTotal} damage to the defending ${defenderName}\n(Base Power: ${moveData.power} - damage roll: ${dicePool[hitNum]}\n`;
               }
               multiHitString += `**Total: ` + multiHitTotal.toFixed(0) + `**`;
 
@@ -1288,8 +1232,7 @@ module.exports.run = async (interaction) => {
 
               //format pokemon names
               let atkPokeSpecies_formatted =
-                attackPoke.form.charAt(0).toUpperCase() +
-                attackPoke.form.slice(1);
+                "Trainer";
               let defPokeSpecies_formatted =
                 defendPoke.form.charAt(0).toUpperCase() +
                 defendPoke.form.slice(1);
@@ -1323,13 +1266,13 @@ module.exports.run = async (interaction) => {
                     name: interaction.user.username,
                     icon_url: interaction.user.avatarURL,
                   },
-                  title: `**${attackerName}** used ${tempMove} on **${defenderName}**!`,
+                  title: `**Trainer** used ${tempMove} on **${defenderName}**!`,
                   url: `https://bulbapedia.bulbagarden.net/wiki/${tempMove.replace(
                     " ",
                     ""
                   )}_(Move)`,
                   // thumbnail: { url:  `${this.pokemonData.sprites.front_default}`,
-                  description: `${effectiveString}${criticalString}`,
+                  description: `${effectiveString}`,
 
                   fields: [
                     {
@@ -1342,7 +1285,7 @@ module.exports.run = async (interaction) => {
                     },
                     {
                       name: "Attacker Info",
-                      value: `**${attackerName}**, Lv ${attackPoke.level} ${atkPokeSpecies_formatted}\n=================`,
+                      value: `**Trainer**, Lv ${level} ${atkPokeSpecies_formatted}\n=================`,
                     },
                     {
                       name: "Defender Info",
@@ -1367,13 +1310,13 @@ module.exports.run = async (interaction) => {
                     name: interaction.user.username,
                     icon_url: interaction.user.avatarURL,
                   },
-                  title: `**${attackerName}** used ${tempMove} on **${defenderName}**!`,
+                  title: `**Trainer** used ${tempMove} on **${defenderName}**!`,
                   url: `https://bulbapedia.bulbagarden.net/wiki/${tempMove.replace(
                     " ",
                     ""
                   )}_(Move)`,
                   // thumbnail: { url:  `${this.pokemonData.sprites.front_default}`,
-                  description: `${effectiveString}${criticalString}`,
+                  description: `${effectiveString}`,
 
                   fields: [
                     {
@@ -1386,7 +1329,7 @@ module.exports.run = async (interaction) => {
                     },
                     {
                       name: "Attacker Info",
-                      value: `**${attackerName}**, Lv ${attackPoke.level} ${atkPokeSpecies_formatted}\n=================`,
+                      value: `**Trainer**, Lv ${level} ${atkPokeSpecies_formatted}\n=================`,
                     },
                     {
                       name: "Defender Info",
