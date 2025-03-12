@@ -142,7 +142,7 @@ function testAgainstREGX(stringToTest){
         logger.error("[modpoke] User tried to put in invalid string input.");
         throw "That is not a valid string input, please keep input alphanumeric, ', - or _";
     }
-    return
+    return stringToTest;
 }
 
 module.exports.run = async (interaction) => {

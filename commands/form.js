@@ -39,13 +39,13 @@ module.exports.data = new SlashCommandBuilder()
         .setName('list')
         .setDescription('List all forms for a species')
         .addStringOption(option =>
-            option.setName('species-name').setDescription('the Species name').setRequired(true)))
+            option.setName('species-name').setDescription('the Species name').setRequired(true).setAutocomplete(true)))
         .addSubcommand(subcommand =>
             subcommand
             .setName('add')
             .setDescription('adds a form to the database')
-            .addStringOption(option => option.setName('species-name').setDescription('Species Name').setRequired(true))
-            .addStringOption(option => option.setName('form-name').setDescription('Form Name').setRequired(true))
+                .addStringOption(option => option.setName('species-name').setDescription('Species Name').setRequired(true).setAutocomplete(true))
+                .addStringOption(option => option.setName('form-name').setDescription('Form Name').setRequired(true))
             .addStringOption(option => option.setName('ability1').setDescription('First Ability').setRequired(true))
             .addIntegerOption(option => option.setName('hp-base-stat').setDescription('HP Base Stat').setRequired(true))
             .addIntegerOption(option => option.setName('attack-base-stat').setDescription('ATK Base Stat').setRequired(true))
@@ -53,21 +53,115 @@ module.exports.data = new SlashCommandBuilder()
             .addIntegerOption(option => option.setName('specialattack-base-stat').setDescription('SPA Base Stat').setRequired(true))
             .addIntegerOption(option => option.setName('specialdefense-base-stat').setDescription('SPD Base Stat').setRequired(true))
             .addIntegerOption(option => option.setName('speed-base-stat').setDescription('SPE Base Stat').setRequired(true))
-            .addStringOption(option => option.setName('type1').setDescription('First Type').setRequired(true))
+            .addStringOption(option => option.setName('type1').setDescription('First Type').setRequired(true)
+                    .addChoices(
+                        { name: 'Bug', value: 'Bug' },
+                        { name: 'Dark', value: 'Dark' },
+                        { name: 'Dragon', value: 'Dragon' },
+                        { name: 'Electric', value: 'Electric' },
+                        { name: 'Fairy', value: 'Fairy' },
+                        { name: 'Fighting', value: 'Fighting' },
+                        { name: 'Fire', value: 'Fire' },
+                        { name: 'Flying', value: 'Flying' },
+                        { name: 'Grass', value: 'Grass' },
+                        { name: 'Ghost', value: 'Ghost' },
+                        { name: 'Ground', value: 'Ground' },
+                        { name: 'Ice', value: 'Ice' },
+                        { name: 'Normal', value: 'Normal' },
+                        { name: 'Poison', value: 'Poison' },
+                        { name: 'Psychic', value: 'Psychic' },
+                        { name: 'Rock', value: 'Rock' },
+                        { name: 'Steel', value: 'Steel' },
+                        { name: 'Stellar', value: 'Stellar' },
+                        { name: 'Water', value: 'Water' },
+                        { name: '???', value: '???' }
+                    ))
             .addBooleanOption(option => option.setName('private').setDescription('private the form').setRequired(true))
             .addStringOption(option => option.setName('ability2').setDescription('Second Ability'))
             .addStringOption(option => option.setName('ability3').setDescription('Third Ability'))
-            .addStringOption(option => option.setName('type2').setDescription('Second Type'))
-            .addIntegerOption(option => option.setName('genderratio').setDescription('Gender ratio'))
-            .addIntegerOption(option => option.setName('capturerate').setDescription('Capture rate'))
-            .addStringOption(option => option.setName('egggroup1').setDescription('First Egg group'))
-            .addStringOption(option => option.setName('egggroup2').setDescription('Second Egg group')))
+            .addStringOption(option => option.setName('type2').setDescription('Second Type')
+                    .addChoices(
+                        { name: 'Bug', value: 'Bug' },
+                        { name: 'Dark', value: 'Dark' },
+                        { name: 'Dragon', value: 'Dragon' },
+                        { name: 'Electric', value: 'Electric' },
+                        { name: 'Fairy', value: 'Fairy' },
+                        { name: 'Fighting', value: 'Fighting' },
+                        { name: 'Fire', value: 'Fire' },
+                        { name: 'Flying', value: 'Flying' },
+                        { name: 'Grass', value: 'Grass' },
+                        { name: 'Ghost', value: 'Ghost' },
+                        { name: 'Ground', value: 'Ground' },
+                        { name: 'Ice', value: 'Ice' },
+                        { name: 'Normal', value: 'Normal' },
+                        { name: 'Poison', value: 'Poison' },
+                        { name: 'Psychic', value: 'Psychic' },
+                        { name: 'Rock', value: 'Rock' },
+                        { name: 'Steel', value: 'Steel' },
+                        { name: 'Stellar', value: 'Stellar' },
+                        { name: 'Water', value: 'Water' },
+                        { name: '???', value: '???' },
+                        { name: 'None', value: '-' }
+                    ))
+            .addIntegerOption(option => option.setName('genderratio').setDescription('Gender ratio').setMinValue(-1).setMaxValue(8))
+            .addIntegerOption(option => option.setName('capturerate').setDescription('Capture rate').setMinValue(0).setMaxValue(255))
+            .addStringOption(option => option.setName('egggroup1').setDescription('First Egg group')
+                    .addChoices(
+                        { name: 'Amorphous', value: 'Amorphous' },
+                        { name: 'Bug', value: 'Bug' },
+                        { name: 'Dragon', value: 'Dragon' },
+                        { name: 'Fairy', value: 'Fairy' },
+                        { name: 'Field', value: 'Field' },
+                        { name: 'Flying', value: 'Flying' },
+                        { name: 'Grass', value: 'Grass' },
+                        { name: 'Human-Like', value: 'Human-Like' },
+                        { name: 'Mineral', value: 'Mineral' },
+                        { name: 'Monster', value: 'Monster' },                      
+                        { name: 'Water1', value: 'Water1' },
+                        { name: 'Water2', value: 'Water2' },
+                        { name: 'Water3', value: 'Water3' }
+                    ))
+            .addStringOption(option => option.setName('egggroup2').setDescription('Second Egg group')
+                    .addChoices(
+                        { name: 'Amorphous', value: 'Amorphous' },
+                        { name: 'Bug', value: 'Bug' },
+                        { name: 'Dragon', value: 'Dragon' },
+                        { name: 'Fairy', value: 'Fairy' },
+                        { name: 'Field', value: 'Field' },
+                        { name: 'Flying', value: 'Flying' },
+                        { name: 'Grass', value: 'Grass' },
+                        { name: 'Human-Like', value: 'Human-Like' },
+                        { name: 'Mineral', value: 'Mineral' },
+                        { name: 'Monster', value: 'Monster' },
+                        { name: 'Water1', value: 'Water1' },
+                        { name: 'Water2', value: 'Water2' },
+                        { name: 'Water3', value: 'Water3' }
+                    )))
         .addSubcommand(subcommand =>
             subcommand
             .setName('remove')
             .setDescription('removes a form from the database')
-            .addStringOption(option => option.setName('species-name').setDescription('Species Name').setRequired(true))
-            .addStringOption(option => option.setName('form-name').setDescription('Form Name').setRequired(true)));
+                .addStringOption(option => option.setName('species-name').setDescription('Species Name').setRequired(true).setAutocomplete(true))
+                .addStringOption(option => option.setName('form-name').setDescription('Form Name').setRequired(true).setAutocomplete(true)));
+
+module.exports.autocomplete = async (interaction) => {
+    const focused = interaction.options.getFocused(true);
+    if (focused.name === 'species-name') {
+        let choices = interaction.client.formCache;
+        const filtered = choices.filter(choice => (!choice.private || (choice.discordID == interaction.user)) && choice.species.toLowerCase().startsWith(focused.value.toLowerCase())).slice(0,24);
+        await interaction.respond(
+            filtered.map(choice => ({name:choice.species,value:choice.species})),
+        );
+    } else if (focused.name === 'form-name') {
+        let choices = interaction.client.formCache;
+        const filtered = choices.filter(choice => (!choice.private || (choice.discordID == interaction.user)) && choice.form.toLowerCase().startsWith(focused.value.toLowerCase())).slice(0,24);
+        await interaction.respond(
+            filtered.map(choice => ({name:choice.form, value:choice.form})),
+        );
+    } else {
+        //nope, not auto completed
+    }
+}
 
 module.exports.run = async (interaction) => 
 {
@@ -85,7 +179,7 @@ module.exports.run = async (interaction) =>
         .setStyle(ButtonStyle.Secondary);
 
     const row = new ActionRowBuilder()
-        .addComponents(cancel, confirm)
+        .addComponents(confirm, cancel)
 
 
     try {
