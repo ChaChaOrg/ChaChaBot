@@ -53,15 +53,90 @@ module.exports.data = new SlashCommandBuilder()
             .addIntegerOption(option => option.setName('specialattack-base-stat').setDescription('SPA Base Stat').setRequired(true))
             .addIntegerOption(option => option.setName('specialdefense-base-stat').setDescription('SPD Base Stat').setRequired(true))
             .addIntegerOption(option => option.setName('speed-base-stat').setDescription('SPE Base Stat').setRequired(true))
-            .addStringOption(option => option.setName('type1').setDescription('First Type').setRequired(true))
+            .addStringOption(option => option.setName('type1').setDescription('First Type').setRequired(true)
+                    .addChoices(
+                        { name: 'Bug', value: 'Bug' },
+                        { name: 'Dark', value: 'Dark' },
+                        { name: 'Dragon', value: 'Dragon' },
+                        { name: 'Electric', value: 'Electric' },
+                        { name: 'Fairy', value: 'Fairy' },
+                        { name: 'Fighting', value: 'Fighting' },
+                        { name: 'Fire', value: 'Fire' },
+                        { name: 'Flying', value: 'Flying' },
+                        { name: 'Grass', value: 'Grass' },
+                        { name: 'Ghost', value: 'Ghost' },
+                        { name: 'Ground', value: 'Ground' },
+                        { name: 'Ice', value: 'Ice' },
+                        { name: 'Normal', value: 'Normal' },
+                        { name: 'Poison', value: 'Poison' },
+                        { name: 'Psychic', value: 'Psychic' },
+                        { name: 'Rock', value: 'Rock' },
+                        { name: 'Steel', value: 'Steel' },
+                        { name: 'Stellar', value: 'Stellar' },
+                        { name: 'Water', value: 'Water' },
+                        { name: '???', value: '???' }
+                    ))
             .addBooleanOption(option => option.setName('private').setDescription('private the form').setRequired(true))
             .addStringOption(option => option.setName('ability2').setDescription('Second Ability'))
             .addStringOption(option => option.setName('ability3').setDescription('Third Ability'))
-            .addStringOption(option => option.setName('type2').setDescription('Second Type'))
-            .addIntegerOption(option => option.setName('genderratio').setDescription('Gender ratio'))
-            .addIntegerOption(option => option.setName('capturerate').setDescription('Capture rate'))
-            .addStringOption(option => option.setName('egggroup1').setDescription('First Egg group'))
-            .addStringOption(option => option.setName('egggroup2').setDescription('Second Egg group')))
+            .addStringOption(option => option.setName('type2').setDescription('Second Type')
+                    .addChoices(
+                        { name: 'Bug', value: 'Bug' },
+                        { name: 'Dark', value: 'Dark' },
+                        { name: 'Dragon', value: 'Dragon' },
+                        { name: 'Electric', value: 'Electric' },
+                        { name: 'Fairy', value: 'Fairy' },
+                        { name: 'Fighting', value: 'Fighting' },
+                        { name: 'Fire', value: 'Fire' },
+                        { name: 'Flying', value: 'Flying' },
+                        { name: 'Grass', value: 'Grass' },
+                        { name: 'Ghost', value: 'Ghost' },
+                        { name: 'Ground', value: 'Ground' },
+                        { name: 'Ice', value: 'Ice' },
+                        { name: 'Normal', value: 'Normal' },
+                        { name: 'Poison', value: 'Poison' },
+                        { name: 'Psychic', value: 'Psychic' },
+                        { name: 'Rock', value: 'Rock' },
+                        { name: 'Steel', value: 'Steel' },
+                        { name: 'Stellar', value: 'Stellar' },
+                        { name: 'Water', value: 'Water' },
+                        { name: '???', value: '???' },
+                        { name: 'None', value: '-' }
+                    ))
+            .addIntegerOption(option => option.setName('genderratio').setDescription('Gender ratio').setMinValue(-1).setMaxValue(8))
+            .addIntegerOption(option => option.setName('capturerate').setDescription('Capture rate').setMinValue(0).setMaxValue(255))
+            .addStringOption(option => option.setName('egggroup1').setDescription('First Egg group')
+                    .addChoices(
+                        { name: 'Amorphous', value: 'Amorphous' },
+                        { name: 'Bug', value: 'Bug' },
+                        { name: 'Dragon', value: 'Dragon' },
+                        { name: 'Fairy', value: 'Fairy' },
+                        { name: 'Field', value: 'Field' },
+                        { name: 'Flying', value: 'Flying' },
+                        { name: 'Grass', value: 'Grass' },
+                        { name: 'Human-Like', value: 'Human-Like' },
+                        { name: 'Mineral', value: 'Mineral' },
+                        { name: 'Monster', value: 'Monster' },                      
+                        { name: 'Water1', value: 'Water1' },
+                        { name: 'Water2', value: 'Water2' },
+                        { name: 'Water3', value: 'Water3' }
+                    ))
+            .addStringOption(option => option.setName('egggroup2').setDescription('Second Egg group')
+                    .addChoices(
+                        { name: 'Amorphous', value: 'Amorphous' },
+                        { name: 'Bug', value: 'Bug' },
+                        { name: 'Dragon', value: 'Dragon' },
+                        { name: 'Fairy', value: 'Fairy' },
+                        { name: 'Field', value: 'Field' },
+                        { name: 'Flying', value: 'Flying' },
+                        { name: 'Grass', value: 'Grass' },
+                        { name: 'Human-Like', value: 'Human-Like' },
+                        { name: 'Mineral', value: 'Mineral' },
+                        { name: 'Monster', value: 'Monster' },
+                        { name: 'Water1', value: 'Water1' },
+                        { name: 'Water2', value: 'Water2' },
+                        { name: 'Water3', value: 'Water3' }
+                    )))
         .addSubcommand(subcommand =>
             subcommand
             .setName('remove')
