@@ -85,6 +85,11 @@ module.exports.data = new SlashCommandBuilder()
           .setDescription('The move used (gen 1-7 only sorry :<) lowercase with dashes instead of spaces. Ie, "rock-smash"')
           .setRequired(true)
           .setAutocomplete(true))
+      .addIntegerOption(option =>
+        option.setName('stages')
+        .setDescription('Stages of Attack or Special Attack. Used in saving throw calculations.')
+        .setMaxValue(6)
+        .setMinValue(-6))
       .addStringOption(option =>
         option.setName('type1')
           .setDescription('Trainers are usually typeless. If they do have a type, add one here.')
@@ -139,6 +144,49 @@ module.exports.data = new SlashCommandBuilder()
           .setDescription('Stages of defense/special defense the attacker has. Minimum -6, maximum +6')
           .setMaxValue(6)
           .setMinValue(-6))
+      .addNumberOption(option =>
+        option.setName('additive-bonus')
+          .setDescription('Extra damage *added* to the base power. Usually done through ChaCha feats. Defaults to 0'))
+      .addNumberOption(option =>
+        option.setName('multiplicitive-bonus')
+          .setDescription('Extra damage *multiplying* the base power. Must be at least 0.001')
+          .setMinValue(0.001))
+  )
+  .addSubcommand(subcommand =>
+    subcommand
+      .setName('arceusgiftvstrainer')
+      .setDescription('For damaging a human hit by an Arceus Gift attack.')
+      .addIntegerOption(option =>
+        option.setName('level')
+          .setDescription('The character level of the trainer using the move')
+          .setMinValue(1)
+          .setRequired(true))
+      .addStringOption(option =>
+        option.setName('move-name')
+          .setDescription('The move used (gen 1-7 only sorry :<) lowercase with dashes instead of spaces. Ie, "rock-smash"')
+          .setRequired(true)
+          .setAutocomplete(true))
+      .addIntegerOption(option =>
+        option.setName('basestat')
+          .setDescription('The value of the relevant attribute score - strength for physical moves, intelligence for special.')
+          .setMinValue(0)
+          .setRequired(true))
+      .addBooleanOption(option =>
+        option.setName('stab')
+          .setDescription('Whether the trainer gets STAB for this move. Defaults to false.'))
+      .addIntegerOption(option =>
+        option.setName('stages')
+          .setDescription('Stages of Attack or Special Attack. Used in saving throw calculations.')
+          .setMaxValue(6)
+          .setMinValue(-6))
+      .addStringOption(option =>
+        option.setName('type1')
+          .setDescription('Add a type (if applicable) to the defending trainer.')
+          .setRequired(false))
+      .addStringOption(option =>
+        option.setName('type2')
+          .setDescription('Trainers are usually typeless. If the defending trainer has _two_ types, set the second here.')
+          .setRequired(false))
       .addNumberOption(option =>
         option.setName('additive-bonus')
           .setDescription('Extra damage *added* to the base power. Usually done through ChaCha feats. Defaults to 0'))
@@ -623,6 +671,8 @@ module.exports.run = async (interaction) => {
       let other = 0;
       let otherMult = 1;
 
+      let stages = interaction.options.getInteger('stages') ?? 0;
+
 
       //variables required
       let Pokemon = require("../models/pokemon.js");
@@ -797,14 +847,26 @@ module.exports.run = async (interaction) => {
               let saveType = "";
               let saveDC = 20;
               saveDC -= (moveData.pp) / 5;
+              let stageMod = 1;
+              if (stages > -1){
+                stageMod = (2 + stages) / 2;
+              }else {
+                stageMod = 2 / (Math.abs(stages) + 2);
+              }
+
+              let tempAttack = 0;
+
+              // Get stat - convert to ability score after modifications to get DC
 
               if (moveData.damage_class.name === "physical") {
                 saveType = "Fortitude";
-                saveDC += parseInt(attackPoke.statBlock.strMod);
+                tempAttack = attackPoke.statBlock.finalStats[ATK_ARRAY_INDEX];
               } else {
                 saveType = "Reflex";
-                saveDC += parseInt(attackPoke.statBlock.intMod);
+                tempAttack = attackPoke.statBlock.finalStats[SPA_ARRAY_INDEX];
               }
+              tempAttack = tempAttack * stageMod;
+              saveDC += Math.floor((((tempAttack * 0.15) + 1.5) - 10) / 2);
 
               //
               // Final damage calculation
@@ -1371,7 +1433,342 @@ module.exports.run = async (interaction) => {
       });
 
 
+    } else if (interaction.options.getSubcommand() === 'arceusgiftvstrainer') {
+
+      let attackerMove;
+      let other = 0;
+      let otherMult = 1;
+
+      let stages = interaction.options.getInteger('stages') ?? 0;
+
+
+      let dice = 0;
+      let stab = 1;
+      let effective = 1;
+      //
+      // Checks if an arg is there, than assigns it. This keeps null values out of the way.
+      // This means that if an arg is left off, it will just keep the defaults, but you CAN'T put them out of order.
+      //
+
+      attackerName = "Attacking Trainer";
+      attackerMove = interaction.options.getString('move-name');
+
+      if (interaction.options.getNumber('additive-bonus'))
+        other = interaction.options.getNumber('additive-bonus');
+      if (interaction.options.getNumber('multiplicitive-bonus'))
+        otherMult = interaction.options.getNumber('multiplicitive-bonus');
+
+
+      //values used for calculation
+      let damageTotal = 0;
+      let critTotal = 0;
+      let saveTotal = 0;
+      let saveCrit = 0;
+
+      let effectiveString = "";
+      let combatString = "";
+
+      let level = interaction.options.getInteger('level');
+
+
+      //
+      // Grab the move information and the relevant type information.
+      //
+      interaction.client.pokedex.getMoveByName(attackerMove.toLowerCase()).then((moveData) => {
+        interaction.client.pokedex.getTypeByName(moveData.type.name).then((typeData) => {
+
+          //
+          // Grab defender's types into a temporary object
+          //
+          let defenderTypes = [interaction.options.getString("type1"), interaction.options.getString("type2")];
+
+          //Set STAB bonus
+          //If either of the Pokemon's types are the same as the move, stab is set to 1.5. Other wise it is 1.0
+          //
+          if (interaction.options.getBoolean('stab')) {
+            stab = 1.5;
+          }
+
+          //
+          // Calculate Type Effectiveness
+          //
+          typeData.damage_relations.half_damage_to.forEach((typeElement) => {
+            if (
+              // Loops through the "typeData" api object for the types that this move deals half damage to.
+              // It then multiplies the effectiveness accordingly.
+              //
+              typeElement.name === defenderTypes[0] ||
+              typeElement.name === defenderTypes[1]
+            )
+              effective = effective * 0.5;
+          });
+
+          typeData.damage_relations.double_damage_to.forEach(
+            (typeElement) => {
+              if (
+                // Loops through the "typeData" api object for the types that this move deals double damage to.
+                // It then multiplies the effectiveness accordingly.
+                //
+                typeElement.name === defenderTypes[0] ||
+                typeElement.name === defenderTypes[1]
+              )
+                effective = effective * 2;
+            }
+          );
+
+          typeData.damage_relations.no_damage_to.forEach((typeElement) => {
+            if (
+              // Loops through the "typeData" api object for the types that this move deals no damage to.
+              // It then sets the effectiveness accordingly.
+              //
+              typeElement.name === defenderTypes[0] ||
+              typeElement.name === defenderTypes[1]
+            )
+              effective = 0;
+          });
+
+          //
+          // Sets the relevant effectiveness string.
+          //
+          if (effective > 1) {
+            effectiveString = "*It's super effective!*\n";
+          } else if (effective === 0) {
+            effectiveString = `*It has no effect on the defending trainer.*\n`;
+          } else if (effective < 1) {
+            effectiveString = "*It's not very effective.*\n";
+          }
+
+          //
+          // Check for mult-hit move
+          //
+          let numHits = 1;
+          try {
+            numHits = moveData.meta.max_hits ?? 1;
+          } catch {
+            // Catch for any moves that don't have meta (from recent gens)
+            numHits = 1;
+          };
+          let dicePool = new Array(numHits);
+
+          for (let hitNum = 0; hitNum < numHits; hitNum++) {
+            dice = 0;
+            //
+            // calculate damage dice roll
+            //
+
+            for (let numDice = Math.floor((moveData.power + other) * 0.2); numDice > 0; numDice--) {
+              dice += Math.floor(Math.random() * 8 + 1);
+            }
+            dicePool[hitNum] = dice;
+          }
+          //Attack and defense don't matter for hitting trainers.
+          // Calculate Save info instead
+          let saveType = "";
+          let saveDC = 20;
+          saveDC -= (moveData.pp) / 5;
+          
+          let tempStat = interaction.options.getInteger('basestat');
+          if(stages){
+            tempStat = Math.floor((tempStat - 1.5) * (20/3))
+            if (stages > -1) {
+              stageMod = (2 + stages) / 2;
+            } else {
+              stageMod = 2 / (Math.abs(stages) + 2);
+            }
+            // Convert ability score to stat, do stages, then go back
+            tempStat = tempStat * stageMod;
+            tempStat = Math.ceil((tempStat*0.15) + 1.5);
+          }
+
+          saveDC += Math.floor((tempStat - 10)/2);
+
+          if (moveData.damage_class.name === "physical") {
+            saveType = "Fortitude";
+          } else {
+            saveType = "Reflex";
+          }
+
+          //
+          // Final damage calculation
+          //
+
+          let multiHitString = ``;
+          let multiHitTotal = 0;
+          let critBonus = 0;
+          for (let hitNum = 0; hitNum < numHits; hitNum++) {
+            damageTotal =
+              ((10 * level + 10) / 250) *
+              dicePool[hitNum] *
+              stab *
+              effective *
+              otherMult;
+
+            multiHitTotal += damageTotal;
+            damageTotal = damageTotal.toFixed(0);
+            critTotal = (damageTotal * CRITICAL_HIT_MULTIPLIER).toFixed(0);
+            saveTotal = Math.floor((damageTotal * SAVING_THROW_MULTIPLIER)).toFixed(0);
+            saveCrit = Math.floor((damageTotal * CRITICAL_HIT_MULTIPLIER * SAVING_THROW_MULTIPLIER)).toFixed(0);
+            critBonus = critTotal - damageTotal;
+            multiHitString += `Hit #` + (hitNum + 1) + ` -- **` + damageTotal + `** -- (+` + critBonus + `)\n`
+            combatString +=
+              `For hit ${hitNum}: \n` +
+              `Attacking Trainer (level ${level}) used ${moveData.name} on Defending Trainer\n` +
+              effectiveString +
+              `Attacking Trainer deals ${damageTotal} damage to the defending trainer, or ${saveTotal} if the defending trainer passes a DC ${saveDC} ${saveType} save.\n(Base Power: ${moveData.power} - damage roll: ${dicePool[hitNum]}\n` +
+              `For a crit, instead Trainer deals ${critTotal} damage to the defending trainer, or ${saveCrit} if the defending trainer passes a DC ${saveDC} ${saveType} save.\n(Base Power: ${moveData.power} - damage roll: ${dicePool[hitNum]}\n`;
+          }
+          multiHitString += `**Total: ` + multiHitTotal.toFixed(0) + `**`;
+
+
+          // Embed for damage
+
+          //format pokemon names
+          let atkPokeSpecies_formatted =
+            "Trainer";
+          let defPokeSpecies_formatted =
+            "Trainer";
+
+          // get # of dice rolled
+          let diceRolled = Math.floor(moveData.power / 5);
+          diceRolled += "d8";
+
+          //format move
+          let tempMove = moveData.name;
+          if (~tempMove.indexOf("-")) {
+            let tempA = tempMove.slice(0, tempMove.indexOf("-"));
+            let tempB = tempMove.slice(
+              tempMove.indexOf("-") + 1,
+              tempMove.length
+            );
+            tempA = capitalizeWord(tempA);
+            tempB = capitalizeWord(tempB);
+            tempMove = tempA + " " + tempB;
+          } else
+            tempMove = tempMove.charAt(0).toUpperCase() + tempMove.slice(1);
+
+          let moveHungerCost = (8 - moveData.pp / 5) + 1;
+
+          let combatEmbedString = {};
+
+          if (numHits > 1) {
+            combatEmbedString = {
+              color: 3447003,
+              author: {
+                name: interaction.user.username,
+                icon_url: interaction.user.avatarURL,
+              },
+              title: `**Attacking Trainer** used ${tempMove} on **Defending Trainer**!`,
+              url: `https://bulbapedia.bulbagarden.net/wiki/${tempMove.replace(
+                " ",
+                ""
+              )}_(Move)`,
+              // thumbnail: { url:  `${this.pokemonData.sprites.front_default}`,
+              description: `${effectiveString}`,
+
+              fields: [
+                {
+                  name: "Damage Dealt",
+                  value: `${tempMove} hits Defending Trainer up to ${numHits} times!`,
+                },
+                {
+                  name: "HITS -- **DAMAGE** -- (EXTRA DAMAGE IF CRIT)",
+                  value: `${multiHitString}`,
+                },
+                {
+                  name: "Attacker Info",
+                  value: `**Attacking Trainer**, Lv ${level} ${atkPokeSpecies_formatted}\n=================`,
+                },
+                {
+                  name: "Defender Info",
+                  value: `**Defending Trainer**\n=================`,
+                },
+                {
+                  name: "Saving Throw",
+                  value: `**DC ${saveDC} ${saveType} save**\n=================`,
+                },
+                {
+                  name: `${tempMove} Info`,
+                  value: `**Move Info:** ${capitalizeWord(moveData.damage_class.name)} ${capitalizeWord(moveData.type.name)} Attack` +
+                    `\n**Base Power:** ${moveData.power} pw\n**Damage Roll:** ${dicePool} (${diceRolled} for ${numHits} hits)\n**Hunger Cost:** ${moveHungerCost}`,
+                },
+              ],
+              timestamp: new Date(),
+              footer: {
+                icon_url: interaction.client.user.avatarURL,
+                text: "Chambers and Charizard!",
+              },
+            };
+          } else {
+            combatEmbedString = {
+              color: 3447003,
+              author: {
+                name: interaction.user.username,
+                icon_url: interaction.user.avatarURL,
+              },
+              title: `**Attacking Trainer** used ${tempMove} on **Defending Trainer**!`,
+              url: `https://bulbapedia.bulbagarden.net/wiki/${tempMove.replace(
+                " ",
+                ""
+              )}_(Move)`,
+              // thumbnail: { url:  `${this.pokemonData.sprites.front_default}`,
+              description: `${effectiveString}`,
+
+              fields: [
+                {
+                  name: "Damage Dealt",
+                  value: `Defending Trainer takes ${damageTotal} damage. (${saveTotal} if the save succeeded.)`,
+                },
+                {
+                  name: "Critical Hit Damage",
+                  value: `Defending Trainer takes ${critTotal} damage (${saveCrit} if save succeeded).`,
+                },
+                {
+                  name: "Attacker Info",
+                  value: `**Attacking Trainer**, Lv ${level} Trainer\n=================`,
+                },
+                {
+                  name: "Defender Info",
+                  value: `**Defending Trainer**\n=================`,
+                },
+                {
+                  name: "Saving Throw",
+                  value: `**DC ${saveDC} ${saveType} save**\n=================`,
+                },
+                {
+                  name: `${tempMove} Info`,
+                  value: `**Move Info:** ${capitalizeWord(moveData.damage_class.name)} ${capitalizeWord(moveData.type.name)} Attack` +
+                    `\n**Base Power:** ${moveData.power} pw\n**Damage Roll:** ${dicePool} (${diceRolled} for ${numHits} hit(s))\n**Hunger Cost:** ${moveHungerCost}`,
+                },
+              ],
+              timestamp: new Date(),
+              footer: {
+                icon_url: interaction.client.user.avatarURL,
+                text: "Chambers and Charizard!",
+              },
+            };
+          }
+
+          // comment out embed if necessary
+
+          //embed message
+          logger.info("[damage] Sending combat embed string.");
+          interaction.followUp({ embeds: [combatEmbedString] }).catch(console.error);
+        }
+        );
+      }).catch(function (error) {
+        if (error.response.status == 404) {
+          logger.error("[damage] Move not found. " + error)
+          interaction.followUp("Move not found, check your spelling and whether dashes are needed or not!");
+          return;
+        } else {
+          logger.error('[damage] There was an error: ' + error);
+          interaction.followUp("Error getting move!");
+          return;
+        }
+      });
+
     }
+    
   } catch (error) {
     logger.error(error);
     interaction.channel.send(error.toString());
