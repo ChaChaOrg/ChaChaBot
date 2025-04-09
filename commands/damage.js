@@ -85,6 +85,11 @@ module.exports.data = new SlashCommandBuilder()
           .setDescription('The move used (gen 1-7 only sorry :<) lowercase with dashes instead of spaces. Ie, "rock-smash"')
           .setRequired(true)
           .setAutocomplete(true))
+      .addIntegerOption(option =>
+        option.setName('stages')
+        .setDescription('Stages of Attack or Special Attack. Used in saving throw calculations.')
+        .setMaxValue(6)
+        .setMinValue(-6))
       .addStringOption(option =>
         option.setName('type1')
           .setDescription('Trainers are usually typeless. If they do have a type, add one here.')
@@ -163,12 +168,17 @@ module.exports.data = new SlashCommandBuilder()
           .setAutocomplete(true))
       .addIntegerOption(option =>
         option.setName('basestat')
-          .setDescription('The relevant attribute - strength for physical moves, intelligence for special.')
+          .setDescription('The value of the relevant attribute score - strength for physical moves, intelligence for special.')
           .setMinValue(0)
           .setRequired(true))
       .addBooleanOption(option =>
         option.setName('stab')
           .setDescription('Whether the trainer gets STAB for this move. Defaults to false.'))
+      .addIntegerOption(option =>
+        option.setName('stages')
+          .setDescription('Stages of Attack or Special Attack. Used in saving throw calculations.')
+          .setMaxValue(6)
+          .setMinValue(-6))
       .addStringOption(option =>
         option.setName('type1')
           .setDescription('Add a type (if applicable) to the defending trainer.')
@@ -661,6 +671,8 @@ module.exports.run = async (interaction) => {
       let other = 0;
       let otherMult = 1;
 
+      let stages = interaction.options.getInteger('stages') ?? 0;
+
 
       //variables required
       let Pokemon = require("../models/pokemon.js");
@@ -835,14 +847,26 @@ module.exports.run = async (interaction) => {
               let saveType = "";
               let saveDC = 20;
               saveDC -= (moveData.pp) / 5;
+              let stageMod = 1;
+              if (stages > -1){
+                stageMod = (2 + stages) / 2;
+              }else {
+                stageMod = 2 / (Math.abs(stages) + 2);
+              }
+
+              let tempAttack = 0;
+
+              // Get stat - convert to ability score after modifications to get DC
 
               if (moveData.damage_class.name === "physical") {
                 saveType = "Fortitude";
-                saveDC += parseInt(attackPoke.statBlock.strMod);
+                tempAttack = attackPoke.statBlock.finalStats[ATK_ARRAY_INDEX];
               } else {
                 saveType = "Reflex";
-                saveDC += parseInt(attackPoke.statBlock.intMod);
+                tempAttack = attackPoke.statBlock.finalStats[SPA_ARRAY_INDEX];
               }
+              tempAttack = tempAttack * stageMod;
+              saveDC += Math.floor((((tempAttack * 0.15) + 1.5) - 10) / 2);
 
               //
               // Final damage calculation
@@ -1415,6 +1439,8 @@ module.exports.run = async (interaction) => {
       let other = 0;
       let otherMult = 1;
 
+      let stages = interaction.options.getInteger('stages') ?? 0;
+
 
       let dice = 0;
       let stab = 1;
@@ -1540,7 +1566,21 @@ module.exports.run = async (interaction) => {
           let saveType = "";
           let saveDC = 20;
           saveDC -= (moveData.pp) / 5;
-          saveDC += Math.floor((interaction.options.getInteger('basestat') - 10) / 2);
+          
+          let tempStat = interaction.options.getInteger('basestat');
+          if(stages){
+            tempStat = Math.floor((tempStat - 1.5) * (20/3))
+            if (stages > -1) {
+              stageMod = (2 + stages) / 2;
+            } else {
+              stageMod = 2 / (Math.abs(stages) + 2);
+            }
+            // Convert ability score to stat, do stages, then go back
+            tempStat = tempStat * stageMod;
+            tempStat = Math.ceil((tempStat*0.15) + 1.5);
+          }
+
+          saveDC += Math.floor((tempStat - 10)/2);
 
           if (moveData.damage_class.name === "physical") {
             saveType = "Fortitude";
