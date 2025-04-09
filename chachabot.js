@@ -97,6 +97,20 @@ client.pokemonCacheUpdate = function() {
 }
 
 client.pokemonCacheUpdate()
+
+client.formCacheUpdate = function () {
+    let formSQL = 'SELECT * From pokeForms';
+    client.mysqlConnection.query(formSQL, function (err, rows) {
+        if (err) {
+            logger.error("[startup] SQL error on start up. Please try again later or contact the dev team if the issue persists. " + `${err}`);
+            return;
+        }
+        formCacheArray = rows;
+        client.formCache = formCacheArray;
+    });
+} 
+
+client.formCacheUpdate();
 //Load each command
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
