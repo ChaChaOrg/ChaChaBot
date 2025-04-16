@@ -341,7 +341,7 @@ module.exports.run = async (interaction) => {
                 return;
             }
 
-            let dupeSQL = `SELECT * FROM pokemon WHERE name = '${valString}'`;
+            let dupeSQL = `SELECT * FROM pokemon WHERE name = "${valString}"`;
 
             let results = new Promise((resolve, reject) => interaction.client.mysqlConnection.query(dupeSQL, function (err, rows, fields) {
                 if (err) {
@@ -392,10 +392,10 @@ module.exports.run = async (interaction) => {
 
         // ================= SQL statements  =================
         // sql statement to check if the Pokemon exists
-        let sqlFindPoke = `SELECT * FROM pokemon WHERE name = '${pokeName}'`;
+        let sqlFindPoke = `SELECT * FROM pokemon WHERE name = "${pokeName}"`;
         logger.info(`[modpoke] SQL find pokemon query: ${sqlFindPoke}`);
         // sql statement to update the Pokemon
-        let sqlUpdateString = `UPDATE pokemon SET ${valName} = '${valString}' WHERE name = '${pokeName}'`;
+        let sqlUpdateString = `UPDATE pokemon SET ${valName} = "${valString}" WHERE name = "${pokeName}"`;
         logger.info(`[modpoke] SQL update string: ${sqlUpdateString}`);
         // not found message
         let notFoundMessage = pokeName + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `/listpoke` to view the Pokemon you can edit.)";

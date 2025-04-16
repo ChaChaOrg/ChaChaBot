@@ -379,20 +379,55 @@ function toTitleCase(str) {
 // format dashed stuff nicely
 let fixAbilityOrMoveFormatting = function (tempWord, middle) {
     // set up formatted ability name
+    //list of sticking points: mud-slap, double-edge, soft-boiled, self-destruct, will-o-wisp, wake-up slap, 
+    //u-turn, x-scissor, v-create, trick-or-treat
+    //topsy-turvy, freeze-dry, baby-doll eyes, power-up punch,soul-stealing 7-star strike, multi-attack
+    //well-baked body, soul-heart
+    //light that burns, power of alch, good as gold, ruin stuff
+    let lower = tempWord.toLowerCase();
+    if (lower === "will-o-wisp") {
+        return "Will-O-Wisp";
+    }
+    if (lower === "trick-or-treat") {
+        return "Trick-or-Treat";
+    }
+    if (lower === "v-create") {
+        return "V-create";
+    }
+    if (lower === "u-turn") {
+        return "U-turn"
+    }
     try {
-        if (~tempWord.indexOf("-")) {
+        if (tempWord.indexOf("-") > -1) {
             // if the word is only a dash, return it
             if (tempWord === "-") return tempWord;
             // otherwise replace the dashes with the requested middle!
             tempWord = tempWord.replace("-", middle);
-        } else if (~tempWord.indexOf(" ")) {
+        } else if (tempWord.indexOf(" ") > -1) {
             tempWord = tempWord.replace(" ", middle)
-        } else tempWord = capitalizeWord(tempWord);
+        } else {
+            tempWord = capitalizeWord(tempWord);
+        }
     } catch (oops) {
         return tempWord;
     }
     //camel case the word before going out
-    return toTitleCase(tempWord);
+    let parts = tempWord.split(middle);
+    let word = "";
+    parts.forEach((p, i) => {
+        let littlep = p.toLowerCase();
+        if (littlep === "the" || littlep === "or" || littlep === "as") {
+            word += littlep;
+        } else {
+            word += toTitleCase(p);
+        }
+        
+        if (i != (parts.length -1)) {
+            //add chosen middle to end if not last word
+            word += middle;
+        }
+    });
+    return word;
 }
 
 // assign four moves at random based on given level
@@ -405,7 +440,7 @@ Pokemon.prototype.sendSummaryMessage = function (interaction) {
   let tempAbility = this.ability.name;
   let tempAbilityURL = this.ability.name;
     tempAbility = fixAbilityOrMoveFormatting(tempAbility, " ");
-    tempAbilityURL = "https://bulbapedia.bulbagarden.net/wiki/" + fixAbilityOrMoveFormatting(tempAbility, "_");
+    tempAbilityURL = "https://bulbapedia.bulbagarden.net/wiki/" + fixAbilityOrMoveFormatting(tempAbility, "_") + "_(Ability)";
 
   // if the ability is hidden, append a lil O to it
   if (this.ability.isHiddenAbility) tempAbility = tempAbility.concat(" (HA)");
@@ -460,7 +495,7 @@ Pokemon.prototype.sendSummaryMessage = function (interaction) {
                 movesURL[i] = '-';
             }
         }
-        movesURL[i] = "https://bulbapedia.bulbagarden.net/wiki/" + movesURL[i];
+        movesURL[i] = "https://bulbapedia.bulbagarden.net/wiki/" + movesURL[i] + "_(move)";
     }
 
 
