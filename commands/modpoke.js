@@ -65,6 +65,7 @@ const CODE_FORMAT_START = "```diff\n";
 const CODE_FORMAT_END = "\n```"
 
 const SQL_SANITATION_REGEX = /[^a-zA-Z0-9-'_]/;
+const SQL_SANITATION_REGEX_SPACE = /[^a-zA-Z0-9-' _]/;
 
 module.exports.data = new SlashCommandBuilder()
                         .setName('modpoke')
@@ -168,7 +169,9 @@ module.exports.run = async (interaction) => {
         let fieldToChange = interaction.options.getString("field-to-change");
         let newValue = interaction.options.getString("new-value");
 
-        if (nickname.match(SQL_SANITATION_REGEX) || newValue.match(SQL_SANITATION_REGEX)){
+        if (nickname.match(SQL_SANITATION_REGEX) || 
+        (newValue.match(SQL_SANITATION_REGEX) && !(fieldToChange == "ability" || fieldToChange == "move1"|| fieldToChange == "move2"|| fieldToChange == "move3"|| fieldToChange == "move4"|| fieldToChange == "move5")) ||
+        (newValue.match(SQL_SANITATION_REGEX_SPACE) && (fieldToChange == "ability" || fieldToChange == "move1"|| fieldToChange == "move2"|| fieldToChange == "move3"|| fieldToChange == "move4"|| fieldToChange == "move5"))){
             logger.error("[modpoke] User tried to put in invalid string input.");
             interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
             return;
@@ -341,7 +344,7 @@ module.exports.run = async (interaction) => {
                 return;
             }
 
-            let dupeSQL = `SELECT * FROM pokemon WHERE name = '${valString}'`;
+            let dupeSQL = `SELECT * FROM pokemon WHERE name = "${valString}"`;
 
             let results = new Promise((resolve, reject) => interaction.client.mysqlConnection.query(dupeSQL, function (err, rows, fields) {
                 if (err) {
@@ -392,10 +395,10 @@ module.exports.run = async (interaction) => {
 
         // ================= SQL statements  =================
         // sql statement to check if the Pokemon exists
-        let sqlFindPoke = `SELECT * FROM pokemon WHERE name = '${pokeName}'`;
+        let sqlFindPoke = `SELECT * FROM pokemon WHERE name = "${pokeName}"`;
         logger.info(`[modpoke] SQL find pokemon query: ${sqlFindPoke}`);
         // sql statement to update the Pokemon
-        let sqlUpdateString = `UPDATE pokemon SET ${valName} = '${valString}' WHERE name = '${pokeName}'`;
+        let sqlUpdateString = `UPDATE pokemon SET ${valName} = "${valString}" WHERE name = "${pokeName}"`;
         logger.info(`[modpoke] SQL update string: ${sqlUpdateString}`);
         // not found message
         let notFoundMessage = pokeName + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `/listpoke` to view the Pokemon you can edit.)";
@@ -405,7 +408,7 @@ module.exports.run = async (interaction) => {
             // if you're here, the name couldn't be found in the table
             if (err) {
                 let cantAccessSQLMessage = "SQL error, please try again later or contact a maintainer if the issue persists.";
-                logger.error("[modpoke]" + cantAccessSQLMessage + ` ${err}`)
+                logger.error("[modpoke]" + cantAccessSQLMessage + " ${err}")
                 interaction.editReply(cantAccessSQLMessage);
                 return;
             } else if (rows.length === 0) {
@@ -437,7 +440,7 @@ module.exports.run = async (interaction) => {
                                         let errorMessage = "Unable to update static field " + valName + " of " + pokeName;
                                         logger.error(`[modpoke] ${errorMessage}\n\t${err.toString()}`);
                                         logger.error("[modpoke] " + err);
-                                        interaction.editReply(errorMessage);
+                                        interaction.editReply(errorMessage + err);
                                         reject();
                                     } else {
                                         let successMessage = "**" + pokeName + "'s** " + valName + " has been changed to " + valString + "!";
