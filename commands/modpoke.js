@@ -65,7 +65,7 @@ const CODE_FORMAT_START = "```diff\n";
 const CODE_FORMAT_END = "\n```"
 
 const SQL_SANITATION_REGEX = /[^a-zA-Z0-9-'_]/;
-const SQL_SANITATION_REGEX_SPACE = /[^a-zA-Z0-9-' _]/;
+const SQL_SANITATION_REGEX_MOVE = /[^a-zA-Z0-9-', _]/;
 
 module.exports.data = new SlashCommandBuilder()
                         .setName('modpoke')
@@ -171,7 +171,7 @@ module.exports.run = async (interaction) => {
 
         if (nickname.match(SQL_SANITATION_REGEX) || 
         (newValue.match(SQL_SANITATION_REGEX) && !(fieldToChange == "ability" || fieldToChange == "move1"|| fieldToChange == "move2"|| fieldToChange == "move3"|| fieldToChange == "move4"|| fieldToChange == "move5")) ||
-        (newValue.match(SQL_SANITATION_REGEX_SPACE) && (fieldToChange == "ability" || fieldToChange == "move1"|| fieldToChange == "move2"|| fieldToChange == "move3"|| fieldToChange == "move4"|| fieldToChange == "move5"))){
+        (newValue.match(SQL_SANITATION_REGEX_MOVE) && (fieldToChange == "ability" || fieldToChange == "move1"|| fieldToChange == "move2"|| fieldToChange == "move3"|| fieldToChange == "move4"|| fieldToChange == "move5"))){
             logger.error("[modpoke] User tried to put in invalid string input.");
             interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
             return;
