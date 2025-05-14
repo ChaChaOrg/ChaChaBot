@@ -402,9 +402,9 @@ let fixAbilityOrMoveFormatting = function (tempWord, middle) {
             // if the word is only a dash, return it
             if (tempWord === "-") return tempWord;
             // otherwise replace the dashes with the requested middle!
-            tempWord = tempWord.replace("-", middle);
+            tempWord = tempWord.replaceAll("-", middle);
         } else if (tempWord.indexOf(" ") > -1) {
-            tempWord = tempWord.replace(" ", middle)
+            tempWord = tempWord.replaceAll(" ", middle)
         } else {
             tempWord = capitalizeWord(tempWord);
         }
@@ -495,6 +495,7 @@ Pokemon.prototype.sendSummaryMessage = function (interaction) {
                 movesURL[i] = '-';
             }
         }
+        console.log(movesURL[i]);
         movesURL[i] = "https://bulbapedia.bulbagarden.net/wiki/" + movesURL[i] + "_(move)";
     }
 
