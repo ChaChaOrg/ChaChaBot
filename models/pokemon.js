@@ -402,9 +402,9 @@ let fixAbilityOrMoveFormatting = function (tempWord, middle) {
             // if the word is only a dash, return it
             if (tempWord === "-") return tempWord;
             // otherwise replace the dashes with the requested middle!
-            tempWord = tempWord.replace("-", middle);
+            tempWord = tempWord.replaceAll("-", middle);
         } else if (tempWord.indexOf(" ") > -1) {
-            tempWord = tempWord.replace(" ", middle)
+            tempWord = tempWord.replaceAll(" ", middle)
         } else {
             tempWord = capitalizeWord(tempWord);
         }
@@ -495,6 +495,7 @@ Pokemon.prototype.sendSummaryMessage = function (interaction) {
                 movesURL[i] = '-';
             }
         }
+        console.log(movesURL[i]);
         movesURL[i] = "https://bulbapedia.bulbagarden.net/wiki/" + movesURL[i] + "_(move)";
     }
 
@@ -1120,7 +1121,12 @@ Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
                                     });
                             }.bind(this))
                             .catch(function (error) {
-                                console.log("Error when retrieving pokemon Data :C  ERROR: ", error.response.statusText);
+                                if (!error.response) {
+                                    console.log("Empty error response detected. Error: " + error);
+                                } else {
+                                    console.log("Error when retrieving pokemon Data :C  ERROR: ", error.response.statusText);
+                                }
+                                
                                 if (error.response.status === 404) {
                                     let errMsg = "Pokemon not found, please check your spelling."
                                     reject(errMsg)
