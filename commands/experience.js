@@ -345,90 +345,81 @@ module.exports.data = new SlashCommandBuilder()
 module.exports.run = async (interaction) => {
 	await interaction.deferReply();
 
-	let winnercount = 1;
+
 
 	let winnerarray = [interaction.options.getInteger("winner-level1")];
 	if (interaction.options.getInteger("winner-level2")) {
 		winnerarray.push(interaction.options.getInteger("winner-level2"))
-		winnercount++;
-	} else {
-		winnerarray.push(0);
 	}
 	if (interaction.options.getInteger("winner-level3")) {
 		winnerarray.push(interaction.options.getInteger("winner-level3"))
-		winnercount++;
-	} else {
-		winnerarray.push(0);
 	}
 	if (interaction.options.getInteger("winner-level4")) {
 		winnerarray.push(interaction.options.getInteger("winner-level4"))
-		winnercount++;
-	} else {
-		winnerarray.push(0);
 	}
 	if (interaction.options.getInteger("winner-level5")) {
 		winnerarray.push(interaction.options.getInteger("winner-level5"))
-		winnercount++;
-	} else {
-		winnerarray.push(0);
 	}
 	if (interaction.options.getInteger("winner-level6")) {
 		winnerarray.push(interaction.options.getInteger("winner-level6"))
-		winnercount++;
-	} else {
-		winnerarray.push(0);
 	}
 
 	let defeatedarray = [interaction.options.getInteger("defeated-level1")]
 	if (interaction.options.getInteger("defeated-level2")) {
 		defeatedarray.push(interaction.options.getInteger("defeated-level2"))
-	} else {
-		defeatedarray.push(0);
 	}
 	if (interaction.options.getInteger("defeated-level3")) {
 		defeatedarray.push(interaction.options.getInteger("defeated-level3"))
-	} else {
-		defeatedarray.push(0);
 	}
 	if (interaction.options.getInteger("defeated-level4")) {
 		defeatedarray.push(interaction.options.getInteger("defeated-level4"))
-	} else {
-		defeatedarray.push(0);
 	}
 	if (interaction.options.getInteger("defeated-level5")) {
 		defeatedarray.push(interaction.options.getInteger("defeated-level5"))
-	} else {
-		defeatedarray.push(0);
 	}
 	if (interaction.options.getInteger("defeated-level6")) {
 		defeatedarray.push(interaction.options.getInteger("defeated-level6"))
-	} else {
-		defeatedarray.push(0);
 	}
 
 	let reply = "";
+	let replyStart = "";
+
+	replyStart += "**" + winnerarray.length + " Pokemon** \("
 
 	winnerarray.forEach((winner, index) => {
-		if (winner > 0) {
-			let XP = 0;
-			defeatedarray.forEach((loser) => {
-				if (loser > 0) {
-					XP += XPtable[winner - 1][loser - 1]
-				}
-			});
-			let finalXP = Math.floor(XP / winnercount);
-			if (XP > 0 && finalXP == 0) {
-				finalXP = 1;
-			}
-			reply += "Pokemon " + (index+1) + " receives " + finalXP + " experience."
-			if (winnercount > 1){
-				reply += " This was " + XP + " divided by " + winnercount + " Pokemon earning experience.";
-			}
-			reply += "\n"
-		}
-	});
 
-	interaction.followUp(reply);
+		let XP = 0;
+		defeatedarray.forEach((loser) => {
+			XP += XPtable[winner - 1][loser - 1]
+		});
+		let finalXP = Math.floor(XP / winnerarray.length);
+		if (XP > 0 && finalXP == 0) {
+			finalXP = 1;
+		}
+		replyStart += "level " + winner;
+		if (winnerarray.length > (index + 2)) {
+			replyStart += ", ";
+		}else if(winnerarray.length > (index + 1)) {
+			replyStart += " & ";
+		}
+		reply += "**Pokemon " + (index + 1) + "** \(level " + winner + "\) receives " + finalXP + " experience."
+		if (winnerarray.length > 1) {
+			reply += "\n-# This was " + XP + " divided by " + winnerarray.length + " Pokemon earning experience.\n\n";
+		}
+
+	});
+	replyStart += "\) defeated " + defeatedarray.length + " Pokemon \(";
+	defeatedarray.forEach((loser, index) => {
+		replyStart += "level " + loser;
+		if (defeatedarray.length > (index + 2)) {
+			replyStart += ", ";
+		}else if(defeatedarray.length > (index + 1)) {
+			replyStart += " & ";
+		}
+	})
+	replyStart += "\)\n\n"
+
+	interaction.followUp(replyStart + reply);
 
 
 }

@@ -65,6 +65,7 @@ const CODE_FORMAT_START = "```diff\n";
 const CODE_FORMAT_END = "\n```"
 
 const SQL_SANITATION_REGEX = /[^a-zA-Z0-9-'_]/;
+const SQL_SANITATION_REGEX_MOVE = /[^a-zA-Z0-9-', _]/;
 
 module.exports.data = new SlashCommandBuilder()
                         .setName('modpoke')
@@ -168,7 +169,9 @@ module.exports.run = async (interaction) => {
         let fieldToChange = interaction.options.getString("field-to-change");
         let newValue = interaction.options.getString("new-value");
 
-        if (nickname.match(SQL_SANITATION_REGEX) || newValue.match(SQL_SANITATION_REGEX)){
+        if (nickname.match(SQL_SANITATION_REGEX) || 
+        (newValue.match(SQL_SANITATION_REGEX) && !(fieldToChange == "ability" || fieldToChange == "move1"|| fieldToChange == "move2"|| fieldToChange == "move3"|| fieldToChange == "move4"|| fieldToChange == "move5")) ||
+        (newValue.match(SQL_SANITATION_REGEX_MOVE) && (fieldToChange == "ability" || fieldToChange == "move1"|| fieldToChange == "move2"|| fieldToChange == "move3"|| fieldToChange == "move4"|| fieldToChange == "move5"))){
             logger.error("[modpoke] User tried to put in invalid string input.");
             interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
             return;
@@ -405,7 +408,7 @@ module.exports.run = async (interaction) => {
             // if you're here, the name couldn't be found in the table
             if (err) {
                 let cantAccessSQLMessage = "SQL error, please try again later or contact a maintainer if the issue persists.";
-                logger.error("[modpoke]" + cantAccessSQLMessage + ` ${err}`)
+                logger.error("[modpoke]" + cantAccessSQLMessage + " ${err}")
                 interaction.editReply(cantAccessSQLMessage);
                 return;
             } else if (rows.length === 0) {
@@ -437,7 +440,7 @@ module.exports.run = async (interaction) => {
                                         let errorMessage = "Unable to update static field " + valName + " of " + pokeName;
                                         logger.error(`[modpoke] ${errorMessage}\n\t${err.toString()}`);
                                         logger.error("[modpoke] " + err);
-                                        interaction.editReply(errorMessage);
+                                        interaction.editReply(errorMessage + err);
                                         reject();
                                     } else {
                                         let successMessage = "**" + pokeName + "'s** " + valName + " has been changed to " + valString + "!";
