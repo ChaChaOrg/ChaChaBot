@@ -1121,7 +1121,12 @@ Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
                                     });
                             }.bind(this))
                             .catch(function (error) {
-                                console.log("Error when retrieving pokemon Data :C  ERROR: ", error.response.statusText);
+                                if (!error.response) {
+                                    console.log("Empty error response detected. Error: " + error);
+                                } else {
+                                    console.log("Error when retrieving pokemon Data :C  ERROR: ", error.response.statusText);
+                                }
+                                
                                 if (error.response.status === 404) {
                                     let errMsg = "Pokemon not found, please check your spelling."
                                     reject(errMsg)
