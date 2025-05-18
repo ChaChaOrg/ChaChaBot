@@ -368,6 +368,12 @@ module.exports.run = async (interaction) => {
           //
           interaction.client.pokedex.getMoveByName(attackerMove.toLowerCase()).then((moveData) => {
             interaction.client.pokedex.getTypeByName(moveData.type.name).then((typeData) => {
+              if(typeof moveData === undefined || typeof typeData === undefined){
+                logger.error("[damage] Move Data or Type Data not found - possible API/Connection error.")
+                // If Move or Type data is missing, the API call failed
+                interaction.editReply("Move or Type Data not found. This is likely an API or Connection error. Please try again.");
+                return;
+              }
 
               //
               // parse attack stages into the effect it has on damage.
@@ -750,6 +756,12 @@ module.exports.run = async (interaction) => {
           //
           interaction.client.pokedex.getMoveByName(attackerMove.toLowerCase()).then((moveData) => {
             interaction.client.pokedex.getTypeByName(moveData.type.name).then((typeData) => {
+              if(typeof moveData === undefined || typeof typeData === undefined){
+                logger.error("[damage] Move Data or Type Data not found - possible API/Connection error.")
+                // If Move or Type data is missing, the API call failed
+                interaction.editReply("Move or Type Data not found. This is likely an API or Connection error. Please try again.");
+                return;
+              }
 
               //
               // Grab the pokemon's types into a temporary object, create a type for the trainer
@@ -1140,6 +1152,12 @@ module.exports.run = async (interaction) => {
           //
           interaction.client.pokedex.getMoveByName(attackerMove.toLowerCase()).then((moveData) => {
             interaction.client.pokedex.getTypeByName(moveData.type.name).then((typeData) => {
+              if(typeof moveData === undefined || typeof typeData === undefined){
+                logger.error("[damage] Move Data or Type Data not found - possible API/Connection error.")
+                // If Move or Type data is missing, the API call failed
+                interaction.editReply("Move or Type Data not found. This is likely an API or Connection error. Please try again.");
+                return;
+              }
 
               //
               // parse attack stages into the effect it has on damage.
@@ -1476,6 +1494,12 @@ module.exports.run = async (interaction) => {
       //
       interaction.client.pokedex.getMoveByName(attackerMove.toLowerCase()).then((moveData) => {
         interaction.client.pokedex.getTypeByName(moveData.type.name).then((typeData) => {
+          if(typeof moveData === undefined || typeof typeData === undefined){
+                logger.error("[damage] Move Data or Type Data not found - possible API/Connection error.")
+                // If Move or Type data is missing, the API call failed
+                interaction.editReply("Move or Type Data not found. This is likely an API or Connection error. Please try again.");
+                return;
+              }
 
           //
           // Grab defender's types into a temporary object
