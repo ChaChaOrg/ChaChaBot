@@ -1,919 +1,919 @@
-1	Pound	Normal	Physical	35	40	100%	I
-2	Karate Chop	Fighting	Physical	25	50	100%	I
-3	Double Slap	Normal	Physical	10	15	85%	I
-4	Comet Punch	Normal	Physical	15	18	85%	I
-5	Mega Punch	Normal	Physical	20	80	85%	I
-6	Pay Day	Normal	Physical	20	40	100%	I
-7	Fire Punch	Fire	Physical	15	75	100%	I
-8	Ice Punch	Ice	Physical	15	75	100%	I
-9	Thunder Punch	Electric	Physical	15	75	100%	I
-10	Scratch	Normal	Physical	35	40	100%	I
-11	Vise Grip	Normal	Physical	30	55	100%	I
-12	Guillotine	Normal	Physical	5	—	30%	I
-13	Razor Wind	Normal	Special	10	80	100%	I
-14	Swords Dance	Normal	Status	20	—	—%	I
-15	Cut	Normal	Physical	30	50	95%	I
-16	Gust	Flying	Special	35	40	100%	I
-17	Wing Attack	Flying	Physical	35	60	100%	I
-18	Whirlwind	Normal	Status	20	—	—%	I
-19	Fly	Flying	Physical	15	90	95%	I
-20	Bind	Normal	Physical	20	15	85%	I
-21	Slam	Normal	Physical	20	80	75%	I
-22	Vine Whip	Grass	Physical	25	45	100%	I
-23	Stomp	Normal	Physical	20	65	100%	I
-24	Double Kick	Fighting	Physical	30	30	100%	I
-25	Mega Kick	Normal	Physical	5	120	75%	I
-26	Jump Kick	Fighting	Physical	10	100	95%	I
-27	Rolling Kick	Fighting	Physical	15	60	85%	I
-28	Sand Attack	Ground	Status	15	—	100%	I
-29	Headbutt	Normal	Physical	15	70	100%	I
-30	Horn Attack	Normal	Physical	25	65	100%	I
-31	Fury Attack	Normal	Physical	20	15	85%	I
-32	Horn Drill	Normal	Physical	5	—	30%	I
-33	Tackle	Normal	Physical	35	40	100%	I
-34	Body Slam	Normal	Physical	15	85	100%	I
-35	Wrap	Normal	Physical	20	15	90%	I
-36	Take Down	Normal	Physical	20	90	85%	I
-37	Thrash	Normal	Physical	10	120	100%	I
-38	Double-Edge	Normal	Physical	15	120	100%	I
-39	Tail Whip	Normal	Status	30	—	100%	I
-40	Poison Sting	Poison	Physical	35	15	100%	I
-41	Twineedle	Bug	Physical	20	25	100%	I
-42	Pin Missile	Bug	Physical	20	25	95%	I
-43	Leer	Normal	Status	30	—	100%	I
-44	Bite	Dark	Physical	25	60	100%	I
-45	Growl	Normal	Status	40	—	100%	I
-46	Roar	Normal	Status	20	—	—%	I
-47	Sing	Normal	Status	15	—	55%	I
-48	Supersonic	Normal	Status	20	—	55%	I
-49	Sonic Boom	Normal	Special	20	—	90%	I
-50	Disable	Normal	Status	20	—	100%	I
-51	Acid	Poison	Special	30	40	100%	I
-52	Ember	Fire	Special	25	40	100%	I
-53	Flamethrower	Fire	Special	15	90	100%	I
-54	Mist	Ice	Status	30	—	—%	I
-55	Water Gun	Water	Special	25	40	100%	I
-56	Hydro Pump	Water	Special	5	110	80%	I
-57	Surf	Water	Special	15	90	100%	I
-58	Ice Beam	Ice	Special	10	90	100%	I
-59	Blizzard	Ice	Special	5	110	70%	I
-60	Psybeam	Psychic	Special	20	65	100%	I
-61	Bubble Beam	Water	Special	20	65	100%	I
-62	Aurora Beam	Ice	Special	20	65	100%	I
-63	Hyper Beam	Normal	Special	5	150	90%	I
-64	Peck	Flying	Physical	35	35	100%	I
-65	Drill Peck	Flying	Physical	20	80	100%	I
-66	Submission	Fighting	Physical	20	80	80%	I
-67	Low Kick	Fighting	Physical	20	—	100%	I
-68	Counter	Fighting	Physical	20	—	100%	I
-69	Seismic Toss	Fighting	Physical	20	—	100%	I
-70	Strength	Normal	Physical	15	80	100%	I
-71	Absorb	Grass	Special	25	20	100%	I
-72	Mega Drain	Grass	Special	15	40	100%	I
-73	Leech Seed	Grass	Status	10	—	90%	I
-74	Growth	Normal	Status	20	—	—%	I
-75	Razor Leaf	Grass	Physical	25	55	95%	I
-76	Solar Beam	Grass	Special	10	120	100%	I
-77	Poison Powder	Poison	Status	35	—	75%	I
-78	Stun Spore	Grass	Status	30	—	75%	I
-79	Sleep Powder	Grass	Status	15	—	75%	I
-80	Petal Dance	Grass	Special	10	120	100%	I
-81	String Shot	Bug	Status	40	—	95%	I
-82	Dragon Rage	Dragon	Special	10	—	100%	I
-83	Fire Spin	Fire	Special	15	35	85%	I
-84	Thunder Shock	Electric	Special	30	40	100%	I
-85	Thunderbolt	Electric	Special	15	90	100%	I
-86	Thunder Wave	Electric	Status	20	—	90%	I
-87	Thunder	Electric	Special	10	110	70%	I
-88	Rock Throw	Rock	Physical	15	50	90%	I
-89	Earthquake	Ground	Physical	10	100	100%	I
-90	Fissure	Ground	Physical	5	—	30%	I
-91	Dig	Ground	Physical	10	80	100%	I
-92	Toxic	Poison	Status	10	—	90%	I
-93	Confusion	Psychic	Special	25	50	100%	I
-94	Psychic	Psychic	Special	10	90	100%	I
-95	Hypnosis	Psychic	Status	20	—	60%	I
-96	Meditate	Psychic	Status	40	—	—%	I
-97	Agility	Psychic	Status	30	—	—%	I
-98	Quick Attack	Normal	Physical	30	40	100%	I
-99	Rage	Normal	Physical	20	20	100%	I
-100	Teleport	Psychic	Status	20	—	—%	I
-101	Night Shade	Ghost	Special	15	—	100%	I
-102	Mimic	Normal	Status	10	—	—%	I
-103	Screech	Normal	Status	40	—	85%	I
-104	Double Team	Normal	Status	15	—	—%	I
-105	Recover	Normal	Status	5	—	—%	I
-106	Harden	Normal	Status	30	—	—%	I
-107	Minimize	Normal	Status	10	—	—%	I
-108	Smokescreen	Normal	Status	20	—	100%	I
-109	Confuse Ray	Ghost	Status	10	—	100%	I
-110	Withdraw	Water	Status	40	—	—%	I
-111	Defense Curl	Normal	Status	40	—	—%	I
-112	Barrier	Psychic	Status	20	—	—%	I
-113	Light Screen	Psychic	Status	30	—	—%	I
-114	Haze	Ice	Status	30	—	—%	I
-115	Reflect	Psychic	Status	20	—	—%	I
-116	Focus Energy	Normal	Status	30	—	—%	I
-117	Bide	Normal	Physical	10	—	—%	I
-118	Metronome	Normal	Status	10	—	—%	I
-119	Mirror Move	Flying	Status	20	—	—%	I
-120	Self-Destruct	Normal	Physical	5	200	100%	I
-121	Egg Bomb	Normal	Physical	10	100	75%	I
-122	Lick	Ghost	Physical	30	30	100%	I
-123	Smog	Poison	Special	20	30	70%	I
-124	Sludge	Poison	Special	20	65	100%	I
-125	Bone Club	Ground	Physical	20	65	85%	I
-126	Fire Blast	Fire	Special	5	110	85%	I
-127	Waterfall	Water	Physical	15	80	100%	I
-128	Clamp	Water	Physical	15	35	85%	I
-129	Swift	Normal	Special	20	60	—%	I
-130	Skull Bash	Normal	Physical	10	130	100%	I
-131	Spike Cannon	Normal	Physical	15	20	100%	I
-132	Constrict	Normal	Physical	35	10	100%	I
-133	Amnesia	Psychic	Status	20	—	—%	I
-134	Kinesis	Psychic	Status	15	—	80%	I
-135	Soft-Boiled	Normal	Status	5	—	—%	I
-136	High Jump Kick	Fighting	Physical	10	130	90%	I
-137	Glare	Normal	Status	30	—	100%	I
-138	Dream Eater	Psychic	Special	15	100	100%	I
-139	Poison Gas	Poison	Status	40	—	90%	I
-140	Barrage	Normal	Physical	20	15	85%	I
-141	Leech Life	Bug	Physical	10	80	100%	I
-142	Lovely Kiss	Normal	Status	10	—	75%	I
-143	Sky Attack	Flying	Physical	5	140	90%	I
-144	Transform	Normal	Status	10	—	—%	I
-145	Bubble	Water	Special	30	40	100%	I
-146	Dizzy Punch	Normal	Physical	10	70	100%	I
-147	Spore	Grass	Status	15	—	100%	I
-148	Flash	Normal	Status	20	—	100%	I
-149	Psywave	Psychic	Special	15	—	100%	I
-150	Splash	Normal	Status	40	—	—%	I
-151	Acid Armor	Poison	Status	20	—	—%	I
-152	Crabhammer	Water	Physical	10	100	90%	I
-153	Explosion	Normal	Physical	5	250	100%	I
-154	Fury Swipes	Normal	Physical	15	18	80%	I
-155	Bonemerang	Ground	Physical	10	50	90%	I
-156	Rest	Psychic	Status	5	—	—%	I
-157	Rock Slide	Rock	Physical	10	75	90%	I
-158	Hyper Fang	Normal	Physical	15	80	90%	I
-159	Sharpen	Normal	Status	30	—	—%	I
-160	Conversion	Normal	Status	30	—	—%	I
-161	Tri Attack	Normal	Special	10	80	100%	I
-162	Super Fang	Normal	Physical	10	—	90%	I
-163	Slash	Normal	Physical	20	70	100%	I
-164	Substitute	Normal	Status	10	—	—%	I
-165	Struggle	Normal	Physical	1	50	—%	I
-166	Sketch	Normal	Status	1	—	—%	II
-167	Triple Kick	Fighting	Physical	10	10	90%	II
-168	Thief	Dark	Physical	25	60	100%	II
-169	Spider Web	Bug	Status	10	—	—%	II
-170	Mind Reader	Normal	Status	5	—	—%	II
-171	Nightmare	Ghost	Status	15	—	100%	II
-172	Flame Wheel	Fire	Physical	25	60	100%	II
-173	Snore	Normal	Special	15	50	100%	II
-174	Curse	Ghost	Status	10	—	—%	II
-175	Flail	Normal	Physical	15	—	100%	II
-176	Conversion 2	Normal	Status	30	—	—%	II
-177	Aeroblast	Flying	Special	5	100	95%	II
-178	Cotton Spore	Grass	Status	40	—	100%	II
-179	Reversal	Fighting	Physical	15	—	100%	II
-180	Spite	Ghost	Status	10	—	100%	II
-181	Powder Snow	Ice	Special	25	40	100%	II
-182	Protect	Normal	Status	10	—	—%	II
-183	Mach Punch	Fighting	Physical	30	40	100%	II
-184	Scary Face	Normal	Status	10	—	100%	II
-185	Feint Attack	Dark	Physical	20	60	—%	II
-186	Sweet Kiss	Fairy	Status	10	—	75%	II
-187	Belly Drum	Normal	Status	10	—	—%	II
-188	Sludge Bomb	Poison	Special	10	90	100%	II
-189	Mud-Slap	Ground	Special	10	20	100%	II
-190	Octazooka	Water	Special	10	65	85%	II
-191	Spikes	Ground	Status	20	—	—%	II
-192	Zap Cannon	Electric	Special	5	120	50%	II
-193	Foresight	Normal	Status	40	—	—%	II
-194	Destiny Bond	Ghost	Status	5	—	—%	II
-195	Perish Song	Normal	Status	5	—	—%	II
-196	Icy Wind	Ice	Special	15	55	95%	II
-197	Detect	Fighting	Status	5	—	—%	II
-198	Bone Rush	Ground	Physical	10	25	90%	II
-199	Lock-On	Normal	Status	5	—	—%	II
-200	Outrage	Dragon	Physical	10	120	100%	II
-201	Sandstorm	Rock	Status	10	—	—%	II
-202	Giga Drain	Grass	Special	10	75	100%	II
-203	Endure	Normal	Status	10	—	—%	II
-204	Charm	Fairy	Status	20	—	100%	II
-205	Rollout	Rock	Physical	20	30	90%	II
-206	False Swipe	Normal	Physical	40	40	100%	II
-207	Swagger	Normal	Status	15	—	85%	II
-208	Milk Drink	Normal	Status	5	—	—%	II
-209	Spark	Electric	Physical	20	65	100%	II
-210	Fury Cutter	Bug	Physical	20	40	95%	II
-211	Steel Wing	Steel	Physical	25	70	90%	II
-212	Mean Look	Normal	Status	5	—	—%	II
-213	Attract	Normal	Status	15	—	100%	II
-214	Sleep Talk	Normal	Status	10	—	—%	II
-215	Heal Bell	Normal	Status	5	—	—%	II
-216	Return	Normal	Physical	20	—	100%	II
-217	Present	Normal	Physical	15	—	90%	II
-218	Frustration	Normal	Physical	20	—	100%	II
-219	Safeguard	Normal	Status	25	—	—%	II
-220	Pain Split	Normal	Status	20	—	—%	II
-221	Sacred Fire	Fire	Physical	5	100	95%	II
-222	Magnitude	Ground	Physical	30	—	100%	II
-223	Dynamic Punch	Fighting	Physical	5	100	50%	II
-224	Megahorn	Bug	Physical	10	120	85%	II
-225	Dragon Breath	Dragon	Special	20	60	100%	II
-226	Baton Pass	Normal	Status	40	—	—%	II
-227	Encore	Normal	Status	5	—	100%	II
-228	Pursuit	Dark	Physical	20	40	100%	II
-229	Rapid Spin	Normal	Physical	40	50	100%	II
-230	Sweet Scent	Normal	Status	20	—	100%	II
-231	Iron Tail	Steel	Physical	15	100	75%	II
-232	Metal Claw	Steel	Physical	35	50	95%	II
-233	Vital Throw	Fighting	Physical	10	70	—%	II
-234	Morning Sun	Normal	Status	5	—	—%	II
-235	Synthesis	Grass	Status	5	—	—%	II
-236	Moonlight	Fairy	Status	5	—	—%	II
-237	Hidden Power	Normal	Special	15	60	100%	II
-238	Cross Chop	Fighting	Physical	5	100	80%	II
-239	Twister	Dragon	Special	20	40	100%	II
-240	Rain Dance	Water	Status	5	—	—%	II
-241	Sunny Day	Fire	Status	5	—	—%	II
-242	Crunch	Dark	Physical	15	80	100%	II
-243	Mirror Coat	Psychic	Special	20	—	100%	II
-244	Psych Up	Normal	Status	10	—	—%	II
-245	Extreme Speed	Normal	Physical	5	80	100%	II
-246	Ancient Power	Rock	Special	5	60	100%	II
-247	Shadow Ball	Ghost	Special	15	80	100%	II
-248	Future Sight	Psychic	Special	10	120	100%	II
-249	Rock Smash	Fighting	Physical	15	40	100%	II
-250	Whirlpool	Water	Special	15	35	85%	II
-251	Beat Up	Dark	Physical	10	—	100%	II
-252	Fake Out	Normal	Physical	10	40	100%	III
-253	Uproar	Normal	Special	10	90	100%	III
-254	Stockpile	Normal	Status	20	—	—%	III
-255	Spit Up	Normal	Special	10	—	100%	III
-256	Swallow	Normal	Status	10	—	—%	III
-257	Heat Wave	Fire	Special	10	95	90%	III
-258	Hail	Ice	Status	10	—	—%	III
-259	Torment	Dark	Status	15	—	100%	III
-260	Flatter	Dark	Status	15	—	100%	III
-261	Will-O-Wisp	Fire	Status	15	—	85%	III
-262	Memento	Dark	Status	10	—	100%	III
-263	Facade	Normal	Physical	20	70	100%	III
-264	Focus Punch	Fighting	Physical	20	150	100%	III
-265	Smelling Salts	Normal	Physical	10	70	100%	III
-266	Follow Me	Normal	Status	20	—	—%	III
-267	Nature Power	Normal	Status	20	—	—%	III
-268	Charge	Electric	Status	20	—	—%	III
-269	Taunt	Dark	Status	20	—	100%	III
-270	Helping Hand	Normal	Status	20	—	—%	III
-271	Trick	Psychic	Status	10	—	100%	III
-272	Role Play	Psychic	Status	10	—	—%	III
-273	Wish	Normal	Status	10	—	—%	III
-274	Assist	Normal	Status	20	—	—%	III
-275	Ingrain	Grass	Status	20	—	—%	III
-276	Superpower	Fighting	Physical	5	120	100%	III
-277	Magic Coat	Psychic	Status	15	—	—%	III
-278	Recycle	Normal	Status	10	—	—%	III
-279	Revenge	Fighting	Physical	10	60	100%	III
-280	Brick Break	Fighting	Physical	15	75	100%	III
-281	Yawn	Normal	Status	10	—	—%	III
-282	Knock Off	Dark	Physical	20	65	100%	III
-283	Endeavor	Normal	Physical	5	—	100%	III
-284	Eruption	Fire	Special	5	150	100%	III
-285	Skill Swap	Psychic	Status	10	—	—%	III
-286	Imprison	Psychic	Status	10	—	—%	III
-287	Refresh	Normal	Status	20	—	—%	III
-288	Grudge	Ghost	Status	5	—	—%	III
-289	Snatch	Dark	Status	10	—	—%	III
-290	Secret Power	Normal	Physical	20	70	100%	III
-291	Dive	Water	Physical	10	80	100%	III
-292	Arm Thrust	Fighting	Physical	20	15	100%	III
-293	Camouflage	Normal	Status	20	—	—%	III
-294	Tail Glow	Bug	Status	20	—	—%	III
-295	Luster Purge	Psychic	Special	5	70	100%	III
-296	Mist Ball	Psychic	Special	5	70	100%	III
-297	Feather Dance	Flying	Status	15	—	100%	III
-298	Teeter Dance	Normal	Status	20	—	100%	III
-299	Blaze Kick	Fire	Physical	10	85	90%	III
-300	Mud Sport	Ground	Status	15	—	—%	III
-301	Ice Ball	Ice	Physical	20	30	90%	III
-302	Needle Arm	Grass	Physical	15	60	100%	III
-303	Slack Off	Normal	Status	5	—	—%	III
-304	Hyper Voice	Normal	Special	10	90	100%	III
-305	Poison Fang	Poison	Physical	15	50	100%	III
-306	Crush Claw	Normal	Physical	10	75	95%	III
-307	Blast Burn	Fire	Special	5	150	90%	III
-308	Hydro Cannon	Water	Special	5	150	90%	III
-309	Meteor Mash	Steel	Physical	10	90	90%	III
-310	Astonish	Ghost	Physical	15	30	100%	III
-311	Weather Ball	Normal	Special	10	50	100%	III
-312	Aromatherapy	Grass	Status	5	—	—%	III
-313	Fake Tears	Dark	Status	20	—	100%	III
-314	Air Cutter	Flying	Special	25	60	95%	III
-315	Overheat	Fire	Special	5	130	90%	III
-316	Odor Sleuth	Normal	Status	40	—	—%	III
-317	Rock Tomb	Rock	Physical	15	60	95%	III
-318	Silver Wind	Bug	Special	5	60	100%	III
-319	Metal Sound	Steel	Status	40	—	85%	III
-320	Grass Whistle	Grass	Status	15	—	55%	III
-321	Tickle	Normal	Status	20	—	100%	III
-322	Cosmic Power	Psychic	Status	20	—	—%	III
-323	Water Spout	Water	Special	5	150	100%	III
-324	Signal Beam	Bug	Special	15	75	100%	III
-325	Shadow Punch	Ghost	Physical	20	60	—%	III
-326	Extrasensory	Psychic	Special	20	80	100%	III
-327	Sky Uppercut	Fighting	Physical	15	85	90%	III
-328	Sand Tomb	Ground	Physical	15	35	85%	III
-329	Sheer Cold	Ice	Special	5	—	30%	III
-330	Muddy Water	Water	Special	10	90	85%	III
-331	Bullet Seed	Grass	Physical	30	25	100%	III
-332	Aerial Ace	Flying	Physical	20	60	—	III
-333	Icicle Spear	Ice	Physical	30	25	100%	III
-334	Iron Defense	Steel	Status	15	—	—%	III
-335	Block	Normal	Status	5	—	—%	III
-336	Howl	Normal	Status	40	—	—%	III
-337	Dragon Claw	Dragon	Physical	15	80	100%	III
-338	Frenzy Plant	Grass	Special	5	150	90%	III
-339	Bulk Up	Fighting	Status	20	—	—%	III
-340	Bounce	Flying	Physical	5	85	85%	III
-341	Mud Shot	Ground	Special	15	55	95%	III
-342	Poison Tail	Poison	Physical	25	50	100%	III
-343	Covet	Normal	Physical	25	60	100%	III
-344	Volt Tackle	Electric	Physical	15	120	100%	III
-345	Magical Leaf	Grass	Special	20	60	—%	III
-346	Water Sport	Water	Status	15	—	—%	III
-347	Calm Mind	Psychic	Status	20	—	—%	III
-348	Leaf Blade	Grass	Physical	15	90	100%	III
-349	Dragon Dance	Dragon	Status	20	—	—%	III
-350	Rock Blast	Rock	Physical	10	25	90%	III
-351	Shock Wave	Electric	Special	20	60	—%	III
-352	Water Pulse	Water	Special	20	60	100%	III
-353	Doom Desire	Steel	Special	5	140	100%	III
-354	Psycho Boost	Psychic	Special	5	140	90%	III
-355	Roost	Flying	Status	5	—	—%	IV
-356	Gravity	Psychic	Status	5	—	—%	IV
-357	Miracle Eye	Psychic	Status	40	—	—%	IV
-358	Wake-Up Slap	Fighting	Physical	10	70	100%	IV
-359	Hammer Arm	Fighting	Physical	10	100	90%	IV
-360	Gyro Ball	Steel	Physical	5	—	100%	IV
-361	Healing Wish	Psychic	Status	10	—	—%	IV
-362	Brine	Water	Special	10	65	100%	IV
-363	Natural Gift	Normal	Physical	15	—	100%	IV
-364	Feint	Normal	Physical	10	30	100%	IV
-365	Pluck	Flying	Physical	20	60	100%	IV
-366	Tailwind	Flying	Status	15	—	—%	IV
-367	Acupressure	Normal	Status	30	—	—%	IV
-368	Metal Burst	Steel	Physical	10	—	100%	IV
-369	U-turn	Bug	Physical	20	70	100%	IV
-370	Close Combat	Fighting	Physical	5	120	100%	IV
-371	Payback	Dark	Physical	10	50	100%	IV
-372	Assurance	Dark	Physical	10	60	100%	IV
-373	Embargo	Dark	Status	15	—	100%	IV
-374	Fling	Dark	Physical	10	—	100%	IV
-375	Psycho Shift	Psychic	Status	10	—	100%	IV
-376	Trump Card	Normal	Special	5	—	—%	IV
-377	Heal Block	Psychic	Status	15	—	100%	IV
-378	Wring Out	Normal	Special	5	—	100%	IV
-379	Power Trick	Psychic	Status	10	—	—%	IV
-380	Gastro Acid	Poison	Status	10	—	100%	IV
-381	Lucky Chant	Normal	Status	30	—	—%	IV
-382	Me First	Normal	Status	20	—	—%	IV
-383	Copycat	Normal	Status	20	—	—%	IV
-384	Power Swap	Psychic	Status	10	—	—%	IV
-385	Guard Swap	Psychic	Status	10	—	—%	IV
-386	Punishment	Dark	Physical	5	—	100%	IV
-387	Last Resort	Normal	Physical	5	140	100%	IV
-388	Worry Seed	Grass	Status	10	—	100%	IV
-389	Sucker Punch	Dark	Physical	5	70	100%	IV
-390	Toxic Spikes	Poison	Status	20	—	—%	IV
-391	Heart Swap	Psychic	Status	10	—	—%	IV
-392	Aqua Ring	Water	Status	20	—	—%	IV
-393	Magnet Rise	Electric	Status	10	—	—%	IV
-394	Flare Blitz	Fire	Physical	15	120	100%	IV
-395	Force Palm	Fighting	Physical	10	60	100%	IV
-396	Aura Sphere	Fighting	Special	20	80	—	IV
-397	Rock Polish	Rock	Status	20	—	—%	IV
-398	Poison Jab	Poison	Physical	20	80	100%	IV
-399	Dark Pulse	Dark	Special	15	80	100%	IV
-400	Night Slash	Dark	Physical	15	70	100%	IV
-401	Aqua Tail	Water	Physical	10	90	90%	IV
-402	Seed Bomb	Grass	Physical	15	80	100%	IV
-403	Air Slash	Flying	Special	15	75	95%	IV
-404	X-Scissor	Bug	Physical	15	80	100%	IV
-405	Bug Buzz	Bug	Special	10	90	100%	IV
-406	Dragon Pulse	Dragon	Special	10	85	100%	IV
-407	Dragon Rush	Dragon	Physical	10	100	75%	IV
-408	Power Gem	Rock	Special	20	80	100%	IV
-409	Drain Punch	Fighting	Physical	10	75	100%	IV
-410	Vacuum Wave	Fighting	Special	30	40	100%	IV
-411	Focus Blast	Fighting	Special	5	120	70%	IV
-412	Energy Ball	Grass	Special	10	90	100%	IV
-413	Brave Bird	Flying	Physical	15	120	100%	IV
-414	Earth Power	Ground	Special	10	90	100%	IV
-415	Switcheroo	Dark	Status	10	—	100%	IV
-416	Giga Impact	Normal	Physical	5	150	90%	IV
-417	Nasty Plot	Dark	Status	20	—	—%	IV
-418	Bullet Punch	Steel	Physical	30	40	100%	IV
-419	Avalanche	Ice	Physical	10	60	100%	IV
-420	Ice Shard	Ice	Physical	30	40	100%	IV
-421	Shadow Claw	Ghost	Physical	15	70	100%	IV
-422	Thunder Fang	Electric	Physical	15	65	95%	IV
-423	Ice Fang	Ice	Physical	15	65	95%	IV
-424	Fire Fang	Fire	Physical	15	65	95%	IV
-425	Shadow Sneak	Ghost	Physical	30	40	100%	IV
-426	Mud Bomb	Ground	Special	10	65	85%	IV
-427	Psycho Cut	Psychic	Physical	20	70	100%	IV
-428	Zen Headbutt	Psychic	Physical	15	80	90%	IV
-429	Mirror Shot	Steel	Special	10	65	85%	IV
-430	Flash Cannon	Steel	Special	10	80	100%	IV
-431	Rock Climb	Normal	Physical	20	90	85%	IV
-432	Defog	Flying	Status	15	—	—%	IV
-433	Trick Room	Psychic	Status	5	—	—%	IV
-434	Draco Meteor	Dragon	Special	5	130	90%	IV
-435	Discharge	Electric	Special	15	80	100%	IV
-436	Lava Plume	Fire	Special	15	80	100%	IV
-437	Leaf Storm	Grass	Special	5	130	90%	IV
-438	Power Whip	Grass	Physical	10	120	85%	IV
-439	Rock Wrecker	Rock	Physical	5	150	90%	IV
-440	Cross Poison	Poison	Physical	20	70	100%	IV
-441	Gunk Shot	Poison	Physical	5	120	80%	IV
-442	Iron Head	Steel	Physical	15	80	100%	IV
-443	Magnet Bomb	Steel	Physical	20	60	—	IV
-444	Stone Edge	Rock	Physical	5	100	80%	IV
-445	Captivate	Normal	Status	20	—	100%	IV
-446	Stealth Rock	Rock	Status	20	—	—%	IV
-447	Grass Knot	Grass	Special	20	—	100%	IV
-448	Chatter	Flying	Special	20	65	100%	IV
-449	Judgment	Normal	Special	10	100	100%	IV
-450	Bug Bite	Bug	Physical	20	60	100%	IV
-451	Charge Beam	Electric	Special	10	50	90%	IV
-452	Wood Hammer	Grass	Physical	15	120	100%	IV
-453	Aqua Jet	Water	Physical	20	40	100%	IV
-454	Attack Order	Bug	Physical	15	90	100%	IV
-455	Defend Order	Bug	Status	10	—	—%	IV
-456	Heal Order	Bug	Status	10	—	—%	IV
-457	Head Smash	Rock	Physical	5	150	80%	IV
-458	Double Hit	Normal	Physical	10	35	90%	IV
-459	Roar of Time	Dragon	Special	5	150	90%	IV
-460	Spacial Rend	Dragon	Special	5	100	95%	IV
-461	Lunar Dance	Psychic	Status	10	—	—%	IV
-462	Crush Grip	Normal	Physical	5	—	100%	IV
-463	Magma Storm	Fire	Special	5	100	75%	IV
-464	Dark Void	Dark	Status	10	—	50%	IV
-465	Seed Flare	Grass	Special	5	120	85%	IV
-466	Ominous Wind	Ghost	Special	5	60	100%	IV
-467	Shadow Force	Ghost	Physical	5	120	100%	IV
-468	Hone Claws	Dark	Status	15	—	—%	V
-469	Wide Guard	Rock	Status	10	—	—%	V
-470	Guard Split	Psychic	Status	10	—	—%	V
-471	Power Split	Psychic	Status	10	—	—%	V
-472	Wonder Room	Psychic	Status	10	—	—%	V
-473	Psyshock	Psychic	Special	10	80	100%	V
-474	Venoshock	Poison	Special	10	65	100%	V
-475	Autotomize	Steel	Status	15	—	—%	V
-476	Rage Powder	Bug	Status	20	—	—%	V
-477	Telekinesis	Psychic	Status	15	—	—%	V
-478	Magic Room	Psychic	Status	10	—	—%	V
-479	Smack Down	Rock	Physical	15	50	100%	V
-480	Storm Throw	Fighting	Physical	10	60	100%	V
-481	Flame Burst	Fire	Special	15	70	100%	V
-482	Sludge Wave	Poison	Special	10	95	100%	V
-483	Quiver Dance	Bug	Status	20	—	—%	V
-484	Heavy Slam	Steel	Physical	10	—	100%	V
-485	Synchronoise	Psychic	Special	10	120	100%	V
-486	Electro Ball	Electric	Special	10	—	100%	V
-487	Soak	Water	Status	20	—	100%	V
-488	Flame Charge	Fire	Physical	20	50	100%	V
-489	Coil	Poison	Status	20	—	—%	V
-490	Low Sweep	Fighting	Physical	20	65	100%	V
-491	Acid Spray	Poison	Special	20	40	100%	V
-492	Foul Play	Dark	Physical	15	95	100%	V
-493	Simple Beam	Normal	Status	15	—	100%	V
-494	Entrainment	Normal	Status	15	—	100%	V
-495	After You	Normal	Status	15	—	—%	V
-496	Round	Normal	Special	15	60	100%	V
-497	Echoed Voice	Normal	Special	15	40	100%	V
-498	Chip Away	Normal	Physical	20	70	100%	V
-499	Clear Smog	Poison	Special	15	50	—%	V
-500	Stored Power	Psychic	Special	10	20	100%	V
-501	Quick Guard	Fighting	Status	15	—	—%	V
-502	Ally Switch	Psychic	Status	15	—	—%	V
-503	Scald	Water	Special	15	80	100%	V
-504	Shell Smash	Normal	Status	15	—	—%	V
-505	Heal Pulse	Psychic	Status	10	—	—%	V
-506	Hex	Ghost	Special	10	65	100%	V
-507	Sky Drop	Flying	Physical	10	60	100%	V
-508	Shift Gear	Steel	Status	10	—	—%	V
-509	Circle Throw	Fighting	Physical	10	60	90%	V
-510	Incinerate	Fire	Special	15	60	100%	V
-511	Quash	Dark	Status	15	—	100%	V
-512	Acrobatics	Flying	Physical	15	55	100%	V
-513	Reflect Type	Normal	Status	15	—	—%	V
-514	Retaliate	Normal	Physical	5	70	100%	V
-515	Final Gambit	Fighting	Special	5	—	100%	V
-516	Bestow	Normal	Status	15	—	—%	V
-517	Inferno	Fire	Special	5	100	50%	V
-518	Water Pledge	Water	Special	10	80	100%	V
-519	Fire Pledge	Fire	Special	10	80	100%	V
-520	Grass Pledge	Grass	Special	10	80	100%	V
-521	Volt Switch	Electric	Special	20	70	100%	V
-522	Struggle Bug	Bug	Special	20	50	100%	V
-523	Bulldoze	Ground	Physical	20	60	100%	V
-524	Frost Breath	Ice	Special	10	60	90%	V
-525	Dragon Tail	Dragon	Physical	10	60	90%	V
-526	Work Up	Normal	Status	30	—	—%	V
-527	Electroweb	Electric	Special	15	55	95%	V
-528	Wild Charge	Electric	Physical	15	90	100%	V
-529	Drill Run	Ground	Physical	10	80	95%	V
-530	Dual Chop	Dragon	Physical	15	40	90%	V
-531	Heart Stamp	Psychic	Physical	25	60	100%	V
-532	Horn Leech	Grass	Physical	10	75	100%	V
-533	Sacred Sword	Fighting	Physical	15	90	100%	V
-534	Razor Shell	Water	Physical	10	75	95%	V
-535	Heat Crash	Fire	Physical	10	—	100%	V
-536	Leaf Tornado	Grass	Special	10	65	90%	V
-537	Steamroller	Bug	Physical	20	65	100%	V
-538	Cotton Guard	Grass	Status	10	—	—%	V
-539	Night Daze	Dark	Special	10	85	95%	V
-540	Psystrike	Psychic	Special	10	100	100%	V
-541	Tail Slap	Normal	Physical	10	25	85%	V
-542	Hurricane	Flying	Special	10	110	70%	V
-543	Head Charge	Normal	Physical	15	120	100%	V
-544	Gear Grind	Steel	Physical	15	50	85%	V
-545	Searing Shot	Fire	Special	5	100	100%	V
-546	Techno Blast	Normal	Special	5	120	100%	V
-547	Relic Song	Normal	Special	10	75	100%	V
-548	Secret Sword	Fighting	Special	10	85	100%	V
-549	Glaciate	Ice	Special	10	65	95%	V
-550	Bolt Strike	Electric	Physical	5	130	85%	V
-551	Blue Flare	Fire	Special	5	130	85%	V
-552	Fiery Dance	Fire	Special	10	80	100%	V
-553	Freeze Shock	Ice	Physical	5	140	90%	V
-554	Ice Burn	Ice	Special	5	140	90%	V
-555	Snarl	Dark	Special	15	55	95%	V
-556	Icicle Crash	Ice	Physical	10	85	90%	V
-557	V-create	Fire	Physical	5	180	95%	V
-558	Fusion Flare	Fire	Special	5	100	100%	V
-559	Fusion Bolt	Electric	Physical	5	100	100%	V
-560	Flying Press	Fighting	Physical	10	100	95%	VI
-561	Mat Block	Fighting	Status	10	—	—%	VI
-562	Belch	Poison	Special	10	120	90%	VI
-563	Rototiller	Ground	Status	10	—	—%	VI
-564	Sticky Web	Bug	Status	20	—	—%	VI
-565	Fell Stinger	Bug	Physical	25	50	100%	VI
-566	Phantom Force	Ghost	Physical	10	90	100%	VI
-567	Trick-or-Treat	Ghost	Status	20	—	100%	VI
-568	Noble Roar	Normal	Status	30	—	100%	VI
-569	Ion Deluge	Electric	Status	25	—	—%	VI
-570	Parabolic Charge	Electric	Special	20	65	100%	VI
-571	Forest's Curse	Grass	Status	20	—	100%	VI
-572	Petal Blizzard	Grass	Physical	15	90	100%	VI
-573	Freeze-Dry	Ice	Special	20	70	100%	VI
-574	Disarming Voice	Fairy	Special	15	40	—%	VI
-575	Parting Shot	Dark	Status	20	—	100%	VI
-576	Topsy-Turvy	Dark	Status	20	—	—%	VI
-577	Draining Kiss	Fairy	Special	10	50	100%	VI
-578	Crafty Shield	Fairy	Status	10	—	—%	VI
-579	Flower Shield	Fairy	Status	10	—	—%	VI
-580	Grassy Terrain	Grass	Status	10	—	—%	VI
-581	Misty Terrain	Fairy	Status	10	—	—%	VI
-582	Electrify	Electric	Status	20	—	—%	VI
-583	Play Rough	Fairy	Physical	10	90	90%	VI
-584	Fairy Wind	Fairy	Special	30	40	100%	VI
-585	Moonblast	Fairy	Special	15	95	100%	VI
-586	Boomburst	Normal	Special	10	140	100%	VI
-587	Fairy Lock	Fairy	Status	10	—	—%	VI
-588	King's Shield	Steel	Status	10	—	—%	VI
-589	Play Nice	Normal	Status	20	—	—%	VI
-590	Confide	Normal	Status	20	—	—%	VI
-591	Diamond Storm	Rock	Physical	5	100	95%	VI
-592	Steam Eruption	Water	Special	5	110	95%	VI
-593	Hyperspace Hole	Psychic	Special	5	80	—%	VI
-594	Water Shuriken	Water	Special	20	15	100%	VI
-595	Mystical Fire	Fire	Special	10	75	100%	VI
-596	Spiky Shield	Grass	Status	10	—	—%	VI
-597	Aromatic Mist	Fairy	Status	20	—	—%	VI
-598	Eerie Impulse	Electric	Status	15	—	100%	VI
-599	Venom Drench	Poison	Status	20	—	100%	VI
-600	Powder	Bug	Status	20	—	100%	VI
-601	Geomancy	Fairy	Status	10	—	—%	VI
-602	Magnetic Flux	Electric	Status	20	—	—%	VI
-603	Happy Hour	Normal	Status	30	—	—%	VI
-604	Electric Terrain	Electric	Status	10	—	—%	VI
-605	Dazzling Gleam	Fairy	Special	10	80	100%	VI
-606	Celebrate	Normal	Status	40	—	—%	VI
-607	Hold Hands	Normal	Status	40	—	—%	VI
-608	Baby-Doll Eyes	Fairy	Status	30	—	100%	VI
-609	Nuzzle	Electric	Physical	20	20	100%	VI
-610	Hold Back	Normal	Physical	40	40	100%	VI
-611	Infestation	Bug	Special	20	20	100%	VI
-612	Power-Up Punch	Fighting	Physical	20	40	100%	VI
-613	Oblivion Wing	Flying	Special	10	80	100%	VI
-614	Thousand Arrows	Ground	Physical	10	90	100%	VI
-615	Thousand Waves	Ground	Physical	10	90	100%	VI
-616	Land's Wrath	Ground	Physical	10	90	100%	VI
-617	Light of Ruin	Fairy	Special	5	140	90%	VI
-618	Origin Pulse	Water	Special	10	110	85%	VI
-619	Precipice Blades	Ground	Physical	10	120	85%	VI
-620	Dragon Ascent	Flying	Physical	5	120	100%	VI
-621	Hyperspace Fury	Dark	Physical	5	100	—%	VI
-622	Breakneck Blitz	Normal	Physical	1	—	—%	VII
-623	Breakneck Blitz	Normal	Special	1	—	—%	VII
-624	All-Out Pummeling	Fighting	Physical	1	—	—%	VII
-625	All-Out Pummeling	Fighting	Special	1	—	—%	VII
-626	Supersonic Skystrike	Flying	Physical	1	—	—%	VII
-627	Supersonic Skystrike	Flying	Special	1	—	—%	VII
-628	Acid Downpour	Poison	Physical	1	—	—%	VII
-629	Acid Downpour	Poison	Special	1	—	—%	VII
-630	Tectonic Rage	Ground	Physical	1	—	—%	VII
-631	Tectonic Rage	Ground	Special	1	—	—%	VII
-632	Continental Crush	Rock	Physical	1	—	—%	VII
-633	Continental Crush	Rock	Special	1	—	—%	VII
-634	Savage Spin-Out	Bug	Physical	1	—	—%	VII
-635	Savage Spin-Out	Bug	Special	1	—	—%	VII
-636	Never-Ending Nightmare	Ghost	Physical	1	—	—%	VII
-637	Never-Ending Nightmare	Ghost	Special	1	—	—%	VII
-638	Corkscrew Crash	Steel	Physical	1	—	—%	VII
-639	Corkscrew Crash	Steel	Special	1	—	—%	VII
-640	Inferno Overdrive	Fire	Physical	1	—	—%	VII
-641	Inferno Overdrive	Fire	Special	1	—	—%	VII
-642	Hydro Vortex	Water	Physical	1	—	—%	VII
-643	Hydro Vortex	Water	Special	1	—	—%	VII
-644	Bloom Doom	Grass	Physical	1	—	—%	VII
-645	Bloom Doom	Grass	Special	1	—	—%	VII
-646	Gigavolt Havoc	Electric	Physical	1	—	—%	VII
-647	Gigavolt Havoc	Electric	Special	1	—	—%	VII
-648	Shattered Psyche	Psychic	Physical	1	—	—%	VII
-649	Shattered Psyche	Psychic	Special	1	—	—%	VII
-650	Subzero Slammer	Ice	Physical	1	—	—%	VII
-651	Subzero Slammer	Ice	Special	1	—	—%	VII
-652	Devastating Drake	Dragon	Physical	1	—	—%	VII
-653	Devastating Drake	Dragon	Special	1	—	—%	VII
-654	Black Hole Eclipse	Dark	Physical	1	—	—%	VII
-655	Black Hole Eclipse	Dark	Special	1	—	—%	VII
-656	Twinkle Tackle	Fairy	Physical	1	—	—%	VII
-657	Twinkle Tackle	Fairy	Special	1	—	—%	VII
-658	Catastropika	Electric	Physical	1	210	—%	VII
-659	Shore Up	Ground	Status	5	—	—%	VII
-660	First Impression	Bug	Physical	10	90	100%	VII
-661	Baneful Bunker	Poison	Status	10	—	—%	VII
-662	Spirit Shackle	Ghost	Physical	10	80	100%	VII
-663	Darkest Lariat	Dark	Physical	10	85	100%	VII
-664	Sparkling Aria	Water	Special	10	90	100%	VII
-665	Ice Hammer	Ice	Physical	10	100	90%	VII
-666	Floral Healing	Fairy	Status	10	—	—%	VII
-667	High Horsepower	Ground	Physical	10	95	95%	VII
-668	Strength Sap	Grass	Status	10	—	100%	VII
-669	Solar Blade	Grass	Physical	10	125	100%	VII
-670	Leafage	Grass	Physical	40	40	100%	VII
-671	Spotlight	Normal	Status	15	—	—%	VII
-672	Toxic Thread	Poison	Status	20	—	100%	VII
-673	Laser Focus	Normal	Status	30	—	—%	VII
-674	Gear Up	Steel	Status	20	—	—%	VII
-675	Throat Chop	Dark	Physical	15	80	100%	VII
-676	Pollen Puff	Bug	Special	15	90	100%	VII
-677	Anchor Shot	Steel	Physical	20	80	100%	VII
-678	Psychic Terrain	Psychic	Status	10	—	—%	VII
-679	Lunge	Bug	Physical	15	80	100%	VII
-680	Fire Lash	Fire	Physical	15	80	100%	VII
-681	Power Trip	Dark	Physical	10	20	100%	VII
-682	Burn Up	Fire	Special	5	130	100%	VII
-683	Speed Swap	Psychic	Status	10	—	—%	VII
-684	Smart Strike	Steel	Physical	10	70	—%	VII
-685	Purify	Poison	Status	20	—	—%	VII
-686	Revelation Dance	Normal	Special	15	90	100%	VII
-687	Core Enforcer	Dragon	Special	10	100	100%	VII
-688	Trop Kick	Grass	Physical	15	70	100%	VII
-689	Instruct	Psychic	Status	15	—	—%	VII
-690	Beak Blast	Flying	Physical	15	100	100%	VII
-691	Clanging Scales	Dragon	Special	5	110	100%	VII
-692	Dragon Hammer	Dragon	Physical	15	90	100%	VII
-693	Brutal Swing	Dark	Physical	20	60	100%	VII
-694	Aurora Veil	Ice	Status	20	—	—%	VII
-695	Sinister Arrow Raid	Ghost	Physical	1	180	—%	VII
-696	Malicious Moonsault	Dark	Physical	1	180	—%	VII
-697	Oceanic Operetta	Water	Special	1	195	—%	VII
-698	Guardian of Alola	Fairy	Special	1	—	—%	VII
-699	Soul-Stealing 7-Star Strike	Ghost	Physical	1	195	—%	VII
-700	Stoked Sparksurfer	Electric	Special	1	175	—%	VII
-701	Pulverizing Pancake	Normal	Physical	1	210	—%	VII
-702	Extreme Evoboost	Normal	Status	1	—	—%	VII
-703	Genesis Supernova	Psychic	Special	1	185	—%	VII
-704	Shell Trap	Fire	Special	5	150	100%	VII
-705	Fleur Cannon	Fairy	Special	5	130	90%	VII
-706	Psychic Fangs	Psychic	Physical	10	85	100%	VII
-707	Stomping Tantrum	Ground	Physical	10	75	100%	VII
-708	Shadow Bone	Ghost	Physical	10	85	100%	VII
-709	Accelerock	Rock	Physical	20	40	100%	VII
-710	Liquidation	Water	Physical	10	85	100%	VII
-711	Prismatic Laser	Psychic	Special	10	160	100%	VII
-712	Spectral Thief	Ghost	Physical	10	90	100%	VII
-713	Sunsteel Strike	Steel	Physical	5	100	100%	VII
-714	Moongeist Beam	Ghost	Special	5	100	100%	VII
-715	Tearful Look	Normal	Status	20	—	—%	VII
-716	Zing Zap	Electric	Physical	10	80	100%	VII
-717	Nature's Madness	Fairy	Special	10	—	90%	VII
-718	Multi-Attack	Normal	Physical	10	120	100%	VII
-719	10,000,000 Volt Thunderbolt	Electric	Special	1	195	—%	VII
-720	Mind Blown	Fire	Special	5	150	100%	VII
-721	Plasma Fists	Electric	Physical	15	100	100%	VII
-722	Photon Geyser	Psychic	Special	5	100	100%	VII
-723	Light That Burns the Sky	Psychic	Special	1	200	—%	VII
-724	Searing Sunraze Smash	Steel	Physical	1	200	—%	VII
-725	Menacing Moonraze Maelstrom	Ghost	Special	1	200	—%	VII
-726	Let's Snuggle Forever	Fairy	Physical	1	190	—%	VII
-727	Splintered Stormshards	Rock	Physical	1	190	—%	VII
-728	Clangorous Soulblaze	Dragon	Special	1	185	—%	VII
-729	Zippy Zap	Electric	Physical	10	80	100%	VII
-730	Splishy Splash	Water	Special	15	90	100%	VII
-731	Floaty Fall	Flying	Physical	15	90	95%	VII
-732	Pika Papow	Electric	Special	20	—	—%	VII
-733	Bouncy Bubble	Water	Special	20	60	100%	VII
-734	Buzzy Buzz	Electric	Special	20	60	100%	VII
-735	Sizzly Slide	Fire	Physical	20	60	100%	VII
-736	Glitzy Glow	Psychic	Special	15	80	95%	VII
-737	Baddy Bad	Dark	Special	15	80	95%	VII
-738	Sappy Seed	Grass	Physical	10	100	90%	VII
-739	Freezy Frost	Ice	Special	10	100	90%	VII
-740	Sparkly Swirl	Fairy	Special	5	120	85%	VII
-741	Veevee Volley	Normal	Physical	20	—	—%	VII
-742	Double Iron Bash	Steel	Physical	5	60	100%	VII
-743	Max Guard	Normal	Status	10	—	—%	VIII
-744	Dynamax Cannon	Dragon	Special	5	100	100%	VIII
-745	Snipe Shot	Water	Special	15	80	100%	VIII
-746	Jaw Lock	Dark	Physical	10	80	100%	VIII
-747	Stuff Cheeks	Normal	Status	10	—	—%	VIII
-748	No Retreat	Fighting	Status	5	—	—%	VIII
-749	Tar Shot	Rock	Status	15	—	100%	VIII
-750	Magic Powder	Psychic	Status	20	—	100%	VIII
-751	Dragon Darts	Dragon	Physical	10	50	100%	VIII
-752	Teatime	Normal	Status	10	—	—%	VIII
-753	Octolock	Fighting	Status	15	—	100%	VIII
-754	Bolt Beak	Electric	Physical	10	85	100%	VIII
-755	Fishious Rend	Water	Physical	10	85	100%	VIII
-756	Court Change	Normal	Status	10	—	100%	VIII
-757	Max Flare	Fire	???	10	—	—%	VIII
-758	Max Flutterby	Bug	???	10	—	—%	VIII
-759	Max Lightning	Electric	???	10	—	—%	VIII
-760	Max Strike	Normal	???	10	—	—%	VIII
-761	Max Knuckle	Fighting	???	10	—	—%	VIII
-762	Max Phantasm	Ghost	???	10	—	—%	VIII
-763	Max Hailstorm	Ice	???	10	—	—%	VIII
-764	Max Ooze	Poison	???	10	—	—%	VIII
-765	Max Geyser	Water	???	10	—	—%	VIII
-766	Max Airstream	Flying	???	10	—	—%	VIII
-767	Max Starfall	Fairy	???	10	—	—%	VIII
-768	Max Wyrmwind	Dragon	???	10	—	—%	VIII
-769	Max Mindstorm	Psychic	???	10	—	—%	VIII
-770	Max Rockfall	Rock	???	10	—	—%	VIII
-771	Max Quake	Ground	???	10	—	—%	VIII
-772	Max Darkness	Dark	???	10	—	—%	VIII
-773	Max Overgrowth	Grass	???	10	—	—%	VIII
-774	Max Steelspike	Steel	???	10	—	—%	VIII
-775	Clangorous Soul	Dragon	Status	5	—	—%	VIII
-776	Body Press	Fighting	Physical	10	80	100%	VIII
-777	Decorate	Fairy	Status	15	—	—%	VIII
-778	Drum Beating	Grass	Physical	10	80	100%	VIII
-779	Snap Trap	Grass	Physical	15	35	100%	VIII
-780	Pyro Ball	Fire	Physical	5	120	90%	VIII
-781	Behemoth Blade	Steel	Physical	5	100	100%	VIII
-782	Behemoth Bash	Steel	Physical	5	100	100%	VIII
-783	Aura Wheel	Electric	Physical	10	110	100%	VIII
-784	Breaking Swipe	Dragon	Physical	15	60	100%	VIII
-785	Branch Poke	Grass	Physical	40	40	100%	VIII
-786	Overdrive	Electric	Special	10	80	100%	VIII
-787	Apple Acid	Grass	Special	10	80	100%	VIII
-788	Grav Apple	Grass	Physical	10	80	100%	VIII
-789	Spirit Break	Fairy	Physical	15	75	100%	VIII
-790	Strange Steam	Fairy	Special	10	90	95%	VIII
-791	Life Dew	Water	Status	10	—	—%	VIII
-792	Obstruct	Dark	Status	10	—	100%	VIII
-793	False Surrender	Dark	Physical	10	80	—%	VIII
-794	Meteor Assault	Fighting	Physical	5	150	100%	VIII
-795	Eternabeam	Dragon	Special	5	160	90%	VIII
-796	Steel Beam	Steel	Special	5	140	95%	VIII
-797	Expanding Force	Psychic	Special	10	80	100%	VIII
-798	Steel Roller	Steel	Physical	5	130	100%	VIII
-799	Scale Shot	Dragon	Physical	20	25	90%	VIII
-800	Meteor Beam	Rock	Special	10	120	90%	VIII
-801	Shell Side Arm	Poison	Special	10	90	100%	VIII
-802	Misty Explosion	Fairy	Special	5	100	100%	VIII
-803	Grassy Glide	Grass	Physical	20	60	100%	VIII
-804	Rising Voltage	Electric	Special	20	70	100%	VIII
-805	Terrain Pulse	Normal	Special	10	50	100%	VIII
-806	Skitter Smack	Bug	Physical	10	70	90%	VIII
-807	Burning Jealousy	Fire	Special	5	70	100%	VIII
-808	Lash Out	Dark	Physical	5	75	100%	VIII
-809	Poltergeist	Ghost	Physical	5	110	90%	VIII
-810	Corrosive Gas	Poison	Status	40	—	100%	VIII
-811	Coaching	Fighting	Status	10	—	—%	VIII
-812	Flip Turn	Water	Physical	20	60	100%	VIII
-813	Triple Axel	Ice	Physical	10	20	90%	VIII
-814	Dual Wingbeat	Flying	Physical	10	40	90%	VIII
-815	Scorching Sands	Ground	Special	10	70	100%	VIII
-816	Jungle Healing	Grass	Status	10	—	—%	VIII
-817	Wicked Blow	Dark	Physical	5	75	100%	VIII
-818	Surging Strikes	Water	Physical	5	25	100%	VIII
-819	Thunder Cage	Electric	Special	15	80	90%	VIII
-820	Dragon Energy	Dragon	Special	5	150	100%	VIII
-821	Freezing Glare	Psychic	Special	10	90	100%	VIII
-822	Fiery Wrath	Dark	Special	10	90	100%	VIII
-823	Thunderous Kick	Fighting	Physical	10	90	100%	VIII
-824	Glacial Lance	Ice	Physical	5	120	100%	VIII
-825	Astral Barrage	Ghost	Special	5	120	100%	VIII
-826	Eerie Spell	Psychic	Special	5	80	100%	VIII
-827	Dire Claw	Poison	Physical	15	80	100%	VIII
-828	Psyshield Bash	Psychic	Physical	10	70	90%	VIII
-829	Power Shift	Normal	Status	10	—	—%	VIII
-830	Stone Axe	Rock	Physical	15	65	90%	VIII
-831	Springtide Storm	Fairy	Special	10	100	80%	VIII
-832	Mystical Power	Psychic	Special	10	70	90%	VIII
-833	Raging Fury	Fire	Physical	10	120	100%	VIII
-834	Wave Crash	Water	Physical	10	120	100%	VIII
-835	Chloroblast	Grass	Special	5	150	95%	VIII
-836	Mountain Gale	Ice	Physical	10	100	85%	VIII
-837	Victory Dance	Fighting	Status	10	—	—%	VIII
-838	Headlong Rush	Ground	Physical	5	120	100%	VIII
-839	Barb Barrage	Poison	Physical	10	60	100%	VIII
-840	Esper Wing	Psychic	Special	10	80	100%	VIII
-841	Bitter Malice	Ghost	Special	10	75	100%	VIII
-842	Shelter	Steel	Status	10	—	—%	VIII
-843	Triple Arrows	Fighting	Physical	10	90	100%	VIII
-844	Infernal Parade	Ghost	Special	15	60	100%	VIII
-845	Ceaseless Edge	Dark	Physical	15	65	90%	VIII
-846	Bleakwind Storm	Flying	Special	10	100	80%	VIII
-847	Wildbolt Storm	Electric	Special	10	100	80%	VIII
-848	Sandsear Storm	Ground	Special	10	100	80%	VIII
-849	Lunar Blessing	Psychic	Status	5	—	—%	VIII
-850	Take Heart	Psychic	Status	10	—	—%	VIII
-851	Tera Blast	Normal	Special	10	80	100%	IX
-852	Silk Trap	Bug	Status	10	—	—%	IX
-853	Axe Kick	Fighting	Physical	10	120	90%	IX
-854	Last Respects	Ghost	Physical	10	50	100%	IX
-855	Lumina Crash	Psychic	Special	10	80	100%	IX
-856	Order Up	Dragon	Physical	10	80	100%	IX
-857	Jet Punch	Water	Physical	15	60	100%	IX
-858	Spicy Extract	Grass	Status	15	—	—%	IX
-859	Spin Out	Steel	Physical	5	100	100%	IX
-860	Population Bomb	Normal	Physical	10	20	90%	IX
-861	Ice Spinner	Ice	Physical	15	80	100%	IX
-862	Glaive Rush	Dragon	Physical	5	120	100%	IX
-863	Revival Blessing	Normal	Status	1	—	—%	IX
-864	Salt Cure	Rock	Physical	15	40	100%	IX
-865	Triple Dive	Water	Physical	10	30	95%	IX
-866	Mortal Spin	Poison	Physical	15	30	100%	IX
-867	Doodle	Normal	Status	10	—	100%	IX
-868	Fillet Away	Normal	Status	10	—	—%	IX
-869	Kowtow Cleave	Dark	Physical	10	85	—%	IX
-870	Flower Trick	Grass	Physical	10	70	—%	IX
-871	Torch Song	Fire	Special	10	80	100%	IX
-872	Aqua Step	Water	Physical	10	80	100%	IX
-873	Raging Bull	Normal	Physical	10	90	100%	IX
-874	Make It Rain	Steel	Special	5	120	100%	IX
-875	Psyblade	Psychic	Physical	15	80	100%	IX
-876	Hydro Steam	Water	Special	15	80	100%	IX
-877	Ruination	Dark	Special	10	—	90%	IX
-878	Collision Course	Fighting	Physical	5	100	100%	IX
-879	Electro Drift	Electric	Special	5	100	100%	IX
-880	Shed Tail	Normal	Status	10	—	—%	IX
-881	Chilly Reception	Ice	Status	10	—	—%	IX
-882	Tidy Up	Normal	Status	10	—	—%	IX
-883	Snowscape	Ice	Status	10	—	—%	IX
-884	Pounce	Bug	Physical	20	50	100%	IX
-885	Trailblaze	Grass	Physical	20	50	100%	IX
-886	Chilling Water	Water	Special	20	50	100%	IX
-887	Hyper Drill	Normal	Physical	5	100	100%	IX
-888	Twin Beam	Psychic	Special	10	40	100%	IX
-889	Rage Fist	Ghost	Physical	10	50	100%	IX
-890	Armor Cannon	Fire	Special	5	120	100%	IX
-891	Bitter Blade	Fire	Physical	10	90	100%	IX
-892	Double Shock	Electric	Physical	5	120	100%	IX
-893	Gigaton Hammer	Steel	Physical	5	160	100%	IX
-894	Comeuppance	Dark	Physical	10	—	100%	IX
-895	Aqua Cutter	Water	Physical	20	70	100%	IX
-896	Blazing Torque	Fire	Physical	10	80	100%	IX
-897	Wicked Torque	Dark	Physical	10	80	100%	IX
-898	Noxious Torque	Poison	Physical	10	100	100%	IX
-899	Combat Torque	Fighting	Physical	10	100	100%	IX
-900	Magical Torque	Fairy	Physical	10	100	100%	IX
-901	Blood Moon	Normal	Special	5	140	100%	IX
-902	Matcha Gotcha	Grass	Special	15	80	90%	IX
-903	Syrup Bomb	Grass	Special	10	60	85%	IX
-904	Ivy Cudgel	Grass	Physical	10	100	100%	IX
-905	Electro Shot	Electric	Special	10	130	100%	IX
-906	Tera Starstorm	Normal	Special	5	120	100%	IX
-907	Fickle Beam	Dragon	Special	5	80	100%	IX
-908	Burning Bulwark	Fire	Status	10	—	—%	IX
-909	Thunderclap	Electric	Special	5	70	100%	IX
-910	Mighty Cleave	Rock	Physical	5	95	100%	IX
-911	Tachyon Cutter	Steel	Special	10	50	—%	IX
-912	Hard Press	Steel	Physical	10	—	100	IX
-913	Dragon Cheer	Dragon	Status	15	—	—%	IX
-914	Alluring Voice	Fairy	Special	10	80	100%	IX
-915	Temper Flare	Fire	Physical	10	75	100%	IX
-916	Supercell Slam	Electric	Physical	15	100	95%	IX
-917	Psychic Noise	Psychic	Special	10	75	100%	IX
-918	Upper Hand	Fighting	Physical	15	65	100%	IX
-919	Malignant Chain	Poison	Special	5	100	100%	IX
+1	Pound	Normal	Physical	35	40	100%	I	pound
+2	Karate Chop	Fighting	Physical	25	50	100%	I	karate-chop
+3	Double Slap	Normal	Physical	10	15	85%	I	double-slap
+4	Comet Punch	Normal	Physical	15	18	85%	I	comet-punch
+5	Mega Punch	Normal	Physical	20	80	85%	I	mega-punch
+6	Pay Day	Normal	Physical	20	40	100%	I	pay-day
+7	Fire Punch	Fire	Physical	15	75	100%	I	fire-punch
+8	Ice Punch	Ice	Physical	15	75	100%	I	ice-punch
+9	Thunder Punch	Electric	Physical	15	75	100%	I	thunder-punch
+10	Scratch	Normal	Physical	35	40	100%	I	scratch
+11	Vise Grip	Normal	Physical	30	55	100%	I	vice-grip
+12	Guillotine	Normal	Physical	5	—	30%	I	guillotine
+13	Razor Wind	Normal	Special	10	80	100%	I	razor-wind
+14	Swords Dance	Normal	Status	20	—	—%	I	swords-dance
+15	Cut	Normal	Physical	30	50	95%	I	cut
+16	Gust	Flying	Special	35	40	100%	I	gust
+17	Wing Attack	Flying	Physical	35	60	100%	I	wing-attack
+18	Whirlwind	Normal	Status	20	—	—%	I	whirlwind
+19	Fly	Flying	Physical	15	90	95%	I	fly
+20	Bind	Normal	Physical	20	15	85%	I	bind
+21	Slam	Normal	Physical	20	80	75%	I	slam
+22	Vine Whip	Grass	Physical	25	45	100%	I	vine-whip
+23	Stomp	Normal	Physical	20	65	100%	I	stomp
+24	Double Kick	Fighting	Physical	30	30	100%	I	double-kick
+25	Mega Kick	Normal	Physical	5	120	75%	I	mega-kick
+26	Jump Kick	Fighting	Physical	10	100	95%	I	jump-kick
+27	Rolling Kick	Fighting	Physical	15	60	85%	I	rolling-kick
+28	Sand Attack	Ground	Status	15	—	100%	I	sand-attack
+29	Headbutt	Normal	Physical	15	70	100%	I	headbutt
+30	Horn Attack	Normal	Physical	25	65	100%	I	horn-attack
+31	Fury Attack	Normal	Physical	20	15	85%	I	fury-attack
+32	Horn Drill	Normal	Physical	5	—	30%	I	horn-drill
+33	Tackle	Normal	Physical	35	40	100%	I	tackle
+34	Body Slam	Normal	Physical	15	85	100%	I	body-slam
+35	Wrap	Normal	Physical	20	15	90%	I	wrap
+36	Take Down	Normal	Physical	20	90	85%	I	take-down
+37	Thrash	Normal	Physical	10	120	100%	I	thrash
+38	Double-Edge	Normal	Physical	15	120	100%	I	double-edge
+39	Tail Whip	Normal	Status	30	—	100%	I	tail-whip
+40	Poison Sting	Poison	Physical	35	15	100%	I	poison-sting
+41	Twineedle	Bug	Physical	20	25	100%	I	twineedle
+42	Pin Missile	Bug	Physical	20	25	95%	I	pin-missile
+43	Leer	Normal	Status	30	—	100%	I	leer
+44	Bite	Dark	Physical	25	60	100%	I	bite
+45	Growl	Normal	Status	40	—	100%	I	growl
+46	Roar	Normal	Status	20	—	—%	I	roar
+47	Sing	Normal	Status	15	—	55%	I	sing
+48	Supersonic	Normal	Status	20	—	55%	I	supersonic
+49	Sonic Boom	Normal	Special	20	—	90%	I	sonic-boom
+50	Disable	Normal	Status	20	—	100%	I	disable
+51	Acid	Poison	Special	30	40	100%	I	acid
+52	Ember	Fire	Special	25	40	100%	I	ember
+53	Flamethrower	Fire	Special	15	90	100%	I	flamethrower
+54	Mist	Ice	Status	30	—	—%	I	mist
+55	Water Gun	Water	Special	25	40	100%	I	water-gun
+56	Hydro Pump	Water	Special	5	110	80%	I	hydro-pump
+57	Surf	Water	Special	15	90	100%	I	surf
+58	Ice Beam	Ice	Special	10	90	100%	I	ice-beam
+59	Blizzard	Ice	Special	5	110	70%	I	blizzard
+60	Psybeam	Psychic	Special	20	65	100%	I	psybeam
+61	Bubble Beam	Water	Special	20	65	100%	I	bubble-beam
+62	Aurora Beam	Ice	Special	20	65	100%	I	aurora-beam
+63	Hyper Beam	Normal	Special	5	150	90%	I	hyper-beam
+64	Peck	Flying	Physical	35	35	100%	I	peck
+65	Drill Peck	Flying	Physical	20	80	100%	I	drill-peck
+66	Submission	Fighting	Physical	20	80	80%	I	submission
+67	Low Kick	Fighting	Physical	20	—	100%	I	low-kick
+68	Counter	Fighting	Physical	20	—	100%	I	counter
+69	Seismic Toss	Fighting	Physical	20	—	100%	I	seismic-toss
+70	Strength	Normal	Physical	15	80	100%	I	strength
+71	Absorb	Grass	Special	25	20	100%	I	absorb
+72	Mega Drain	Grass	Special	15	40	100%	I	mega-drain
+73	Leech Seed	Grass	Status	10	—	90%	I	leech-seed
+74	Growth	Normal	Status	20	—	—%	I	growth
+75	Razor Leaf	Grass	Physical	25	55	95%	I	razor-leaf
+76	Solar Beam	Grass	Special	10	120	100%	I	solar-beam
+77	Poison Powder	Poison	Status	35	—	75%	I	poison-powder
+78	Stun Spore	Grass	Status	30	—	75%	I	stun-spore
+79	Sleep Powder	Grass	Status	15	—	75%	I	sleep-powder
+80	Petal Dance	Grass	Special	10	120	100%	I	petal-dance
+81	String Shot	Bug	Status	40	—	95%	I	string-shot
+82	Dragon Rage	Dragon	Special	10	—	100%	I	dragon-rage
+83	Fire Spin	Fire	Special	15	35	85%	I	fire-spin
+84	Thunder Shock	Electric	Special	30	40	100%	I	thunder-shock
+85	Thunderbolt	Electric	Special	15	90	100%	I	thunderbolt
+86	Thunder Wave	Electric	Status	20	—	90%	I	thunder-wave
+87	Thunder	Electric	Special	10	110	70%	I	thunder
+88	Rock Throw	Rock	Physical	15	50	90%	I	rock-throw
+89	Earthquake	Ground	Physical	10	100	100%	I	earthquake
+90	Fissure	Ground	Physical	5	—	30%	I	fissure
+91	Dig	Ground	Physical	10	80	100%	I	dig
+92	Toxic	Poison	Status	10	—	90%	I	toxic
+93	Confusion	Psychic	Special	25	50	100%	I	confusion
+94	Psychic	Psychic	Special	10	90	100%	I	psychic
+95	Hypnosis	Psychic	Status	20	—	60%	I	hypnosis
+96	Meditate	Psychic	Status	40	—	—%	I	meditate
+97	Agility	Psychic	Status	30	—	—%	I	agility
+98	Quick Attack	Normal	Physical	30	40	100%	I	quick-attack
+99	Rage	Normal	Physical	20	20	100%	I	rage
+100	Teleport	Psychic	Status	20	—	—%	I	teleport
+101	Night Shade	Ghost	Special	15	—	100%	I	night-shade
+102	Mimic	Normal	Status	10	—	—%	I	mimic
+103	Screech	Normal	Status	40	—	85%	I	screech
+104	Double Team	Normal	Status	15	—	—%	I	double-team
+105	Recover	Normal	Status	5	—	—%	I	recover
+106	Harden	Normal	Status	30	—	—%	I	harden
+107	Minimize	Normal	Status	10	—	—%	I	minimize
+108	Smokescreen	Normal	Status	20	—	100%	I	smokescreen
+109	Confuse Ray	Ghost	Status	10	—	100%	I	confuse-ray
+110	Withdraw	Water	Status	40	—	—%	I	withdraw
+111	Defense Curl	Normal	Status	40	—	—%	I	defense-curl
+112	Barrier	Psychic	Status	20	—	—%	I	barrier
+113	Light Screen	Psychic	Status	30	—	—%	I	light-screen
+114	Haze	Ice	Status	30	—	—%	I	haze
+115	Reflect	Psychic	Status	20	—	—%	I	reflect
+116	Focus Energy	Normal	Status	30	—	—%	I	focus-energy
+117	Bide	Normal	Physical	10	—	—%	I	bide
+118	Metronome	Normal	Status	10	—	—%	I	metronome
+119	Mirror Move	Flying	Status	20	—	—%	I	mirror-move
+120	Self-Destruct	Normal	Physical	5	200	100%	I	self-destruct
+121	Egg Bomb	Normal	Physical	10	100	75%	I	egg-bomb
+122	Lick	Ghost	Physical	30	30	100%	I	lick
+123	Smog	Poison	Special	20	30	70%	I	smog
+124	Sludge	Poison	Special	20	65	100%	I	sludge
+125	Bone Club	Ground	Physical	20	65	85%	I	bone-club
+126	Fire Blast	Fire	Special	5	110	85%	I	fire-blast
+127	Waterfall	Water	Physical	15	80	100%	I	waterfall
+128	Clamp	Water	Physical	15	35	85%	I	clamp
+129	Swift	Normal	Special	20	60	—%	I	swift
+130	Skull Bash	Normal	Physical	10	130	100%	I	skull-bash
+131	Spike Cannon	Normal	Physical	15	20	100%	I	spike-cannon
+132	Constrict	Normal	Physical	35	10	100%	I	constrict
+133	Amnesia	Psychic	Status	20	—	—%	I	amnesia
+134	Kinesis	Psychic	Status	15	—	80%	I	kinesis
+135	Soft-Boiled	Normal	Status	5	—	—%	I	soft-boiled
+136	High Jump Kick	Fighting	Physical	10	130	90%	I	high-jump-kick
+137	Glare	Normal	Status	30	—	100%	I	glare
+138	Dream Eater	Psychic	Special	15	100	100%	I	dream-eater
+139	Poison Gas	Poison	Status	40	—	90%	I	poison-gas
+140	Barrage	Normal	Physical	20	15	85%	I	barrage
+141	Leech Life	Bug	Physical	10	80	100%	I	leech-life
+142	Lovely Kiss	Normal	Status	10	—	75%	I	lovely-kiss
+143	Sky Attack	Flying	Physical	5	140	90%	I	sky-attack
+144	Transform	Normal	Status	10	—	—%	I	transform
+145	Bubble	Water	Special	30	40	100%	I	bubble
+146	Dizzy Punch	Normal	Physical	10	70	100%	I	dizzy-punch
+147	Spore	Grass	Status	15	—	100%	I	spore
+148	Flash	Normal	Status	20	—	100%	I	flash
+149	Psywave	Psychic	Special	15	—	100%	I	psywave
+150	Splash	Normal	Status	40	—	—%	I	splash
+151	Acid Armor	Poison	Status	20	—	—%	I	acid-armor
+152	Crabhammer	Water	Physical	10	100	90%	I	crabhammer
+153	Explosion	Normal	Physical	5	250	100%	I	explosion
+154	Fury Swipes	Normal	Physical	15	18	80%	I	fury-swipes
+155	Bonemerang	Ground	Physical	10	50	90%	I	bonemerang
+156	Rest	Psychic	Status	5	—	—%	I	rest
+157	Rock Slide	Rock	Physical	10	75	90%	I	rock-slide
+158	Hyper Fang	Normal	Physical	15	80	90%	I	hyper-fang
+159	Sharpen	Normal	Status	30	—	—%	I	sharpen
+160	Conversion	Normal	Status	30	—	—%	I	conversion
+161	Tri Attack	Normal	Special	10	80	100%	I	tri-attack
+162	Super Fang	Normal	Physical	10	—	90%	I	super-fang
+163	Slash	Normal	Physical	20	70	100%	I	slash
+164	Substitute	Normal	Status	10	—	—%	I	substitute
+165	Struggle	Normal	Physical	1	50	—%	I	struggle
+166	Sketch	Normal	Status	1	—	—%	II	sketch
+167	Triple Kick	Fighting	Physical	10	10	90%	II	triple-kick
+168	Thief	Dark	Physical	25	60	100%	II	thief
+169	Spider Web	Bug	Status	10	—	—%	II	spider-web
+170	Mind Reader	Normal	Status	5	—	—%	II	mind-reader
+171	Nightmare	Ghost	Status	15	—	100%	II	nightmare
+172	Flame Wheel	Fire	Physical	25	60	100%	II	flame-wheel
+173	Snore	Normal	Special	15	50	100%	II	snore
+174	Curse	Ghost	Status	10	—	—%	II	curse
+175	Flail	Normal	Physical	15	—	100%	II	flail
+176	Conversion 2	Normal	Status	30	—	—%	II	conversion-
+177	Aeroblast	Flying	Special	5	100	95%	II	aeroblast
+178	Cotton Spore	Grass	Status	40	—	100%	II	cotton-spore
+179	Reversal	Fighting	Physical	15	—	100%	II	reversal
+180	Spite	Ghost	Status	10	—	100%	II	spite
+181	Powder Snow	Ice	Special	25	40	100%	II	powder-snow
+182	Protect	Normal	Status	10	—	—%	II	protect
+183	Mach Punch	Fighting	Physical	30	40	100%	II	mach-punch
+184	Scary Face	Normal	Status	10	—	100%	II	scary-face
+185	Feint Attack	Dark	Physical	20	60	—%	II	feint-attack
+186	Sweet Kiss	Fairy	Status	10	—	75%	II	sweet-kiss
+187	Belly Drum	Normal	Status	10	—	—%	II	belly-drum
+188	Sludge Bomb	Poison	Special	10	90	100%	II	sludge-bomb
+189	Mud-Slap	Ground	Special	10	20	100%	II	mud-slap
+190	Octazooka	Water	Special	10	65	85%	II	octazooka
+191	Spikes	Ground	Status	20	—	—%	II	spikes
+192	Zap Cannon	Electric	Special	5	120	50%	II	zap-cannon
+193	Foresight	Normal	Status	40	—	—%	II	foresight
+194	Destiny Bond	Ghost	Status	5	—	—%	II	destiny-bond
+195	Perish Song	Normal	Status	5	—	—%	II	perish-song
+196	Icy Wind	Ice	Special	15	55	95%	II	icy-wind
+197	Detect	Fighting	Status	5	—	—%	II	detect
+198	Bone Rush	Ground	Physical	10	25	90%	II	bone-rush
+199	Lock-On	Normal	Status	5	—	—%	II	lock-on
+200	Outrage	Dragon	Physical	10	120	100%	II	outrage
+201	Sandstorm	Rock	Status	10	—	—%	II	sandstorm
+202	Giga Drain	Grass	Special	10	75	100%	II	giga-drain
+203	Endure	Normal	Status	10	—	—%	II	endure
+204	Charm	Fairy	Status	20	—	100%	II	charm
+205	Rollout	Rock	Physical	20	30	90%	II	rollout
+206	False Swipe	Normal	Physical	40	40	100%	II	false-swipe
+207	Swagger	Normal	Status	15	—	85%	II	swagger
+208	Milk Drink	Normal	Status	5	—	—%	II	milk-drink
+209	Spark	Electric	Physical	20	65	100%	II	spark
+210	Fury Cutter	Bug	Physical	20	40	95%	II	fury-cutter
+211	Steel Wing	Steel	Physical	25	70	90%	II	steel-wing
+212	Mean Look	Normal	Status	5	—	—%	II	mean-look
+213	Attract	Normal	Status	15	—	100%	II	attract
+214	Sleep Talk	Normal	Status	10	—	—%	II	sleep-talk
+215	Heal Bell	Normal	Status	5	—	—%	II	heal-bell
+216	Return	Normal	Physical	20	—	100%	II	return
+217	Present	Normal	Physical	15	—	90%	II	present
+218	Frustration	Normal	Physical	20	—	100%	II	frustration
+219	Safeguard	Normal	Status	25	—	—%	II	safeguard
+220	Pain Split	Normal	Status	20	—	—%	II	pain-split
+221	Sacred Fire	Fire	Physical	5	100	95%	II	sacred-fire
+222	Magnitude	Ground	Physical	30	—	100%	II	magnitude
+223	Dynamic Punch	Fighting	Physical	5	100	50%	II	dynamic-punch
+224	Megahorn	Bug	Physical	10	120	85%	II	megahorn
+225	Dragon Breath	Dragon	Special	20	60	100%	II	dragon-breath
+226	Baton Pass	Normal	Status	40	—	—%	II	baton-pass
+227	Encore	Normal	Status	5	—	100%	II	encore
+228	Pursuit	Dark	Physical	20	40	100%	II	pursuit
+229	Rapid Spin	Normal	Physical	40	50	100%	II	rapid-spin
+230	Sweet Scent	Normal	Status	20	—	100%	II	sweet-scent
+231	Iron Tail	Steel	Physical	15	100	75%	II	iron-tail
+232	Metal Claw	Steel	Physical	35	50	95%	II	metal-claw
+233	Vital Throw	Fighting	Physical	10	70	—%	II	vital-throw
+234	Morning Sun	Normal	Status	5	—	—%	II	morning-sun
+235	Synthesis	Grass	Status	5	—	—%	II	synthesis
+236	Moonlight	Fairy	Status	5	—	—%	II	moonlight
+237	Hidden Power	Normal	Special	15	60	100%	II	hidden-power
+238	Cross Chop	Fighting	Physical	5	100	80%	II	cross-chop
+239	Twister	Dragon	Special	20	40	100%	II	twister
+240	Rain Dance	Water	Status	5	—	—%	II	rain-dance
+241	Sunny Day	Fire	Status	5	—	—%	II	sunny-day
+242	Crunch	Dark	Physical	15	80	100%	II	crunch
+243	Mirror Coat	Psychic	Special	20	—	100%	II	mirror-coat
+244	Psych Up	Normal	Status	10	—	—%	II	psych-up
+245	Extreme Speed	Normal	Physical	5	80	100%	II	extreme-speed
+246	Ancient Power	Rock	Special	5	60	100%	II	ancient-power
+247	Shadow Ball	Ghost	Special	15	80	100%	II	shadow-ball
+248	Future Sight	Psychic	Special	10	120	100%	II	future-sight
+249	Rock Smash	Fighting	Physical	15	40	100%	II	rock-smash
+250	Whirlpool	Water	Special	15	35	85%	II	whirlpool
+251	Beat Up	Dark	Physical	10	—	100%	II	beat-up
+252	Fake Out	Normal	Physical	10	40	100%	III	fake-out
+253	Uproar	Normal	Special	10	90	100%	III	uproar
+254	Stockpile	Normal	Status	20	—	—%	III	stockpile
+255	Spit Up	Normal	Special	10	—	100%	III	spit-up
+256	Swallow	Normal	Status	10	—	—%	III	swallow
+257	Heat Wave	Fire	Special	10	95	90%	III	heat-wave
+258	Hail	Ice	Status	10	—	—%	III	hail
+259	Torment	Dark	Status	15	—	100%	III	torment
+260	Flatter	Dark	Status	15	—	100%	III	flatter
+261	Will-O-Wisp	Fire	Status	15	—	85%	III	will-o-wisp
+262	Memento	Dark	Status	10	—	100%	III	memento
+263	Facade	Normal	Physical	20	70	100%	III	facade
+264	Focus Punch	Fighting	Physical	20	150	100%	III	focus-punch
+265	Smelling Salts	Normal	Physical	10	70	100%	III	smelling-salts
+266	Follow Me	Normal	Status	20	—	—%	III	follow-me
+267	Nature Power	Normal	Status	20	—	—%	III	nature-power
+268	Charge	Electric	Status	20	—	—%	III	charge
+269	Taunt	Dark	Status	20	—	100%	III	taunt
+270	Helping Hand	Normal	Status	20	—	—%	III	helping-hand
+271	Trick	Psychic	Status	10	—	100%	III	trick
+272	Role Play	Psychic	Status	10	—	—%	III	role-play
+273	Wish	Normal	Status	10	—	—%	III	wish
+274	Assist	Normal	Status	20	—	—%	III	assist
+275	Ingrain	Grass	Status	20	—	—%	III	ingrain
+276	Superpower	Fighting	Physical	5	120	100%	III	superpower
+277	Magic Coat	Psychic	Status	15	—	—%	III	magic-coat
+278	Recycle	Normal	Status	10	—	—%	III	recycle
+279	Revenge	Fighting	Physical	10	60	100%	III	revenge
+280	Brick Break	Fighting	Physical	15	75	100%	III	brick-break
+281	Yawn	Normal	Status	10	—	—%	III	yawn
+282	Knock Off	Dark	Physical	20	65	100%	III	knock-off
+283	Endeavor	Normal	Physical	5	—	100%	III	endeavor
+284	Eruption	Fire	Special	5	150	100%	III	eruption
+285	Skill Swap	Psychic	Status	10	—	—%	III	skill-swap
+286	Imprison	Psychic	Status	10	—	—%	III	imprison
+287	Refresh	Normal	Status	20	—	—%	III	refresh
+288	Grudge	Ghost	Status	5	—	—%	III	grudge
+289	Snatch	Dark	Status	10	—	—%	III	snatch
+290	Secret Power	Normal	Physical	20	70	100%	III	secret-power
+291	Dive	Water	Physical	10	80	100%	III	dive
+292	Arm Thrust	Fighting	Physical	20	15	100%	III	arm-thrust
+293	Camouflage	Normal	Status	20	—	—%	III	camouflage
+294	Tail Glow	Bug	Status	20	—	—%	III	tail-glow
+295	Luster Purge	Psychic	Special	5	70	100%	III	luster-purge
+296	Mist Ball	Psychic	Special	5	70	100%	III	mist-ball
+297	Feather Dance	Flying	Status	15	—	100%	III	feather-dance
+298	Teeter Dance	Normal	Status	20	—	100%	III	teeter-dance
+299	Blaze Kick	Fire	Physical	10	85	90%	III	blaze-kick
+300	Mud Sport	Ground	Status	15	—	—%	III	mud-sport
+301	Ice Ball	Ice	Physical	20	30	90%	III	ice-ball
+302	Needle Arm	Grass	Physical	15	60	100%	III	needle-arm
+303	Slack Off	Normal	Status	5	—	—%	III	slack-off
+304	Hyper Voice	Normal	Special	10	90	100%	III	hyper-voice
+305	Poison Fang	Poison	Physical	15	50	100%	III	poison-fang
+306	Crush Claw	Normal	Physical	10	75	95%	III	crush-claw
+307	Blast Burn	Fire	Special	5	150	90%	III	blast-burn
+308	Hydro Cannon	Water	Special	5	150	90%	III	hydro-cannon
+309	Meteor Mash	Steel	Physical	10	90	90%	III	meteor-mash
+310	Astonish	Ghost	Physical	15	30	100%	III	astonish
+311	Weather Ball	Normal	Special	10	50	100%	III	weather-ball
+312	Aromatherapy	Grass	Status	5	—	—%	III	aromatherapy
+313	Fake Tears	Dark	Status	20	—	100%	III	fake-tears
+314	Air Cutter	Flying	Special	25	60	95%	III	air-cutter
+315	Overheat	Fire	Special	5	130	90%	III	overheat
+316	Odor Sleuth	Normal	Status	40	—	—%	III	odor-sleuth
+317	Rock Tomb	Rock	Physical	15	60	95%	III	rock-tomb
+318	Silver Wind	Bug	Special	5	60	100%	III	silver-wind
+319	Metal Sound	Steel	Status	40	—	85%	III	metal-sound
+320	Grass Whistle	Grass	Status	15	—	55%	III	grass-whistle
+321	Tickle	Normal	Status	20	—	100%	III	tickle
+322	Cosmic Power	Psychic	Status	20	—	—%	III	cosmic-power
+323	Water Spout	Water	Special	5	150	100%	III	water-spout
+324	Signal Beam	Bug	Special	15	75	100%	III	signal-beam
+325	Shadow Punch	Ghost	Physical	20	60	—%	III	shadow-punch
+326	Extrasensory	Psychic	Special	20	80	100%	III	extrasensory
+327	Sky Uppercut	Fighting	Physical	15	85	90%	III	sky-uppercut
+328	Sand Tomb	Ground	Physical	15	35	85%	III	sand-tomb
+329	Sheer Cold	Ice	Special	5	—	30%	III	sheer-cold
+330	Muddy Water	Water	Special	10	90	85%	III	muddy-water
+331	Bullet Seed	Grass	Physical	30	25	100%	III	bullet-seed
+332	Aerial Ace	Flying	Physical	20	60	—	III	aerial-ace
+333	Icicle Spear	Ice	Physical	30	25	100%	III	icicle-spear
+334	Iron Defense	Steel	Status	15	—	—%	III	iron-defense
+335	Block	Normal	Status	5	—	—%	III	block
+336	Howl	Normal	Status	40	—	—%	III	howl
+337	Dragon Claw	Dragon	Physical	15	80	100%	III	dragon-claw
+338	Frenzy Plant	Grass	Special	5	150	90%	III	frenzy-plant
+339	Bulk Up	Fighting	Status	20	—	—%	III	bulk-up
+340	Bounce	Flying	Physical	5	85	85%	III	bounce
+341	Mud Shot	Ground	Special	15	55	95%	III	mud-shot
+342	Poison Tail	Poison	Physical	25	50	100%	III	poison-tail
+343	Covet	Normal	Physical	25	60	100%	III	covet
+344	Volt Tackle	Electric	Physical	15	120	100%	III	volt-tackle
+345	Magical Leaf	Grass	Special	20	60	—%	III	magical-leaf
+346	Water Sport	Water	Status	15	—	—%	III	water-sport
+347	Calm Mind	Psychic	Status	20	—	—%	III	calm-mind
+348	Leaf Blade	Grass	Physical	15	90	100%	III	leaf-blade
+349	Dragon Dance	Dragon	Status	20	—	—%	III	dragon-dance
+350	Rock Blast	Rock	Physical	10	25	90%	III	rock-blast
+351	Shock Wave	Electric	Special	20	60	—%	III	shock-wave
+352	Water Pulse	Water	Special	20	60	100%	III	water-pulse
+353	Doom Desire	Steel	Special	5	140	100%	III	doom-desire
+354	Psycho Boost	Psychic	Special	5	140	90%	III	psycho-boost
+355	Roost	Flying	Status	5	—	—%	IV	roost
+356	Gravity	Psychic	Status	5	—	—%	IV	gravity
+357	Miracle Eye	Psychic	Status	40	—	—%	IV	miracle-eye
+358	Wake-Up Slap	Fighting	Physical	10	70	100%	IV	wake-up-slap
+359	Hammer Arm	Fighting	Physical	10	100	90%	IV	hammer-arm
+360	Gyro Ball	Steel	Physical	5	—	100%	IV	gyro-ball
+361	Healing Wish	Psychic	Status	10	—	—%	IV	healing-wish
+362	Brine	Water	Special	10	65	100%	IV	brine
+363	Natural Gift	Normal	Physical	15	—	100%	IV	natural-gift
+364	Feint	Normal	Physical	10	30	100%	IV	feint
+365	Pluck	Flying	Physical	20	60	100%	IV	pluck
+366	Tailwind	Flying	Status	15	—	—%	IV	tailwind
+367	Acupressure	Normal	Status	30	—	—%	IV	acupressure
+368	Metal Burst	Steel	Physical	10	—	100%	IV	metal-burst
+369	U-turn	Bug	Physical	20	70	100%	IV	u-turn
+370	Close Combat	Fighting	Physical	5	120	100%	IV	close-combat
+371	Payback	Dark	Physical	10	50	100%	IV	payback
+372	Assurance	Dark	Physical	10	60	100%	IV	assurance
+373	Embargo	Dark	Status	15	—	100%	IV	embargo
+374	Fling	Dark	Physical	10	—	100%	IV	fling
+375	Psycho Shift	Psychic	Status	10	—	100%	IV	psycho-shift
+376	Trump Card	Normal	Special	5	—	—%	IV	trump-card
+377	Heal Block	Psychic	Status	15	—	100%	IV	heal-block
+378	Wring Out	Normal	Special	5	—	100%	IV	wring-out
+379	Power Trick	Psychic	Status	10	—	—%	IV	power-trick
+380	Gastro Acid	Poison	Status	10	—	100%	IV	gastro-acid
+381	Lucky Chant	Normal	Status	30	—	—%	IV	lucky-chant
+382	Me First	Normal	Status	20	—	—%	IV	me-first
+383	Copycat	Normal	Status	20	—	—%	IV	copycat
+384	Power Swap	Psychic	Status	10	—	—%	IV	power-swap
+385	Guard Swap	Psychic	Status	10	—	—%	IV	guard-swap
+386	Punishment	Dark	Physical	5	—	100%	IV	punishment
+387	Last Resort	Normal	Physical	5	140	100%	IV	last-resort
+388	Worry Seed	Grass	Status	10	—	100%	IV	worry-seed
+389	Sucker Punch	Dark	Physical	5	70	100%	IV	sucker-punch
+390	Toxic Spikes	Poison	Status	20	—	—%	IV	toxic-spikes
+391	Heart Swap	Psychic	Status	10	—	—%	IV	heart-swap
+392	Aqua Ring	Water	Status	20	—	—%	IV	aqua-ring
+393	Magnet Rise	Electric	Status	10	—	—%	IV	magnet-rise
+394	Flare Blitz	Fire	Physical	15	120	100%	IV	flare-blitz
+395	Force Palm	Fighting	Physical	10	60	100%	IV	force-palm
+396	Aura Sphere	Fighting	Special	20	80	—	IV	aura-sphere
+397	Rock Polish	Rock	Status	20	—	—%	IV	rock-polish
+398	Poison Jab	Poison	Physical	20	80	100%	IV	poison-jab
+399	Dark Pulse	Dark	Special	15	80	100%	IV	dark-pulse
+400	Night Slash	Dark	Physical	15	70	100%	IV	night-slash
+401	Aqua Tail	Water	Physical	10	90	90%	IV	aqua-tail
+402	Seed Bomb	Grass	Physical	15	80	100%	IV	seed-bomb
+403	Air Slash	Flying	Special	15	75	95%	IV	air-slash
+404	X-Scissor	Bug	Physical	15	80	100%	IV	x-scissor
+405	Bug Buzz	Bug	Special	10	90	100%	IV	bug-buzz
+406	Dragon Pulse	Dragon	Special	10	85	100%	IV	dragon-pulse
+407	Dragon Rush	Dragon	Physical	10	100	75%	IV	dragon-rush
+408	Power Gem	Rock	Special	20	80	100%	IV	power-gem
+409	Drain Punch	Fighting	Physical	10	75	100%	IV	drain-punch
+410	Vacuum Wave	Fighting	Special	30	40	100%	IV	vacuum-wave
+411	Focus Blast	Fighting	Special	5	120	70%	IV	focus-blast
+412	Energy Ball	Grass	Special	10	90	100%	IV	energy-ball
+413	Brave Bird	Flying	Physical	15	120	100%	IV	brave-bird
+414	Earth Power	Ground	Special	10	90	100%	IV	earth-power
+415	Switcheroo	Dark	Status	10	—	100%	IV	switcheroo
+416	Giga Impact	Normal	Physical	5	150	90%	IV	giga-impact
+417	Nasty Plot	Dark	Status	20	—	—%	IV	nasty-plot
+418	Bullet Punch	Steel	Physical	30	40	100%	IV	bullet-punch
+419	Avalanche	Ice	Physical	10	60	100%	IV	avalanche
+420	Ice Shard	Ice	Physical	30	40	100%	IV	ice-shard
+421	Shadow Claw	Ghost	Physical	15	70	100%	IV	shadow-claw
+422	Thunder Fang	Electric	Physical	15	65	95%	IV	thunder-fang
+423	Ice Fang	Ice	Physical	15	65	95%	IV	ice-fang
+424	Fire Fang	Fire	Physical	15	65	95%	IV	fire-fang
+425	Shadow Sneak	Ghost	Physical	30	40	100%	IV	shadow-sneak
+426	Mud Bomb	Ground	Special	10	65	85%	IV	mud-bomb
+427	Psycho Cut	Psychic	Physical	20	70	100%	IV	psycho-cut
+428	Zen Headbutt	Psychic	Physical	15	80	90%	IV	zen-headbutt
+429	Mirror Shot	Steel	Special	10	65	85%	IV	mirror-shot
+430	Flash Cannon	Steel	Special	10	80	100%	IV	flash-cannon
+431	Rock Climb	Normal	Physical	20	90	85%	IV	rock-climb
+432	Defog	Flying	Status	15	—	—%	IV	defog
+433	Trick Room	Psychic	Status	5	—	—%	IV	trick-room
+434	Draco Meteor	Dragon	Special	5	130	90%	IV	draco-meteor
+435	Discharge	Electric	Special	15	80	100%	IV	discharge
+436	Lava Plume	Fire	Special	15	80	100%	IV	lava-plume
+437	Leaf Storm	Grass	Special	5	130	90%	IV	leaf-storm
+438	Power Whip	Grass	Physical	10	120	85%	IV	power-whip
+439	Rock Wrecker	Rock	Physical	5	150	90%	IV	rock-wrecker
+440	Cross Poison	Poison	Physical	20	70	100%	IV	cross-poison
+441	Gunk Shot	Poison	Physical	5	120	80%	IV	gunk-shot
+442	Iron Head	Steel	Physical	15	80	100%	IV	iron-head
+443	Magnet Bomb	Steel	Physical	20	60	—	IV	magnet-bomb
+444	Stone Edge	Rock	Physical	5	100	80%	IV	stone-edge
+445	Captivate	Normal	Status	20	—	100%	IV	captivate
+446	Stealth Rock	Rock	Status	20	—	—%	IV	stealth-rock
+447	Grass Knot	Grass	Special	20	—	100%	IV	grass-knot
+448	Chatter	Flying	Special	20	65	100%	IV	chatter
+449	Judgment	Normal	Special	10	100	100%	IV	judgment
+450	Bug Bite	Bug	Physical	20	60	100%	IV	bug-bite
+451	Charge Beam	Electric	Special	10	50	90%	IV	charge-beam
+452	Wood Hammer	Grass	Physical	15	120	100%	IV	wood-hammer
+453	Aqua Jet	Water	Physical	20	40	100%	IV	aqua-jet
+454	Attack Order	Bug	Physical	15	90	100%	IV	attack-order
+455	Defend Order	Bug	Status	10	—	—%	IV	defend-order
+456	Heal Order	Bug	Status	10	—	—%	IV	heal-order
+457	Head Smash	Rock	Physical	5	150	80%	IV	head-smash
+458	Double Hit	Normal	Physical	10	35	90%	IV	double-hit
+459	Roar of Time	Dragon	Special	5	150	90%	IV	roar-of-time
+460	Spacial Rend	Dragon	Special	5	100	95%	IV	spacial-rend
+461	Lunar Dance	Psychic	Status	10	—	—%	IV	lunar-dance
+462	Crush Grip	Normal	Physical	5	—	100%	IV	crush-grip
+463	Magma Storm	Fire	Special	5	100	75%	IV	magma-storm
+464	Dark Void	Dark	Status	10	—	50%	IV	dark-void
+465	Seed Flare	Grass	Special	5	120	85%	IV	seed-flare
+466	Ominous Wind	Ghost	Special	5	60	100%	IV	ominous-wind
+467	Shadow Force	Ghost	Physical	5	120	100%	IV	shadow-force
+468	Hone Claws	Dark	Status	15	—	—%	V	hone-claws
+469	Wide Guard	Rock	Status	10	—	—%	V	wide-guard
+470	Guard Split	Psychic	Status	10	—	—%	V	guard-split
+471	Power Split	Psychic	Status	10	—	—%	V	power-split
+472	Wonder Room	Psychic	Status	10	—	—%	V	wonder-room
+473	Psyshock	Psychic	Special	10	80	100%	V	psyshock
+474	Venoshock	Poison	Special	10	65	100%	V	venoshock
+475	Autotomize	Steel	Status	15	—	—%	V	autotomize
+476	Rage Powder	Bug	Status	20	—	—%	V	rage-powder
+477	Telekinesis	Psychic	Status	15	—	—%	V	telekinesis
+478	Magic Room	Psychic	Status	10	—	—%	V	magic-room
+479	Smack Down	Rock	Physical	15	50	100%	V	smack-down
+480	Storm Throw	Fighting	Physical	10	60	100%	V	storm-throw
+481	Flame Burst	Fire	Special	15	70	100%	V	flame-burst
+482	Sludge Wave	Poison	Special	10	95	100%	V	sludge-wave
+483	Quiver Dance	Bug	Status	20	—	—%	V	quiver-dance
+484	Heavy Slam	Steel	Physical	10	—	100%	V	heavy-slam
+485	Synchronoise	Psychic	Special	10	120	100%	V	synchronoise
+486	Electro Ball	Electric	Special	10	—	100%	V	electro-ball
+487	Soak	Water	Status	20	—	100%	V	soak
+488	Flame Charge	Fire	Physical	20	50	100%	V	flame-charge
+489	Coil	Poison	Status	20	—	—%	V	coil
+490	Low Sweep	Fighting	Physical	20	65	100%	V	low-sweep
+491	Acid Spray	Poison	Special	20	40	100%	V	acid-spray
+492	Foul Play	Dark	Physical	15	95	100%	V	foul-play
+493	Simple Beam	Normal	Status	15	—	100%	V	simple-beam
+494	Entrainment	Normal	Status	15	—	100%	V	entrainment
+495	After You	Normal	Status	15	—	—%	V	after-you
+496	Round	Normal	Special	15	60	100%	V	round
+497	Echoed Voice	Normal	Special	15	40	100%	V	echoed-voice
+498	Chip Away	Normal	Physical	20	70	100%	V	chip-away
+499	Clear Smog	Poison	Special	15	50	—%	V	clear-smog
+500	Stored Power	Psychic	Special	10	20	100%	V	stored-power
+501	Quick Guard	Fighting	Status	15	—	—%	V	quick-guard
+502	Ally Switch	Psychic	Status	15	—	—%	V	ally-switch
+503	Scald	Water	Special	15	80	100%	V	scald
+504	Shell Smash	Normal	Status	15	—	—%	V	shell-smash
+505	Heal Pulse	Psychic	Status	10	—	—%	V	heal-pulse
+506	Hex	Ghost	Special	10	65	100%	V	hex
+507	Sky Drop	Flying	Physical	10	60	100%	V	sky-drop
+508	Shift Gear	Steel	Status	10	—	—%	V	shift-gear
+509	Circle Throw	Fighting	Physical	10	60	90%	V	circle-throw
+510	Incinerate	Fire	Special	15	60	100%	V	incinerate
+511	Quash	Dark	Status	15	—	100%	V	quash
+512	Acrobatics	Flying	Physical	15	55	100%	V	acrobatics
+513	Reflect Type	Normal	Status	15	—	—%	V	reflect-type
+514	Retaliate	Normal	Physical	5	70	100%	V	retaliate
+515	Final Gambit	Fighting	Special	5	—	100%	V	final-gambit
+516	Bestow	Normal	Status	15	—	—%	V	bestow
+517	Inferno	Fire	Special	5	100	50%	V	inferno
+518	Water Pledge	Water	Special	10	80	100%	V	water-pledge
+519	Fire Pledge	Fire	Special	10	80	100%	V	fire-pledge
+520	Grass Pledge	Grass	Special	10	80	100%	V	grass-pledge
+521	Volt Switch	Electric	Special	20	70	100%	V	volt-switch
+522	Struggle Bug	Bug	Special	20	50	100%	V	struggle-bug
+523	Bulldoze	Ground	Physical	20	60	100%	V	bulldoze
+524	Frost Breath	Ice	Special	10	60	90%	V	frost-breath
+525	Dragon Tail	Dragon	Physical	10	60	90%	V	dragon-tail
+526	Work Up	Normal	Status	30	—	—%	V	work-up
+527	Electroweb	Electric	Special	15	55	95%	V	electroweb
+528	Wild Charge	Electric	Physical	15	90	100%	V	wild-charge
+529	Drill Run	Ground	Physical	10	80	95%	V	drill-run
+530	Dual Chop	Dragon	Physical	15	40	90%	V	dual-chop
+531	Heart Stamp	Psychic	Physical	25	60	100%	V	heart-stamp
+532	Horn Leech	Grass	Physical	10	75	100%	V	horn-leech
+533	Sacred Sword	Fighting	Physical	15	90	100%	V	sacred-sword
+534	Razor Shell	Water	Physical	10	75	95%	V	razor-shell
+535	Heat Crash	Fire	Physical	10	—	100%	V	heat-crash
+536	Leaf Tornado	Grass	Special	10	65	90%	V	leaf-tornado
+537	Steamroller	Bug	Physical	20	65	100%	V	steamroller
+538	Cotton Guard	Grass	Status	10	—	—%	V	cotton-guard
+539	Night Daze	Dark	Special	10	85	95%	V	night-daze
+540	Psystrike	Psychic	Special	10	100	100%	V	psystrike
+541	Tail Slap	Normal	Physical	10	25	85%	V	tail-slap
+542	Hurricane	Flying	Special	10	110	70%	V	hurricane
+543	Head Charge	Normal	Physical	15	120	100%	V	head-charge
+544	Gear Grind	Steel	Physical	15	50	85%	V	gear-grind
+545	Searing Shot	Fire	Special	5	100	100%	V	searing-shot
+546	Techno Blast	Normal	Special	5	120	100%	V	techno-blast
+547	Relic Song	Normal	Special	10	75	100%	V	relic-song
+548	Secret Sword	Fighting	Special	10	85	100%	V	secret-sword
+549	Glaciate	Ice	Special	10	65	95%	V	glaciate
+550	Bolt Strike	Electric	Physical	5	130	85%	V	bolt-strike
+551	Blue Flare	Fire	Special	5	130	85%	V	blue-flare
+552	Fiery Dance	Fire	Special	10	80	100%	V	fiery-dance
+553	Freeze Shock	Ice	Physical	5	140	90%	V	freeze-shock
+554	Ice Burn	Ice	Special	5	140	90%	V	ice-burn
+555	Snarl	Dark	Special	15	55	95%	V	snarl
+556	Icicle Crash	Ice	Physical	10	85	90%	V	icicle-crash
+557	V-create	Fire	Physical	5	180	95%	V	v-create
+558	Fusion Flare	Fire	Special	5	100	100%	V	fusion-flare
+559	Fusion Bolt	Electric	Physical	5	100	100%	V	fusion-bolt
+560	Flying Press	Fighting	Physical	10	100	95%	VI	flying-press
+561	Mat Block	Fighting	Status	10	—	—%	VI	mat-block
+562	Belch	Poison	Special	10	120	90%	VI	belch
+563	Rototiller	Ground	Status	10	—	—%	VI	rototiller
+564	Sticky Web	Bug	Status	20	—	—%	VI	sticky-web
+565	Fell Stinger	Bug	Physical	25	50	100%	VI	fell-stinger
+566	Phantom Force	Ghost	Physical	10	90	100%	VI	phantom-force
+567	Trick-or-Treat	Ghost	Status	20	—	100%	VI	trick-or-treat
+568	Noble Roar	Normal	Status	30	—	100%	VI	noble-roar
+569	Ion Deluge	Electric	Status	25	—	—%	VI	ion-deluge
+570	Parabolic Charge	Electric	Special	20	65	100%	VI	parabolic-charge
+571	Forest's Curse	Grass	Status	20	—	100%	VI	forests-curse
+572	Petal Blizzard	Grass	Physical	15	90	100%	VI	petal-blizzard
+573	Freeze-Dry	Ice	Special	20	70	100%	VI	freeze-dry
+574	Disarming Voice	Fairy	Special	15	40	—%	VI	disarming-voice
+575	Parting Shot	Dark	Status	20	—	100%	VI	parting-shot
+576	Topsy-Turvy	Dark	Status	20	—	—%	VI	topsy-turvy
+577	Draining Kiss	Fairy	Special	10	50	100%	VI	draining-kiss
+578	Crafty Shield	Fairy	Status	10	—	—%	VI	crafty-shield
+579	Flower Shield	Fairy	Status	10	—	—%	VI	flower-shield
+580	Grassy Terrain	Grass	Status	10	—	—%	VI	grassy-terrain
+581	Misty Terrain	Fairy	Status	10	—	—%	VI	misty-terrain
+582	Electrify	Electric	Status	20	—	—%	VI	electrify
+583	Play Rough	Fairy	Physical	10	90	90%	VI	play-rough
+584	Fairy Wind	Fairy	Special	30	40	100%	VI	fairy-wind
+585	Moonblast	Fairy	Special	15	95	100%	VI	moonblast
+586	Boomburst	Normal	Special	10	140	100%	VI	boomburst
+587	Fairy Lock	Fairy	Status	10	—	—%	VI	fairy-lock
+588	King's Shield	Steel	Status	10	—	—%	VI	kings-shield
+589	Play Nice	Normal	Status	20	—	—%	VI	play-nice
+590	Confide	Normal	Status	20	—	—%	VI	confide
+591	Diamond Storm	Rock	Physical	5	100	95%	VI	diamond-storm
+592	Steam Eruption	Water	Special	5	110	95%	VI	steam-eruption
+593	Hyperspace Hole	Psychic	Special	5	80	—%	VI	hyperspace-hole
+594	Water Shuriken	Water	Special	20	15	100%	VI	water-shuriken
+595	Mystical Fire	Fire	Special	10	75	100%	VI	mystical-fire
+596	Spiky Shield	Grass	Status	10	—	—%	VI	spiky-shield
+597	Aromatic Mist	Fairy	Status	20	—	—%	VI	aromatic-mist
+598	Eerie Impulse	Electric	Status	15	—	100%	VI	eerie-impulse
+599	Venom Drench	Poison	Status	20	—	100%	VI	venom-drench
+600	Powder	Bug	Status	20	—	100%	VI	powder
+601	Geomancy	Fairy	Status	10	—	—%	VI	geomancy
+602	Magnetic Flux	Electric	Status	20	—	—%	VI	magnetic-flux
+603	Happy Hour	Normal	Status	30	—	—%	VI	happy-hour
+604	Electric Terrain	Electric	Status	10	—	—%	VI	electric-terrain
+605	Dazzling Gleam	Fairy	Special	10	80	100%	VI	dazzling-gleam
+606	Celebrate	Normal	Status	40	—	—%	VI	celebrate
+607	Hold Hands	Normal	Status	40	—	—%	VI	hold-hands
+608	Baby-Doll Eyes	Fairy	Status	30	—	100%	VI	baby-doll-eyes
+609	Nuzzle	Electric	Physical	20	20	100%	VI	nuzzle
+610	Hold Back	Normal	Physical	40	40	100%	VI	hold-back
+611	Infestation	Bug	Special	20	20	100%	VI	infestation
+612	Power-Up Punch	Fighting	Physical	20	40	100%	VI	power-up-punch
+613	Oblivion Wing	Flying	Special	10	80	100%	VI	oblivion-wing
+614	Thousand Arrows	Ground	Physical	10	90	100%	VI	thousand-arrows
+615	Thousand Waves	Ground	Physical	10	90	100%	VI	thousand-waves
+616	Land's Wrath	Ground	Physical	10	90	100%	VI	lands-wrath
+617	Light of Ruin	Fairy	Special	5	140	90%	VI	light-of-ruin
+618	Origin Pulse	Water	Special	10	110	85%	VI	origin-pulse
+619	Precipice Blades	Ground	Physical	10	120	85%	VI	precipice-blades
+620	Dragon Ascent	Flying	Physical	5	120	100%	VI	dragon-ascent
+621	Hyperspace Fury	Dark	Physical	5	100	—%	VI	hyperspace-fury
+622	Breakneck Blitz	Normal	Physical	1	—	—%	VII	breakneck-blitz--physical
+623	Breakneck Blitz	Normal	Special	1	—	—%	VII	breakneck-blitz--special
+624	All-Out Pummeling	Fighting	Physical	1	—	—%	VII	all-out-pummeling--physical
+625	All-Out Pummeling	Fighting	Special	1	—	—%	VII	all-out-pummeling--special
+626	Supersonic Skystrike	Flying	Physical	1	—	—%	VII	supersonic-skystrike--physical
+627	Supersonic Skystrike	Flying	Special	1	—	—%	VII	supersonic-skystrike--special
+628	Acid Downpour	Poison	Physical	1	—	—%	VII	acid-downpour--physical
+629	Acid Downpour	Poison	Special	1	—	—%	VII	acid-downpour--special
+630	Tectonic Rage	Ground	Physical	1	—	—%	VII	tectonic-rage--physical
+631	Tectonic Rage	Ground	Special	1	—	—%	VII	tectonic-rage--special
+632	Continental Crush	Rock	Physical	1	—	—%	VII	continental-crush--physical
+633	Continental Crush	Rock	Special	1	—	—%	VII	continental-crush--special
+634	Savage Spin-Out	Bug	Physical	1	—	—%	VII	savage-spin-out--physical
+635	Savage Spin-Out	Bug	Special	1	—	—%	VII	savage-spin-out--special
+636	Never-Ending Nightmare	Ghost	Physical	1	—	—%	VII	never-ending-nightmare--physical
+637	Never-Ending Nightmare	Ghost	Special	1	—	—%	VII	never-ending-nightmare--special
+638	Corkscrew Crash	Steel	Physical	1	—	—%	VII	corkscrew-crash--physical
+639	Corkscrew Crash	Steel	Special	1	—	—%	VII	corkscrew-crash--special
+640	Inferno Overdrive	Fire	Physical	1	—	—%	VII	inferno-overdrive--physical
+641	Inferno Overdrive	Fire	Special	1	—	—%	VII	inferno-overdrive--special
+642	Hydro Vortex	Water	Physical	1	—	—%	VII	hydro-vortex--physical
+643	Hydro Vortex	Water	Special	1	—	—%	VII	hydro-vortex--special
+644	Bloom Doom	Grass	Physical	1	—	—%	VII	bloom-doom--physical
+645	Bloom Doom	Grass	Special	1	—	—%	VII	bloom-doom--special
+646	Gigavolt Havoc	Electric	Physical	1	—	—%	VII	gigavolt-havoc--physical
+647	Gigavolt Havoc	Electric	Special	1	—	—%	VII	gigavolt-havoc--special
+648	Shattered Psyche	Psychic	Physical	1	—	—%	VII	shattered-psyche--physical
+649	Shattered Psyche	Psychic	Special	1	—	—%	VII	shattered-psyche--special
+650	Subzero Slammer	Ice	Physical	1	—	—%	VII	subzero-slammer--physical
+651	Subzero Slammer	Ice	Special	1	—	—%	VII	subzero-slammer--special
+652	Devastating Drake	Dragon	Physical	1	—	—%	VII	devastating-drake--physical
+653	Devastating Drake	Dragon	Special	1	—	—%	VII	devastating-drake--special
+654	Black Hole Eclipse	Dark	Physical	1	—	—%	VII	black-hole-eclipse--physical
+655	Black Hole Eclipse	Dark	Special	1	—	—%	VII	black-hole-eclipse--special
+656	Twinkle Tackle	Fairy	Physical	1	—	—%	VII	twinkle-tackle--physical
+657	Twinkle Tackle	Fairy	Special	1	—	—%	VII	twinkle-tackle--special
+658	Catastropika	Electric	Physical	1	210	—%	VII	catastropika
+659	Shore Up	Ground	Status	5	—	—%	VII	shore-up
+660	First Impression	Bug	Physical	10	90	100%	VII	first-impression
+661	Baneful Bunker	Poison	Status	10	—	—%	VII	baneful-bunker
+662	Spirit Shackle	Ghost	Physical	10	80	100%	VII	spirit-shackle
+663	Darkest Lariat	Dark	Physical	10	85	100%	VII	darkest-lariat
+664	Sparkling Aria	Water	Special	10	90	100%	VII	sparkling-aria
+665	Ice Hammer	Ice	Physical	10	100	90%	VII	ice-hammer
+666	Floral Healing	Fairy	Status	10	—	—%	VII	floral-healing
+667	High Horsepower	Ground	Physical	10	95	95%	VII	high-horsepower
+668	Strength Sap	Grass	Status	10	—	100%	VII	strength-sap
+669	Solar Blade	Grass	Physical	10	125	100%	VII	solar-blade
+670	Leafage	Grass	Physical	40	40	100%	VII	leafage
+671	Spotlight	Normal	Status	15	—	—%	VII	spotlight
+672	Toxic Thread	Poison	Status	20	—	100%	VII	toxic-thread
+673	Laser Focus	Normal	Status	30	—	—%	VII	laser-focus
+674	Gear Up	Steel	Status	20	—	—%	VII	gear-up
+675	Throat Chop	Dark	Physical	15	80	100%	VII	throat-chop
+676	Pollen Puff	Bug	Special	15	90	100%	VII	pollen-puff
+677	Anchor Shot	Steel	Physical	20	80	100%	VII	anchor-shot
+678	Psychic Terrain	Psychic	Status	10	—	—%	VII	psychic-terrain
+679	Lunge	Bug	Physical	15	80	100%	VII	lunge
+680	Fire Lash	Fire	Physical	15	80	100%	VII	fire-lash
+681	Power Trip	Dark	Physical	10	20	100%	VII	power-trip
+682	Burn Up	Fire	Special	5	130	100%	VII	burn-up
+683	Speed Swap	Psychic	Status	10	—	—%	VII	speed-swap
+684	Smart Strike	Steel	Physical	10	70	—%	VII	smart-strike
+685	Purify	Poison	Status	20	—	—%	VII	purify
+686	Revelation Dance	Normal	Special	15	90	100%	VII	revelation-dance
+687	Core Enforcer	Dragon	Special	10	100	100%	VII	core-enforcer
+688	Trop Kick	Grass	Physical	15	70	100%	VII	trop-kick
+689	Instruct	Psychic	Status	15	—	—%	VII	instruct
+690	Beak Blast	Flying	Physical	15	100	100%	VII	beak-blast
+691	Clanging Scales	Dragon	Special	5	110	100%	VII	clanging-scales
+692	Dragon Hammer	Dragon	Physical	15	90	100%	VII	dragon-hammer
+693	Brutal Swing	Dark	Physical	20	60	100%	VII	brutal-swing
+694	Aurora Veil	Ice	Status	20	—	—%	VII	aurora-veil
+695	Sinister Arrow Raid	Ghost	Physical	1	180	—%	VII	sinister-arrow-raid
+696	Malicious Moonsault	Dark	Physical	1	180	—%	VII	malicious-moonsault
+697	Oceanic Operetta	Water	Special	1	195	—%	VII	oceanic-operetta
+698	Guardian of Alola	Fairy	Special	1	—	—%	VII	guardian-of-alola
+699	Soul-Stealing 7-Star Strike	Ghost	Physical	1	195	—%	VII	soul-stealing--star-strike
+700	Stoked Sparksurfer	Electric	Special	1	175	—%	VII	stoked-sparksurfer
+701	Pulverizing Pancake	Normal	Physical	1	210	—%	VII	pulverizing-pancake
+702	Extreme Evoboost	Normal	Status	1	—	—%	VII	extreme-evoboost
+703	Genesis Supernova	Psychic	Special	1	185	—%	VII	genesis-supernova
+704	Shell Trap	Fire	Special	5	150	100%	VII	shell-trap
+705	Fleur Cannon	Fairy	Special	5	130	90%	VII	fleur-cannon
+706	Psychic Fangs	Psychic	Physical	10	85	100%	VII	psychic-fangs
+707	Stomping Tantrum	Ground	Physical	10	75	100%	VII	stomping-tantrum
+708	Shadow Bone	Ghost	Physical	10	85	100%	VII	shadow-bone
+709	Accelerock	Rock	Physical	20	40	100%	VII	accelerock
+710	Liquidation	Water	Physical	10	85	100%	VII	liquidation
+711	Prismatic Laser	Psychic	Special	10	160	100%	VII	prismatic-laser
+712	Spectral Thief	Ghost	Physical	10	90	100%	VII	spectral-thief
+713	Sunsteel Strike	Steel	Physical	5	100	100%	VII	sunsteel-strike
+714	Moongeist Beam	Ghost	Special	5	100	100%	VII	moongeist-beam
+715	Tearful Look	Normal	Status	20	—	—%	VII	tearful-look
+716	Zing Zap	Electric	Physical	10	80	100%	VII	zing-zap
+717	Nature's Madness	Fairy	Special	10	—	90%	VII	natures-madness
+718	Multi-Attack	Normal	Physical	10	120	100%	VII	multi-attack
+719	10,000,000 Volt Thunderbolt	Electric	Special	1	195	—%	VII	---volt-thunderbolt
+720	Mind Blown	Fire	Special	5	150	100%	VII	mind-blown
+721	Plasma Fists	Electric	Physical	15	100	100%	VII	plasma-fists
+722	Photon Geyser	Psychic	Special	5	100	100%	VII	photon-geyser
+723	Light That Burns the Sky	Psychic	Special	1	200	—%	VII	light-that-burns-the-sky
+724	Searing Sunraze Smash	Steel	Physical	1	200	—%	VII	searing-sunraze-smash
+725	Menacing Moonraze Maelstrom	Ghost	Special	1	200	—%	VII	menacing-moonraze-maelstrom
+726	Let's Snuggle Forever	Fairy	Physical	1	190	—%	VII	lets-snuggle-forever
+727	Splintered Stormshards	Rock	Physical	1	190	—%	VII	splintered-stormshards
+728	Clangorous Soulblaze	Dragon	Special	1	185	—%	VII	clangorous-soulblaze
+729	Zippy Zap	Electric	Physical	10	80	100%	VII	zippy-zap
+730	Splishy Splash	Water	Special	15	90	100%	VII	splishy-splash
+731	Floaty Fall	Flying	Physical	15	90	95%	VII	floaty-fall
+732	Pika Papow	Electric	Special	20	—	—%	VII	pika-papow
+733	Bouncy Bubble	Water	Special	20	60	100%	VII	bouncy-bubble
+734	Buzzy Buzz	Electric	Special	20	60	100%	VII	buzzy-buzz
+735	Sizzly Slide	Fire	Physical	20	60	100%	VII	sizzly-slide
+736	Glitzy Glow	Psychic	Special	15	80	95%	VII	glitzy-glow
+737	Baddy Bad	Dark	Special	15	80	95%	VII	baddy-bad
+738	Sappy Seed	Grass	Physical	10	100	90%	VII	sappy-seed
+739	Freezy Frost	Ice	Special	10	100	90%	VII	freezy-frost
+740	Sparkly Swirl	Fairy	Special	5	120	85%	VII	sparkly-swirl
+741	Veevee Volley	Normal	Physical	20	—	—%	VII	veevee-volley
+742	Double Iron Bash	Steel	Physical	5	60	100%	VII	double-iron-bash
+743	Max Guard	Normal	Status	10	—	—%	VIII	max-guard
+744	Dynamax Cannon	Dragon	Special	5	100	100%	VIII	dynamax-cannon
+745	Snipe Shot	Water	Special	15	80	100%	VIII	snipe-shot
+746	Jaw Lock	Dark	Physical	10	80	100%	VIII	jaw-lock
+747	Stuff Cheeks	Normal	Status	10	—	—%	VIII	stuff-cheeks
+748	No Retreat	Fighting	Status	5	—	—%	VIII	no-retreat
+749	Tar Shot	Rock	Status	15	—	100%	VIII	tar-shot
+750	Magic Powder	Psychic	Status	20	—	100%	VIII	magic-powder
+751	Dragon Darts	Dragon	Physical	10	50	100%	VIII	dragon-darts
+752	Teatime	Normal	Status	10	—	—%	VIII	teatime
+753	Octolock	Fighting	Status	15	—	100%	VIII	octolock
+754	Bolt Beak	Electric	Physical	10	85	100%	VIII	bolt-beak
+755	Fishious Rend	Water	Physical	10	85	100%	VIII	fishious-rend
+756	Court Change	Normal	Status	10	—	100%	VIII	court-change
+757	Max Flare	Fire	???	10	—	—%	VIII	max-flare
+758	Max Flutterby	Bug	???	10	—	—%	VIII	max-flutterby
+759	Max Lightning	Electric	???	10	—	—%	VIII	max-lightning
+760	Max Strike	Normal	???	10	—	—%	VIII	max-strike
+761	Max Knuckle	Fighting	???	10	—	—%	VIII	max-knuckle
+762	Max Phantasm	Ghost	???	10	—	—%	VIII	max-phantasm
+763	Max Hailstorm	Ice	???	10	—	—%	VIII	max-hailstorm
+764	Max Ooze	Poison	???	10	—	—%	VIII	max-ooze
+765	Max Geyser	Water	???	10	—	—%	VIII	max-geyser
+766	Max Airstream	Flying	???	10	—	—%	VIII	max-airstream
+767	Max Starfall	Fairy	???	10	—	—%	VIII	max-starfall
+768	Max Wyrmwind	Dragon	???	10	—	—%	VIII	max-wyrmwind
+769	Max Mindstorm	Psychic	???	10	—	—%	VIII	max-mindstorm
+770	Max Rockfall	Rock	???	10	—	—%	VIII	max-rockfall
+771	Max Quake	Ground	???	10	—	—%	VIII	max-quake
+772	Max Darkness	Dark	???	10	—	—%	VIII	max-darkness
+773	Max Overgrowth	Grass	???	10	—	—%	VIII	max-overgrowth
+774	Max Steelspike	Steel	???	10	—	—%	VIII	max-steelspike
+775	Clangorous Soul	Dragon	Status	5	—	—%	VIII	clangorous-soul
+776	Body Press	Fighting	Physical	10	80	100%	VIII	body-press
+777	Decorate	Fairy	Status	15	—	—%	VIII	decorate
+778	Drum Beating	Grass	Physical	10	80	100%	VIII	drum-beating
+779	Snap Trap	Grass	Physical	15	35	100%	VIII	snap-trap
+780	Pyro Ball	Fire	Physical	5	120	90%	VIII	pyro-ball
+781	Behemoth Blade	Steel	Physical	5	100	100%	VIII	behemoth-blade
+782	Behemoth Bash	Steel	Physical	5	100	100%	VIII	behemoth-bash
+783	Aura Wheel	Electric	Physical	10	110	100%	VIII	aura-wheel
+784	Breaking Swipe	Dragon	Physical	15	60	100%	VIII	breaking-swipe
+785	Branch Poke	Grass	Physical	40	40	100%	VIII	branch-poke
+786	Overdrive	Electric	Special	10	80	100%	VIII	overdrive
+787	Apple Acid	Grass	Special	10	80	100%	VIII	apple-acid
+788	Grav Apple	Grass	Physical	10	80	100%	VIII	grav-apple
+789	Spirit Break	Fairy	Physical	15	75	100%	VIII	spirit-break
+790	Strange Steam	Fairy	Special	10	90	95%	VIII	strange-steam
+791	Life Dew	Water	Status	10	—	—%	VIII	life-dew
+792	Obstruct	Dark	Status	10	—	100%	VIII	obstruct
+793	False Surrender	Dark	Physical	10	80	—%	VIII	false-surrender
+794	Meteor Assault	Fighting	Physical	5	150	100%	VIII	meteor-assault
+795	Eternabeam	Dragon	Special	5	160	90%	VIII	eternabeam
+796	Steel Beam	Steel	Special	5	140	95%	VIII	steel-beam
+797	Expanding Force	Psychic	Special	10	80	100%	VIII	expanding-force
+798	Steel Roller	Steel	Physical	5	130	100%	VIII	steel-roller
+799	Scale Shot	Dragon	Physical	20	25	90%	VIII	scale-shot
+800	Meteor Beam	Rock	Special	10	120	90%	VIII	meteor-beam
+801	Shell Side Arm	Poison	Special	10	90	100%	VIII	shell-side-arm
+802	Misty Explosion	Fairy	Special	5	100	100%	VIII	misty-explosion
+803	Grassy Glide	Grass	Physical	20	60	100%	VIII	grassy-glide
+804	Rising Voltage	Electric	Special	20	70	100%	VIII	rising-voltage
+805	Terrain Pulse	Normal	Special	10	50	100%	VIII	terrain-pulse
+806	Skitter Smack	Bug	Physical	10	70	90%	VIII	skitter-smack
+807	Burning Jealousy	Fire	Special	5	70	100%	VIII	burning-jealousy
+808	Lash Out	Dark	Physical	5	75	100%	VIII	lash-out
+809	Poltergeist	Ghost	Physical	5	110	90%	VIII	poltergeist
+810	Corrosive Gas	Poison	Status	40	—	100%	VIII	corrosive-gas
+811	Coaching	Fighting	Status	10	—	—%	VIII	coaching
+812	Flip Turn	Water	Physical	20	60	100%	VIII	flip-turn
+813	Triple Axel	Ice	Physical	10	20	90%	VIII	triple-axel
+814	Dual Wingbeat	Flying	Physical	10	40	90%	VIII	dual-wingbeat
+815	Scorching Sands	Ground	Special	10	70	100%	VIII	scorching-sands
+816	Jungle Healing	Grass	Status	10	—	—%	VIII	jungle-healing
+817	Wicked Blow	Dark	Physical	5	75	100%	VIII	wicked-blow
+818	Surging Strikes	Water	Physical	5	25	100%	VIII	surging-strikes
+819	Thunder Cage	Electric	Special	15	80	90%	VIII	thunder-cage
+820	Dragon Energy	Dragon	Special	5	150	100%	VIII	dragon-energy
+821	Freezing Glare	Psychic	Special	10	90	100%	VIII	freezing-glare
+822	Fiery Wrath	Dark	Special	10	90	100%	VIII	fiery-wrath
+823	Thunderous Kick	Fighting	Physical	10	90	100%	VIII	thunderous-kick
+824	Glacial Lance	Ice	Physical	5	120	100%	VIII	glacial-lance
+825	Astral Barrage	Ghost	Special	5	120	100%	VIII	astral-barrage
+826	Eerie Spell	Psychic	Special	5	80	100%	VIII	eerie-spell
+827	Dire Claw	Poison	Physical	15	80	100%	VIII	dire-claw
+828	Psyshield Bash	Psychic	Physical	10	70	90%	VIII	psyshield-bash
+829	Power Shift	Normal	Status	10	—	—%	VIII	power-shift
+830	Stone Axe	Rock	Physical	15	65	90%	VIII	stone-axe
+831	Springtide Storm	Fairy	Special	10	100	80%	VIII	springtide-storm
+832	Mystical Power	Psychic	Special	10	70	90%	VIII	mystical-power
+833	Raging Fury	Fire	Physical	10	120	100%	VIII	raging-fury
+834	Wave Crash	Water	Physical	10	120	100%	VIII	wave-crash
+835	Chloroblast	Grass	Special	5	150	95%	VIII	chloroblast
+836	Mountain Gale	Ice	Physical	10	100	85%	VIII	mountain-gale
+837	Victory Dance	Fighting	Status	10	—	—%	VIII	victory-dance
+838	Headlong Rush	Ground	Physical	5	120	100%	VIII	headlong-rush
+839	Barb Barrage	Poison	Physical	10	60	100%	VIII	barb-barrage
+840	Esper Wing	Psychic	Special	10	80	100%	VIII	esper-wing
+841	Bitter Malice	Ghost	Special	10	75	100%	VIII	bitter-malice
+842	Shelter	Steel	Status	10	—	—%	VIII	shelter
+843	Triple Arrows	Fighting	Physical	10	90	100%	VIII	triple-arrows
+844	Infernal Parade	Ghost	Special	15	60	100%	VIII	infernal-parade
+845	Ceaseless Edge	Dark	Physical	15	65	90%	VIII	ceaseless-edge
+846	Bleakwind Storm	Flying	Special	10	100	80%	VIII	bleakwind-storm
+847	Wildbolt Storm	Electric	Special	10	100	80%	VIII	wildbolt-storm
+848	Sandsear Storm	Ground	Special	10	100	80%	VIII	sandsear-storm
+849	Lunar Blessing	Psychic	Status	5	—	—%	VIII	lunar-blessing
+850	Take Heart	Psychic	Status	10	—	—%	VIII	take-heart
+851	Tera Blast	Normal	Special	10	80	100%	IX	tera-blast
+852	Silk Trap	Bug	Status	10	—	—%	IX	silk-trap
+853	Axe Kick	Fighting	Physical	10	120	90%	IX	axe-kick
+854	Last Respects	Ghost	Physical	10	50	100%	IX	last-respects
+855	Lumina Crash	Psychic	Special	10	80	100%	IX	lumina-crash
+856	Order Up	Dragon	Physical	10	80	100%	IX	order-up
+857	Jet Punch	Water	Physical	15	60	100%	IX	jet-punch
+858	Spicy Extract	Grass	Status	15	—	—%	IX	spicy-extract
+859	Spin Out	Steel	Physical	5	100	100%	IX	spin-out
+860	Population Bomb	Normal	Physical	10	20	90%	IX	population-bomb
+861	Ice Spinner	Ice	Physical	15	80	100%	IX	ice-spinner
+862	Glaive Rush	Dragon	Physical	5	120	100%	IX	glaive-rush
+863	Revival Blessing	Normal	Status	1	—	—%	IX	revival-blessing
+864	Salt Cure	Rock	Physical	15	40	100%	IX	salt-cure
+865	Triple Dive	Water	Physical	10	30	95%	IX	triple-dive
+866	Mortal Spin	Poison	Physical	15	30	100%	IX	mortal-spin
+867	Doodle	Normal	Status	10	—	100%	IX	doodle
+868	Fillet Away	Normal	Status	10	—	—%	IX	fillet-away
+869	Kowtow Cleave	Dark	Physical	10	85	—%	IX	kowtow-cleave
+870	Flower Trick	Grass	Physical	10	70	—%	IX	flower-trick
+871	Torch Song	Fire	Special	10	80	100%	IX	torch-song
+872	Aqua Step	Water	Physical	10	80	100%	IX	aqua-step
+873	Raging Bull	Normal	Physical	10	90	100%	IX	raging-bull
+874	Make It Rain	Steel	Special	5	120	100%	IX	make-it-rain
+875	Psyblade	Psychic	Physical	15	80	100%	IX	psyblade
+876	Hydro Steam	Water	Special	15	80	100%	IX	hydro-steam
+877	Ruination	Dark	Special	10	—	90%	IX	ruination
+878	Collision Course	Fighting	Physical	5	100	100%	IX	collision-course
+879	Electro Drift	Electric	Special	5	100	100%	IX	electro-drift
+880	Shed Tail	Normal	Status	10	—	—%	IX	shed-tail
+881	Chilly Reception	Ice	Status	10	—	—%	IX	chilly-reception
+882	Tidy Up	Normal	Status	10	—	—%	IX	tidy-up
+883	Snowscape	Ice	Status	10	—	—%	IX	snowscape
+884	Pounce	Bug	Physical	20	50	100%	IX	pounce
+885	Trailblaze	Grass	Physical	20	50	100%	IX	trailblaze
+886	Chilling Water	Water	Special	20	50	100%	IX	chilling-water
+887	Hyper Drill	Normal	Physical	5	100	100%	IX	hyper-drill
+888	Twin Beam	Psychic	Special	10	40	100%	IX	twin-beam
+889	Rage Fist	Ghost	Physical	10	50	100%	IX	rage-fist
+890	Armor Cannon	Fire	Special	5	120	100%	IX	armor-cannon
+891	Bitter Blade	Fire	Physical	10	90	100%	IX	bitter-blade
+892	Double Shock	Electric	Physical	5	120	100%	IX	double-shock
+893	Gigaton Hammer	Steel	Physical	5	160	100%	IX	gigaton-hammer
+894	Comeuppance	Dark	Physical	10	—	100%	IX	comeuppance
+895	Aqua Cutter	Water	Physical	20	70	100%	IX	aqua-cutter
+896	Blazing Torque	Fire	Physical	10	80	100%	IX	blazing-torque
+897	Wicked Torque	Dark	Physical	10	80	100%	IX	wicked-torque
+898	Noxious Torque	Poison	Physical	10	100	100%	IX	noxious-torque
+899	Combat Torque	Fighting	Physical	10	100	100%	IX	combat-torque
+900	Magical Torque	Fairy	Physical	10	100	100%	IX	magical-torque
+901	Blood Moon	Normal	Special	5	140	100%	IX	blood-moon
+902	Matcha Gotcha	Grass	Special	15	80	90%	IX	matcha-gotcha
+903	Syrup Bomb	Grass	Special	10	60	85%	IX	syrup-bomb
+904	Ivy Cudgel	Grass	Physical	10	100	100%	IX	ivy-cudgel
+905	Electro Shot	Electric	Special	10	130	100%	IX	electro-shot
+906	Tera Starstorm	Normal	Special	5	120	100%	IX	tera-starstorm
+907	Fickle Beam	Dragon	Special	5	80	100%	IX	fickle-beam
+908	Burning Bulwark	Fire	Status	10	—	—%	IX	burning-bulwark
+909	Thunderclap	Electric	Special	5	70	100%	IX	thunderclap
+910	Mighty Cleave	Rock	Physical	5	95	100%	IX	mighty-cleave
+911	Tachyon Cutter	Steel	Special	10	50	—%	IX	tachyon-cutter
+912	Hard Press	Steel	Physical	10	—	100	IX	hard-press
+913	Dragon Cheer	Dragon	Status	15	—	—%	IX	dragon-cheer
+914	Alluring Voice	Fairy	Special	10	80	100%	IX	alluring-voice
+915	Temper Flare	Fire	Physical	10	75	100%	IX	temper-flare
+916	Supercell Slam	Electric	Physical	15	100	95%	IX	supercell-slam
+917	Psychic Noise	Psychic	Special	10	75	100%	IX	psychic-noise
+918	Upper Hand	Fighting	Physical	15	65	100%	IX	upper-hand
+919	Malignant Chain	Poison	Special	5	100	100%	IX	malignant-chain
