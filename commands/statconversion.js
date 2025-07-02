@@ -86,92 +86,86 @@ module.exports.run = async (interaction) => {
 
 		ability = Math.ceil((value * 0.15) + 1.5);
 		logger.info("[statconversion] converted HP to CON.");
-		interaction.followUp("With " + stages + ", an HP stat of " + value + " becomes a Constitution score of " + ability + " Note: Final HP value used should be equal to the base stat plus HP IVs.");
+		interaction.followUp("An HP stat of " + value + " becomes a Constitution score of " + ability + " Note: Final HP value used should be equal to the base stat plus HP IVs. Stages don't apply to HP/CON!");
 
 	} else if (option === 'Attack') {
 
-		ability = Math.ceil((value * 0.15) + 1.5);
-		ability = Math.floor(ability * stageMult);
+		ability = Math.ceil((value * stageMult * 0.15) + 1.5);
 		logger.info("[statconversion] converted Attack to STR.");
-		interaction.followUp("With " + stages + ", an Attack stat of " + value + " becomes a Strength score of " + ability);
+		interaction.followUp("With " + stages + " stages, an Attack stat of " + value + " becomes a Strength score of " + ability);
 
 	} else if (option === 'Defense') {
 
-		ability = Math.ceil((value * 0.08) - 0.6);
-		ability = Math.floor(ability * stageMult);
+		ability = Math.ceil((value * stageMult * 0.08) - 0.6);
 		logger.info("[statconversion] converted Defense to Natural Armor.");
-		interaction.followUp("With " + stages + ", a Defense stat of " + value + " becomes a Natural Armor value of " + ability);
+		interaction.followUp("With " + stages + " stages, a Defense stat of " + value + " becomes a Natural Armor value of " + ability);
 
 	} else if (option === 'Special Attack') {
 
-		ability = Math.ceil((value * 0.15) + 1.5);
-		ability = Math.floor(ability * stageMult);
+		ability = Math.ceil((value * stageMult * 0.15) + 1.5);
 		logger.info("[statconversion] converted Special Attack to INT.");
-		interaction.followUp("With " + stages + ", a Special Attack stat of " + value + " becomes an Intelligence score of " + ability);
+		interaction.followUp("With " + stages + " stages, a Special Attack stat of " + value + " becomes an Intelligence score of " + ability);
 
 	} else if (option === 'Special Defense') {
 
 		ability = Math.ceil((value * 0.15) + 1.5);
-		ability = Math.floor(ability * stageMult);
 		logger.info("[statconversion] converted Special Defense to WIS.");
-		interaction.followUp("With " + stages + ", a Special Defense stat of " + value + " becomes a Wisdom score of " + ability);
+		interaction.followUp("With " + stages + " stages, a Special Defense stat of " + value + " becomes a Wisdom score of " + ability);
 
 	} else if (option === 'Speed') {
 
-		ability = Math.ceil((value * 0.15) + 1.5);
-		ability = Math.floor(ability * stageMult);
-		ability2 = Math.ceil((0.38 * value) + 4);
-		ability2 = Math.floor(ability2 * stageMult);
+		ability = Math.ceil((value * stageMult * 0.15) + 1.5);
+		ability2 = Math.ceil((0.38 * (value * stageMult)) + 4);
 		logger.info("[statconversion] converted Speed to Dexterity and Move Speed.");
-		interaction.followUp("With " + stages + ", a Speed stat of " + value + " becomes a Dexterity score of " + ability + " and a Move Speed of " + ability2 + " feet per round");
+		interaction.followUp("With " + stages + " stages, a Speed stat of " + value + " becomes a Dexterity score of " + ability + " and a Move Speed of " + ability2 + " feet per round");
 
 	} else if (option === 'Constitution'){
 
 		ability = Math.floor((value-1.5) * (20/3));
 		logger.info("[statconversion] converted CON to HP.");
-		interaction.followUp("A Constitution of " + value + " becomes a maximum HP stat of " + ability);
+		interaction.followUp("A Constitution of " + value + " becomes a maximum HP stat of " + ability + ". Stages don't apply to HP/CON!");
 
 	} else if (option === 'Strength'){
 
 		ability = Math.floor((value-1.5) * (20/3));
 		ability = Math.floor(ability * stageMult);
 		logger.info("[statconversion] converted STR to Attack.");
-		interaction.followUp("A Strength of " + value + " becomes a maximum Attack stat of " + ability + ". Stages don't apply to HP/CON!");
+		interaction.followUp("With " + stages + " stages, a Strength of " + value + " becomes a maximum Attack stat of " + ability);
 
 	} else if (option === 'Natural Armor'){
 
 		ability = Math.floor((value+0.6) * 12.5);
 		ability = Math.floor(ability * stageMult);
 		logger.info("[statconversion] converted Natural Armor to Defense.");
-		interaction.followUp("With " + stages + ", a Natural Armor of " + value + " becomes a maximum Defense stat of " + ability);
+		interaction.followUp("With " + stages + " stages, a Natural Armor of " + value + " becomes a maximum Defense stat of " + ability);
 		
 	} else if (option === 'Intelligence'){
 
 		ability = Math.floor((value-1.5) * (20/3));
 		ability = Math.floor(ability * stageMult);
 		logger.info("[statconversion] converted INT to Special Attack.");
-		interaction.followUp("With " + stages + ", an Intelligence of " + value + " becomes a maximum Special Attack stat of " + ability);
+		interaction.followUp("With " + stages + " stages, an Intelligence of " + value + " becomes a maximum Special Attack stat of " + ability);
 		
 	} else if (option === 'Wisdom'){
 
 		ability = Math.floor((value-1.5) * (20/3));
 		ability = Math.floor(ability * stageMult);
 		logger.info("[statconversion] converted WIS to Special Defense.");
-		interaction.followUp("With " + stages + ", a Wisdom of " + value + " becomes a maximum Special Defense stat of " + ability);
+		interaction.followUp("With " + stages + " stages, a Wisdom of " + value + " becomes a maximum Special Defense stat of " + ability);
 		
 	} else if (option === 'Dexterity'){
 
 		ability = Math.floor((value-1.5) * (20/3));
 		ability = Math.floor(ability * stageMult);
 		logger.info("[statconversion] converted DEX to Speed.");
-		interaction.followUp("With " + stages + ", a Dexterity of " + value + " becomes a maximum Speed stat of " + ability + ", which may not match with a conversion from Move Speed");
+		interaction.followUp("With " + stages + " stages, a Dexterity of " + value + " becomes a maximum Speed stat of " + ability + ", which may not match with a conversion from Move Speed");
 		
 	} else if (option === 'Move Speed'){
 
 		ability = Math.floor((value-4) * (50/19));
 		ability = Math.floor(ability * stageMult);
 		logger.info("[statconversion] converted Move Speed to Speed.");
-		interaction.followUp("With " + stages + ", a Move Speed of " + value + " becomes a maximum Speed stat of " + ability + ", which may not match with a conversion from Dexterity");
+		interaction.followUp("With " + stages + " stages, a Move Speed of " + value + " becomes a maximum Speed stat of " + ability + ", which may not match with a conversion from Dexterity");
 		
 	}
 	return;
