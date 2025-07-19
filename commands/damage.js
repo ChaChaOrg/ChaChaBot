@@ -394,8 +394,8 @@ module.exports.run = async (interaction) => {
               //
               // Grab each pokemon's types into a temporary object
               //
-              let attackerTypes = [attackPoke.type1, attackPoke.type2];
-              let defenderTypes = [defendPoke.type1, defendPoke.type2];
+              let attackerTypes = [attackPoke.type1.toLowerCase(), attackPoke.type2.toLowerCase()];
+              let defenderTypes = [defendPoke.type1.toLowerCase(), defendPoke.type2.toLowerCase()];
 
               //Set STAB bonus
               //If either of the Pokemon's types are the same as the move, stab is set to 1.5. Other wise it is 1.0
@@ -766,10 +766,12 @@ module.exports.run = async (interaction) => {
               //
               // Grab the pokemon's types into a temporary object, create a type for the trainer
               //
-              let attackerTypes = [attackPoke.type1, attackPoke.type2];
+              let attackerTypes = [attackPoke.type1.toLowerCase(), attackPoke.type2.toLowerCase()];
               let defenderTypes = [2];
               defenderTypes[0] = interaction.options.getString("type1") ?? '';
+              defenderTypes[0] = defenderTypes[0].toLowerCase();
               defenderTypes[1] = interaction.options.getString("type2") ?? '';
+              defenderTypes[1] = defenderTypes[1].toLowerCase();
 
               //Set STAB bonus
               //If either of the Pokemon's types are the same as the move, stab is set to 1.5. Other wise it is 1.0
@@ -1178,7 +1180,7 @@ module.exports.run = async (interaction) => {
               //
               // Grab each pokemon's types into a temporary object
               //
-              let defenderTypes = [defendPoke.type1, defendPoke.type2];
+              let defenderTypes = [defendPoke.type1.toLowerCase(), defendPoke.type2.toLowerCase()];
 
               //Set STAB bonus
               //If either of the Pokemon's types are the same as the move, stab is set to 1.5. Other wise it is 1.0
@@ -1504,7 +1506,7 @@ module.exports.run = async (interaction) => {
           //
           // Grab defender's types into a temporary object
           //
-          let defenderTypes = [interaction.options.getString("type1"), interaction.options.getString("type2")];
+          let defenderTypes = [interaction.options.getString("type1").toLowerCase(), interaction.options.getString("type2").toLowerCase()];
 
           //Set STAB bonus
           //If either of the Pokemon's types are the same as the move, stab is set to 1.5. Other wise it is 1.0
