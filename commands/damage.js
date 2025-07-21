@@ -295,8 +295,8 @@ module.exports.data = new SlashCommandBuilder()
           .setDescription('The number of hits for the move - default 1.')
           .setMinValue(0))
       .addStringOption(option =>
-        option.setName('move-name')
-          .setDescription('Name your custom move (for display only, optional)'))
+        option.setName('move-name-custom')
+          .setDescription('Name your custom move (for display only, optional, letters only).'))
       .addIntegerOption(option =>
         option.setName('stages-of-attack')
           .setDescription('Stages of attack/special attack the attacker has. Minimum -6, maximum +6')
@@ -378,7 +378,6 @@ module.exports.run = async (interaction) => {
       //let args_string = args.slice(0).join(" ")
 
       let attackerName;
-      let attackerMove;
       let defenderName;
       let bonusDef = 0;
       let bonusAtk = 0;
@@ -1986,12 +1985,11 @@ module.exports.run = async (interaction) => {
       //
 
       attackerName = interaction.options.getString('attacker-name');
-      attackerMove = interaction.options.getString('move-name');
       defenderName = interaction.options.getString('defender-name');
 
       let atkLevelOffset = interaction.options.getInteger('level-offset') ?? 0;
 
-      let moveName = interaction.options.getString('move-name') ?? "Custom Move";
+      let moveName = interaction.options.getString('move-name-custom') ?? "CustomMove";
       if (moveName.match(SQL_SANITATION_REGEX)){
         logger.error("[damage] User tried to put in invalid string input.");
         interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
