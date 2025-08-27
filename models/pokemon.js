@@ -1123,7 +1123,7 @@ Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
                             .catch(function (error) {
                                 if (!error.response) {
                                     console.log("Empty error response detected. Error: " + error);
-
+                                    //timeout bug, is it something i can do anything about?
                                     reject("Unknown Error.");
                                 } else {
                                     console.log("Error when retrieving pokemon Data :C  ERROR: ", error.response.statusText);

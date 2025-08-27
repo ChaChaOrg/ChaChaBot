@@ -205,11 +205,16 @@ module.exports.autocomplete = async (interaction) => {
       filtered.map(choice => ({ name: choice.name, value: choice.name })),
     )
   } else if (focusedValue.name === 'move-name') {
-    var choices = interaction.client.movelist;
-    const filtered = choices.filter(choice => choice[1].toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
+      const choices = interaction.client.movelist;
+      //const entries = choices.entries().toMemberArray();
+      const keys = Array.from(choices.keys());
+      //console.log(keys[1]);
+      const filtered = keys.filter(key => key.toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0,24);//toArray();//take(24).toArray();
+      //entries.filter(choice => choice[choice[1].toLowerCase().startsWith(focusedValue.value.toLowerCase())][choice[1].length - 1]).slice(0,24);//.toArray().slice(0, 24); .filter(key => key.toLowerCase().startsWith(focusedValue.value.toLowerCase()))
     await interaction.respond(
-      filtered.map(choice => ({ name: choice[1], value: choice[1].replace(' ', '-').replace('\'', '') })),
-    )
+      filtered.map(choice => ({ name: choice, value: choice})),
+      )
+      //filtered.map(choice => ({ name: choice[1], value: choice[1].replace(' ', '-').replace('\'', '') })),
   }
 };
 
@@ -277,7 +282,12 @@ module.exports.run = async (interaction) => {
       //
 
       attackerName = interaction.options.getString('attacker-name');
-      attackerMove = interaction.options.getString('move-name');
+      let movename = interaction.options.getString('move-name');
+      let move = interaction.client.movelist.get(movename);
+      attackerMove = move[move.length-1];
+      if (!attackerMove) {
+          attackerMove = interaction.options.getString('move-name');
+      }        
       defenderName = interaction.options.getString('defender-name');
 
       if (attackerName.toLowerCase() === defenderName.toLowerCase()) {
