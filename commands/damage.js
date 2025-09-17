@@ -295,8 +295,8 @@ module.exports.data = new SlashCommandBuilder()
           .setDescription('The number of hits for the move - default 1.')
           .setMinValue(0))
       .addStringOption(option =>
-        option.setName('move-name')
-          .setDescription('Name your custom move (for display only, optional)'))
+        option.setName('move-name-custom')
+          .setDescription('Name your custom move (for display only, optional, letters only).'))
       .addIntegerOption(option =>
         option.setName('stages-of-attack')
           .setDescription('Stages of attack/special attack the attacker has. Minimum -6, maximum +6')
@@ -378,7 +378,6 @@ module.exports.run = async (interaction) => {
       //let args_string = args.slice(0).join(" ")
 
       let attackerName;
-      let attackerMove;
       let defenderName;
       let bonusDef = 0;
       let bonusAtk = 0;
@@ -635,6 +634,14 @@ module.exports.run = async (interaction) => {
               let multiHitString = ``;
               let multiHitTotal = 0;
               let critBonus = 0;
+              let critAtk = 1;
+              let critDef = 1;
+              if(stageModAtk > 1){
+                critAtk = stageModAtk;
+              }
+              if(stageModDef < 1){
+                critDef = stageModDef;
+              }
               for (let hitNum = 0; hitNum < numHits; hitNum++) {
                 damageTotal =
                   ((10 * (attackPoke.level + atkLevelOffset) + 10) / 250) *
@@ -645,9 +652,18 @@ module.exports.run = async (interaction) => {
                   effective *
                   otherMult;
 
+                critTotal =
+                  ((10 * (attackPoke.level + atkLevelOffset) + 10) / 250) *
+                  ((tempAttack * critAtk) /
+                    (tempDefense * critDef)) *
+                  dicePool[hitNum] *
+                  stab *
+                  effective *
+                  otherMult;
+
                 multiHitTotal += damageTotal;
                 damageTotal = damageTotal.toFixed(0);
-                critTotal = (damageTotal * CRITICAL_HIT_MULTIPLIER).toFixed(0);
+                critTotal = (critTotal * CRITICAL_HIT_MULTIPLIER).toFixed(0);
                 critBonus = critTotal - damageTotal;
                 multiHitString += `Hit #` + (hitNum + 1) + ` -- **` + damageTotal + `** -- (+` + critBonus + `)\n`
                 combatString +=
@@ -1296,13 +1312,6 @@ module.exports.run = async (interaction) => {
                 return;
               }
 
-              // Make sure offset is valid.
-              if((attackPoke.level + atkLevelOffset) < 1){
-                logger.error("[damage] Level offset brought final level below 1.")
-                // Too much offset, went negative!
-                interaction.editReply("Invalid level offset!");
-                return;
-              }
 
               //
               // parse attack stages into the effect it has on damage.
@@ -1428,9 +1437,17 @@ module.exports.run = async (interaction) => {
               let multiHitString = ``;
               let multiHitTotal = 0;
               let critBonus = 0;
+              let critAtk = 1;
+              let critDef = 1;
+              if (stageModAtk > 1) {
+                critAtk = stageModAtk;
+              }
+              if (stageModDef < 1) {
+                critDef = stageModDef;
+              }
               for (let hitNum = 0; hitNum < numHits; hitNum++) {
                 damageTotal =
-                  ((10 * (level + atkLevelOffset) + 10) / 250) *
+                  ((10 * (level) + 10) / 250) *
                   ((tempAttack * stageModAtk) /
                     (tempDefense * stageModDef)) *
                   dicePool[hitNum] *
@@ -1438,9 +1455,18 @@ module.exports.run = async (interaction) => {
                   effective *
                   otherMult;
 
+                critTotal =
+                  ((10 * (level) + 10) / 250) *
+                  ((tempAttack * critAtk) /
+                    (tempDefense * critDef)) *
+                  dicePool[hitNum] *
+                  stab *
+                  effective *
+                  otherMult;
+
                 multiHitTotal += damageTotal;
                 damageTotal = damageTotal.toFixed(0);
-                critTotal = (damageTotal * CRITICAL_HIT_MULTIPLIER).toFixed(0);
+                critTotal = (critTotal * CRITICAL_HIT_MULTIPLIER).toFixed(0);
                 critBonus = critTotal - damageTotal;
                 multiHitString += `Hit #` + (hitNum + 1) + ` -- **` + damageTotal + `** -- (+` + critBonus + `)\n`
                 combatString +=
@@ -1988,12 +2014,11 @@ module.exports.run = async (interaction) => {
       //
 
       attackerName = interaction.options.getString('attacker-name');
-      attackerMove = interaction.options.getString('move-name');
       defenderName = interaction.options.getString('defender-name');
 
       let atkLevelOffset = interaction.options.getInteger('level-offset') ?? 0;
 
-      let moveName = interaction.options.getString('move-name') ?? "Custom Move";
+      let moveName = interaction.options.getString('move-name-custom') ?? "CustomMove";
       if (moveName.match(SQL_SANITATION_REGEX)){
         logger.error("[damage] User tried to put in invalid string input.");
         interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
@@ -2235,6 +2260,14 @@ module.exports.run = async (interaction) => {
             let multiHitString = ``;
             let multiHitTotal = 0;
             let critBonus = 0;
+            let critAtk = 1;
+            let critDef = 1;
+            if (stageModAtk > 1) {
+              critAtk = stageModAtk;
+            }
+            if (stageModDef < 1) {
+              critDef = stageModDef;
+            }
             for (let hitNum = 0; hitNum < numHits; hitNum++) {
               damageTotal =
                 ((10 * (attackPoke.level + atkLevelOffset) + 10) / 250) *
@@ -2245,9 +2278,18 @@ module.exports.run = async (interaction) => {
                 effective *
                 otherMult;
 
+              critTotal =
+                ((10 * (attackPoke.level + atkLevelOffset) + 10) / 250) *
+                ((tempAttack * critAtk) /
+                  (tempDefense * critDef)) *
+                dicePool[hitNum] *
+                stab *
+                effective *
+                otherMult;
+
               multiHitTotal += damageTotal;
               damageTotal = damageTotal.toFixed(0);
-              critTotal = (damageTotal * CRITICAL_HIT_MULTIPLIER).toFixed(0);
+              critTotal = (critTotal * CRITICAL_HIT_MULTIPLIER).toFixed(0);
               critBonus = critTotal - damageTotal;
               multiHitString += `Hit #` + (hitNum + 1) + ` -- **` + damageTotal + `** -- (+` + critBonus + `)\n`
               combatString +=
