@@ -27,7 +27,7 @@ const addMessage = "The \"add\" subcommand adds a form to the list of available 
     " 41 40 50 65 65 Ice null" +
     " 6 190 Field null 0\n";
 
-const REGEX_SANI_STRING = /[^a-zA-Z0-9'_]/;
+const REGEX_SANI_STRING = /[^a-zA-Z0-9'_\-]/;
 const REGEX_FORBID = /(^\s*DROP\s*$)|(\s+DROP\s+)|(\s+DROP\s*$)|(^\s*DROP\s+)|(^\s*TABLE\s*$)|(\s+TABLE\s*$)|(\s+TABLE\s+)|(^\s*TABLE\s+)|(^\s*INSERT\s*$)|(\s+INSERT\s+)|(\s+INSERT\s*$)|(^\s*INSERT\s+)|(^\s*DELETE\s*$)|(\s+DELETE\s+)|(\s+DELETE\s*$)|(^\s*DELETE\s+)/i;
 
 // JavaScript Document
@@ -142,6 +142,12 @@ module.exports.data = new SlashCommandBuilder()
             .setName('remove')
             .setDescription('removes a form from the database')
                 .addStringOption(option => option.setName('species-name').setDescription('Species Name').setRequired(true).setAutocomplete(true))
+                .addStringOption(option => option.setName('form-name').setDescription('Form Name').setRequired(true).setAutocomplete(true)))
+    .addSubcommand(subcommand =>
+        subcommand
+            .setName('show')
+            .setDescription('Displays detailed information for a form')
+                .addStringOption(option => option.setName('species-name').setDescription('Species Name').setRequired(true).setAutocomplete(true))
                 .addStringOption(option => option.setName('form-name').setDescription('Form Name').setRequired(true).setAutocomplete(true)));
 
 module.exports.autocomplete = async (interaction) => {
@@ -153,11 +159,14 @@ module.exports.autocomplete = async (interaction) => {
             filtered.map(choice => ({name:choice.species,value:choice.species})),
         );
     } else if (focused.name === 'form-name') {
-        let choices = interaction.client.formCache;
-        const filtered = choices.filter(choice => (!choice.private || (choice.discordID == interaction.user)) && choice.form.toLowerCase().startsWith(focused.value.toLowerCase())).slice(0,24);
-        await interaction.respond(
-            filtered.map(choice => ({name:choice.form, value:choice.form})),
-        );
+        const selectSpecies = interaction.options.getString('species-name')
+        if (selectSpecies) {
+            let choices = interaction.client.formCache;
+            const filtered = choices.filter(choice => (!choice.private || (choice.discordID == interaction.user)) && selectSpecies.toLowerCase() == choice.species.toLowerCase() && choice.form.toLowerCase().startsWith(focused.value.toLowerCase())).slice(0, 24);
+            await interaction.respond(
+                filtered.map(choice => ({ name: choice.form, value: choice.form })),
+            );
+        }        
     } else {
         //nope, not auto completed
     }
@@ -404,7 +413,7 @@ module.exports.run = async (interaction) =>
                 }
             });
 
-        } else if(interaction.options.getSubcommand("remove")){
+        } else if(interaction.options.getSubcommand() === "remove"){
             //in future, may want to add a confirmation step to the deletion process
             let species = interaction.options.getString("species-name").toLowerCase();
             let form = interaction.options.getString("form-name").toLowerCase();
@@ -455,6 +464,109 @@ module.exports.run = async (interaction) =>
 
 
             return;
+        } else if(interaction.options.getSubcommand() === "show"){
+
+            let species = interaction.options.getString("species-name").toLowerCase();
+            let form = interaction.options.getString("form-name").toLowerCase();
+
+            if (form.match(REGEX_SANI_STRING) || species.match(REGEX_SANI_STRING)) {
+
+                logger.error("[form show] User attempted to use invalid character.");
+                console.log("Invalid character detected.");
+                interaction.followUp("Please double check the spelling on your inputs.");
+                return;
+            }
+
+            logger.info("[form] Showing form");
+            let sql = `SELECT * FROM pokeForms WHERE species='` + species + `' AND form='` + form + `';`;
+            interaction.client.mysqlConnection.query(sql, function (err, result) {
+                if (err) {
+                    logger.error(err);
+                    throw err;
+                }
+                if (result.length < 1) {
+                    logger.info("[form] No form to show");
+                    interaction.editReply({ content: "There were no forms matching your selection.", components: [] });
+                } else if (result.length > 1) {
+                    logger.info("[form] Multiple results for show!")
+                    interaction.editReply({ content: "Multiple results. Please confirm the form name.", components: [] });
+                } else {
+                    logger.info("[form] got form.");
+                    if (result[0].private == 1 && result[0].discordID != interaction.user.id) {
+                        logger.info("[form] Invalid user tried to access private form");
+                        interaction.editReply({ content: "There were no forms matching your selection.", components: [] });
+                        return;
+                    }
+                    // Set up Form Summary
+                    let avatarURL = interaction.user.avatarURL();
+                    let username = interaction.user.username;
+
+                    let typeString = result[0].type1;
+                    if(result[0].type2){
+                        typeString += ", " + result[0].type2;
+                    }
+
+                    let abilityString = "1: " + result[0].ability1;
+                    if(result[0].ability2){
+                        abilityString += "\n2: " + result[0].ability2;
+                    }
+                    if(result[0].ability3){
+                        abilityString += "\n3: " + result[0].ability3;
+                    }
+
+                    let eggGroupString = "";
+                    if(result[0].eggGroup1){
+                        eggGroupString += "1: " + result[0].eggGroup1;
+                    }
+                    if(result[0].eggGroup2){
+                        eggGroupString += "\n2: " + result[0].eggGroup2;
+                    }
+                    if(!eggGroupString){
+                        eggGroupString = "n/a";
+                    }
+
+                    let formEmbedString = {
+                        color: 3447003,
+                        author: {
+                            name: username,
+                            icon_url: avatarURL,
+                        },
+                        title: `The ${result[0].form} form of ${result[0].species}`,
+
+                        fields: [
+
+                            {
+                                name: "Types",
+                                value: `${typeString}`,
+                            },
+                            {
+                                name: "Abilities",
+                                value: `${abilityString}`,
+                            },
+                            {
+                                name: "Base Stats",
+                                value: `HP: ${result[0].hpBST}\nAttack: ${result[0].atkBST}\nDefense: ${result[0].defBST}\nSpecial Attack: ${result[0].spaBST}\nSpecial Defense: ${result[0].spdBST}\nSpeed: ${result[0].speBST}`,
+                            },
+                            {
+                                name: "Gender Rate",
+                                value: `${result[0].genderRate}`,
+                            },
+                            {
+                                name: "Capture Rate",
+                                value: `${result[0].captureRate}`,
+                            },
+                            {
+                                name: "Egg Groups",
+                                value: `${eggGroupString}`,
+                            }
+
+
+                        ]
+                    }
+
+                    interaction.editReply({embeds: [formEmbedString]});
+                }
+            });
         }
     } catch (error){
         logger.error("[form] " + error.message);
