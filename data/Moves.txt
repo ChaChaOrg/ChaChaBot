@@ -173,7 +173,7 @@
 173	Snore	Normal	Special	15	50	100%	II	snore
 174	Curse	Ghost	Status	10	—	—%	II	curse
 175	Flail	Normal	Physical	15	—	100%	II	flail
-176	Conversion 2	Normal	Status	30	—	—%	II	conversion-
+176	Conversion 2	Normal	Status	30	—	—%	II	conversion-2
 177	Aeroblast	Flying	Special	5	100	95%	II	aeroblast
 178	Cotton Spore	Grass	Status	40	—	100%	II	cotton-spore
 179	Reversal	Fighting	Physical	15	—	100%	II	reversal
@@ -696,7 +696,7 @@
 696	Malicious Moonsault	Dark	Physical	1	180	—%	VII	malicious-moonsault
 697	Oceanic Operetta	Water	Special	1	195	—%	VII	oceanic-operetta
 698	Guardian of Alola	Fairy	Special	1	—	—%	VII	guardian-of-alola
-699	Soul-Stealing 7-Star Strike	Ghost	Physical	1	195	—%	VII	soul-stealing--star-strike
+699	Soul-Stealing 7-Star Strike	Ghost	Physical	1	195	—%	VII	soul-stealing-7-star-strike
 700	Stoked Sparksurfer	Electric	Special	1	175	—%	VII	stoked-sparksurfer
 701	Pulverizing Pancake	Normal	Physical	1	210	—%	VII	pulverizing-pancake
 702	Extreme Evoboost	Normal	Status	1	—	—%	VII	extreme-evoboost
