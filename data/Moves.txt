@@ -716,7 +716,7 @@
 716	Zing Zap	Electric	Physical	10	80	100%	VII	zing-zap
 717	Nature's Madness	Fairy	Special	10	—	90%	VII	natures-madness
 718	Multi-Attack	Normal	Physical	10	120	100%	VII	multi-attack
-719	10,000,000 Volt Thunderbolt	Electric	Special	1	195	—%	VII	---volt-thunderbolt
+719	10,000,000 Volt Thunderbolt	Electric	Special	1	195	—%	VII	10-000-000-volt-thunderbolt
 720	Mind Blown	Fire	Special	5	150	100%	VII	mind-blown
 721	Plasma Fists	Electric	Physical	15	100	100%	VII	plasma-fists
 722	Photon Geyser	Psychic	Special	5	100	100%	VII	photon-geyser
@@ -917,3 +917,4 @@
 917	Psychic Noise	Psychic	Special	10	75	100%	IX	psychic-noise
 918	Upper Hand	Fighting	Physical	15	65	100%	IX	upper-hand
 919	Malignant Chain	Poison	Special	5	100	100%	IX	malignant-chain
+920	Nihil Light	Dragon	Special	10	200	100%	IX	nihil-light
