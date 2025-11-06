@@ -487,6 +487,13 @@ module.exports.run = async (interaction) => {
         });
 
         Promise.all(loadSQLPromise).then((response) => {
+          
+          if(!attackPoke.speciesData || !defendPoke.speciesData){
+            logger.error("[damage] No Pokemon data returned - possible API/Connection error.")
+            // If Move or Type data is missing, the API call failed
+            interaction.editReply("Pokemon present but no data returned. This is likely an API or Connection error. Please try again.");
+            return;
+          }
           //
           // Now that the pokemon have been found, grab the move information and the relevant type information.
           //
@@ -902,6 +909,12 @@ module.exports.run = async (interaction) => {
         loadSQLPromise.push(attackPoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, response[0]));
 
         Promise.all(loadSQLPromise).then((response) => {
+          if(!attackPoke.speciesData){
+            logger.error("[damage] No Pokemon data returned - possible API/Connection error.")
+            // If Move or Type data is missing, the API call failed
+            interaction.editReply("Pokemon present but no data returned. This is likely an API or Connection error. Please try again.");
+            return;
+          }
           //
           // Now that the pokemon has been found, grab the move information and the relevant type information.
           //
@@ -1300,6 +1313,12 @@ module.exports.run = async (interaction) => {
         loadSQLPromise.push(defendPoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, response[0]));
 
         Promise.all(loadSQLPromise).then((response) => {
+          if(!defendPoke.speciesData){
+            logger.error("[damage] No Pokemon data returned - possible API/Connection error.")
+            // If Move or Type data is missing, the API call failed
+            interaction.editReply("Pokemon present but no data returned. This is likely an API or Connection error. Please try again.");
+            return;
+          }
           //
           // Now that the pokemon have been found, grab the move information and the relevant type information.
           //
@@ -2111,6 +2130,12 @@ module.exports.run = async (interaction) => {
         });
 
         Promise.all(loadSQLPromise).then((response) => {
+          if(!attackPoke.speciesData || !defendPoke.speciesData){
+            logger.error("[damage] No Pokemon data returned - possible API/Connection error.")
+            // If Move or Type data is missing, the API call failed
+            interaction.editReply("Pokemon present but no data returned. This is likely an API or Connection error. Please try again.");
+            return;
+          }
 
           interaction.client.pokedex.getTypeByName(moveType).then((typeData) => {
             if(typeof typeData === undefined){
