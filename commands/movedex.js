@@ -19,7 +19,7 @@ module.exports.autocomplete = async (interaction) => {
 
   const filtered = choices.filter(choice => choice[1].toLowerCase().startsWith(focusedValue.toLowerCase())).slice(0, 24);
   await interaction.respond(
-    filtered.map(choice => ({ name: choice[1], value: choice[1] })),
+    filtered.map(choice => ({ name: choice[1], value: choice[8] })),
   )
 };
 

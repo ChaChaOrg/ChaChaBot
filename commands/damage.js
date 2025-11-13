@@ -331,7 +331,7 @@ module.exports.autocomplete = async (interaction) => {
     var choices = interaction.client.movelist;
     const filtered = choices.filter(choice => choice[1].toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
     await interaction.respond(
-      filtered.map(choice => ({ name: choice[1], value: choice[1].replace(' ', '-').replace('\'', '') })),
+      filtered.map(choice => ({ name: choice[1], value: choice[8] })),
     )
   }
 };
@@ -704,7 +704,7 @@ module.exports.run = async (interaction) => {
               } else
                 tempMove = tempMove.charAt(0).toUpperCase() + tempMove.slice(1);
 
-              let moveHungerCost = (8 - moveData.pp / 5) + 1;
+              let moveHungerCost = Math.ceil((8 - moveData.pp / 5) + 1);
 
               let combatEmbedString = {};
 
@@ -1090,7 +1090,7 @@ module.exports.run = async (interaction) => {
               } else
                 tempMove = tempMove.charAt(0).toUpperCase() + tempMove.slice(1);
 
-              let moveHungerCost = (8 - moveData.pp / 5) + 1;
+              let moveHungerCost = Math.ceil((8 - moveData.pp / 5) + 1);
 
               let combatEmbedString = {};
 
@@ -1506,7 +1506,7 @@ module.exports.run = async (interaction) => {
               } else
                 tempMove = tempMove.charAt(0).toUpperCase() + tempMove.slice(1);
 
-              let moveHungerCost = (8 - moveData.pp / 5) + 1;
+              let moveHungerCost = Math.ceil((8 - moveData.pp / 5) + 1);
 
               let combatEmbedString = {};
 
@@ -1841,7 +1841,7 @@ module.exports.run = async (interaction) => {
           } else
             tempMove = tempMove.charAt(0).toUpperCase() + tempMove.slice(1);
 
-          let moveHungerCost = (8 - moveData.pp / 5) + 1;
+          let moveHungerCost = Math.ceil((8 - moveData.pp / 5) + 1);
 
           let combatEmbedString = {};
 
