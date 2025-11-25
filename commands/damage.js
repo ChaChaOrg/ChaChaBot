@@ -1694,7 +1694,13 @@ module.exports.run = async (interaction) => {
           //
           // Grab defender's types into a temporary object
           //
-          let defenderTypes = [interaction.options.getString("type1").toLowerCase(), interaction.options.getString("type2").toLowerCase()];
+          let defenderTypes = [interaction.options.getString("type1"), interaction.options.getString("type2")];
+          if (defenderTypes[0]){
+            defenderTypes[0] = defenderTypes[0].toLowerCase();
+          }
+          if (defenderTypes[1]){
+            defenderTypes[1] = defenderTypes[1].toLowerCase();
+          }
 
           //Set STAB bonus
           //If either of the Pokemon's types are the same as the move, stab is set to 1.5. Other wise it is 1.0
