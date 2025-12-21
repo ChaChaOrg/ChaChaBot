@@ -284,10 +284,14 @@ module.exports.run = async (interaction) => {
       attackerName = interaction.options.getString('attacker-name');
       let movename = interaction.options.getString('move-name');
       let move = interaction.client.movelist.get(movename);
-      attackerMove = move[move.length-1];
-      if (!attackerMove) {
-          attackerMove = interaction.options.getString('move-name');
-      }        
+      
+      if (!move) {
+         attackerMove = interaction.options.getString('move-name');
+      } else {
+
+         attackerMove = move[move.length - 1];
+      }
+      attackerMove = attackerMove.replaceAll(" ", "-").replaceAll("'","");
       defenderName = interaction.options.getString('defender-name');
 
       if (attackerName.toLowerCase() === defenderName.toLowerCase()) {
@@ -328,7 +332,7 @@ module.exports.run = async (interaction) => {
       let loadSQLPromise = [];
 
       if (attackerName.match(SQL_SANITATION_REGEX) || defenderName.match(SQL_SANITATION_REGEX)) {
-        logger.error("[modpoke] User tried to put in invalid string input.");
+        logger.error("[damage] User tried to put in invalid string input.");
         interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
         return;
       }
@@ -604,7 +608,7 @@ module.exports.run = async (interaction) => {
                     {
                       name: `${tempMove} Info`,
                       value: `**Move Info:** ${capitalizeWord(moveData.damage_class.name)} ${capitalizeWord(moveData.type.name)} Attack` +
-                        `\n**Base Power:** ${moveData.power} pw\n**Damage Roll:** ${dicePool} (${diceRolled} for ${numHits} hits)\n**Hunger Cost:** ${moveHungerCost}`,
+                          `\n**Base Power:** ${moveData.power} pw\n**Damage Roll:** ${dicePool} (${diceRolled} for ${numHits} hits)\n**Hunger Cost:** ${moveHungerCost}\n**Dodge DC:** ${attackPoke.level + 5} / ${attackPoke.level + 7} / ${attackPoke.level + 10} / ${attackPoke.level + 14}`,
                     },
                   ],
                   timestamp: new Date(),
@@ -648,7 +652,7 @@ module.exports.run = async (interaction) => {
                     {
                       name: `${tempMove} Info`,
                       value: `**Move Info:** ${capitalizeWord(moveData.damage_class.name)} ${capitalizeWord(moveData.type.name)} Attack` +
-                        `\n**Base Power:** ${moveData.power} pw\n**Damage Roll:** ${dicePool} (${diceRolled} for ${numHits} hit(s))\n**Hunger Cost:** ${moveHungerCost}`,
+                          `\n**Base Power:** ${moveData.power} pw\n**Damage Roll:** ${dicePool} (${diceRolled} for ${numHits} hit(s))\n**Hunger Cost:** ${moveHungerCost}\n**Dodge DC:** ${attackPoke.level + 5} / ${attackPoke.level + 7} / ${attackPoke.level + 10} / ${attackPoke.level + 14}`,
                     },
                   ],
                   timestamp: new Date(),

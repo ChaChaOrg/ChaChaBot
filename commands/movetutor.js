@@ -231,6 +231,7 @@ module.exports.run = async (interaction) => {
 							" if it's the second evolution" +
 							' stage that can learn' +
 							' the move.\n';
+						output += '**Friendship Bonuses**\n Friendly: +1\n Helpful: +3\n Fanatic: +6\n';
 						interaction.followUp(output);
 						//let index = data.search(workingName);
 						//index += workingName.length;

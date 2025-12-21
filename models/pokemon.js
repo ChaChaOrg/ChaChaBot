@@ -20,6 +20,8 @@ let fs = require('fs');
 const MIN_EXP = 0;
 const BASE_FRIEND = 70;
 
+const SQL_SANITATION_REGEX = /[^a-zA-Z0-9-'_]/;
+
 
 module.exports = Pokemon;
 
@@ -621,8 +623,8 @@ Pokemon.prototype.sendSummaryMessage = function (interaction) {
           value: `**FORT: ** ${saveStats[0]} | **REF: ** ${saveStats[1]} | **WILL: ** ${saveStats[2]}`,
         },
         {
-          name: "AC & Move Speed",
-          value: `**AC: ** ${this.statBlock.armorClass} | **Move Speed: ** ${this.statBlock.moveSpeed} ft\n\n((NOTE - AC does *not* include Size Bonus, which you can find based on the Pokemon's height and [this chart](https://www.d20pfsrd.com/BASICS-ABILITY-SCORES/GLOSSARY/#Size) ))`,
+            name: "AC, Dodge DC, & Move Speed",
+            value: `**AC: ** ${this.statBlock.armorClass} | **Dodge DC: ** ${this.level + 5} | **Move Speed: ** ${this.statBlock.moveSpeed} ft\n\n((NOTE - AC does *not* include Size Bonus, which you can find based on the Pokemon's height and [this chart](https://www.d20pfsrd.com/BASICS-ABILITY-SCORES/GLOSSARY/#Size) ))`,
         },
       ],
       timestamp: new Date(),
@@ -1097,6 +1099,7 @@ Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
                             });
                     } else {
                         console.log("Are we here?");
+                        //maybe try genning to see if it works, is the issue sql link or api link?
                         P.getPokemonSpeciesByName(this.species.toLowerCase())
                             .then(function (response) {
                                 console.log(response.varieties[0]);
