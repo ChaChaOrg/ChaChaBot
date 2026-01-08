@@ -7,6 +7,7 @@ const DEF_ARRAY_INDEX = 2;
 const SPA_ARRAY_INDEX = 3;
 const SPD_ARRAY_INDEX = 4;
 const SPE_ARRAY_INDEX = 5;
+const SQL_SANITATION_REGEX = /[^a-zA-Z0-9-'_]/;
 
 module.exports.data = new SlashCommandBuilder()
 	.setName('clonepoke')
@@ -34,7 +35,12 @@ module.exports.run = async (interaction) => {
             interaction.reply("Creates a copy of a pokemon in the bot. Just give the command the pokemon's name.");
         */
         
-            let name = interaction.options.getString("name");
+        let name = interaction.options.getString("name");
+        if (name.match(SQL_SANITATION_REGEX)) {
+            logger.error("[clonepoke] User tried to put in invalid string input.");
+            interaction.editReply("That is not a valid name, please keep input alphanumeric, ', - or _");
+            return;
+        }
             logger.info("[clonepoke] Searching database for " + name);
             let Pokemon = require("../models/pokemon");
             let basePoke = new Pokemon();
@@ -48,7 +54,7 @@ module.exports.run = async (interaction) => {
 
                 if (response.length == 0) {
                     logger.info("[clonepoke] " + name + " not found.");
-                    interaction.reply("Your pokemon wasn't found. Can't clone something that isn't there.");
+                    interaction.reply("Your pokemon wasn't found. Cloning canceled.");
                 } else {
                     logger.info("[clonepoke] Pokemon found.");
                     let cloneName = name + "Clone";
@@ -73,6 +79,18 @@ module.exports.run = async (interaction) => {
 
                         let clonesql = `SELECT * FROM pokemon WHERE name LIKE '${cloneName}%';`;
                         interaction.client.mysqlConnection.query(clonesql, function (err, response) {
+                            if (!response) {
+                                logger.error("[clonepoke] Database communication failed.");
+                                interaction.editReply("Communication with database failed. Could not clone the pokemon. Please try again later.");
+                                //throw "Communication failed. Null response detected.";
+                                return;
+                            }
+                            if (err) {
+                                logger.error("[clonepoke] SQL error detected: " + err);
+                                interaction.editReply("Error detected. Please double check your spelling.");
+                                //throw err;
+                                return;
+                            }
                             iterations = response.length + 1;
                             console.log("Clone Count: " + iterations);
                             if (iterations >= 2) {
@@ -89,8 +107,8 @@ module.exports.run = async (interaction) => {
                             let importString = "";
 
                             nameLine += cloneName + " (" + basePoke.species + ") (" + basePoke.gender + ")\n";
-                            ability += basePoke.ability + "\n";
-                            level += basePoke.level + "\n";
+                            ability += basePoke.ability.name + "\n";
+                            level += basePoke.level * 5 + "\n";
 
                             evs += basePoke.statBlock.evStats[HP_ARRAY_INDEX] + " HP / " + basePoke.statBlock.evStats[ATK_ARRAY_INDEX] + " Atk / " +
                                 basePoke.statBlock.evStats[DEF_ARRAY_INDEX] + " Def / " + basePoke.statBlock.evStats[SPA_ARRAY_INDEX] + " SpA / " +
@@ -111,7 +129,7 @@ module.exports.run = async (interaction) => {
                             });
                             //interaction.reply("We tried to create a perfect copy of your pokemon.....");
                             //interaction.reply("We suceeded.");
-                            interaction.followUp("Cloning procedure complete. Use /showpoke " + cloneName + " to view your new old friend.");
+                            interaction.editReply("Cloning procedure complete. Use /showpoke " + cloneName + " to view your new old friend.");
                             logger.info("[clonepoke] Cloning completed.");
                         });
 
@@ -122,11 +140,14 @@ module.exports.run = async (interaction) => {
             });
         }
     catch (error) {
+       
         logger.error("[clonepoke] Error: " + error.toString());
         console.log("[clonepoke] Error: " + error.toString());
-        throw error;
-        interaction.channel.send(error.toString());
+        
         interaction.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);
+        /*throw error;
+        interaction.channel.send(error.toString());
+        interaction.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);*/
     }
     
 }

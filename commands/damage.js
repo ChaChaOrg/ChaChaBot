@@ -328,8 +328,12 @@ module.exports.autocomplete = async (interaction) => {
       filtered.map(choice => ({ name: choice.name, value: choice.name })),
     )
   } else if (focusedValue.name === 'move-name') {
-    var choices = interaction.client.movelist;
-    const filtered = choices.filter(choice => choice[1].toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
+      const choices = interaction.client.movelist;
+      //const entries = choices.entries().toMemberArray();
+      const keys = Array.from(choices.keys());
+      //console.log(keys[1]);
+      const filtered = keys.filter(key => key.toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0,24);//toArray();//take(24).toArray();
+      //entries.filter(choice => choice[choice[1].toLowerCase().startsWith(focusedValue.value.toLowerCase())][choice[1].length - 1]).slice(0,24);//.toArray().slice(0, 24); .filter(key => key.toLowerCase().startsWith(focusedValue.value.toLowerCase()))
     await interaction.respond(
       filtered.map(choice => ({ name: choice[1], value: choice[8] })),
     )
@@ -399,7 +403,16 @@ module.exports.run = async (interaction) => {
       //
 
       attackerName = interaction.options.getString('attacker-name');
-      attackerMove = interaction.options.getString('move-name');
+      let movename = interaction.options.getString('move-name');
+      let move = interaction.client.movelist.get(movename);
+      
+      if (!move) {
+         attackerMove = interaction.options.getString('move-name');
+      } else {
+
+         attackerMove = move[move.length - 1];
+      }
+      attackerMove = attackerMove.replaceAll(" ", "-").replaceAll("'","");
       defenderName = interaction.options.getString('defender-name');
 
       let atkLevelOffset = interaction.options.getInteger('level-offset') ?? 0;
@@ -750,7 +763,7 @@ module.exports.run = async (interaction) => {
                     {
                       name: `${tempMove} Info`,
                       value: `**Move Info:** ${capitalizeWord(moveData.damage_class.name)} ${capitalizeWord(moveData.type.name)} Attack` +
-                        `\n**Base Power:** ${moveData.power} pw\n**Damage Roll:** ${dicePool} (${diceRolled} for ${numHits} hits)\n**Hunger Cost:** ${moveHungerCost}`,
+                          `\n**Base Power:** ${moveData.power} pw\n**Damage Roll:** ${dicePool} (${diceRolled} for ${numHits} hits)\n**Hunger Cost:** ${moveHungerCost}\n**Dodge DC:** ${attackPoke.level + 5} / ${attackPoke.level + 7} / ${attackPoke.level + 10} / ${attackPoke.level + 14}`,
                     },
                   ],
                   timestamp: new Date(),
@@ -794,7 +807,7 @@ module.exports.run = async (interaction) => {
                     {
                       name: `${tempMove} Info`,
                       value: `**Move Info:** ${capitalizeWord(moveData.damage_class.name)} ${capitalizeWord(moveData.type.name)} Attack` +
-                        `\n**Base Power:** ${moveData.power} pw\n**Damage Roll:** ${dicePool} (${diceRolled} for ${numHits} hit(s))\n**Hunger Cost:** ${moveHungerCost}`,
+                          `\n**Base Power:** ${moveData.power} pw\n**Damage Roll:** ${dicePool} (${diceRolled} for ${numHits} hit(s))\n**Hunger Cost:** ${moveHungerCost}\n**Dodge DC:** ${attackPoke.level + 5} / ${attackPoke.level + 7} / ${attackPoke.level + 10} / ${attackPoke.level + 14}`,
                     },
                   ],
                   timestamp: new Date(),
