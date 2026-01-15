@@ -86,6 +86,10 @@ module.exports.run = async (interaction) => {
 
                     });
             }
+        }).catch(function (error) {
+            logger.error("[showpoke] Error during SQL or response: " + error);
+            interaction.editReply("Error with SQL response. Possible API bug, please try again. Alert wranglers on repeat failures.")
+            return;
         });
 
     } catch (error) {

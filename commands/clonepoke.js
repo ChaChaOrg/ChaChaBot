@@ -122,11 +122,9 @@ module.exports.run = async (interaction) => {
             });
         }
     catch (error) {
-        logger.error("[clonepoke] Error: " + error.toString());
-        console.log("[clonepoke] Error: " + error.toString());
-        throw error;
-        interaction.channel.send(error.toString());
-        interaction.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);
+        logger.error("[clonepoke] Error! " + error);
+        interaction.editReply('ChaCha machine :b:roke, please try again later').catch(console.error);
+        return;
     }
     
 }
