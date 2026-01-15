@@ -402,6 +402,10 @@ module.exports.run = async (interaction) =>
                     interaction.followUp("That already exists.");
                     return;
                 }
+            }).catch(function (error) {
+                logger.error('[form] There was an error: ' + error);
+                interaction.editReply("Error checking database! Please try again.");
+                return;
             });
 
         } else if(interaction.options.getSubcommand("remove")){
@@ -460,7 +464,8 @@ module.exports.run = async (interaction) =>
         logger.error("[form] " + error.message);
         console.log(error);
         console.log(error.message);
-        //interaction.channel.send(error.message);
+        interaction.editReply("ChaCha machine :B:roke, please try again later");
+        return;
     }
 
 }

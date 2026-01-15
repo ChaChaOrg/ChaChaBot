@@ -2474,11 +2474,9 @@ module.exports.run = async (interaction) => {
       })
     }
   } catch (error) {
-    logger.error(error);
-    interaction.channel.send(error.toString());
-    interaction.channel
-      .send("ChaCha machine :b:roke, please try again later")
-      .catch(console.error);
+    logger.error("[damage] Error!" + error);
+    interaction.editReply("ChaCha machine :b:roke, please try again later");
+    return;
   }
 }
 

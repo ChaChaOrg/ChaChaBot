@@ -319,7 +319,12 @@ module.exports.run = async (interaction) => {
 						});
 				}
 				resolve();
-			})}))
+			}).catch(function (error){
+				logger.error("[move] Error during SQL or response: " + error);
+				interaction.editReply("Error fetching Pokemons. This may be temporary error - please retry");
+				return;
+			})
+		}))
 		});
 		Promise.all(promisearray).then(() => {
 			interaction.followUp(followup + "This is the base power each strike should use with the Damage command - each strike can crit and STAB individually.");
