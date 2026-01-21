@@ -49,8 +49,8 @@ const HELP_MESSAGE = "The \"manual\" damage calculator. Variables in order:\n" +
 	.addNumberOption(option =>
 		option.setName('effectiveness')
 		.setDescription('The effectiveness of the move on the foe, as a percentage.')
-		.setMinValue(.5)
-		.setMaxValue(2))
+		.setMinValue(.25)
+		.setMaxValue(4))
 	.addNumberOption(option =>
 		option.setName('critical-hit')
 		.setDescription('1.5 if a critical hit, 1 otherwise.')

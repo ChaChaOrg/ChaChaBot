@@ -70,6 +70,9 @@ module.exports.data = new SlashCommandBuilder()
         option.setName('multiplicitive-bonus')
           .setDescription('Extra damage *multiplying* the base power. Must be at least 0.001')
           .setMinValue(0.001))
+      .addIntegerOption(option =>
+        option.setName('level-offset')
+          .setDescription(`Adjusts Attacking Pokemon's level. For use with Pokemon prestige classes. Can't reduce below 0.`))
   )
   .addSubcommand(subcommand =>
     subcommand
@@ -105,6 +108,9 @@ module.exports.data = new SlashCommandBuilder()
         option.setName('multiplicitive-bonus')
           .setDescription('Extra damage *multiplying* the base power. Must be at least 0.001')
           .setMinValue(0.001))
+      .addIntegerOption(option =>
+        option.setName('level-offset')
+          .setDescription(`Adjusts Attacking Pokemon's level. For use with Pokemon prestige classes. Can't reduce below 0.`))
   )
   .addSubcommand(subcommand =>
     subcommand
@@ -194,6 +200,123 @@ module.exports.data = new SlashCommandBuilder()
         option.setName('multiplicitive-bonus')
           .setDescription('Extra damage *multiplying* the base power. Must be at least 0.001')
           .setMinValue(0.001))
+  )
+  .addSubcommand(subcommand =>
+    subcommand
+      .setName('battle-custom')
+      .setDescription('Simulate a battle between two pokemon, using a custom move')
+      .addStringOption(option =>
+        option.setName('attacker-name')
+          .setDescription('The name of the attacker, as listed in the database')
+          .setRequired(true)
+          .setAutocomplete(true))
+      .addStringOption(option =>
+        option.setName('move-category')
+          .setDescription('Physical or Special Attack?')
+          .setRequired(true)
+          .addChoices({
+            name: 'Physical',
+            value: 'physical'
+          }, {
+            name: 'Special',
+            value: 'special'
+          }))
+      .addStringOption(option =>
+        option.setName('move-type')
+          .setDescription('Type of the Attack')
+          .setRequired(true)
+          .addChoices({
+            name: 'Normal',
+            value: 'normal'
+          }, {
+            name: 'Fire',
+            value: 'fire'
+          }, {
+            name: 'Fighting',
+            value: 'fighting'
+          }, {
+            name: 'Water',
+            value: 'water'
+          }, {
+            name: 'Flying',
+            value: 'flying'
+          }, {
+            name: 'Grass',
+            value: 'grass'
+          }, {
+            name: 'Poison',
+            value: 'poison'
+          }, {
+            name: 'Electric',
+            value: 'electric'
+          }, {
+            name: 'Ground',
+            value: 'ground'
+          }, {
+            name: 'Psychic',
+            value: 'psychic'
+          }, {
+            name: 'Rock',
+            value: 'rock'
+          }, {
+            name: 'Ice',
+            value: 'ice'
+          }, {
+            name: 'Bug',
+            value: 'bug'
+          }, {
+            name: 'Dragon',
+            value: 'dragon'
+          }, {
+            name: 'Ghost',
+            value: 'ghost'
+          }, {
+            name: 'Dark',
+            value: 'dark'
+          }, {
+            name: 'Steel',
+            value: 'steel'
+          }, {
+            name: 'Fairy',
+            value: 'fairy'
+          }))
+      .addIntegerOption(option =>
+        option.setName('move-power')
+          .setDescription('The power of the move - this will round down to the nearest 5.')
+          .setRequired(true)
+          .setMinValue(0))
+      .addStringOption(option =>
+        option.setName('defender-name')
+          .setDescription('The name of the pokemon being hit by the attack, as listed in the database')
+          .setRequired(true)
+          .setAutocomplete(true))
+      .addIntegerOption(option =>
+        option.setName('move-hits')
+          .setDescription('The number of hits for the move - default 1.')
+          .setMinValue(0))
+      .addStringOption(option =>
+        option.setName('move-name-custom')
+          .setDescription('Name your custom move (for display only, optional, letters only).'))
+      .addIntegerOption(option =>
+        option.setName('stages-of-attack')
+          .setDescription('Stages of attack/special attack the attacker has. Minimum -6, maximum +6')
+          .setMaxValue(6)
+          .setMinValue(-6))
+      .addIntegerOption(option =>
+        option.setName('stages-of-defense')
+          .setDescription('Stages of defense/special defense the attacker has. Minimum -6, maximum +6')
+          .setMaxValue(6)
+          .setMinValue(-6))
+      .addNumberOption(option =>
+        option.setName('additive-bonus')
+          .setDescription('Extra damage *added* to the base power. Usually done through ChaCha feats. Defaults to 0'))
+      .addNumberOption(option =>
+        option.setName('multiplicitive-bonus')
+          .setDescription('Extra damage *multiplying* the base power. Must be at least 0.001')
+          .setMinValue(0.001))
+      .addIntegerOption(option =>
+        option.setName('level-offset')
+          .setDescription(`Adjusts Attacking Pokemon's level. For use with Pokemon prestige classes. Can't reduce below 0.`))
   );
 
 module.exports.autocomplete = async (interaction) => {
@@ -212,9 +335,8 @@ module.exports.autocomplete = async (interaction) => {
       const filtered = keys.filter(key => key.toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0,24);//toArray();//take(24).toArray();
       //entries.filter(choice => choice[choice[1].toLowerCase().startsWith(focusedValue.value.toLowerCase())][choice[1].length - 1]).slice(0,24);//.toArray().slice(0, 24); .filter(key => key.toLowerCase().startsWith(focusedValue.value.toLowerCase()))
     await interaction.respond(
-      filtered.map(choice => ({ name: choice, value: choice})),
-      )
-      //filtered.map(choice => ({ name: choice[1], value: choice[1].replace(' ', '-').replace('\'', '') })),
+      filtered.map(choice => ({ name: choice[1], value: choice[8] })),
+    )
   }
 };
 
@@ -260,7 +382,6 @@ module.exports.run = async (interaction) => {
       //let args_string = args.slice(0).join(" ")
 
       let attackerName;
-      let attackerMove;
       let defenderName;
       let bonusDef = 0;
       let bonusAtk = 0;
@@ -293,6 +414,8 @@ module.exports.run = async (interaction) => {
       }
       attackerMove = attackerMove.replaceAll(" ", "-").replaceAll("'","");
       defenderName = interaction.options.getString('defender-name');
+
+      let atkLevelOffset = interaction.options.getInteger('level-offset') ?? 0;
 
       if (attackerName.toLowerCase() === defenderName.toLowerCase()) {
         let errMsg = 'Did you mean to attack yourself? :thinking: You can\'t do that.';
@@ -377,6 +500,13 @@ module.exports.run = async (interaction) => {
         });
 
         Promise.all(loadSQLPromise).then((response) => {
+          
+          if(!attackPoke.speciesData || !defendPoke.speciesData){
+            logger.error("[damage] No Pokemon data returned - possible API/Connection error.")
+            // If Move or Type data is missing, the API call failed
+            interaction.editReply("Pokemon present but no data returned. This is likely an API or Connection error. Please try again.");
+            return;
+          }
           //
           // Now that the pokemon have been found, grab the move information and the relevant type information.
           //
@@ -386,6 +516,14 @@ module.exports.run = async (interaction) => {
                 logger.error("[damage] Move Data or Type Data not found - possible API/Connection error.")
                 // If Move or Type data is missing, the API call failed
                 interaction.editReply("Move or Type Data not found. This is likely an API or Connection error. Please try again.");
+                return;
+              }
+
+              // Make sure offset is valid.
+              if((attackPoke.level + atkLevelOffset) < 1){
+                logger.error("[damage] Level offset brought final level below 1.")
+                // Too much offset, went negative!
+                interaction.editReply("Invalid level offset!");
                 return;
               }
 
@@ -408,15 +546,15 @@ module.exports.run = async (interaction) => {
               //
               // Grab each pokemon's types into a temporary object
               //
-              let attackerTypes = [attackPoke.type1, attackPoke.type2];
-              let defenderTypes = [defendPoke.type1, defendPoke.type2];
+              let attackerTypes = [attackPoke.type1.toLowerCase(), attackPoke.type2.toLowerCase()];
+              let defenderTypes = [defendPoke.type1.toLowerCase(), defendPoke.type2.toLowerCase()];
 
               //Set STAB bonus
               //If either of the Pokemon's types are the same as the move, stab is set to 1.5. Other wise it is 1.0
               //
               if (
-                attackerTypes[0] === moveData.type.name ||
-                attackerTypes[1] === moveData.type.name
+                attackerTypes[0].toLowerCase()  === moveData.type.name ||
+                attackerTypes[1].toLowerCase()  === moveData.type.name
               ) {
                 stab = 1.5;
               }
@@ -516,9 +654,17 @@ module.exports.run = async (interaction) => {
               let multiHitString = ``;
               let multiHitTotal = 0;
               let critBonus = 0;
+              let critAtk = 1;
+              let critDef = 1;
+              if(stageModAtk > 1){
+                critAtk = stageModAtk;
+              }
+              if(stageModDef < 1){
+                critDef = stageModDef;
+              }
               for (let hitNum = 0; hitNum < numHits; hitNum++) {
                 damageTotal =
-                  ((10 * attackPoke.level + 10) / 250) *
+                  ((10 * (attackPoke.level + atkLevelOffset) + 10) / 250) *
                   ((tempAttack * stageModAtk) /
                     (tempDefense * stageModDef)) *
                   dicePool[hitNum] *
@@ -526,9 +672,18 @@ module.exports.run = async (interaction) => {
                   effective *
                   otherMult;
 
+                critTotal =
+                  ((10 * (attackPoke.level + atkLevelOffset) + 10) / 250) *
+                  ((tempAttack * critAtk) /
+                    (tempDefense * critDef)) *
+                  dicePool[hitNum] *
+                  stab *
+                  effective *
+                  otherMult;
+
                 multiHitTotal += damageTotal;
                 damageTotal = damageTotal.toFixed(0);
-                critTotal = (damageTotal * CRITICAL_HIT_MULTIPLIER).toFixed(0);
+                critTotal = (critTotal * CRITICAL_HIT_MULTIPLIER).toFixed(0);
                 critBonus = critTotal - damageTotal;
                 multiHitString += `Hit #` + (hitNum + 1) + ` -- **` + damageTotal + `** -- (+` + critBonus + `)\n`
                 combatString +=
@@ -569,7 +724,7 @@ module.exports.run = async (interaction) => {
               } else
                 tempMove = tempMove.charAt(0).toUpperCase() + tempMove.slice(1);
 
-              let moveHungerCost = (8 - moveData.pp / 5) + 1;
+              let moveHungerCost = Math.ceil((8 - moveData.pp / 5) + 1);
 
               let combatEmbedString = {};
 
@@ -693,6 +848,8 @@ module.exports.run = async (interaction) => {
 
       let stages = interaction.options.getInteger('stages') ?? 0;
 
+      let atkLevelOffset = interaction.options.getInteger('level-offset') ?? 0;
+
 
       //variables required
       let Pokemon = require("../models/pokemon.js");
@@ -765,6 +922,12 @@ module.exports.run = async (interaction) => {
         loadSQLPromise.push(attackPoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, response[0]));
 
         Promise.all(loadSQLPromise).then((response) => {
+          if(!attackPoke.speciesData){
+            logger.error("[damage] No Pokemon data returned - possible API/Connection error.")
+            // If Move or Type data is missing, the API call failed
+            interaction.editReply("Pokemon present but no data returned. This is likely an API or Connection error. Please try again.");
+            return;
+          }
           //
           // Now that the pokemon has been found, grab the move information and the relevant type information.
           //
@@ -780,17 +943,19 @@ module.exports.run = async (interaction) => {
               //
               // Grab the pokemon's types into a temporary object, create a type for the trainer
               //
-              let attackerTypes = [attackPoke.type1, attackPoke.type2];
+              let attackerTypes = [attackPoke.type1.toLowerCase(), attackPoke.type2.toLowerCase()];
               let defenderTypes = [2];
               defenderTypes[0] = interaction.options.getString("type1") ?? '';
+              defenderTypes[0] = defenderTypes[0].toLowerCase();
               defenderTypes[1] = interaction.options.getString("type2") ?? '';
+              defenderTypes[1] = defenderTypes[1].toLowerCase();
 
               //Set STAB bonus
               //If either of the Pokemon's types are the same as the move, stab is set to 1.5. Other wise it is 1.0
               //
               if (
-                attackerTypes[0] === moveData.type.name ||
-                attackerTypes[1] === moveData.type.name
+                attackerTypes[0].toLowerCase()  === moveData.type.name ||
+                attackerTypes[1].toLowerCase()  === moveData.type.name
               ) {
                 stab = 1.5;
               }
@@ -951,7 +1116,7 @@ module.exports.run = async (interaction) => {
               } else
                 tempMove = tempMove.charAt(0).toUpperCase() + tempMove.slice(1);
 
-              let moveHungerCost = (8 - moveData.pp / 5) + 1;
+              let moveHungerCost = Math.ceil((8 - moveData.pp / 5) + 1);
 
               let combatEmbedString = {};
 
@@ -1161,6 +1326,12 @@ module.exports.run = async (interaction) => {
         loadSQLPromise.push(defendPoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, response[0]));
 
         Promise.all(loadSQLPromise).then((response) => {
+          if(!defendPoke.speciesData){
+            logger.error("[damage] No Pokemon data returned - possible API/Connection error.")
+            // If Move or Type data is missing, the API call failed
+            interaction.editReply("Pokemon present but no data returned. This is likely an API or Connection error. Please try again.");
+            return;
+          }
           //
           // Now that the pokemon have been found, grab the move information and the relevant type information.
           //
@@ -1172,6 +1343,7 @@ module.exports.run = async (interaction) => {
                 interaction.editReply("Move or Type Data not found. This is likely an API or Connection error. Please try again.");
                 return;
               }
+
 
               //
               // parse attack stages into the effect it has on damage.
@@ -1192,7 +1364,7 @@ module.exports.run = async (interaction) => {
               //
               // Grab each pokemon's types into a temporary object
               //
-              let defenderTypes = [defendPoke.type1, defendPoke.type2];
+              let defenderTypes = [defendPoke.type1.toLowerCase(), defendPoke.type2.toLowerCase()];
 
               //Set STAB bonus
               //If either of the Pokemon's types are the same as the move, stab is set to 1.5. Other wise it is 1.0
@@ -1297,9 +1469,17 @@ module.exports.run = async (interaction) => {
               let multiHitString = ``;
               let multiHitTotal = 0;
               let critBonus = 0;
+              let critAtk = 1;
+              let critDef = 1;
+              if (stageModAtk > 1) {
+                critAtk = stageModAtk;
+              }
+              if (stageModDef < 1) {
+                critDef = stageModDef;
+              }
               for (let hitNum = 0; hitNum < numHits; hitNum++) {
                 damageTotal =
-                  ((10 * level + 10) / 250) *
+                  ((10 * (level) + 10) / 250) *
                   ((tempAttack * stageModAtk) /
                     (tempDefense * stageModDef)) *
                   dicePool[hitNum] *
@@ -1307,9 +1487,18 @@ module.exports.run = async (interaction) => {
                   effective *
                   otherMult;
 
+                critTotal =
+                  ((10 * (level) + 10) / 250) *
+                  ((tempAttack * critAtk) /
+                    (tempDefense * critDef)) *
+                  dicePool[hitNum] *
+                  stab *
+                  effective *
+                  otherMult;
+
                 multiHitTotal += damageTotal;
                 damageTotal = damageTotal.toFixed(0);
-                critTotal = (damageTotal * CRITICAL_HIT_MULTIPLIER).toFixed(0);
+                critTotal = (critTotal * CRITICAL_HIT_MULTIPLIER).toFixed(0);
                 critBonus = critTotal - damageTotal;
                 multiHitString += `Hit #` + (hitNum + 1) + ` -- **` + damageTotal + `** -- (+` + critBonus + `)\n`
                 combatString +=
@@ -1349,7 +1538,7 @@ module.exports.run = async (interaction) => {
               } else
                 tempMove = tempMove.charAt(0).toUpperCase() + tempMove.slice(1);
 
-              let moveHungerCost = (8 - moveData.pp / 5) + 1;
+              let moveHungerCost = Math.ceil((8 - moveData.pp / 5) + 1);
 
               let combatEmbedString = {};
 
@@ -1519,6 +1708,12 @@ module.exports.run = async (interaction) => {
           // Grab defender's types into a temporary object
           //
           let defenderTypes = [interaction.options.getString("type1"), interaction.options.getString("type2")];
+          if (defenderTypes[0]){
+            defenderTypes[0] = defenderTypes[0].toLowerCase();
+          }
+          if (defenderTypes[1]){
+            defenderTypes[1] = defenderTypes[1].toLowerCase();
+          }
 
           //Set STAB bonus
           //If either of the Pokemon's types are the same as the move, stab is set to 1.5. Other wise it is 1.0
@@ -1684,7 +1879,7 @@ module.exports.run = async (interaction) => {
           } else
             tempMove = tempMove.charAt(0).toUpperCase() + tempMove.slice(1);
 
-          let moveHungerCost = (8 - moveData.pp / 5) + 1;
+          let moveHungerCost = Math.ceil((8 - moveData.pp / 5) + 1);
 
           let combatEmbedString = {};
 
@@ -1805,8 +2000,492 @@ module.exports.run = async (interaction) => {
         }
       });
 
+    } else if (interaction.options.getSubcommand() === 'battle-custom') {
+
+      //clause for helping!
+      /* if (args[0].includes("help")) {
+        logger.info("[damage] Sending help interaction.");
+        interaction.reply(HELP_MESSAGE)
+          .catch(console.error);
+        return;
+      }
+      
+  
+      if (args.length < 3) {
+        logger.info("[damage] Sending too few parameters interaction.");
+        interaction.reply("You haven't provided enough parameters, please try again.").catch(console.error);
+        return;
+      }
+      */
+      // DAMAGE
+      // args[0] = attacker's name [REQUIRED]
+      // args[1] = move name [REQUIRED]
+      // args[2] = defender's name [REQUIRED]
+      // args[3] = Crit [y/n Defaults to n]
+      // args[4] = stages of attack [Defaults to 1]
+      // args[5] = stages of defense [Defaults to 1]
+      // args[6] = additive damage bonus [Defaults to 0]
+      // args[7] = multiplicative damage bonus [Defaults to 1]
+      //
+
+      //let args_string = args.slice(0).join(" ")
+
+      let attackerName;
+      let defenderName;
+      let bonusDef = 0;
+      let bonusAtk = 0;
+      let other = 0;
+      let otherMult = 1;
+
+
+      //variables required
+      let Pokemon = require("../models/pokemon.js");
+      let attackPoke = new Pokemon();
+      let defendPoke = new Pokemon();
+
+      let dice = 0;
+      let stab = 1;
+      let effective = 1;
+      //
+      // Checks if an arg is there, than assigns it. This keeps null values out of the way.
+      // This means that if an arg is left off, it will just keep the defaults, but you CAN'T put them out of order.
+      //
+
+      attackerName = interaction.options.getString('attacker-name');
+      defenderName = interaction.options.getString('defender-name');
+
+      let atkLevelOffset = interaction.options.getInteger('level-offset') ?? 0;
+
+      let moveName = interaction.options.getString('move-name-custom') ?? "CustomMove";
+      if (moveName.match(SQL_SANITATION_REGEX)){
+        logger.error("[damage] User tried to put in invalid string input.");
+        interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+        return;
+      }
+      let moveCategory = interaction.options.getString('move-category');
+      let moveType = interaction.options.getString('move-type');
+      let movePower = interaction.options.getInteger('move-power');
+
+      if (attackerName.toLowerCase() === defenderName.toLowerCase()) {
+        let errMsg = 'Did you mean to attack yourself? :thinking: You can\'t do that.';
+        logger.error(errMsg);
+        interaction.followUp(errMsg);
+        return;
+      }
+
+      if (interaction.options.getInteger('stages-of-attack'))
+        bonusAtk = interaction.options.getInteger('stages-of-attack'); //Stages Attack
+      if (interaction.options.getInteger('stages-of-defense'))
+        bonusDef = interaction.options.getInteger('stages-of-defense'); //Stages Defense    
+      if (interaction.options.getNumber('additive-bonus'))
+        other = interaction.options.getNumber('additive-bonus');
+      if (interaction.options.getNumber('multiplicitive-bonus'))
+        otherMult = interaction.options.getNumber('multiplicitive-bonus');
+
+
+      //values used for calculation
+      let stageModAtk = 0;
+      let stageModDef = 0;
+      let damageTotal = 0;
+      let critTotal = 0;
+
+      let effectiveString = "";
+      let combatString = "";
+
+      //
+      // Grabs the SQL entry for both attacking and defending pokemon.
+      //
+
+
+      let sql = `SELECT * FROM pokemon WHERE name = '${attackerName}' OR name = '${defenderName}';`;
+      logger.info(`[damage] SQL query: ${sql}`)
+      //console.log(sql);
+
+      let loadSQLPromise = [];
+
+      if (attackerName.match(SQL_SANITATION_REGEX) || defenderName.match(SQL_SANITATION_REGEX)) {
+        logger.error("[modpoke] User tried to put in invalid string input.");
+        interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
+        return;
+      }
+      interaction.client.mysqlConnection.query(sql, function (err, response) {
+        if (err) {
+          let errMsg = `Error with SQL query: ${err}`;
+          logger.error(errMsg);
+          interaction.followUp(errMsg);
+          return;
+        };
+
+        if (response.length === 0) {
+          let errMsg = `Cannot find neither '${attackerName}' nor '${defenderName}'. Please check your spelling + case-sensitivity.`
+          logger.error(errMsg);
+          interaction.followUp(errMsg);
+          return;
+        }
+        else if (response.length === 1) {
+          let foundPokeName = response[0].name;
+          let errMsg = '';
+
+          if (foundPokeName === attackerName)
+            errMsg = `I found the attacker '${attackerName}' but not the defender. Please check your spelling + case-sensitivity.`
+          else if (foundPokeName === defenderName)
+            errMsg = `I found the defender '${defenderName}' but not the attacker. Please check your spelling + case-sensitivity.`
+
+          logger.error(errMsg);
+          interaction.followUp(errMsg);
+          return;
+        }
+
+        logger.info('[damage] Attacker: ' + response[0].name + ' retrieved from SQL database.');
+        logger.info('[damage] Defender: ' + response[1].name + ' retrieved from SQL database.');
+
+        //
+        // Load the found pokemon into pokemon objects, then wait til they both complete before continuing.
+        //
+        response.forEach((element) => {
+          if (element["name"].toLowerCase() === attackerName.toLowerCase())
+            loadSQLPromise.push(attackPoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, element));
+          else loadSQLPromise.push(defendPoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, element));
+        });
+
+        Promise.all(loadSQLPromise).then((response) => {
+          if(!attackPoke.speciesData || !defendPoke.speciesData){
+            logger.error("[damage] No Pokemon data returned - possible API/Connection error.")
+            // If Move or Type data is missing, the API call failed
+            interaction.editReply("Pokemon present but no data returned. This is likely an API or Connection error. Please try again.");
+            return;
+          }
+
+          interaction.client.pokedex.getTypeByName(moveType).then((typeData) => {
+            if(typeof typeData === undefined){
+                logger.error("[damage] Type Data not found - possible API/Connection error.")
+                // If Move or Type data is missing, the API call failed
+                interaction.editReply("Type Data not found. This is likely an API or Connection error. Please try again.");
+                return;
+              }
+            //
+            // Now that the pokemon have been found, grab the move information and the relevant type information.
+            //
+
+
+            // Make sure offset is valid.
+            if ((attackPoke.level + atkLevelOffset) < 1) {
+              logger.error("[damage] Level offset brought final level below 1.")
+              // Too much offset, went negative!
+              interaction.editReply("Invalid level offset!");
+              return;
+            }
+
+            //
+            // parse attack stages into the effect it has on damage.
+            //
+            if (bonusAtk > -1) {
+              stageModAtk = (2 + bonusAtk) / 2;
+            } else {
+              stageModAtk = 2 / (Math.abs(bonusAtk) + 2);
+            }
+            //
+            // parse defense stages into the effect it has on damage.
+            //
+            if (bonusDef > -1) {
+              stageModDef = (2 + bonusDef) / 2;
+            } else {
+              stageModDef = 2 / (Math.abs(bonusDef) + 2);
+            }
+            //
+            // Grab each pokemon's types into a temporary object
+            //
+            let attackerTypes = [attackPoke.type1, attackPoke.type2];
+            let defenderTypes = [defendPoke.type1, defendPoke.type2];
+
+
+            //Set STAB bonus
+            //If either of the Pokemon's types are the same as the move, stab is set to 1.5. Other wise it is 1.0
+            //
+            if (
+              attackerTypes[0].toLowerCase() === moveType ||
+              attackerTypes[1].toLowerCase() === moveType
+            ) {
+              stab = 1.5;
+            }
+
+            //
+            // Calculate Type Effectiveness
+            //
+            typeData.damage_relations.half_damage_to.forEach((typeElement) => {
+              if (
+                // Loops through the "typeData" api object for the types that this move deals half damage to.
+                // It then multiplies the effectiveness accordingly.
+                //
+                typeElement.name === defenderTypes[0] ||
+                typeElement.name === defenderTypes[1]
+              )
+                effective = effective * 0.5;
+            });
+
+            typeData.damage_relations.double_damage_to.forEach(
+              (typeElement) => {
+                if (
+                  // Loops through the "typeData" api object for the types that this move deals double damage to.
+                  // It then multiplies the effectiveness accordingly.
+                  //
+                  typeElement.name === defenderTypes[0] ||
+                  typeElement.name === defenderTypes[1]
+                )
+                  effective = effective * 2;
+              }
+            );
+
+            typeData.damage_relations.no_damage_to.forEach((typeElement) => {
+              if (
+                // Loops through the "typeData" api object for the types that this move deals no damage to.
+                // It then sets the effectiveness accordingly.
+                //
+                typeElement.name === defenderTypes[0] ||
+                typeElement.name === defenderTypes[1]
+              )
+                effective = 0;
+            });
+
+            //
+            // Sets the relevant effectiveness string.
+            //
+            if (effective > 1) {
+              effectiveString = "*It's super effective!*\n";
+            } else if (effective === 0) {
+              effectiveString = `*It has no effect on ${defendPoke.name}*\n`;
+            } else if (effective < 1) {
+              effectiveString = "*It's not very effective.*\n";
+            }
+
+            //
+            // Check for mult-hit move
+            //
+            let numHits = 1;
+            try {
+              numHits = interaction.options.getInteger('move-hits') ?? 1;
+            } catch {
+              // Catch for any moves that don't have meta (from recent gens)
+              numHits = 1;
+            };
+            let dicePool = new Array(numHits);
+
+            for (let hitNum = 0; hitNum < numHits; hitNum++) {
+              dice = 0;
+              //
+              // calculate damage dice roll
+              //
+
+              for (let numDice = Math.floor((movePower + other) * 0.2); numDice > 0; numDice--) {
+                dice += Math.floor(Math.random() * 8 + 1);
+              }
+              dicePool[hitNum] = dice;
+            }
+
+
+            //Checks if the move does physical or special damage.
+            // then grabs the relevant stat.
+            //
+            let tempAttack = 0;
+            let tempDefense = 0;
+
+            if (moveCategory === "physical") {
+              tempAttack = attackPoke.statBlock.finalStats[ATK_ARRAY_INDEX];
+              tempDefense = defendPoke.statBlock.finalStats[DEF_ARRAY_INDEX];
+            } else {
+              tempAttack = attackPoke.statBlock.finalStats[SPA_ARRAY_INDEX];
+              tempDefense = defendPoke.statBlock.finalStats[SPD_ARRAY_INDEX];
+            }
+
+            //
+            // Final damage calculation
+            //
+
+            let multiHitString = ``;
+            let multiHitTotal = 0;
+            let critBonus = 0;
+            let critAtk = 1;
+            let critDef = 1;
+            if (stageModAtk > 1) {
+              critAtk = stageModAtk;
+            }
+            if (stageModDef < 1) {
+              critDef = stageModDef;
+            }
+            for (let hitNum = 0; hitNum < numHits; hitNum++) {
+              damageTotal =
+                ((10 * (attackPoke.level + atkLevelOffset) + 10) / 250) *
+                ((tempAttack * stageModAtk) /
+                  (tempDefense * stageModDef)) *
+                dicePool[hitNum] *
+                stab *
+                effective *
+                otherMult;
+
+              critTotal =
+                ((10 * (attackPoke.level + atkLevelOffset) + 10) / 250) *
+                ((tempAttack * critAtk) /
+                  (tempDefense * critDef)) *
+                dicePool[hitNum] *
+                stab *
+                effective *
+                otherMult;
+
+              multiHitTotal += damageTotal;
+              damageTotal = damageTotal.toFixed(0);
+              critTotal = (critTotal * CRITICAL_HIT_MULTIPLIER).toFixed(0);
+              critBonus = critTotal - damageTotal;
+              multiHitString += `Hit #` + (hitNum + 1) + ` -- **` + damageTotal + `** -- (+` + critBonus + `)\n`
+              combatString +=
+                `For hit ${hitNum}: \n` +
+                `**${attackerName}** (level ${attackPoke.level} ${attackPoke.species}) used ${moveName} on ${defenderName} (level ${defendPoke.level} ${defendPoke.species})\n` +
+                effectiveString +
+                `${attackerName} deals ${damageTotal} damage to the defending ${defenderName}\n(Base Power: ${movePower} - damage roll: ${dicePool[hitNum]}\n` +
+                `For a crit, instead ${attackerName} deals ${critTotal} damage to the defending ${defenderName}\n(Base Power: ${movePower} - damage roll: ${dicePool[hitNum]}\n`;
+            }
+            multiHitString += `**Total: ` + multiHitTotal.toFixed(0) + `**`;
+
+
+            // Embed for damage
+
+            //format pokemon names
+            let atkPokeSpecies_formatted =
+              attackPoke.form.charAt(0).toUpperCase() +
+              attackPoke.form.slice(1);
+            let defPokeSpecies_formatted =
+              defendPoke.form.charAt(0).toUpperCase() +
+              defendPoke.form.slice(1);
+
+            // get # of dice rolled
+            let diceRolled = Math.floor(movePower / 5);
+            diceRolled += "d8";
+
+            //format move
+            let tempMove = moveName;
+            if (~tempMove.indexOf("-")) {
+              let tempA = tempMove.slice(0, tempMove.indexOf("-"));
+              let tempB = tempMove.slice(
+                tempMove.indexOf("-") + 1,
+                tempMove.length
+              );
+              tempA = capitalizeWord(tempA);
+              tempB = capitalizeWord(tempB);
+              tempMove = tempA + " " + tempB;
+            } else
+              tempMove = tempMove.charAt(0).toUpperCase() + tempMove.slice(1);
+
+            let combatEmbedString = {};
+
+            if (numHits > 1) {
+              combatEmbedString = {
+                color: 3447003,
+                author: {
+                  name: interaction.user.username,
+                  icon_url: interaction.user.avatarURL,
+                },
+                title: `**${attackerName}** used ${tempMove} on **${defenderName}**!`,
+                url: `https://bulbapedia.bulbagarden.net/wiki/${tempMove.replace(
+                  " ",
+                  ""
+                )}_(Move)`,
+                // thumbnail: { url:  `${this.pokemonData.sprites.front_default}`,
+                description: `${effectiveString}`,
+
+                fields: [
+                  {
+                    name: "Damage Dealt",
+                    value: `${tempMove} hits ${defenderName} up to ${numHits} times!`,
+                  },
+                  {
+                    name: "HITS -- **DAMAGE** -- (EXTRA DAMAGE IF CRIT)",
+                    value: `${multiHitString}`,
+                  },
+                  {
+                    name: "Attacker Info",
+                    value: `**${attackerName}**, Lv ${attackPoke.level} ${atkPokeSpecies_formatted}\n=================`,
+                  },
+                  {
+                    name: "Defender Info",
+                    value: `**${defenderName}**, Lv ${defendPoke.level} ${defPokeSpecies_formatted}\n=================`,
+                  },
+                  {
+                    name: `${tempMove} Info`,
+                    value: `**Move Info:** ${capitalizeWord(moveCategory)} ${capitalizeWord(moveType)} Attack` +
+                      `\n**Base Power:** ${movePower} pw\n**Damage Roll:** ${dicePool} (${diceRolled} for ${numHits} hits)`,
+                  },
+                ],
+                timestamp: new Date(),
+                footer: {
+                  icon_url: interaction.client.user.avatarURL,
+                  text: "Chambers and Charizard!",
+                },
+              };
+            } else {
+              combatEmbedString = {
+                color: 3447003,
+                author: {
+                  name: interaction.user.username,
+                  icon_url: interaction.user.avatarURL,
+                },
+                title: `**${attackerName}** used ${tempMove} on **${defenderName}**!`,
+                url: `https://bulbapedia.bulbagarden.net/wiki/${tempMove.replace(
+                  " ",
+                  ""
+                )}_(Move)`,
+                // thumbnail: { url:  `${this.pokemonData.sprites.front_default}`,
+                description: `${effectiveString}`,
+
+                fields: [
+                  {
+                    name: "Damage Dealt",
+                    value: `${defenderName} takes ${damageTotal} damage.`,
+                  },
+                  {
+                    name: "Critical Hit Damage",
+                    value: `${defenderName} takes ${critTotal} damage.`,
+                  },
+                  {
+                    name: "Attacker Info",
+                    value: `**${attackerName}**, Lv ${attackPoke.level} ${atkPokeSpecies_formatted}\n=================`,
+                  },
+                  {
+                    name: "Defender Info",
+                    value: `**${defenderName}**, Lv ${defendPoke.level} ${defPokeSpecies_formatted}\n=================`,
+                  },
+                  {
+                    name: `${tempMove} Info`,
+                    value: `**Move Info:** ${capitalizeWord(moveCategory)} ${capitalizeWord(moveType)} Attack` +
+                      `\n**Base Power:** ${movePower} pw\n**Damage Roll:** ${dicePool} (${diceRolled} for ${numHits} hit(s))`,
+                  },
+                ],
+                timestamp: new Date(),
+                footer: {
+                  icon_url: interaction.client.user.avatarURL,
+                  text: "Chambers and Charizard!",
+                },
+              };
+            }
+
+            // comment out embed if necessary
+
+            //embed message
+            logger.info("[damage] Sending combat embed string.");
+            interaction.followUp({ embeds: [combatEmbedString] }).catch(console.error);
+          }
+          );
+        }).catch(function (error) {
+          if (error.response.status == 404) {
+            logger.error("[damage] Move not found. " + error)
+            interaction.followUp("Move not found, check your spelling and whether dashes are needed or not!");
+            return;
+          } else {
+            logger.error('[damage] There was an error: ' + error);
+            interaction.followUp("Error getting move!");
+            return;
+          }
+        });
+      })
     }
-    
   } catch (error) {
     logger.error(error);
     interaction.channel.send(error.toString());
