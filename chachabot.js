@@ -39,21 +39,25 @@ client.commands = new Collection();
 client.pokedex = new Pokedex();
 
 let movelistArray;
-
+let moveMap;
 fs.readFile('data/Moves.txt', 'utf8', (err, data) => {
     if (err) {
         logger.error('[Startup] Error reading move file.\n' + err.toString());
         interaction.followUp('Could not read move list. Please contact ChaChaBot devs.');
     } else {
+        moveMap = new Map();
         //Split moves file into one String per line
         movelistArray = data.toString().split(/\r?\n/);
 
         movelistArray.forEach((element, index) => {
             tempElement = element.split('\t');
+            //moveMap[tempElement[1]] = tempElement;
+            moveMap.set(tempElement[1],tempElement);
             movelistArray[index] = tempElement;
         });
     }
-    client.movelist = movelistArray;
+    //client.movelist = movelistArray;
+    client.movelist = moveMap;
 })
 
 let abilitylistArray;
