@@ -69,9 +69,7 @@ module.exports.run = async (interaction) => {
                    // }                    
                     
                     interaction.deferReply("Extracting " + name + "'s DNA sequence....");
-                    basePoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, response[0]).then(response => {
-
-                        let clonesql = `SELECT * FROM pokemon WHERE name LIKE '${cloneName}%';`;
+                    basePoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, response[0]).then(response => {                        let clonesql = `SELECT * FROM pokemon WHERE name LIKE '${cloneName}%';`;
                         interaction.client.mysqlConnection.query(clonesql, function (err, response) {
                             iterations = response.length + 1;
                             console.log("Clone Count: " + iterations);
@@ -108,23 +106,31 @@ module.exports.run = async (interaction) => {
                             logger.info("[clonepoke] Importing clone.");
                             clonePoke.importPokemon(interaction.client.mysqlConnection, interaction.client.pokedex, importString).then(response => {
                                 clonePoke.uploadPokemon(interaction.client.mysqlConnection, interaction);
-                            });
+                            }).catch(function (error) {
+                                logger.error('[clonepoke] There was an error: ' + error);
+                                interaction.editReply("Error checking database! Please try again.");
+                                return;
+                            })
                             //interaction.reply("We tried to create a perfect copy of your pokemon.....");
                             //interaction.reply("We suceeded.");
-                            interaction.followUp("Cloning procedure complete. Use /showpoke " + cloneName + " to view your new old friend.");
+                            interaction.editReply("Cloning procedure complete. Use /showpoke " + cloneName + " to view your new old friend.");
                             logger.info("[clonepoke] Cloning completed.");
                         });
 
-                        
+
+                    }).catch(function (error) {
+                        logger.error('[clonepoke] There was an error: ' + error);
+                        interaction.editReply("Error checking database! Please try again.");
+                        return;
                     });
 
                 }
             });
-        }
+    }
     catch (error) {
         logger.error("[clonepoke] Error! " + error);
         interaction.editReply('ChaCha machine :b:roke, please try again later').catch(console.error);
         return;
     }
-    
+
 }
