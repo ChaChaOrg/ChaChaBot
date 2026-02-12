@@ -11,6 +11,8 @@ const SHINY_CHANCE = 4096;
 const FRIEND_TRESH = [35, 71, 121, 171, 221]
 const FRIEND_VAL = ["Hostile", "Unfriendly", "Indifferent", "Friendly", "Helpful", "Fanatic"]
 
+const SQL_SANITATION_REGEX = /[^a-zA-Z0-9-'_]/;
+
 const logger = require('../logs/logger.js');
 let Nature = require("./nature.js");
 let Moveset = require("./moveset.js");
