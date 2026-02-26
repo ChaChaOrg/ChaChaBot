@@ -85,6 +85,8 @@ function Pokemon(tempSpecies, tempLevel, tempName, tempform) {
 
   this.campaign = "None";
 
+  this.eggParent = this.form;
+
 
 }
 
@@ -569,7 +571,7 @@ Pokemon.prototype.sendSummaryMessage = function (interaction) {
         },
         {
             name: "Basic Info",
-            value: `**Ability:** [${tempAbility}](${tempAbilityURL}) | **Gender:** ${this.gender} \n**Nature: ** ${this.nature.natureFinal} | ` +
+            value: `**Ability:** [${tempAbility}](${tempAbilityURL}) | **Gender:** ${this.gender} \n**Egg Move Parent:** ${this.eggParent}\n**Nature:** ${this.nature.natureFinal} | ` +
             `**Shiny: ** ${shiny} ` + `\n**OT:** ${this.originalTrainer} | **Campaign:** ${this.campaign}` +
             `\n**Type 1:** [${capitalizeWord(this.type1)}](https://bulbapedia.bulbagarden.net/wiki/${this.type1}_(type)) ` +
             `**Type 2:** [${capitalizeWord(this.type2)}](https://bulbapedia.bulbagarden.net/wiki/${this.type2}_(type))`+
@@ -655,7 +657,7 @@ Pokemon.prototype.uploadPokemon = function (connection, interaction) {
         hpIV, atkIV, defIV, spaIV, spdIV, speIV, 
         hpEV, atkEV, defEV, spaEV, spdEV, speEV, exp,
         move1, move2, move3, move4, move5, moveProgress, 
-        originalTrainer, discordID, private, dateCreated, campaign) 
+        originalTrainer, discordID, private, dateCreated, campaign, eggParent) 
         VALUES (
         "${this.name}",
         "${this.species}",
@@ -696,7 +698,8 @@ Pokemon.prototype.uploadPokemon = function (connection, interaction) {
         ${interaction.user.id},
         ${this.private},
         '${this.dateCreated}',
-        "${this.campaign}")`
+        "${this.campaign}",
+        "${this.eggParent}")`
   //console.log(sql);
   logger.info(`[pokemon] upload SQL query: ${sql}`);
   connection.query(sql, function (err, result) {
@@ -759,7 +762,9 @@ Pokemon.prototype.updatePokemon = function (connection, message, pokePrivate, in
             moveProgress = ${this.moveSet.moveProgress},
             private = ${pokePrivate},
             
-            campaign = "${this.campaign}"
+            campaign = "${this.campaign}",
+
+            eggParent = "${this.eggParent}"
          WHERE name = "${this.name}";`;
 
   //console.log(sql);
@@ -1211,6 +1216,8 @@ Pokemon.prototype.loadFromSQL = function (connection, P, sqlObject) {
                     this.originalTrainer = sqlObject.originalTrainer;
 
                     this.campaign = sqlObject.campaign;
+
+                    this.eggParent = sqlObject.eggParent;
 
                     if (sqlObject.shiny != null) {
                         this.shiny = sqlObject.shiny;
