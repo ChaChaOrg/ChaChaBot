@@ -88,7 +88,7 @@ module.exports.run = async (interaction) => {
 
                             nameLine += cloneName + " (" + basePoke.species + ") (" + basePoke.gender + ")\n";
                             ability += basePoke.ability + "\n";
-                            level += basePoke.level + "\n";
+                            level += (basePoke.level * 5) + "\n";
 
                             evs += basePoke.statBlock.evStats[HP_ARRAY_INDEX] + " HP / " + basePoke.statBlock.evStats[ATK_ARRAY_INDEX] + " Atk / " +
                                 basePoke.statBlock.evStats[DEF_ARRAY_INDEX] + " Def / " + basePoke.statBlock.evStats[SPA_ARRAY_INDEX] + " SpA / " +
@@ -100,6 +100,7 @@ module.exports.run = async (interaction) => {
                                 basePoke.statBlock.ivStats[DEF_ARRAY_INDEX] + " Def / " + basePoke.statBlock.ivStats[SPA_ARRAY_INDEX] + " SpA / " +
                                 basePoke.statBlock.ivStats[SPD_ARRAY_INDEX] + " SpD / " + basePoke.statBlock.ivStats[SPE_ARRAY_INDEX] + " Spe\n";
 
+                            
                             importString += nameLine + ability + level + evs + nature + ivs;
                             //interaction.reply("DNA sequencing complete.");
                             //interaction.reply("Beginning incubation procedure....");
