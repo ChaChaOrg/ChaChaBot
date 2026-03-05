@@ -36,6 +36,7 @@ const HELP_FIELDS_LIST = "Here's the list of all available fields on a Pokemon t
     "**Other**\n" +
     "> `originalTrainer` // The Pokemon's trainer\n" +
     "> `campaign` // The Pokemon's campaign\n" +
+    "> `eggParent` // A special parentage used for egg moves\n"
     "> `shiny` // Shiny status (0 = false, 1 = true)\n" +
     "> `private` // Private marker, generated pokemon set to private (1) by default. (0 = false, 1 = true) (*Private" +
     " Pokemon can only be seen by their creator*)";
@@ -47,7 +48,7 @@ const FEWARGS_MESSAGE = "Too few arguments submitted. Check your submission for 
 const NONEXISTENT_FIELD_MESSAGE = "That isn't a valid field to change! Please check your spelling and try again."
 
 // array of variables that can go straight to being updated
-const STATIC_FIELDS = ["ability", "name", "gender", "hp", "atk", "def", "spa", "spd", "spe", "move1", "move2", "move3", "move4", "move5", "moveProgress", "originalTrainer", "shiny", "private"];
+const STATIC_FIELDS = ["ability", "name", "gender", "hp", "atk", "def", "spa", "spd", "spe", "move1", "move2", "move3", "move4", "move5", "moveProgress", "originalTrainer", "shiny", "private", "eggParent"];
 const OTHER_FIELDS = ["species", "form", "level", "nature", "type1", "type2", "hpIV", "hpEV", "atkIV", "atkEV", "defIV", "defEV", "spaIV", "spaEV", "spdIV", "spdEV", "speIV", "speEV","exp","friendship"]
 
 const ALL_NATURES = ["adamant", "bashful", "bold", "brave", "calm", "careful", "docile", "gentle", "hardy", "hasty", "impish", "jolly", 
