@@ -441,7 +441,8 @@ module.exports.run = async (interaction) => {
                                         let errorMessage = "Unable to update static field " + valName + " of " + pokeName;
                                         logger.error(`[modpoke] ${errorMessage}\n\t${err.toString()}`);
                                         logger.error("[modpoke] " + err);
-                                        interaction.editReply(errorMessage + err);
+                                        //interaction.editReply(errorMessage + err);
+                                        interaction.editReply("Error updating pokemon.");
                                         reject();
                                     } else {
                                         let successMessage = "**" + pokeName + "'s** " + valName + " has been changed to " + valString + "!";
@@ -450,6 +451,9 @@ module.exports.run = async (interaction) => {
                                         interaction.client.pokemonCacheUpdate();
                                         resolve();
                                     }
+                                }).catch(function (error) {
+                                    logger.error("[modpoke] SQL update error:" + error);
+                                    interaction.editReply("Error updating pokemon. Please try again later. Contact bot wranglers if error persists.");
                                 });
                             }
                         });
@@ -908,6 +912,9 @@ module.exports.run = async (interaction) => {
                     });
                 }
             }
+        }).catch(function (error) {
+            logger.error("[modpoke] Error finding pokemon:" + error);
+            interaction.editReply("Error finding pokemon. Please try again later. Contact bot wranglers if error persists.");
         });
 
 

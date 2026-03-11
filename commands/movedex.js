@@ -15,7 +15,7 @@ module.exports.data = new SlashCommandBuilder()
 
 module.exports.autocomplete = async (interaction) => {
   const focusedValue = interaction.options.getFocused();
-  var choices = interaction.client.movelist;
+  let choices = interaction.client.movelist;
 
   const filtered = choices.filter(choice => choice[1].toLowerCase().startsWith(focusedValue.toLowerCase())).slice(0, 24);
   await interaction.respond(

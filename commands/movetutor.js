@@ -216,13 +216,13 @@ module.exports.run = async (interaction) => {
 						logs.info('[movetutor] Displaying results');
 						output += '**Out of Combat Checks** (Checks 1-3)\n';
 						output += "Use your trainer's CHA modifier for these checks.\n";
-						output += '```First DC: ' + DCs[0] + ' // ' + 'Second DC: ' + DCs[1] + ' // ' + 'Third' +
+						output += '```First DC: ' + DCs[0] + '(Skip at rank 4) // ' + 'Second DC: ' + DCs[1] + ' // ' + 'Third' +
 							' DC:' +
-							' ' + DCs[2] + '```\n';
+							' ' + DCs[2] + '(Skip at rank 12)```\n';
 						output += '**In Combat Checks** (Checks 4-6)\n';
 						output += "Replace your trainer's CHA modifier with your pokemon's INT modifier (*or 0 if" +
 							" it's negative*) for these checks.\n";
-						output += '```First DC: ' + DCs[3] + ' // ' + 'Second DC: ' + DCs[4] + ' // ' + 'Third' +
+						output += '```First DC: ' + DCs[3] + '(Skip at rank 8) // ' + 'Second DC: ' + DCs[4] + ' // ' + 'Third' +
 							' DC:' +
 							' ' + DCs[5] + '```\n';
 						output += ':small_blue_diamond: **First Evolutionary Stage** gets **+5** to the check if' +
@@ -231,6 +231,7 @@ module.exports.run = async (interaction) => {
 							" if it's the second evolution" +
 							' stage that can learn' +
 							' the move.\n';
+						output += '**Friendship Bonuses**\n Friendly: +1\n Helpful: +3\n Fanatic: +6\n';
 						interaction.followUp(output);
 						//let index = data.search(workingName);
 						//index += workingName.length;
