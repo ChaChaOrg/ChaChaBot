@@ -75,9 +75,7 @@ module.exports.run = async (interaction) => {
                    // }                    
                     
                     interaction.deferReply("Extracting " + name + "'s DNA sequence....");
-                    basePoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, response[0]).then(response => {
-
-                        let clonesql = `SELECT * FROM pokemon WHERE name LIKE '${cloneName}%';`;
+                    basePoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, response[0]).then(response => {                        let clonesql = `SELECT * FROM pokemon WHERE name LIKE '${cloneName}%';`;
                         interaction.client.mysqlConnection.query(clonesql, function (err, response) {
                             if (!response) {
                                 logger.error("[clonepoke] Database communication failed.");
@@ -107,8 +105,9 @@ module.exports.run = async (interaction) => {
                             let importString = "";
 
                             nameLine += cloneName + " (" + basePoke.species + ") (" + basePoke.gender + ")\n";
-                            ability += basePoke.ability.name + "\n";
-                            level += basePoke.level * 5 + "\n";
+
+                            ability += basePoke.ability + "\n";
+                            level += (basePoke.level * 5) + "\n";
 
                             evs += basePoke.statBlock.evStats[HP_ARRAY_INDEX] + " HP / " + basePoke.statBlock.evStats[ATK_ARRAY_INDEX] + " Atk / " +
                                 basePoke.statBlock.evStats[DEF_ARRAY_INDEX] + " Def / " + basePoke.statBlock.evStats[SPA_ARRAY_INDEX] + " SpA / " +
@@ -120,25 +119,34 @@ module.exports.run = async (interaction) => {
                                 basePoke.statBlock.ivStats[DEF_ARRAY_INDEX] + " Def / " + basePoke.statBlock.ivStats[SPA_ARRAY_INDEX] + " SpA / " +
                                 basePoke.statBlock.ivStats[SPD_ARRAY_INDEX] + " SpD / " + basePoke.statBlock.ivStats[SPE_ARRAY_INDEX] + " Spe\n";
 
+                            
                             importString += nameLine + ability + level + evs + nature + ivs;
                             //interaction.reply("DNA sequencing complete.");
                             //interaction.reply("Beginning incubation procedure....");
                             logger.info("[clonepoke] Importing clone.");
                             clonePoke.importPokemon(interaction.client.mysqlConnection, interaction.client.pokedex, importString).then(response => {
                                 clonePoke.uploadPokemon(interaction.client.mysqlConnection, interaction);
-                            });
+                            }).catch(function (error) {
+                                logger.error('[clonepoke] There was an error: ' + error);
+                                interaction.editReply("Error checking database! Please try again.");
+                                return;
+                            })
                             //interaction.reply("We tried to create a perfect copy of your pokemon.....");
                             //interaction.reply("We suceeded.");
                             interaction.editReply("Cloning procedure complete. Use /showpoke " + cloneName + " to view your new old friend.");
                             logger.info("[clonepoke] Cloning completed.");
                         });
 
-                        
+
+                    }).catch(function (error) {
+                        logger.error('[clonepoke] There was an error: ' + error);
+                        interaction.editReply("Error checking database! Please try again.");
+                        return;
                     });
 
                 }
             });
-        }
+    }
     catch (error) {
        
         logger.error("[clonepoke] Error: " + error.toString());
@@ -149,5 +157,5 @@ module.exports.run = async (interaction) => {
         interaction.channel.send(error.toString());
         interaction.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);*/
     }
-    
+
 }
