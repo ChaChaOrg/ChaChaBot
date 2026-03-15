@@ -451,9 +451,6 @@ module.exports.run = async (interaction) => {
                                         interaction.client.pokemonCacheUpdate();
                                         resolve();
                                     }
-                                }).catch(function (error) {
-                                    logger.error("[modpoke] SQL update error:" + error);
-                                    interaction.editReply("Error updating pokemon. Please try again later. Contact bot wranglers if error persists.");
                                 });
                             }
                         });
