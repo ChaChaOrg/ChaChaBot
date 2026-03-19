@@ -127,17 +127,20 @@ module.exports.autocomplete = async (interaction) => {
 
         const filtered = choices.filter(choice => choice.toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
         await interaction.respond(
-           filtered.map(choice => ({ name: choice, value: choice })),
+            filtered.map(choice => ({ name: choice, value: choice })),
         )
-    }else if(field === "move1" || field === "move2" || field === "move3" || field === "move4" || field === "move5"){
-        var choices = interaction.client.movelist;
-
-        const filtered = choices.filter(choice => choice[1].toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
-        await interaction.respond(
-            filtered.map(choice => ({ name: choice[1], value: choice[8] })),
-        )
-    }
-  }else{
+      } else if (field === "move1" || field === "move2" || field === "move3" || field === "move4" || field === "move5") {
+          const choices = interaction.client.movelist;
+          //const entries = choices.entries().toMemberArray();
+          const keys = Array.from(choices.keys());
+          //console.log(keys[1]);
+          const filtered = keys.filter(key => key.toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);//toArray();//take(24).toArray();
+          //entries.filter(choice => choice[choice[1].toLowerCase().startsWith(focusedValue.value.toLowerCase())][choice[1].length - 1]).slice(0,24);//.toArray().slice(0, 24); .filter(key => key.toLowerCase().startsWith(focusedValue.value.toLowerCase()))
+          await interaction.respond(
+              filtered.map(choice => ({ name: choice, value: choices.get(choice)[8] })),
+          )
+      }
+  } else {
     //nothing
   }
   
@@ -909,10 +912,7 @@ module.exports.run = async (interaction) => {
                     });
                 }
             }
-        }).catch(function (error) {
-            logger.error("[modpoke] Error finding pokemon:" + error);
-            interaction.editReply("Error finding pokemon. Please try again later. Contact bot wranglers if error persists.");
-        });
+        })
 
 
     } catch (error) {
