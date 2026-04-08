@@ -68,7 +68,7 @@ module.exports.run = async (interaction) => {
             }
             else {
                 // check if the user is allowed to edit the Pokemon. If a Pokemon is private, the user's discord ID must match the Pokemon's creator ID
-                if (response[0].private > 0 && interaction.member.user.id !== response[0].discordID) {
+                if (response[0].private > 0 && interaction.user.id !== response[0].discordID) {
                     logger.info("[showpoke] Detected user attempting to edit private Pokemon that isn't their own.")
                     // If user found a pokemon that was marked private and belongs to another user, act as if the pokemon doesn't exist in messages
                     interaction.editReply(notFoundMessage);
