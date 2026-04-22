@@ -113,7 +113,7 @@ Statblock.prototype.assignRandIVs = function () {
 Statblock.prototype.calculateSaves = function (pokemon) {
   logger.info("[statblock] Calculating saves.")
   //temp values
-  tempTypes = [pokemon.type1, pokemon.type2];
+  tempTypes = [pokemon.type1.toLowerCase(), pokemon.type2.toLowerCase()];
 
   let fortTypeBonus = 0;
   let refTypeBonus = 0;
