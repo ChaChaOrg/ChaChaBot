@@ -23,7 +23,7 @@ function Nature() {
 }
 
 Nature.prototype.calculateNatureStats = function (pokemon) {
-    logger.info("[nature] Calculating nature stats.")
+    //logger.info("[nature] Calculating nature stats.")
 //    console.log("x " + this.natureXCoord + " Y: " + this.natureYCoord + " final: " + this.natureFinal);
     if (this.natureXCoord !== this.natureYCoord) {
         for (let i = 0; i < STAT_ARRAY_MAX; i++) {
@@ -35,7 +35,7 @@ Nature.prototype.calculateNatureStats = function (pokemon) {
             }
         }
     }
-    console.log("nmulti="+ pokemon.statBlock.nMultiStats);
+    //console.log("nmulti="+ pokemon.statBlock.nMultiStats);
 };
 /**
  * Assigns a nature to a Pokemon given both the Pokemon itself and the desired nature
@@ -43,7 +43,7 @@ Nature.prototype.calculateNatureStats = function (pokemon) {
  * @param nature the desired new Nature
  */
 Nature.prototype.assignNature = function (pokemon, nature) {
-    logger.info("[nature] Assigning nature.")
+    //logger.info("[nature] Assigning nature.")
     this.natureFinal = nature;
     this.natureXCoord = 0;
     this.natureYCoord = 0;
@@ -61,21 +61,25 @@ Nature.prototype.assignNature = function (pokemon, nature) {
         }
     }.bind(this));
 
+    console.log("[nature] Assigned nature.")
+    logger.info("[nature] Assigned nature.")
     this.calculateNatureStats(pokemon);
 
 };
 
 //generate nature
 Nature.prototype.assignRandNature = function (pokemon) {
-    logger.info("[nature] Assigning random nature.")
+    //logger.info("[nature] Assigning random nature.")
     //x-coord for nature
     //these temp vars are the reason genpoke was messing up the nature
     let natureXCoord = Math.floor((Math.random() * NATURE_ARRAY_MAX)); //val between 0-4 for array
     //y-coord for nature
     let natureYCoord = Math.floor((Math.random() * NATURE_ARRAY_MAX));
-    console.log(natureXCoord + ", " + natureYCoord);
+    //console.log(natureXCoord + ", " + natureYCoord);
     //assign selected nature
     //temp var issue can be corrected by going through assignNature like this
+    console.log("[nature] Assigned random nature.")
+    logger.info("[nature] Assigned random nature.")
     this.assignNature(pokemon, NATURE_NAMES[natureXCoord][natureYCoord]);
     //assign nature to final val
     //this.natureFinal = NATURE_NAMES[natureXCoord][natureYCoord];
