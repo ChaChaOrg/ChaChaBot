@@ -61,8 +61,6 @@ Nature.prototype.assignNature = function (pokemon, nature) {
         }
     }.bind(this));
 
-    console.log("[nature] Assigned nature.")
-    logger.info("[nature] Assigned nature.")
     this.calculateNatureStats(pokemon);
 
 };
@@ -78,8 +76,6 @@ Nature.prototype.assignRandNature = function (pokemon) {
     //console.log(natureXCoord + ", " + natureYCoord);
     //assign selected nature
     //temp var issue can be corrected by going through assignNature like this
-    console.log("[nature] Assigned random nature.")
-    logger.info("[nature] Assigned random nature.")
     this.assignNature(pokemon, NATURE_NAMES[natureXCoord][natureYCoord]);
     //assign nature to final val
     //this.natureFinal = NATURE_NAMES[natureXCoord][natureYCoord];

@@ -140,8 +140,8 @@ module.exports.run = async (interaction) => {
                             })
                             //interaction.reply("We tried to create a perfect copy of your pokemon.....");
                             //interaction.reply("We suceeded.");
-                            logger.info("[clonepoke] Cloning completed, new clone: " + clonename);
-                            console.log("[clonepoke] Cloning completed, new clone: " + clonename);
+                            logger.info("[clonepoke] Cloning completed, new clone: " + cloneName);
+                            console.log("[clonepoke] Cloning completed, new clone: " + cloneName);
                             interaction.editReply("Cloning procedure complete. Use /showpoke " + cloneName + " to view your new old friend.");
                         });
 
