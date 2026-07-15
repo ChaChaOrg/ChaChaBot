@@ -103,6 +103,8 @@ module.exports.autocomplete = async (interaction) => {
   };
 
 module.exports.run = async (interaction) => {
+	console.log("USER: " + interaction.user + " RUNNING GENTRAINER: " + interaction.toString());
+	logger.info("USER: " + interaction.user + " RUNNING GENTRAINER: " + interaction.toString());
 
 	await interaction.deferReply();
 
@@ -1704,6 +1706,7 @@ module.exports.run = async (interaction) => {
 			var randT2 = Math.floor(Math.random() * trainerTypes[randT1].length);
 
 			logger.info("[gentrainer] " + `Watch out! It's ${trainerTypes[randT1][randT2]} ${nameOptions[randName]}!`)
+			console.log("[gentrainer] " + `Watch out! It's ${trainerTypes[randT1][randT2]} ${nameOptions[randName]}!`)
 			interaction.followUp(`Watch out! It's ${trainerTypes[randT1][randT2]} ${nameOptions[randName]}!`);
 			return;
 		} else if (interaction.options.getSubcommand() === 'showtypes'){
@@ -1714,12 +1717,14 @@ module.exports.run = async (interaction) => {
 				allTypes = allTypes + "\n";
 			}
 			logger.info("[gentrainer] Sending all trainer types.")
+			console.log("[gentrainer] Sending all trainer types.")
 			interaction.followUp(`All trainer types: \n${allTypes}`).catch(console.error);
 			return;
 		} else if (interaction.options.getSubcommand() === 'randomname'){
 			//If Random Name is requested, return a random name
 			var randName = Math.floor(Math.random() * nameOptions.length);
 			logger.info("[gentrainer] " + `Watch out! It's Trainer ${nameOptions[randName]}!`)
+			console.log("[gentrainer] " + `Watch out! It's Trainer ${nameOptions[randName]}!`)
 			interaction.followUp(`Watch out! It's Trainer ${nameOptions[randName]}!`);
 			return;
 		} else if (interaction.options.getSubcommand() === 'generatetrainer'){
@@ -1841,7 +1846,7 @@ module.exports.run = async (interaction) => {
 
 				//print the trainer out.
 
-				logger.info("[gentrainer] Sending embed interaction.")
+				// logger.info("[gentrainer] Sending embed interaction.")
 
 				let embed = {embed: {
 					color: 3447003,
@@ -1883,11 +1888,14 @@ module.exports.run = async (interaction) => {
 						text: "Chambers and Charizard!"
 					}
 				}}
+				logger.info("[gentrainer] Generated random trainer " + tName);
+				console.log("[gentrainer] Generated random trainer " + tName);
 				interaction.followUp({ embeds: [
 					embed.embed
 				]});
 			} catch (error) {
 				logger.error("[gentrainer] " + error)
+				console.log("[gentrainer] " + error)
 				interaction.followUp(`ChaCha Machine :b:roke :^(. ${error.message}`).catch(console.error);
 			}
 			

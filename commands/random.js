@@ -16,6 +16,10 @@ module.exports.data = new SlashCommandBuilder()
 			));
 
 module.exports.run = async (interaction) => {
+
+	console.log("USER: " + interaction.user + " RUNNING RANDOM: " + interaction.toString());
+	logger.info("USER: " + interaction.user + " RUNNING RANDOM: " + interaction.toString());
+	
 	await interaction.deferReply();
 	let choice = interaction.options.getString('category');
 
@@ -26,6 +30,8 @@ module.exports.run = async (interaction) => {
 			let random = pokemonPool.results[arrayPos].name;
 			let randomClean = random.charAt(0).toUpperCase() + random.slice(1);
 			randomClean = randomClean.replace("-", " ");
+			logger.info("[random] Random Species: " + randomClean);
+			console.log("[random] Random Species: " + randomClean);
 			interaction.followUp("Random Pokemon Species: " + randomClean);
 		})
 	}else if (choice === 'move'){
@@ -35,6 +41,8 @@ module.exports.run = async (interaction) => {
 			let random = movePool.results[arrayPos].name;
 			let randomClean = random.charAt(0).toUpperCase() + random.slice(1);
 			randomClean = randomClean.replace("-", " ");
+			logger.info("[random] Random Move: " + randomClean);
+			console.log("[random] Random Move: " + randomClean);
 			interaction.followUp("Random Move: " + randomClean);
 		})
 	}else if (choice === 'ability'){
@@ -44,11 +52,14 @@ module.exports.run = async (interaction) => {
 			let random = abilityPool.results[arrayPos].name;
 			let randomClean = random.charAt(0).toUpperCase() + random.slice(1);
 			randomClean = randomClean.replace("-", " ");
+			logger.info("[random] Random Ability: " + randomClean);
+			console.log("[random] Random Ability: " + randomClean);
 			interaction.followUp("Random Ability: " + randomClean);
 		})
 	}else{
 		//Error
 		logger.info("[random] Somehow chose nothing to generate.")
+		console.log("[random] Somehow chose nothing to generate.")
         interaction.followUp("Error generating a random value.");
         return;
 	}

@@ -66,6 +66,9 @@ module.exports.data = new SlashCommandBuilder()
 
 module.exports.run = async (interaction) => {
 
+	console.log("USER: " + interaction.user + " RUNNING STATCONVERSION: " + interaction.toString());
+    logger.info("USER: " + interaction.user + " RUNNING STATCONVERSION: " + interaction.toString());
+
 	await interaction.deferReply();
 
 	let option = interaction.options.getString("stat");
@@ -85,30 +88,35 @@ module.exports.run = async (interaction) => {
 	if (option === 'HP') {
 
 		ability = Math.ceil((value * 0.15) + 1.5);
+		console.log("[statconversion] converted HP to CON.")
 		logger.info("[statconversion] converted HP to CON.");
 		interaction.followUp("An HP stat of " + value + " becomes a Constitution score of " + ability + " Note: Final HP value used should be equal to the base stat plus HP IVs. Stages don't apply to HP/CON!");
 
 	} else if (option === 'Attack') {
 
 		ability = Math.ceil((value * stageMult * 0.15) + 1.5);
+		console.log("[statconversion] converted Attack to STR.");
 		logger.info("[statconversion] converted Attack to STR.");
 		interaction.followUp("With " + stages + " stages, an Attack stat of " + value + " becomes a Strength score of " + ability);
 
 	} else if (option === 'Defense') {
 
 		ability = Math.ceil((value * stageMult * 0.08) - 0.6);
+		console.log("[statconversion] converted Defense to Natural Armor.");
 		logger.info("[statconversion] converted Defense to Natural Armor.");
 		interaction.followUp("With " + stages + " stages, a Defense stat of " + value + " becomes a Natural Armor value of " + ability);
 
 	} else if (option === 'Special Attack') {
 
 		ability = Math.ceil((value * stageMult * 0.15) + 1.5);
+		console.log("[statconversion] converted Special Attack to INT.");
 		logger.info("[statconversion] converted Special Attack to INT.");
 		interaction.followUp("With " + stages + " stages, a Special Attack stat of " + value + " becomes an Intelligence score of " + ability);
 
 	} else if (option === 'Special Defense') {
 
 		ability = Math.ceil((value * 0.15) + 1.5);
+		console.log("[statconversion] converted Special Defense to WIS.");
 		logger.info("[statconversion] converted Special Defense to WIS.");
 		interaction.followUp("With " + stages + " stages, a Special Defense stat of " + value + " becomes a Wisdom score of " + ability);
 
@@ -116,12 +124,14 @@ module.exports.run = async (interaction) => {
 
 		ability = Math.ceil((value * stageMult * 0.15) + 1.5);
 		ability2 = Math.ceil((0.38 * (value * stageMult)) + 4);
+		console.log("[statconversion] converted Speed to Dexterity and Move Speed.");
 		logger.info("[statconversion] converted Speed to Dexterity and Move Speed.");
 		interaction.followUp("With " + stages + " stages, a Speed stat of " + value + " becomes a Dexterity score of " + ability + " and a Move Speed of " + ability2 + " feet per round");
 
 	} else if (option === 'Constitution'){
 
 		ability = Math.floor((value-1.5) * (20/3));
+		console.log("[statconversion] converted CON to HP.");
 		logger.info("[statconversion] converted CON to HP.");
 		interaction.followUp("A Constitution of " + value + " becomes a maximum HP stat of " + ability + ". Stages don't apply to HP/CON!");
 
@@ -129,6 +139,7 @@ module.exports.run = async (interaction) => {
 
 		ability = Math.floor((value-1.5) * (20/3));
 		ability = Math.floor(ability * stageMult);
+		console.log("[statconversion] converted STR to Attack.");
 		logger.info("[statconversion] converted STR to Attack.");
 		interaction.followUp("With " + stages + " stages, a Strength of " + value + " becomes a maximum Attack stat of " + ability);
 
@@ -136,6 +147,7 @@ module.exports.run = async (interaction) => {
 
 		ability = Math.floor((value+0.6) * 12.5);
 		ability = Math.floor(ability * stageMult);
+		console.logo("[statconversion] converted Natural Armor to Defense.");
 		logger.info("[statconversion] converted Natural Armor to Defense.");
 		interaction.followUp("With " + stages + " stages, a Natural Armor of " + value + " becomes a maximum Defense stat of " + ability);
 		
@@ -143,6 +155,7 @@ module.exports.run = async (interaction) => {
 
 		ability = Math.floor((value-1.5) * (20/3));
 		ability = Math.floor(ability * stageMult);
+		console.log("[statconversion] converted INT to Special Attack.");
 		logger.info("[statconversion] converted INT to Special Attack.");
 		interaction.followUp("With " + stages + " stages, an Intelligence of " + value + " becomes a maximum Special Attack stat of " + ability);
 		
@@ -150,6 +163,7 @@ module.exports.run = async (interaction) => {
 
 		ability = Math.floor((value-1.5) * (20/3));
 		ability = Math.floor(ability * stageMult);
+		console.log("[statconversion] converted WIS to Special Defense.");
 		logger.info("[statconversion] converted WIS to Special Defense.");
 		interaction.followUp("With " + stages + " stages, a Wisdom of " + value + " becomes a maximum Special Defense stat of " + ability);
 		
@@ -157,6 +171,7 @@ module.exports.run = async (interaction) => {
 
 		ability = Math.floor((value-1.5) * (20/3));
 		ability = Math.floor(ability * stageMult);
+		console.log("[statconversion] converted DEX to Speed.");
 		logger.info("[statconversion] converted DEX to Speed.");
 		interaction.followUp("With " + stages + " stages, a Dexterity of " + value + " becomes a maximum Speed stat of " + ability + ", which may not match with a conversion from Move Speed");
 		
@@ -164,6 +179,7 @@ module.exports.run = async (interaction) => {
 
 		ability = Math.floor((value-4) * (50/19));
 		ability = Math.floor(ability * stageMult);
+		console.log("[statconversion] converted Move Speed to Speed.");
 		logger.info("[statconversion] converted Move Speed to Speed.");
 		interaction.followUp("With " + stages + " stages, a Move Speed of " + value + " becomes a maximum Speed stat of " + ability + ", which may not match with a conversion from Dexterity");
 		

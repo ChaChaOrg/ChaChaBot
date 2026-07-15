@@ -343,12 +343,18 @@ module.exports.autocomplete = async (interaction) => {
 
 
 module.exports.run = async (interaction) => {
+  
+  console.log("USER: " + interaction.user + " RUNNING DAMAGE: " + interaction.toString());
+  logger.info("USER: " + interaction.user + " RUNNING DAMAGE: " + interaction.toString());
+  
   try {
 
 
     await interaction.deferReply();
 
     if (interaction.options.getSubcommand() === 'help') {
+      console.log("[damage] Sent help message.")
+      logger.info("[damage] Sent help message.")
       interaction.editReply(HELP_MESSAGE);
       return;
     } else if (interaction.options.getSubcommand() === 'battle') {
@@ -419,6 +425,7 @@ module.exports.run = async (interaction) => {
 
       if (attackerName.toLowerCase() === defenderName.toLowerCase()) {
         let errMsg = 'Did you mean to attack yourself? :thinking: You can\'t do that.';
+        console.log(errMsg);
         logger.error(errMsg);
         interaction.followUp(errMsg);
         return;
@@ -449,12 +456,13 @@ module.exports.run = async (interaction) => {
 
 
       let sql = `SELECT * FROM pokemon WHERE name = '${attackerName}' OR name = '${defenderName}';`;
-      logger.info(`[damage] SQL query: ${sql}`)
+      // logger.info(`[damage] SQL query: ${sql}`)
       //console.log(sql);
 
       let loadSQLPromise = [];
 
       if (attackerName.match(SQL_SANITATION_REGEX) || defenderName.match(SQL_SANITATION_REGEX)) {
+        console.log("[damage] User tried to put in invalid string input.");
         logger.error("[damage] User tried to put in invalid string input.");
         interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
         return;
@@ -462,6 +470,7 @@ module.exports.run = async (interaction) => {
       interaction.client.mysqlConnection.query(sql, function (err, response) {
         if (err) {
           let errMsg = `Error with SQL query: ${err}`;
+          console.log(errMsg);
           logger.error(errMsg);
           interaction.followUp(errMsg);
           return;
@@ -469,6 +478,7 @@ module.exports.run = async (interaction) => {
 
         if (response.length === 0) {
           let errMsg = `Cannot find neither '${attackerName}' nor '${defenderName}'. Please check your spelling + case-sensitivity.`
+          console.log(errMsg);
           logger.error(errMsg);
           interaction.followUp(errMsg);
           return;
@@ -482,13 +492,14 @@ module.exports.run = async (interaction) => {
           else if (foundPokeName === defenderName)
             errMsg = `I found the defender '${defenderName}' but not the attacker. Please check your spelling + case-sensitivity.`
 
+          console.log(errMsg);
           logger.error(errMsg);
           interaction.followUp(errMsg);
           return;
         }
 
-        logger.info('[damage] Attacker: ' + response[0].name + ' retrieved from SQL database.');
-        logger.info('[damage] Defender: ' + response[1].name + ' retrieved from SQL database.');
+        // logger.info('[damage] Attacker: ' + response[0].name + ' retrieved from SQL database.');
+        // logger.info('[damage] Defender: ' + response[1].name + ' retrieved from SQL database.');
 
         //
         // Load the found pokemon into pokemon objects, then wait til they both complete before continuing.
@@ -502,6 +513,7 @@ module.exports.run = async (interaction) => {
         Promise.all(loadSQLPromise).then((response) => {
           
           if(!attackPoke.speciesData || !defendPoke.speciesData){
+            console.log("[damage] No Pokemon data returned - possible API/Connection error.")
             logger.error("[damage] No Pokemon data returned - possible API/Connection error.")
             // If Move or Type data is missing, the API call failed
             interaction.editReply("Pokemon present but no data returned. This is likely an API or Connection error. Please try again.");
@@ -513,6 +525,7 @@ module.exports.run = async (interaction) => {
           interaction.client.pokedex.getMoveByName(attackerMove.toLowerCase()).then((moveData) => {
             interaction.client.pokedex.getTypeByName(moveData.type.name).then((typeData) => {
               if(typeof moveData === undefined || typeof typeData === undefined){
+                console.log("[damage] Move Data or Type Data not found - possible API/Connection error.")
                 logger.error("[damage] Move Data or Type Data not found - possible API/Connection error.")
                 // If Move or Type data is missing, the API call failed
                 interaction.editReply("Move or Type Data not found. This is likely an API or Connection error. Please try again.");
@@ -521,6 +534,7 @@ module.exports.run = async (interaction) => {
 
               // Make sure offset is valid.
               if((attackPoke.level + atkLevelOffset) < 1){
+                console.log("[damage] Move Data or Type Data not found - possible API/Connection error.")
                 logger.error("[damage] Level offset brought final level below 1.")
                 // Too much offset, went negative!
                 interaction.editReply("Invalid level offset!");
@@ -821,16 +835,19 @@ module.exports.run = async (interaction) => {
               // comment out embed if necessary
 
               //embed message
+              console.log("[damage] Sending combat embed string.");
               logger.info("[damage] Sending combat embed string.");
               interaction.followUp({ embeds: [combatEmbedString] }).catch(console.error);
             }
             );
           }).catch(function (error) {
             if (error.response.status == 404) {
+              console.log("[damage] Move not found. " + error)
               logger.error("[damage] Move not found. " + error)
               interaction.followUp("Move not found, check your spelling and whether dashes are needed or not!");
               return;
             } else {
+              console.log('[damage] There was an error: ' + error);
               logger.error('[damage] There was an error: ' + error);
               interaction.followUp("Error getting move!");
               return;
@@ -888,12 +905,13 @@ module.exports.run = async (interaction) => {
 
 
       let sql = `SELECT * FROM pokemon WHERE name = '${attackerName}';`;
-      logger.info(`[damage] SQL query: ${sql}`)
+      // logger.info(`[damage] SQL query: ${sql}`)
       //console.log(sql);
 
       let loadSQLPromise = [];
 
       if (attackerName.match(SQL_SANITATION_REGEX)) {
+        console.log("[modpoke] User tried to put in invalid string input.");
         logger.error("[modpoke] User tried to put in invalid string input.");
         interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
         return;
@@ -901,6 +919,7 @@ module.exports.run = async (interaction) => {
       interaction.client.mysqlConnection.query(sql, function (err, response) {
         if (err) {
           let errMsg = `Error with SQL query: ${err}`;
+          console.log(errMsg);
           logger.error(errMsg);
           interaction.followUp(errMsg);
           return;
@@ -908,12 +927,13 @@ module.exports.run = async (interaction) => {
 
         if (response.length === 0) {
           let errMsg = `Cannot find '${attackerName}'. Please check your spelling + case-sensitivity.`
+          console.log(errMsg);
           logger.error(errMsg);
           interaction.followUp(errMsg);
           return;
         }
 
-        logger.info('[damage] Attacker: ' + response[0].name + ' retrieved from SQL database.');
+        // logger.info('[damage] Attacker: ' + response[0].name + ' retrieved from SQL database.');
 
         //
         // Load the found pokemon into a pokemon object, then wait til it both complete before continuing.
@@ -923,6 +943,7 @@ module.exports.run = async (interaction) => {
 
         Promise.all(loadSQLPromise).then((response) => {
           if(!attackPoke.speciesData){
+            console.log("[damage] No Pokemon data returned - possible API/Connection error.")
             logger.error("[damage] No Pokemon data returned - possible API/Connection error.")
             // If Move or Type data is missing, the API call failed
             interaction.editReply("Pokemon present but no data returned. This is likely an API or Connection error. Please try again.");
@@ -934,6 +955,7 @@ module.exports.run = async (interaction) => {
           interaction.client.pokedex.getMoveByName(attackerMove.toLowerCase()).then((moveData) => {
             interaction.client.pokedex.getTypeByName(moveData.type.name).then((typeData) => {
               if(typeof moveData === undefined || typeof typeData === undefined){
+                console.log("[damage] Move Data or Type Data not found - possible API/Connection error.")
                 logger.error("[damage] Move Data or Type Data not found - possible API/Connection error.")
                 // If Move or Type data is missing, the API call failed
                 interaction.editReply("Move or Type Data not found. This is likely an API or Connection error. Please try again.");
@@ -1221,16 +1243,19 @@ module.exports.run = async (interaction) => {
               // comment out embed if necessary
 
               //embed message
+              console.log("[damage] Sending combat embed string.");
               logger.info("[damage] Sending combat embed string.");
               interaction.followUp({ embeds: [combatEmbedString] }).catch(console.error);
             }
             );
           }).catch(function (error) {
             if (error.response.status == 404) {
+              console.log("[damage] Move not found. " + error)
               logger.error("[damage] Move not found. " + error)
               interaction.followUp("Move not found, check your spelling and whether dashes are needed or not!");
               return;
             } else {
+              console.log('[damage] There was an error: ' + error);
               logger.error('[damage] There was an error: ' + error);
               interaction.followUp("Error getting move!");
               return;
@@ -1292,12 +1317,13 @@ module.exports.run = async (interaction) => {
 
 
       let sql = `SELECT * FROM pokemon WHERE name = '${defenderName}';`;
-      logger.info(`[damage] SQL query: ${sql}`)
+      // logger.info(`[damage] SQL query: ${sql}`)
       //console.log(sql);
 
       let loadSQLPromise = [];
 
       if (defenderName.match(SQL_SANITATION_REGEX)) {
+        console.log("[modpoke] User tried to put in invalid string input.");
         logger.error("[modpoke] User tried to put in invalid string input.");
         interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
         return;
@@ -1305,6 +1331,7 @@ module.exports.run = async (interaction) => {
       interaction.client.mysqlConnection.query(sql, function (err, response) {
         if (err) {
           let errMsg = `Error with SQL query: ${err}`;
+          console.log(errMsg);
           logger.error(errMsg);
           interaction.followUp(errMsg);
           return;
@@ -1312,12 +1339,13 @@ module.exports.run = async (interaction) => {
 
         if (response.length === 0) {
           let errMsg = `Cannot find '${defenderName}'. Please check your spelling + case-sensitivity.`
+          console.log(errMsg);
           logger.error(errMsg);
           interaction.followUp(errMsg);
           return;
         }
 
-        logger.info('[damage] Defender: ' + response[0].name + ' retrieved from SQL database.');
+        // logger.info('[damage] Defender: ' + response[0].name + ' retrieved from SQL database.');
 
         //
         // Load the found pokemon into a pokemon object, then wait til then wait to complete
@@ -1327,6 +1355,7 @@ module.exports.run = async (interaction) => {
 
         Promise.all(loadSQLPromise).then((response) => {
           if(!defendPoke.speciesData){
+            console.log("[damage] No Pokemon data returned - possible API/Connection error.")
             logger.error("[damage] No Pokemon data returned - possible API/Connection error.")
             // If Move or Type data is missing, the API call failed
             interaction.editReply("Pokemon present but no data returned. This is likely an API or Connection error. Please try again.");
@@ -1338,6 +1367,7 @@ module.exports.run = async (interaction) => {
           interaction.client.pokedex.getMoveByName(attackerMove.toLowerCase()).then((moveData) => {
             interaction.client.pokedex.getTypeByName(moveData.type.name).then((typeData) => {
               if(typeof moveData === undefined || typeof typeData === undefined){
+                console.log("[damage] Move Data or Type Data not found - possible API/Connection error.")
                 logger.error("[damage] Move Data or Type Data not found - possible API/Connection error.")
                 // If Move or Type data is missing, the API call failed
                 interaction.editReply("Move or Type Data not found. This is likely an API or Connection error. Please try again.");
@@ -1635,16 +1665,19 @@ module.exports.run = async (interaction) => {
               // comment out embed if necessary
 
               //embed message
+              console.log("[damage] Sending combat embed string.");
               logger.info("[damage] Sending combat embed string.");
               interaction.followUp({ embeds: [combatEmbedString] }).catch(console.error);
             }
             );
           }).catch(function (error) {
             if (error.response.status == 404) {
+              console.log("[damage] Move not found. " + error)
               logger.error("[damage] Move not found. " + error)
               interaction.followUp("Move not found, check your spelling and whether dashes are needed or not!");
               return;
             } else {
+              console.log('[damage] There was an error: ' + error);
               logger.error('[damage] There was an error: ' + error);
               interaction.followUp("Error getting move!");
               return;
@@ -1676,7 +1709,7 @@ module.exports.run = async (interaction) => {
 
       if (interaction.options.getNumber('additive-bonus'))
         other = interaction.options.getNumber('additive-bonus');
-      if (interaction.options.getNumber('multiplicitive-bonus'))
+      if (interaction.options.getNumber('multiplicative-bonus'))
         otherMult = interaction.options.getNumber('multiplicitive-bonus');
 
 
@@ -1697,14 +1730,15 @@ module.exports.run = async (interaction) => {
       //
       interaction.client.pokedex.getMoveByName(attackerMove.toLowerCase()).then((moveData) => {
         interaction.client.pokedex.getTypeByName(moveData.type.name).then((typeData) => {
-          if(typeof moveData === undefined || typeof typeData === undefined){
-                logger.error("[damage] Move Data or Type Data not found - possible API/Connection error.")
-                // If Move or Type data is missing, the API call failed
-                interaction.editReply("Move or Type Data not found. This is likely an API or Connection error. Please try again.");
-                return;
-              }
+          if (typeof moveData === undefined || typeof typeData === undefined) {
+            console.log("[damage] Move Data or Type Data not found - possible API/Connection error.")
+            logger.error("[damage] Move Data or Type Data not found - possible API/Connection error.")
+            // If Move or Type data is missing, the API call failed
+            interaction.editReply("Move or Type Data not found. This is likely an API or Connection error. Please try again.");
+            return;
+          }
 
-          //
+        //
           // Grab defender's types into a temporary object
           //
           let defenderTypes = [interaction.options.getString("type1"), interaction.options.getString("type2")];
@@ -1984,16 +2018,19 @@ module.exports.run = async (interaction) => {
           // comment out embed if necessary
 
           //embed message
+          console.log("[damage] Sending combat embed string.");
           logger.info("[damage] Sending combat embed string.");
           interaction.followUp({ embeds: [combatEmbedString] }).catch(console.error);
         }
         );
       }).catch(function (error) {
         if (error.response.status == 404) {
+          console.log("[damage] Move not found. " + error)
           logger.error("[damage] Move not found. " + error)
           interaction.followUp("Move not found, check your spelling and whether dashes are needed or not!");
           return;
         } else {
+          console.log('[damage] There was an error: ' + error);
           logger.error('[damage] There was an error: ' + error);
           interaction.followUp("Error getting move!");
           return;
@@ -2058,6 +2095,7 @@ module.exports.run = async (interaction) => {
 
       let moveName = interaction.options.getString('move-name-custom') ?? "CustomMove";
       if (moveName.match(SQL_SANITATION_REGEX)){
+        console.log("[damage] User tried to put in invalid string input.");
         logger.error("[damage] User tried to put in invalid string input.");
         interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
         return;
@@ -2068,6 +2106,7 @@ module.exports.run = async (interaction) => {
 
       if (attackerName.toLowerCase() === defenderName.toLowerCase()) {
         let errMsg = 'Did you mean to attack yourself? :thinking: You can\'t do that.';
+        console.log(errMsg);
         logger.error(errMsg);
         interaction.followUp(errMsg);
         return;
@@ -2098,19 +2137,21 @@ module.exports.run = async (interaction) => {
 
 
       let sql = `SELECT * FROM pokemon WHERE name = '${attackerName}' OR name = '${defenderName}';`;
-      logger.info(`[damage] SQL query: ${sql}`)
+      // logger.info(`[damage] SQL query: ${sql}`)
       //console.log(sql);
 
       let loadSQLPromise = [];
 
       if (attackerName.match(SQL_SANITATION_REGEX) || defenderName.match(SQL_SANITATION_REGEX)) {
-        logger.error("[modpoke] User tried to put in invalid string input.");
+        console.log("[damage] User tried to put in invalid string input.");
+        logger.error("[damage] User tried to put in invalid string input.");
         interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
         return;
       }
       interaction.client.mysqlConnection.query(sql, function (err, response) {
         if (err) {
           let errMsg = `Error with SQL query: ${err}`;
+          console.log(errMsg);
           logger.error(errMsg);
           interaction.followUp(errMsg);
           return;
@@ -2118,6 +2159,7 @@ module.exports.run = async (interaction) => {
 
         if (response.length === 0) {
           let errMsg = `Cannot find neither '${attackerName}' nor '${defenderName}'. Please check your spelling + case-sensitivity.`
+          console.log(errMsg);
           logger.error(errMsg);
           interaction.followUp(errMsg);
           return;
@@ -2131,13 +2173,14 @@ module.exports.run = async (interaction) => {
           else if (foundPokeName === defenderName)
             errMsg = `I found the defender '${defenderName}' but not the attacker. Please check your spelling + case-sensitivity.`
 
+          console.log(errMsg);
           logger.error(errMsg);
           interaction.followUp(errMsg);
           return;
         }
 
-        logger.info('[damage] Attacker: ' + response[0].name + ' retrieved from SQL database.');
-        logger.info('[damage] Defender: ' + response[1].name + ' retrieved from SQL database.');
+        // logger.info('[damage] Attacker: ' + response[0].name + ' retrieved from SQL database.');
+        // logger.info('[damage] Defender: ' + response[1].name + ' retrieved from SQL database.');
 
         //
         // Load the found pokemon into pokemon objects, then wait til they both complete before continuing.
@@ -2150,6 +2193,7 @@ module.exports.run = async (interaction) => {
 
         Promise.all(loadSQLPromise).then((response) => {
           if(!attackPoke.speciesData || !defendPoke.speciesData){
+            console.log("[damage] No Pokemon data returned - possible API/Connection error.")
             logger.error("[damage] No Pokemon data returned - possible API/Connection error.")
             // If Move or Type data is missing, the API call failed
             interaction.editReply("Pokemon present but no data returned. This is likely an API or Connection error. Please try again.");
@@ -2157,19 +2201,21 @@ module.exports.run = async (interaction) => {
           }
 
           interaction.client.pokedex.getTypeByName(moveType).then((typeData) => {
-            if(typeof typeData === undefined){
-                logger.error("[damage] Type Data not found - possible API/Connection error.")
-                // If Move or Type data is missing, the API call failed
-                interaction.editReply("Type Data not found. This is likely an API or Connection error. Please try again.");
-                return;
-              }
-            //
+            if (typeof typeData === undefined) {
+              console.log("[damage] Type Data not found - possible API/Connection error.")
+              logger.error("[damage] Type Data not found - possible API/Connection error.")
+              // If Move or Type data is missing, the API call failed
+              interaction.editReply("Type Data not found. This is likely an API or Connection error. Please try again.");
+              return;
+            }
+          //
             // Now that the pokemon have been found, grab the move information and the relevant type information.
             //
 
 
             // Make sure offset is valid.
             if ((attackPoke.level + atkLevelOffset) < 1) {
+              console.log("[damage] Level offset brought final level below 1.")
               logger.error("[damage] Level offset brought final level below 1.")
               // Too much offset, went negative!
               interaction.editReply("Invalid level offset!");
@@ -2469,16 +2515,19 @@ module.exports.run = async (interaction) => {
             // comment out embed if necessary
 
             //embed message
+            console.log("[damage] Sending combat embed string.");
             logger.info("[damage] Sending combat embed string.");
             interaction.followUp({ embeds: [combatEmbedString] }).catch(console.error);
           }
           );
         }).catch(function (error) {
           if (error.response.status == 404) {
+            console.log("[damage] Move not found. " + error)
             logger.error("[damage] Move not found. " + error)
             interaction.followUp("Move not found, check your spelling and whether dashes are needed or not!");
             return;
           } else {
+            console.log('[damage] There was an error: ' + error);
             logger.error('[damage] There was an error: ' + error);
             interaction.followUp("Error getting move!");
             return;
@@ -2487,6 +2536,7 @@ module.exports.run = async (interaction) => {
       })
     }
   } catch (error) {
+    console.log("[damage] Error!" + error);
     logger.error("[damage] Error!" + error);
     interaction.editReply("ChaCha machine :b:roke, please try again later");
     return;

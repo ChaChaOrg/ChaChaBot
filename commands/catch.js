@@ -46,12 +46,15 @@ module.exports.data = new SlashCommandBuilder()
 				.setDescription('Bonus from Status'));
 
 module.exports.run = async (interaction) => {
+	console.log("USER: " + interaction.user + " RUNNING CATCH: " + interaction.toString());
+    logger.info("USER: " + interaction.user + " RUNNING CATCH: " + interaction.toString());
+	
 	//get pokeball emoji
 	await interaction.deferReply();
 
 	//const shakey = interaction.client.emojis.find(emoji => emoji.name === "poke_shake");
 	const shakey = '[PokeBall Emoji]'
-	logger.info('found emoji');
+	// logger.info('found emoji');
 
 
 	try {		
@@ -110,7 +113,7 @@ module.exports.run = async (interaction) => {
 		const OH_NO_STRING = `Oh no, the ${pokeName} broke free!`;
 		const DRAT_STRING = `Drat! ${pokeName} broke free!`;
 		
-		logger.info("[catch] data received! loading...")
+		// logger.info("[catch] data received! loading...")
 
 		let CumulativeString = LINE_ONE_STRING;
 
@@ -175,65 +178,75 @@ module.exports.run = async (interaction) => {
 		//calculate if it's a critical capture!
 
 		if ((c_critCatch > c_randomCrit) && (level <= catchbonus)) {
-			logger.info("[catch] Critical capture! " + pokeName + " has been caught.")
+			// logger.info("[catch] Critical capture! " + pokeName + " has been caught.")
+			console.log("[catch] " + pokeName + " critical capture!");
+			logger.info("[catch] " + pokeName + " critical capture!")
 			await interaction.followUp(CRIT_CAPTURE_STRING).catch(console.error);
 			return;
 		}
 
 		// ================================= TEST STUFF, DELETE LATER!!! =================================
+		/* 
 		if (troubleshoot != null) {
 			await interaction.followUp(`PokeName: ${pokeName}\n Max HP: ${maxHP}\nCurrent HP: ${curHP}\nCatch Rate: ${rate}\nBall Rate: ${bball}\nStatus Bonus: ${bstatus}\nCapture Power Factor: ${cpfactor}\nCatch Bonus: ${catchbonus}\nPokemon Level:${level}\ncatchBonusMod: ` + catchBonusMod + `\ncMod: ` + cMod + `\nfortyTimer: ` + fortyTimer + `\ncatchBonusFinal: ` + catchBonusFinal + `\ncatchBonusGen: ` + catchBonusGen + `\ntrueCCatch: ` + trueCCatch + `\na_plugValCombo: ` + a_plugValCombo + `\nb_shakeVal: ` + b_shakeVal + `\nb_randomShake: ` + b_randomShake + `\nc_critCatch: ` + c_critCatch + `\nc_randomCrit: ` + c_randomCrit).catch(console.error);
 		}
+			*/
 
 
 		//if not, try for a normal capture
 		//TODO: try to have it post on a timer some day?
 		if (b_shakeVal > b_randomShake[0]) {
-			logger.info("[catch] Ball shakes once.")
+			// logger.info("[catch] Ball shakes once.")
 			CumulativeString += SHAKES_ONCE_STRING;
 			await interaction.editReply(CumulativeString).catch(console.error);
 			await sleep(2000);
 			if (b_shakeVal > b_randomShake[1]) {
-				logger.info("[catch] Ball shakes twice.")
+				// logger.info("[catch] Ball shakes twice.")
 				CumulativeString += SHAKES_TWICE_STRING;
 				await interaction.editReply(CumulativeString).catch(console.error);
 				await sleep(2000);
 
 				if (b_shakeVal > b_randomShake[2]) {
-					logger.info("[catch] Ball shakes three times.")
+					// logger.info("[catch] Ball shakes three times.")
 					CumulativeString += SHAKES_THREE_STRING;
 					await interaction.editReply(CumulativeString).catch(console.error);
 					await sleep(2000);
 
 					if (b_shakeVal > b_randomShake[3]) {
 						logger.info("[catch] " + pokeName + " was caught!")
+						console.log("[catch] " + pokeName + " was caught!")
 						CumulativeString += CAUGHT_STRING;
 						await interaction.editReply(CumulativeString).catch(console.error);
 					} else {
 						logger.info("[catch] " + pokeName + " broke free!")
+						console.log("[catch] " + pokeName + " broke free!")
 						CumulativeString += SO_CLOSE_STRING;
-						await interaction.followUp(CumulativeString).catch(console.error);
+						await interaction.editReply(CumulativeString).catch(console.error);
 					}
 				
 				} else {
 					logger.info("[catch] " + pokeName + " broke free!")
+					console.log("[catch] " + pokeName + " broke free!")
 					CumulativeString += GOT_OUT_STRING;
-					await interaction.followUp(CumulativeString).catch(console.error);
+					await interaction.editReply(CumulativeString).catch(console.error);
 				}
 			
 			} else {
 				logger.info("[catch] " + pokeName + " broke free!")
+				console.log("[catch] " + pokeName + " broke free!")
 				CumulativeString += OH_NO_STRING;
-				await interaction.followUp(CumulativeString).catch(console.error);
+				await interaction.editReply(CumulativeString).catch(console.error);
 			}
 		} else {
 			logger.info("[catch] " + pokeName + " broke free!")
+			console.log("[catch] " + pokeName + " broke free!")
 			CumulativeString += DRAT_STRING;
-			await interaction.followUp(CumulativeString).catch(console.error);
+			await interaction.editReply(CumulativeString).catch(console.error);
 		}
 
 
 	} catch (error) {
+		console.log("[catch] " + error.toString())
 		logger.error("[catch] " + error.toString())
 		//await interaction.followUp(error.toString());
 		//await interaction.followUp('ChaCha machine :b:roke, please try again later').catch(console.error);

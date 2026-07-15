@@ -18,6 +18,10 @@ module.exports.data = new SlashCommandBuilder()
             .addStringOption(option => option.setName('import-data').setDescription('The import string. CHECK HELP FOR FORMAT').setRequired(true)));
 
 module.exports.run = async(interaction) => {
+
+    console.log("USER: " + interaction.user + " RUNNING IMPORTPOKE: " + interaction.toString());
+	logger.info("USER: " + interaction.user + " RUNNING IMPORTPOKE: " + interaction.toString());
+
     let Pokemon = require('../models/pokemon.js');
     let importPoke = new Pokemon();
 
@@ -46,13 +50,14 @@ module.exports.run = async(interaction) => {
     let importContent = interaction.options.getString('import-data');
     if (importContent.match(REGEX_SANI_STRING)) {
         logger.error("[importpoke] Invalid characters detected.");
-        console.log("String format error: invalid characters.");
+        console.log("[importpoke] Invalid characters detected.");
         interaction.followUp("Invalid format detected. Please refer to the help subcommand for proper formatting.");
         return;
     }
-    logger.info("[importpoke] " + importContent);
+    // logger.info("[importpoke] " + importContent);
     importPoke.importPokemon(interaction.client.mysqlConnection, interaction.client.pokedex, importContent).then(() => { 
         logger.info("[importpoke] Sending summary interaction.");
+        console.log("[importpoke] Sending summary interaction.")
         interaction.followUp({ embeds: [importPoke.sendSummaryMessage(interaction).embed] });
         importPoke.uploadPokemon(interaction.client.mysqlConnection, interaction);
         interaction.followUp("Your pokemon has been added!")

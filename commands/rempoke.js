@@ -30,6 +30,10 @@ module.exports.autocomplete = async (interaction) => {
 }
 
 module.exports.run = async (interaction) => {
+
+    console.log("USER: " + interaction.user + " RUNNING REMPOKE: " + interaction.toString());
+	logger.info("USER: " + interaction.user + " RUNNING REMPOKE: " + interaction.toString());
+
     await interaction.deferReply();
     const confirm = new ButtonBuilder()
 			.setCustomId('confirm')
@@ -49,19 +53,20 @@ module.exports.run = async (interaction) => {
         let pokeName = interaction.options.getString("nickname");
 
         //debug print to console
-        logger.info("[rempoke] Attempting to remove " + pokeName + " from the database...");
+        //logger.info("[rempoke] Attempting to remove " + pokeName + " from the database...");
 
         // create find/delete statements
         let findPoke = `SELECT * FROM pokemon WHERE name = '${pokeName}'`;
-        logger.info(`[rempoke] Find pokemon SQL statement: ${findPoke}`);
+        //logger.info(`[rempoke] Find pokemon SQL statement: ${findPoke}`);
 
         let deletePokeStatement = `DELETE FROM pokemon WHERE name = '${pokeName}'`
-        logger.info(`[rempoke] Delete pokemon SQL statement: ${deletePokeStatement}`);
+        //logger.info(`[rempoke] Delete pokemon SQL statement: ${deletePokeStatement}`);
 
         // Attempt to find the Pokemon in the database, ending everything if nothing found
         interaction.client.mysqlConnection.query(findPoke, async function (err, rows, fields) {
             // if there's something wrong, throw error
             if (err) {
+                console.log("Error while attempting to access the database.");
                 logger.error("Error while attempting to access the database.");
                 interaction.followUp("Error while attempting to access the database!");
                 throw err;
@@ -69,7 +74,7 @@ module.exports.run = async (interaction) => {
                 // check to see if it picked anything up
                 if (rows.length > 0) {
                     // let console know
-                    logger.info("[rempoke] " + pokeName + " has been found. Awaiting user confirmation.");
+                    //logger.info("[rempoke] " + pokeName + " has been found. Awaiting user confirmation.");
                     // if picked up, stow the response
                     const response = await interaction.editReply({ 
                         content: 'Pokemon found. Are you sure you want to release `' +
@@ -92,6 +97,7 @@ module.exports.run = async (interaction) => {
                             interaction.client.mysqlConnection.query(deletePokeStatement, function (err, results) {
                                 if (err) {
                                     logger.error("[rempoke] Unable to properly delete " + pokeName);
+                                    console.log("[rempoke] Unable to properly delete " + pokeName);
                                     interaction.editReply({
                                         content: "...But " + pokeName + " came back!\n((The Pokemon could not be deleted))",
                                         components: []
@@ -100,22 +106,27 @@ module.exports.run = async (interaction) => {
                                 } else {
                                     interaction.client.pokemonCacheUpdate();
                                     logger.info("[rempoke] " + pokeName + " has been deleted successfully.");
+                                    console.log("[rempoke] " + pokeName + " has been deleted successfully.");
                                 }
                             });
                         } else if (confirmation.customId === 'cancel') {
-                            logger.info("Edits to Pokemon cancelled by user.")
+                            logger.info("[rempoke] Pokemon removal cancelled by user.")
+                            console.log("[rempoke] Pokemon removal cancelled by user.")
                             interaction.editReply({ 
                                 content: pokeName + "'s release has been cancelled.", 
                                 components: []});
                         }
                     } catch (e) {
                         console.log(e)
+                        logger.info("[rempoke] Did not receive confirmation.")
+                        console.log("[rempoke] Did not receive confirmation.")
                         interaction.editReply({ content: 'Confirmation not received within 1 minute, cancelling', components: [] });
                     }
                     
                 } else {
                     // if you're in here, it didn't find anything
                     logger.info("[rempoke] Pokemon with name " + pokeName + " not found.");
+                    console.log("[rempoke] Pokemon with name " + pokeName + " not found.");
                     interaction.editReply({
                         content: "No Pokemon found with name `" + pokeName +
                         "`, please check spelling and try again.\n" +
@@ -127,7 +138,8 @@ module.exports.run = async (interaction) => {
         });
 
     } catch (error) {
-        logger.error(`[rempoke] ${error}`);
+        logger.error(`[rempoke] Error: ${error}`);
+        console.log(`[rempoke] Error: ${error}`);
         interaction.channel.send(error.toString());
         interaction.channel.send('ChaCha Machine :b:roke whilst trying to remove a Pokemon :(').catch(console.error);
     }

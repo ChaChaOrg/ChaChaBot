@@ -65,6 +65,7 @@ let abilitylistArray;
 fs.readFile('data/Abilities.txt', 'utf8', (err, data) => {
     if (err) {
         logger.error('[Startup] Error reading abilities file.\n' + err.toString());
+        console.log('[Startup] Error reading abilities file.\n' + err.toString());
         interaction.followUp('Could not read ability list. Please contact ChaChaBot devs.');
     } else {
         //Split moves file into one String per line
@@ -82,7 +83,7 @@ fs.readFile('data/Abilities.txt', 'utf8', (err, data) => {
         // sql statement to check if the Pokemon exists
 let sqlFindPoke = `SELECT * FROM pokemon`;
 let pokemonCacheArray
-logger.info(`[startup] SQL find pokemon query: ${sqlFindPoke}`);
+//logger.info(`[startup] SQL find pokemon query: ${sqlFindPoke}`);
 
 // try to find the poke in the array first
 
@@ -93,6 +94,7 @@ client.pokemonCacheUpdate = function() {
          if (err) {
              let cantAccessSQLMessage = "SQL error, please try again later or contact a maintainer if the issue persists.";
              logger.error("[startup]" + cantAccessSQLMessage + ` ${err}`)
+             console.log("[startup]" + cantAccessSQLMessage + ` ${err}`)
              return;
          }
          pokemonCacheArray = rows;
@@ -106,6 +108,7 @@ client.formCacheUpdate = function () {
     let formSQL = 'SELECT * From pokeForms';
     client.mysqlConnection.query(formSQL, function (err, rows) {
         if (err) {
+            console.log("[startup] SQL error on start up. Please try again later or contact the dev team if the issue persists. " + `${err}`);
             logger.error("[startup] SQL error on start up. Please try again later or contact the dev team if the issue persists. " + `${err}`);
             return;
         }
@@ -126,7 +129,7 @@ for (const file of commandFiles) {
     //Check if they have a Slash Command "data" and a "run" field
     if ('data' in command && 'run' in command) {
         client.commands.set(command.data.name, command);
-        logger.info(`Added command ${command.data.name}!`);
+        //logger.info(`Added command ${command.data.name}!`);
     } else {
         //logger.info(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property`)
     }
@@ -138,7 +141,7 @@ const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'
 for (const file of eventFiles) {
     const filePath = path.join(eventsPath, file);
     const event = require(filePath);
-    logger.info(`Added event ${event.name}!`);
+    //logger.info(`Added event ${event.name}!`);
     if( event.once) {
         client.once(event.name, (...args) => event.run(...args));
     } else {

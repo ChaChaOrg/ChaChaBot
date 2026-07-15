@@ -133,6 +133,9 @@ module.exports.autocomplete = async (interaction) => {
 
 module.exports.run = async (interaction) => {
 
+	console.log("USER: " + interaction.user + " RUNNING MOVE: " + interaction.toString());
+	logger.info("USER: " + interaction.user + " RUNNING MOVE: " + interaction.toString());
+
 	var metronomeunselectable = 
 		["After You", "Apple Acid", "Armor Cannon", "Astral Barrage",
 		"Baneful Bunker", "Behemoth Bash", "Behemoth Blade", "Belch",
@@ -188,12 +191,13 @@ module.exports.run = async (interaction) => {
 	await interaction.deferReply();
 	if (interaction.options.getSubcommand() === 'metronome') {
 		let fs = require('fs');
-			logger.info('[move] Move tutor calculations');
-			logger.info('[move] Reading text file');
+			//logger.info('[move] Move tutor calculations');
+			//logger.info('[move] Reading text file');
 			//Load Moves file
 			fs.readFile('./data/Moves.txt', (err, data) => {
 				if (err) {
 					logger.error('[move] Error reading move file.\n' + err.toString());
+					console.log('[move] Error reading move file.\n' + err.toString());
 					interaction.followUp('Could not read move list. Please contact ChaChaBot devs.');
 				} else {
 					//Split moves file into one String per line
@@ -214,19 +218,21 @@ module.exports.run = async (interaction) => {
 						//Test to see if random move meets criteria
 						if (metronomeunselectable.includes(move[1])) {
 							valid = false;
-							logger.info('[move] Selected move not allowed, retrying');
+							//logger.info('[move] Selected move not allowed, retrying');
 						} else if (limitoption === 'damage' && (move[3] === "Status")) {
 							valid = false;
-							logger.info('[move] Selected move is Status, Damage requested - retrying');
+							//logger.info('[move] Selected move is Status, Damage requested - retrying');
 						} else if (limitoption === 'status' && (move[3] === "Physical" || move[3] === "Special")) {
 							valid = false;
-							logger.info('[move] Selected move is Damage, Status requested - retrying');
+							//logger.info('[move] Selected move is Damage, Status requested - retrying');
 						}
 						if (valid){
 							found = true;
-							logger.info('[move] Found a move meeting all criteria');
+							//logger.info('[move] Found a move meeting all criteria');
 						}
 					}
+					console.log("[move] Metronome called " + move[1]);
+					logger.info("[move] Metronome called " + move[1]);
 					interaction.followUp("Your metronome calls " + move[1] + ". Remember your metronome cannot call another move the Pokemon using it knows!");
 				}
 			});
@@ -238,6 +244,7 @@ module.exports.run = async (interaction) => {
 		let names = []
 		if (interaction.options.getString('userbeatup').match(SQL_SANITATION_REGEX)){
             logger.error("[move] User tried to put in invalid string input.");
+			console.log("[move] User tried to put in invalid string input.");
             interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
             return;
         }
@@ -245,6 +252,7 @@ module.exports.run = async (interaction) => {
 
 		if (interaction.options.getString('party-member1beatup').match(SQL_SANITATION_REGEX)){
             logger.error("[move] User tried to put in invalid string input.");
+			console.log("[move] User tried to put in invalid string input.");
             interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
             return;
         }
@@ -253,6 +261,7 @@ module.exports.run = async (interaction) => {
 		if(interaction.options.getString('party-member2beatup')){
 			if (interaction.options.getString('party-member2beatup').match(SQL_SANITATION_REGEX)){
 				logger.error("[move] User tried to put in invalid string input.");
+				console.log("[move] User tried to put in invalid string input.");
 				interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
 				return;
 			}
@@ -261,6 +270,7 @@ module.exports.run = async (interaction) => {
 		if(interaction.options.getString('party-member3beatup')){
 			if (interaction.options.getString('party-member3beatup').match(SQL_SANITATION_REGEX)){
 				logger.error("[move] User tried to put in invalid string input.");
+				console.log("[move] User tried to put in invalid string input.");
 				interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
 				return;
 			}
@@ -269,6 +279,7 @@ module.exports.run = async (interaction) => {
 		if(interaction.options.getString('party-member4beatup')){
 			if (interaction.options.getString('party-member4beatup').match(SQL_SANITATION_REGEX)){
 				logger.error("[move] User tried to put in invalid string input.");
+				console.log("[move] User tried to put in invalid string input.");
 				interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
 				return;
 			}
@@ -277,6 +288,7 @@ module.exports.run = async (interaction) => {
 		if(interaction.options.getString('party-member5beatup')){
 			if (interaction.options.getString('party-member5beatup').match(SQL_SANITATION_REGEX)){
 				logger.error("[move] User tried to put in invalid string input.");
+				console.log("[move] User tried to put in invalid string input.");
 				interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
 				return;
 			}
@@ -291,18 +303,20 @@ module.exports.run = async (interaction) => {
 			let tempPoke = new Pokemon;
 			let notFoundMessage = element + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `/listpoke` to view the Pokemon you can edit.)";
 			let sql = `SELECT * FROM pokemon WHERE name = '${element}';`;
-			logger.info('[move-assist] SQL query: ${sql}');
+			// logger.info('[move-assist] SQL query: ${sql}');
 			promisearray.push(new Promise(async function(resolve, reject){ interaction.client.mysqlConnection.query(sql, async function (err, response) {
 				if (err) throw err;
 	
 				if (response.length == 0) {
 					logger.info("[move-assist] Pokemon not found in database. Please check your spelling, or the Pokemon may not be there.")
+					console.log("[move-assist] Pokemon not found in database. Please check your spelling, or the Pokemon may not be there.")
 					followup += notFoundMessage + "\n";
 				}
 				else {
 					// Check if user is allowed to edit the Pokemon.
 					if (response[0].private > 0 && interaction.user.id !== response[0].discordID) {
 						logger.info("[modpoke] Detected user attempting to access private Pokemon.")
+						console.log("[modpoke] Detected user attempting to access private Pokemon.")
 						// If user found a pokemon that was marked private and belongs to another user, act as if the pokemon doesn't exist in messages
 						interaction.reply(notFoundMessage);
 						return;
@@ -311,7 +325,7 @@ module.exports.run = async (interaction) => {
 					await tempPoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, response[0])
 						.then(response => {
 	
-							logger.info("[move-beatup] Got Pokemon info.");
+							//logger.info("[move-beatup] Got Pokemon info.");
 							let math = tempPoke.statBlock.baseStats[1] / 10;
 							math += 5
 							followup += "Beat Up base power for " + element + " is " + math + ".\n";
@@ -321,12 +335,15 @@ module.exports.run = async (interaction) => {
 				resolve();
 			}).catch(function (error){
 				logger.error("[move] Error during SQL or response: " + error);
+				console.log("[move] Error during SQL or response: " + error);
 				interaction.editReply("Error fetching Pokemons. This may be temporary error - please retry");
 				return;
 			})
 		}))
 		});
 		Promise.all(promisearray).then(() => {
+			logger.info("[move] Sent Beat Up base powers.");
+			console.log("[move] Sent Beat Up base powers.");
 			interaction.followUp(followup + "This is the base power each strike should use with the Damage command - each strike can crit and STAB individually.");
 	 	 })
 	}else if (interaction.options.getSubcommand() === 'assist') {
@@ -339,6 +356,7 @@ module.exports.run = async (interaction) => {
 
 		if (interaction.options.getString('party-member1assist').match(SQL_SANITATION_REGEX)){
             logger.error("[move] User tried to put in invalid string input.");
+			console.log("[move] User tried to put in invalid string input.");
             interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
             return;
         }
@@ -346,6 +364,7 @@ module.exports.run = async (interaction) => {
 		if(interaction.options.getString('party-member2assist')){
 			if (interaction.options.getString('party-member2assist').match(SQL_SANITATION_REGEX)){
 				logger.error("[move] User tried to put in invalid string input.");
+				console.log("[move] User tried to put in invalid string input.");
 				interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
 				return;
 			}
@@ -354,6 +373,7 @@ module.exports.run = async (interaction) => {
 		if(interaction.options.getString('party-member3assist')){
 			if (interaction.options.getString('party-member3assist').match(SQL_SANITATION_REGEX)){
 				logger.error("[move] User tried to put in invalid string input.");
+				console.log("[move] User tried to put in invalid string input.");
 				interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
 				return;
 			}
@@ -362,6 +382,7 @@ module.exports.run = async (interaction) => {
 		if(interaction.options.getString('party-member4assist')){
 			if (interaction.options.getString('party-member4assist').match(SQL_SANITATION_REGEX)){
 				logger.error("[move] User tried to put in invalid string input.");
+				console.log("[move] User tried to put in invalid string input.");
 				interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
 				return;
 			}
@@ -370,6 +391,7 @@ module.exports.run = async (interaction) => {
 		if(interaction.options.getString('party-member5assist')){
 			if (interaction.options.getString('party-member5assist').match(SQL_SANITATION_REGEX)){
 				logger.error("[move] User tried to put in invalid string input.");
+				console.log("[move] User tried to put in invalid string input.");
 				interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
 				return;
 			}
@@ -384,18 +406,20 @@ module.exports.run = async (interaction) => {
 			let tempPoke = new Pokemon;
 			let notFoundMessage = element + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `/listpoke` to view the Pokemon you can edit.)";
 			let sql = `SELECT * FROM pokemon WHERE name = '${element}';`;
-			logger.info('[move-assist] SQL query: ${sql}');
+			//logger.info('[move-assist] SQL query: ${sql}');
 			promisearray.push(new Promise(async function(resolve, reject){ interaction.client.mysqlConnection.query(sql, async function (err, response) {
 				if (err) throw err;
 	
 				if (response.length == 0) {
 					logger.info("[move-assist] Pokemon not found in database. Please check your spelling, or the Pokemon may not be there.")
+					console.log("[move-assist] Pokemon not found in database. Please check your spelling, or the Pokemon may not be there.")
 					followup += notFoundMessage + "\n";
 				}
 				else {
 					// Check if user is allowed to edit the Pokemon.
 					if (response[0].private > 0 && interaction.user.id !== response[0].discordID) {
 						logger.info("[modpoke] Detected user attempting to access private Pokemon.")
+						console.log("[modpoke] Detected user attempting to access private Pokemon.")
 						// If user found a pokemon that was marked private and belongs to another user, act as if the pokemon doesn't exist in messages
 						interaction.reply(notFoundMessage);
 						return;
@@ -404,7 +428,7 @@ module.exports.run = async (interaction) => {
 					await tempPoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, response[0])
 						.then(response => {
 	
-							logger.info("[move-assist] Got Pokemon info.");
+							//logger.info("[move-assist] Got Pokemon info.");
 							if(tempPoke.moveSet.move1){
 								movelist.push(tempPoke.moveSet.move1);
 							}
@@ -441,6 +465,8 @@ module.exports.run = async (interaction) => {
 				let moveindex = Math.floor(Math.random() * (validmoves.length - 1));
 				move = validmoves[moveindex];
 			}
+			logger.info("[move] Assist move: " + move);
+			console.log("[move] Assist move: " + move);
 			interaction.followUp(followup + "Assist calls " + move + ".");
 	 	 })
 	}else if (interaction.options.getSubcommand() === 'confusion') {   

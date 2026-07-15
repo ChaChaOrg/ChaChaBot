@@ -3,7 +3,7 @@
 
 const databaseURL = 'https://bulbapedia.bulbagarden.net/wiki/List_of_moves';
 const PPINDEX = 11;
-const logs = require('../logs/logger.js');
+const logger = require('../logs/logger.js');
 const {
 	SlashCommandBuilder, SlashCommandSubcommandBuilder
 } = require('@discordjs/builders');
@@ -107,30 +107,37 @@ module.exports.autocomplete = async (interaction) => {
 };
 
 module.exports.run = async (interaction) => {
+
+	console.log("USER: " + interaction.user + " RUNNING MOVEDEX: " + interaction.toString());
+	logger.info("USER: " + interaction.user + " RUNNING MOVEDEX: " + interaction.toString());
+	
 	try {
 		//let https = require('https');
 		//let jsdom = require('jsdom');
 		let fs = require('fs');
 		await interaction.deferReply();
 		if (interaction.options.getSubcommand() === 'help') {
-			logs.info('[movetutor] Sending help message');
+			logger.info('[movetutor] Sending help message');
+			console.log('[movetutor] Sending help message');
 			interaction.followUp(MOVETUTOR_HELP);
 			return;
 		} else if (interaction.options.getSubcommand() === 'skill') {
-			logs.info('[movetutor] Skill tutor calculations');
+			logger.info('[movetutor] Sent skill tutor calculations');
+			console.log('[movetutor] Sent skill tutor calculations');
 			var skillDC = 20 - interaction.options.getInteger('int-mod');
 			interaction.followUp(`The DC to learn the ${interaction.options.getString('skill-name')} skill is ${skillDC}.`).catch(console.error);
 			return;
 		} else if (interaction.options.getSubcommand() === 'move') {
-			logs.info('[movetutor] Move tutor calculations');
+			//logger.info('[movetutor] Move tutor calculations');
 			//var request = new XMLHttpRequest();
-			logs.info('[movetutor] Reading text file');
+			//logger.info('[movetutor] Reading text file');
 			//let moves;
 			fs.readFile('./data/Moves.txt', (err, data) => {
 				//console.log(data);
 				//console.log(err);
 				if (err) {
-					logs.error('[movetutor] Error reading move file.\n' + err.toString());
+					logger.error('[movetutor] Error reading move file.\n' + err.toString());
+					console.log('[movetutor] Error reading move file.\n' + err.toString());
 					interaction.followUp('Could not read move list. Please contact ChaChaBot devs.');
 				} else {
 					let workingName = '';
@@ -204,16 +211,17 @@ module.exports.run = async (interaction) => {
 						let dcAdjust = 8 - Math.round(pp / 5);
 						let output = '';
 						if (interaction.options.getString('formula') === ('original')) {
-							logs.info('[movetutor] Adjusting to original formula');
+							//logger.info('[movetutor] Adjusting to original formula');
 							DCs = [20 + dcAdjust, 17 + dcAdjust, 15 + dcAdjust, 15, 13, 10];
 						}
 
 						for (let i = 0; i < DCs.length; i++) {
 							DCs[i] += dcAdjust;
 						}
-						logs.info('[movetutor] Displaying results');
+						//logger.info('[movetutor] Displaying results');
 						output += '**' + moveName + ' Training**\n\n';
-						logs.info('[movetutor] Displaying results');
+						logger.info('[movetutor] Displaying results');
+						console.log('[movetutor] Displaying results');
 						output += '**Out of Combat Checks** (Checks 1-3)\n';
 						output += "Use your trainer's CHA modifier for these checks.\n";
 						output += '```First DC: ' + DCs[0] + '(Skip at rank 4) // ' + 'Second DC: ' + DCs[1] + ' // ' + 'Third' +
@@ -236,6 +244,8 @@ module.exports.run = async (interaction) => {
 						//let index = data.search(workingName);
 						//index += workingName.length;
 					} else {
+						logger.info("[movetutor] Unable to locate move " + moveName);
+						console.log("[movetutor] Unable to locate move " + moveName);
 						interaction.followUp('Unable to find move: ' + moveName + '. Please check your spelling.');
 					}
 				}
@@ -251,16 +261,17 @@ module.exports.run = async (interaction) => {
 			let dcAdjust = 8 - Math.round(pp / 5);
 			let output = '';
 			if (interaction.options.getString('formula') === ('original')) {
-				logs.info('[movetutor] Adjusting to original formula');
+				//logger.info('[movetutor] Adjusting to original formula');
 				DCs = [20 + dcAdjust, 17 + dcAdjust, 15 + dcAdjust, 15, 13, 10];
 			}
 
 			for (let i = 0; i < DCs.length; i++) {
 				DCs[i] += dcAdjust;
 			}
-			logs.info('[movetutor] Displaying results');
+			//logger.info('[movetutor] Displaying results');
 			output += '** Move Training**\n\n';
-			logs.info('[movetutor] Displaying results');
+			logger.info('[movetutor] Displaying results');
+			console.log('[movetutor] Displaying results');
 			output += '**Out of Combat Checks** (Checks 1-3)\n';
 			output += "Use your trainer's CHA modifier for these checks.\n";
 			output += '```First DC: ' + DCs[0] + ' // ' + 'Second DC: ' + DCs[1] + ' // ' + 'Third' +
@@ -281,11 +292,13 @@ module.exports.run = async (interaction) => {
 			interaction.followUp(output);
 		}else {
 			//ya dun goofed
-			logs.info('[movetutor] Invalid tutor type, how did we get here?');
+			logger.info('[movetutor] Invalid tutor type, how did we get here?');
+			console.log('[movetutor] Invalid tutor type, how did we get here?');
 			interaction.followUp('Invalid tutor type used. The valid types are help, skill and move.');
 			return;
 		}
 	} catch (error) {
-		logs.error("[charisma] " + error.toString())
+		logger.error("[movetutor] " + error.toString())
+		console.log("[movetutor] " + error.toString())
 	}
 }

@@ -14,6 +14,10 @@ module.exports.data = new SlashCommandBuilder()
 
 module.exports.run = async (interaction) => 
 {
+
+	console.log("USER: " + interaction.user + " RUNNING MOD: " + interaction.toString());
+	logger.info("USER: " + interaction.user + " RUNNING MOD: " + interaction.toString());
+	
 	//interaction.channel.send('Bang! <:gunspurr:356191158017196032>').catch(console.error);
 	var score = interaction.options.getInteger('stat');
 	var printScore = score;
@@ -28,5 +32,6 @@ module.exports.run = async (interaction) =>
 	}
 
 	logger.info("[mod] " + `${printScore}(${modString})`)
+	console.log("[mod] " + `${printScore}(${modString})`)
 	interaction.reply(`${printScore}(${modString})`).catch(console.error);
 };

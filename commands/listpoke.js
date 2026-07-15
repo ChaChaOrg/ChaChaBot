@@ -147,6 +147,9 @@ function testAgainstREGX(stringToTest){
 
 module.exports.run = async (interaction) => {
 
+    console.log("USER: " + interaction.user + " RUNNING LISTPOKE: " + interaction.toString());
+	logger.info("USER: " + interaction.user + " RUNNING LISTPOKE: " + interaction.toString());
+
     try {
             await interaction.deferReply();
             await interaction.followUp("Looking for that now!");
@@ -200,7 +203,8 @@ module.exports.run = async (interaction) => {
 
                 }
             catch(err){
-                console.log(`${pokemon.species} ${pokemon.form} `+err);
+                console.log(`[listpoke] Error: ${pokemon.species} ${pokemon.form} `+err);
+                logger.error(`[listpoke] Error: ${pokemon.species} ${pokemon.form} `+err);
                 return "ERROR"
             }
                 // return the string!
@@ -279,7 +283,7 @@ module.exports.run = async (interaction) => {
             initialQuery += `(discordID = "${interaction.user.id}" OR private = 0)`
             initialQuery += ';';
 
-            console.log(initialQuery);
+            // console.log(initialQuery);
 
             // query for the info
             interaction.client.mysqlConnection.query(initialQuery, function (err, result) {
@@ -328,7 +332,7 @@ module.exports.run = async (interaction) => {
 
                         // temporary array for making pages
                         let pokeTempArray = [];
-                        console.log("pages");
+                        // console.log("pages");
                         // throw pokemon into pages until all are loaded up
                         for (let i = 0; i < pokeArray.length; i++) {
                             // push the poke into the temporary array
@@ -349,7 +353,7 @@ module.exports.run = async (interaction) => {
                             pokeEmbedPages.push(embedPage(pokeTempArray, currentPageNum));
                             pokeTempArray = [];
                         }
-                        console.log("listing");
+                        // console.log("listing");
                         // TODO turn this into page flipping variant later
                         if (pokeEmbedPages.length > 0) {
                             interaction.user.send("Here are the Pokemon you can view." +
@@ -365,6 +369,7 @@ module.exports.run = async (interaction) => {
                             interaction.followUp("No results found.");
                         }
                         logger.info("[listpoke] Sent all pages to user");
+                        console.log("[listpoke] Sent all pages to user");
 
                         // once all pokemon have been yoinked, print em as a list
                         //console.log(`String: ${printString}`);

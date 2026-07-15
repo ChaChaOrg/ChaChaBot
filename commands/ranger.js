@@ -47,6 +47,10 @@ module.exports.autocomplete = async (interaction) => {
 
 //Interaction to generate response
 module.exports.run = async (interaction) => {
+    
+	console.log("USER: " + interaction.user + " RUNNING RANGER: " + interaction.toString());
+	logger.info("USER: " + interaction.user + " RUNNING RANGER: " + interaction.toString());
+
         //If the dexmod and rate have been given, calculate manually
         if (interaction.options.getSubcommand() === 'manual') {
             let dexmod = interaction.options.getInteger('dexmod');
@@ -64,6 +68,7 @@ module.exports.run = async (interaction) => {
                                 \nDon't forget, a Nat 1 is an auto-fail, and a Nat 20 is an auto-success.`;
 
             logger.info("[ranger] " + finalData)
+            console.log("[ranger] " + finalData)
             interaction.reply(finalData);
         
         //If Pokemon has been given, calculate automatically
@@ -73,7 +78,7 @@ module.exports.run = async (interaction) => {
             let tempPoke = new Pokemon;
 
             let sql = `SELECT * FROM pokemon WHERE name = '${pokeName}';`;
-            logger.info(`[ranger] SQL query: ${sql}`);
+            // logger.info(`[ranger] SQL query: ${sql}`);
 
              let notFoundMessage = pokeName + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `/listpoke` to view the Pokemon you can edit.)";
 
@@ -85,12 +90,14 @@ module.exports.run = async (interaction) => {
                         let pokeNotFoundMessage = "Pokemon not found in database. Please check your spelling, or the Pokemon may" +
                             " not be there.";
                         logger.info("[showpoke] " + pokeNotFoundMessage);
+                        console.log("[showpoke] " + pokeNotFoundMessage);
                         interaction.reply(pokeNotFoundMessage);
                     }
                     else {
                         // check if the user is allowed to edit the Pokemon. If a Pokemon is private, the user's discord ID must match the Pokemon's creator ID
                         if (response[0].private > 0 && interaction.user.id !== response[0].discordID) {
                             logger.info("[modpoke] Detected user attempting to access private Pokemon.")
+                            console.log("[modpoke] Detected user attempting to access private Pokemon.")
                             // If user found a pokemon that was marked private and belongs to another user, act as if the pokemon doesn't exist in messages
                             interaction.reply(notFoundMessage);
                             return;
@@ -101,7 +108,7 @@ module.exports.run = async (interaction) => {
 
                                 // if you're here, the pokemon has been found! Use this to calculate DCs & return
 
-                                logger.info("[ranger] Calculating DCs for Ranger Capture & Loop");
+                                //logger.info("[ranger] Calculating DCs for Ranger Capture & Loop");
 
                                 //the Pokemon's dex mod
                                 let dexmod = parseInt(tempPoke.statBlock.dexMod);
@@ -130,6 +137,7 @@ module.exports.run = async (interaction) => {
                                 \nDon't forget, a Nat 1 is an auto-fail, and a Nat 20 is an auto-success.`;
 
                                 logger.info("[ranger] " + finalData)
+                                console.log("[ranger] " + finalData)
                                 interaction.reply(finalData);
 
                             });

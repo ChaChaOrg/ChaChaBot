@@ -165,7 +165,9 @@ module.exports.autocomplete = async (interaction) => {
 
 module.exports.run = async (interaction) => 
 {
-   await interaction.deferReply();
+    console.log("USER: " + interaction.user + " RUNNING FORM: " + interaction.toString());
+    logger.info("USER: " + interaction.user + " RUNNING FORM: " + interaction.toString());
+    await interaction.deferReply();
 
 
     const confirm = new ButtonBuilder()
@@ -188,28 +190,28 @@ module.exports.run = async (interaction) =>
             let species = interaction.options.getString('species-name').toLowerCase();
             if (species.match(REGEX_SANI_STRING)) {
                 logger.error("[form] User attempted to use invalid character in species name.");
-                console.log("Invalid character detected.");
+                console.log("[form] User attempted to use invalid character in species name.");
                 interaction.followUp("Please double check the spelling on the species name.");
                 return;
             }
             if (species.match(REGEX_FORBID)) {
                 logger.error("[form] Forbidden name detected.");
-                console.log("SQL command detected.");
+                console.log("[form] Forbidden name detected.");
                 interaction.followUp("I'm afraid I can't let you do that. Please use a different name.");
                 return;
             }
-            logger.info("[form] Listing forms for " + species);
+            // logger.info("[form] Listing forms for " + species);
             let sql = 'SELECT form, discordID, private FROM pokeForms WHERE species = \'' + species + '\'';
-            logger.info("[form] List sql query");
+            // logger.info("[form] List sql query");
 
             //insert api search here
             //javascript node.js promise
             interaction.client.pokedex.getPokemonSpeciesByName(species).then(function (response) {
-                console.log(response.varieties);
-                logger.info("[form] Searching api");
+                // console.log(response.varieties);
+                // logger.info("[form] Searching api");
                 let output = "";
                 if (response.varieties.length >=1) {
-                    logger.info("[form] Main form(s) founds");
+                    // logger.info("[form] Main form(s) founds");
                     let names ="";
                     for (let i = 0; i < response.varieties.length; i++) {
                         
@@ -223,31 +225,31 @@ module.exports.run = async (interaction) =>
                     //interaction.reply("The " + species + " species has the following forms in game: " + names);
                     output += "The " + species + " species has the following forms in game: " + names;
                 } else { 
-                    logger.info("[form] No main forms found");
+                    // logger.info("[form] No main forms found");
                     //interaction.reply("No main game forms found.");
                     output += "No main game forms found";
                 }
                 output += "\n";
                 interaction.client.mysqlConnection.query(sql, function (err, result) {
                     if (err) {
-                        logger.error(err);
-                        console.log("list error");
+                        logger.error("[form] Error: " + err);
+                        console.log("[form] Error: " + err);
                         throw err;
                     }
-                    console.log(output);
+                    // console.log(output);
                     let out = output;
-                    logger.info("[form] sql query successful");
+                    // logger.info("[form] sql query successful");
                     //maybe reverse logic, only do stuff if custom forms found?
                         if (result.length <= 0) {
-                            logger.info("[form] no custom forms found");
-                            console.log("no custom forms");
+                            // logger.info("[form] no custom forms found");
+                            // console.log("no custom forms");
                             //interaction.reply("No custom forms were found for that species.");
                             out += "No custom forms were found for that species.";
                         } else {
-                            logger.info("[form] custom forms found");
+                            /* logger.info("[form] custom forms found");
                             console.log("custom forms found");
                             console.log(result);
-                            console.log(result[1]);
+                            console.log(result[1]);*/
                             let cust = "The " + species + " species has the following custom forms: ";
                             for (let i = 0; i < result.length; i++) {
                                 //console.log(result[i]);
@@ -259,16 +261,17 @@ module.exports.run = async (interaction) =>
                                     }
                                 }
                             }
-                            console.log("Forms: " + cust);
+                            // console.log("Forms: " + cust);
                             //interaction.reply(output);
                             out += cust;
                         }
-                    interaction.followUp(out);
+                        logger.info("[form] Output: " + out);
+                        console.log("[form] Output: " + out);
+                        interaction.followUp(out);
                 });
             }).catch(function (error) {
                 logger.error("[form] " + error.message);
-                //console.log(error);
-                console.log(error.message);
+                console.log("[form] " + error.message);
                 interaction.followUp("Given species is not a mainline pokemon species");
             });
 
@@ -321,14 +324,14 @@ module.exports.run = async (interaction) =>
             if (type1.match(REGEX_SANI_STRING) || type2.match(REGEX_SANI_STRING)) {
 
                 logger.error("[form add] User attempted to use invalid character. Type block.");
-                console.log("Invalid character detected.");
+                console.log("[form add] User attempted to use invalid character. Type block.");
                 interaction.followUp("Please double check the spelling on your type inputs.");
                 return;
 
             }
             if (type1.match(REGEX_FORBID) || type2.match(REGEX_FORBID)) {
                 logger.error("[form] Forbidden type detected.");
-                console.log("SQL command detected.");
+                console.log("[form] Forbidden type detected.");
                 interaction.followUp("I'm afraid I can't let you do that. Please use a different type.");
                 return;
             }
@@ -339,14 +342,14 @@ module.exports.run = async (interaction) =>
             if (egggroup1.match(REGEX_SANI_STRING) || egggroup2.match(REGEX_SANI_STRING)) {
 
                 logger.error("[form add] User attempted to use invalid character. Egg block.");
-                console.log("Invalid character detected.");
+                console.log("[form add] User attempted to use invalid character. Egg block.");
                 interaction.followUp("Please double check the spelling on your egg group imputs.");
                 return;
 
             }
             if (egggroup1.match(REGEX_FORBID) || egggroup2.match(REGEX_FORBID)) {
                 logger.error("[form] Forbidden egggroup detected.");
-                console.log("SQL command detected.");
+                console.log("[form] Forbidden egggroup detected.");
                 interaction.followUp("I'm afraid I can't let you do that. Please use a different egg group.");
                 return;
             }
@@ -354,15 +357,16 @@ module.exports.run = async (interaction) =>
 
             if(private) private = 1; else private = 0;
 
-            logger.info('[from] Checking database for new form.');
+            // logger.info('[from] Checking database for new form.');
             interaction.client.mysqlConnection.query(check, function (err, result) {
                 if (err) {
-                    logger.error(err);
+                    logger.error("[form] Error: " + err);
+                    console.log("[form] Error: " + err);
                     throw err;
                 }
                 if (result.length == 0) {
                     //proceed normally
-                    logger.info("[form] Adding new form");
+                    //logger.info("[form] Adding new form");
                     let sql = `INSERT INTO pokeForms (species, form, ability1, ability2, ability3, hpBST, atkBST, defBST, spaBST, spdBST, speBST, type1, type2, genderrate, captureRate, egggroup1, eggGroup2, discordID, private) 
                     VALUES (
                         "${species}",
@@ -386,24 +390,26 @@ module.exports.run = async (interaction) =>
                         ${interaction.user.id},
                         ${private})`;
                     //console.log(sql);
-                    logger.info(`[form] upload SQL query: ${sql}`);
+                    //logger.info(`[form] upload SQL query: ${sql}`);
                     interaction.client.mysqlConnection.query(sql, function (err, result) {
                         if (err) {
                             logger.error(err);
                             throw err;
                         }
-                        console.log("1 record inserted");
+                        console.log("[form] upload SQL was successful.");
                         logger.info("[form] upload SQL was successful.");
                         interaction.followUp("Your new form for " + species + " was successfully added.");
                         return;
                     });
                 } else {
                     logger.info('[form] New form already exists.');
+                    console.log('[form] New form already exists.');
                     interaction.followUp("That already exists.");
                     return;
                 }
             }).catch(function (error) {
                 logger.error('[form] There was an error: ' + error);
+                console.log('[form] There was an error: ' + error);
                 interaction.editReply("Error checking database! Please try again.");
                 return;
             });
@@ -415,7 +421,7 @@ module.exports.run = async (interaction) =>
             if (form.match(REGEX_SANI_STRING) || species.match(REGEX_SANI_STRING)) {
 
                 logger.error("[form remove] User attempted to use invalid character.");
-                console.log("Invalid character detected.");
+                console.log("[form remove] User attempted to use invalid character.");
                 interaction.followUp("Please double check the spelling on your inputs.");
                 return;
 
@@ -429,27 +435,32 @@ module.exports.run = async (interaction) =>
                 const confirmation = await message.awaitMessageComponent({ filter: collectorFilter, time: 60000 });
 
                 if (confirmation.customId == 'confirm') {
-                    logger.info("[form] Removing form");
+                    // logger.info("[form] Removing form");
                     let sql = `DELETE FROM pokeForms WHERE species='` + species + `' AND form='` + form + `';`;
                     interaction.client.mysqlConnection.query(sql, function (err, result) {
                         if (err) {
-                            logger.error(err);
+                            logger.error("[form] Error: " + err);
+                            console.log("[form] Error: " + err);
                             throw err;
                         }
                         if (result.affectedRows == 0) {
                             logger.info("[form] No form to delete");
+                            console.logo("[form] No form to delete");
                             interaction.editReply({content: "There were no forms matching your selection.", components: []});
                         } else {
                             logger.info("[form] " + result.affectedRows + " form(s) removed.");
+                            console.log("[form] " + result.affectedRows + " form(s) removed.");
                             interaction.editReply({content: result.affectedRows + " forms were removed from the database.", components: []});
                         }
                     });
                 } else if (confirmation.customId === 'cancel') {
                     logger.error("[form] Deletion cancelled ");
+                    console.log("[form] Deletion cancelled ");
                     interaction.editReply({content: "Form deletion cancelled due to timeout.", components: []});
                 }
             } catch (e) {
-                console.log(e)
+                logger.info("[form] Confirmation timeout. (Error: " + e + ")");
+                console.log("[form] Confirmation timeout. (Error: " + e + ")");
                 interaction.editReply({ content: 'Confirmation not received within 1 minute, cancelling', components: [] });
             }
 
@@ -462,8 +473,7 @@ module.exports.run = async (interaction) =>
         }
     } catch (error){
         logger.error("[form] " + error.message);
-        console.log(error);
-        console.log(error.message);
+        console.log("[form] " + error.message);
         interaction.editReply("ChaCha machine :B:roke, please try again later");
         return;
     }

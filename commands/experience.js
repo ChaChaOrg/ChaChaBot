@@ -343,6 +343,9 @@ module.exports.data = new SlashCommandBuilder()
 			));
 
 module.exports.run = async (interaction) => {
+
+	console.log("USER: " + interaction.user + " RUNNING EXPERIENCE: " + interaction.toString());
+	logger.info("USER: " + interaction.user + " RUNNING EXPERIENCE: " + interaction.toString());
 	await interaction.deferReply();
 
 
@@ -418,6 +421,9 @@ module.exports.run = async (interaction) => {
 		}
 	})
 	replyStart += "\)\n\n"
+
+	logger.info("[Experience] Output: " + replyStart + reply);
+	console.log("[Experience] Output: " + replyStart + reply);
 
 	interaction.followUp(replyStart + reply);
 

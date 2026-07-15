@@ -148,6 +148,10 @@ module.exports.autocomplete = async (interaction) => {
 
 
 module.exports.run = async (interaction) => {
+    // Log change request
+    console.log("USER: " + interaction.user + " RUNNING MODPOKE: " + interaction.toString());
+    logger.info("USER: " + interaction.user + " RUNNING MODPOKE: " + interaction.toString());
+    
     await interaction.deferReply();
     const confirm = new ButtonBuilder()
 			.setCustomId('confirm')
@@ -169,6 +173,9 @@ module.exports.run = async (interaction) => {
             return;
         }
 
+        console.log("USER: " + interaction.user + " RUNNING SHOWPOKE: " + interaction.toString());
+        logger.info("USER: " + interaction.user + " RUNNING SHOWPOKE: " + interaction.toString());
+
         let nickname = interaction.options.getString("nickname");
         let fieldToChange = interaction.options.getString("field-to-change");
         let newValue = interaction.options.getString("new-value");
@@ -177,6 +184,7 @@ module.exports.run = async (interaction) => {
         (newValue.match(SQL_SANITATION_REGEX) && !(fieldToChange == "ability" || fieldToChange == "move1"|| fieldToChange == "move2"|| fieldToChange == "move3"|| fieldToChange == "move4"|| fieldToChange == "move5")) ||
         (newValue.match(SQL_SANITATION_REGEX_MOVE) && (fieldToChange == "ability" || fieldToChange == "move1"|| fieldToChange == "move2"|| fieldToChange == "move3"|| fieldToChange == "move4"|| fieldToChange == "move5"))){
             logger.error("[modpoke] User tried to put in invalid string input.");
+            console.log("[modpoke] User tried to put in invalid string input.");
             interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
             return;
         }
@@ -196,7 +204,8 @@ module.exports.run = async (interaction) => {
         // check whether the field they want to change exists
         if (!STATIC_FIELDS.includes(valName) && !OTHER_FIELDS.includes(valName) &&
             !STATIC_FIELDS.includes(valName.toLowerCase()) && !lowerCase_OTHERFIELDS.includes(valName.toLowerCase())) {
-            logger.warn("[modpoke] Can't change that field because of spelling or doesn't exist. Sending nonexistent field interaction.");
+            logger.error("[modpoke] Can't change that field because of spelling or doesn't exist. Sending nonexistent field interaction.");
+            console.log("[modpoke] Can't change that field because of spelling or doesn't exist. Sending nonexistent field interaction.");
             interaction.editReply(NONEXISTENT_FIELD_MESSAGE);
             return;
         }
@@ -232,6 +241,7 @@ module.exports.run = async (interaction) => {
         if (valName == "nature") {
             if (!ALL_NATURES.includes(valString)) {
                 logger.error("[modpoke] User tried to put in invalid nature.")
+                console.log("[modpoke] User tried to put in invalid nature.")
                 interaction.editReply("That is not a valid pokemon nature, please check your spelling.")
                 return;
             }
@@ -244,6 +254,7 @@ module.exports.run = async (interaction) => {
         if (ALL_IVS.includes(valName) && (parseInt(valString) < 0 || parseInt(valString) > 31)) {
             if (parseInt(valString) < 0) {
                 logger.error(`[modpoke] IV value (${valString}) for ${pokeName} is outside the bounds of 0 - 31! Modification canceled.`)
+                console.log(`[modpoke] IV value (${valString}) for ${pokeName} is outside the bounds of 0 - 31! Modification canceled.`)
                 interaction.editReply(`IV value (${valString}) for ${pokeName} is outside the bounds of 0 - 31! Modification canceled.`)
                 return;
             }
@@ -258,10 +269,14 @@ module.exports.run = async (interaction) => {
                 try {
                     const confirmation = await response.awaitMessageComponent({ filter: userfilter, time: 60000 });
                     if (confirmation.customId === 'cancel') {
+                        logger.error(`[modpoke] user canceled IV modification with over-cap value.`);
+                        console.log(`[modpoke] user canceled IV modification with over-cap value.`);
                         interaction.followUp('IV modification canceled.');
                         return;
                     }
                 } catch (e) {
+                    logger.error(`[modpoke] IV modification canceled - timed out.`);
+                    console.log(`[modpoke] IV modification canceled - timed out.`);
                     interaction.followUp("Modification canceled due to time out.");
                     return;
                 }
@@ -270,6 +285,7 @@ module.exports.run = async (interaction) => {
         if (ALL_EVS.includes(valName) && (parseInt(valString) < 0 || parseInt(valString) > 252)) {
             if (parseInt(valString) < 0) {
                 logger.error(`[modpoke] EV value (${valString}) for ${pokeName} is outside the bounds of 0 - 252! Modification canceled.`)
+                console.log(`[modpoke] EV value (${valString}) for ${pokeName} is outside the bounds of 0 - 252! Modification canceled.`)
                 interaction.editReply(`EV value (${valString}) for ${pokeName} is outside the bounds of 0 - 252! Modification canceled.`)
                 return;
             }
@@ -285,10 +301,14 @@ module.exports.run = async (interaction) => {
                     const confirmation = await response.awaitMessageComponent({ filter: userfilter, time: 60000 });
 
                     if (confirmation.customId === 'cancel') {
+                        logger.error(`[modpoke] user canceled EV modification with over-cap value.`);
+                        console.log(`[modpoke] user canceled EV modification with over-cap value.`);
                         interaction.followUp("EV modification canceled.");
                         return;
                     }
                 } catch (e) {
+                    logger.error(`[modpoke] EV modification canceled - timed out.`);
+                    console.log(`[modpoke] EV modification canceled - timed out.`);
                     interaction.followUp("Modification canceled due to time out.");
                     return;
                 }
@@ -296,6 +316,7 @@ module.exports.run = async (interaction) => {
         }
         if (valName.toLowerCase() === 'level' && isNaN(parseInt(valString))) {
             logger.error("[modpoke] Attempted to change level to something NaN.");
+            console.log("[modpoke] Attempted to change level to something NaN.");
             interaction.editReply("Your pokemon's level can't be changed to that. Please double check your inputs.");
             return;
         }
@@ -303,6 +324,7 @@ module.exports.run = async (interaction) => {
             
             if (parseInt(valString) < 1) {
                 logger.error(`[modpoke]Level value (${valString}) for ${pokeName} is outside the bounds of 1 - 20! Modification canceled.`)
+                console.log(`[modpoke]Level value (${valString}) for ${pokeName} is outside the bounds of 1 - 20! Modification canceled.`)
                 interaction.editReply(`Level value (${valString}) for ${pokeName} is outside the bounds of 1 - 20! Modification canceled.`)
                 return;
             }
@@ -318,10 +340,14 @@ module.exports.run = async (interaction) => {
                     const confirmation = await response.awaitMessageComponent({ filter: userfilter, time: 60000 });
 
                     if (confirmation.customId === 'cancel') {
+                        logger.error(`[modpoke] user canceled level modification with over-cap value.`);
+                        console.log(`[modpoke] user canceled level modification with over-cap value.`);
                         interaction.followUp("Level modification canceled.");
                         return;
                     }
                 } catch (e) {
+                    logger.error(`[modpoke] Level modification canceled - timed out.`);
+                    console.log(`[modpoke] Level modification canceled - timed out.`);
                     interaction.followUp("Modification canceled due to time out.");
                     return;
                 }
@@ -333,6 +359,7 @@ module.exports.run = async (interaction) => {
             valString = valString.replace("_", " ");
             if (valString.match(/[^A-Za-z-' 0-9]/)){
                 logger.error(`[modpoke] Move has illegal character(s). Modification canceled.`)
+                console.log(`[modpoke] Move has illegal character(s). Modification canceled.`)
                 interaction.editReply(`[modpoke] Move has illegal character. Modification canceled.`)
                 return;
             }
@@ -343,7 +370,8 @@ module.exports.run = async (interaction) => {
         if (valName.toLowerCase() == 'name') {
 
             if (!valString.match(/^\w+$/)) {
-                logger.warn("[modpoke] User put special character in pokemon name, sending warning.");
+                logger.error("[modpoke] User put special character in pokemon name, sending warning.");
+                console.log("[modpoke] User put special character in pokemon name, sending warning.");
                 interaction.editReply("Please do not use special characters when renaming Pokemon. Modification canceled.");
                 return;
             }
@@ -360,14 +388,16 @@ module.exports.run = async (interaction) => {
 
             // Call promise with await
             let dupecheck = await results.catch((err) => {
-                logger.info("[modpoke] " + err);
+                logger.error("[modpoke] Error awaiting dupecheck: " + err);
+                console.log("[modpoke] Error awaiting dupecheck: " + err);
                 interaction.followUp("SQL error, please try again later or contact a maintainer if the issue persists. Modification canceled.");
                 return;
             })
 
             // If duplicate, stop
             if (dupecheck > 0) {
-                logger.warn("[modpoke] Duplicate Pokemon name. Sending warning..");
+                logger.error("[modpoke] Duplicate Pokemon name. Sending warning.");
+                console.log("[modpoke] Duplicate Pokemon name. Sending warning.");
                 interaction.followUp("Duplicate name exists - please choose another name! Modification canceled.");
                 return;
             }
@@ -377,22 +407,26 @@ module.exports.run = async (interaction) => {
         if (valName.toLowerCase() === 'exp') {
             if (isNaN(parseInt(valString))) {
                 logger.error('[modpoke] NAN exp value detected.');
+                console.log('[modpoke] NAN exp value detected.');
                 interaction.editReply("Please double check your input. Exp should be a number, 0 or above.");
                 return;
             }
             if (parseInt(valString) < 0) {
                 logger.error('[modpoke] Negative exp value detected.');
+                console.log('[modpoke] Negative exp value detected.');
                 interaction.editReply("Are you some kind of cooltrainer? A pokemon should have 0 or more exp.");
                 return;
             }
         }
         if (valName.toLowerCase() === 'friendship' && isNaN(parseInt(valString))) {
             logger.error('[modpoke] Friendship value is NAN');
+            console.log('[modpoke] Friendship value is NAN');
             interaction.editReply('Friendship value improperly formatted. Expecting a number.');
             return;
         }
         if (valName.toLowerCase() === 'friendship' && (parseInt(valString) < 0 || parseInt(valString) > 255)) {
             logger.error("[modpoke] Friendship outside of bounds.");
+            console.log("[modpoke] Friendship outside of bounds.");
             interaction.editReply("Given Friendship value was outside of valid range 0-255.");
             return;
         }
@@ -400,10 +434,10 @@ module.exports.run = async (interaction) => {
         // ================= SQL statements  =================
         // sql statement to check if the Pokemon exists
         let sqlFindPoke = `SELECT * FROM pokemon WHERE name = "${pokeName}"`;
-        logger.info(`[modpoke] SQL find pokemon query: ${sqlFindPoke}`);
+        // logger.info(`[modpoke] SQL find pokemon query: ${sqlFindPoke}`);
         // sql statement to update the Pokemon
         let sqlUpdateString = `UPDATE pokemon SET ${valName} = "${valString}" WHERE name = "${pokeName}"`;
-        logger.info(`[modpoke] SQL update string: ${sqlUpdateString}`);
+        // logger.info(`[modpoke] SQL update string: ${sqlUpdateString}`);
         // not found message
         let notFoundMessage = pokeName + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `/listpoke` to view the Pokemon you can edit.)";
 
@@ -413,22 +447,25 @@ module.exports.run = async (interaction) => {
             if (err) {
                 let cantAccessSQLMessage = "SQL error, please try again later or contact a maintainer if the issue persists.";
                 logger.error("[modpoke]" + cantAccessSQLMessage + " ${err}")
+                console.log("[modpoke]" + cantAccessSQLMessage + " ${err}")
                 interaction.editReply(cantAccessSQLMessage);
                 return;
             } else if (rows.length === 0) {
                 // the pokemon was not found
                 logger.info(`[modpoke] ${pokeName} was not found.`)
+                console.log(`[modpoke] ${pokeName} was not found.`)
                 interaction.editReply(notFoundMessage);
                 return;
             } else {
                 // check if the user is allowed to edit the Pokemon. If a Pokemon is private, the user's discord ID must match the Pokemon's creator ID
                 if (rows[0].private > 0 && interaction.user.id !== rows[0].discordID) {
                     logger.info("[modpoke] Detected user attempting to edit private Pokemon that isn't their own.")
+                    console.log("[modpoke] Detected user attempting to edit private Pokemon that isn't their own.")
                     // If user found a pokemon that was marked private and belongs to another user, act as if the pokemon doesn't exist in messages
                     interaction.editReply(notFoundMessage);
                     return
                 } else {
-                    logger.info(`[modpoke] ${pokeName} confirmed to be editable by user. Checking for static/dynamic variable.`);
+                    // logger.info(`[modpoke] ${pokeName} confirmed to be editable by user. Checking for static/dynamic variable.`);
                     // true/false declaring whether or not the variable is static or not
                     let isStaticVal = false;
 
@@ -444,12 +481,15 @@ module.exports.run = async (interaction) => {
                                         let errorMessage = "Unable to update static field " + valName + " of " + pokeName;
                                         logger.error(`[modpoke] ${errorMessage}\n\t${err.toString()}`);
                                         logger.error("[modpoke] " + err);
+                                        console.log(`[modpoke] ${errorMessage}\n\t${err.toString()}`);
+                                        console.log("[modpoke] " + err);
                                         //interaction.editReply(errorMessage + err);
                                         interaction.editReply("Error updating pokemon.");
                                         reject();
                                     } else {
                                         let successMessage = "**" + pokeName + "'s** " + valName + " has been changed to " + valString + "!";
                                         logger.info(`[modpoke] ${successMessage}`)
+                                        console.log(`[modpoke] ${successMessage}`)
                                         interaction.editReply(successMessage + "\nNOTE: Any updates to base stats will be overwritten if related variables (such as IVs, EVs, and level) are changed.");
                                         interaction.client.pokemonCacheUpdate();
                                         resolve();
@@ -464,7 +504,7 @@ module.exports.run = async (interaction) => {
                     staticCheck.then(() => {
                         // if you're here, then the field is not static and needs to get verification before being updated
                         if (!isStaticVal) {// if not a static field, it's one that updates other fields as well...
-                            logger.info(pokeName + " found. Attempting to update non-static field " + valName + " to " + valString + "...")
+                            // logger.info(pokeName + " found. Attempting to update non-static field " + valName + " to " + valString + "...")
                             /* HP calculation stuff (for later)
 
                            // === NEW HP CALCULATION(if needed)===
@@ -483,17 +523,17 @@ module.exports.run = async (interaction) => {
                             // create oldPoke object
                             oldPoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, rows[0]).then(function (results) {
 
-                                console.log("oldPoke:");
+                                /* console.log("oldPoke:");
                                 console.log(`"${oldPoke.pokemonData.stats[0].stat.name}": "${oldPoke.pokemonData.stats[0].base_stat}"`);
                                 console.log(`"${oldPoke.pokemonData.stats[1].stat.name}": "${oldPoke.pokemonData.stats[1].base_stat}"`);
                                 console.log(`"${oldPoke.pokemonData.stats[2].stat.name}": "${oldPoke.pokemonData.stats[2].base_stat}"`);
                                 console.log(`"${oldPoke.pokemonData.stats[3].stat.name}": "${oldPoke.pokemonData.stats[3].base_stat}"`);
                                 console.log(`"${oldPoke.pokemonData.stats[4].stat.name}": "${oldPoke.pokemonData.stats[4].base_stat}"`);
-                                console.log(`"${oldPoke.pokemonData.stats[5].stat.name}": "${oldPoke.pokemonData.stats[5].base_stat}"`);
+                                console.log(`"${oldPoke.pokemonData.stats[5].stat.name}": "${oldPoke.pokemonData.stats[5].base_stat}"`); */
                                 // grab the row and stow it
                                 let thisPoke = rows[0];
-                                console.log("This poke.");
-                                console.log(rows[0]);
+                                // console.log("This poke.");
+                                // console.log(rows[0]);
                                 // if the valName is species, assign directly, otherwise convert it into a number
 
                                 if (valName === "species") {
@@ -529,10 +569,10 @@ module.exports.run = async (interaction) => {
                                     thisPoke["level"] = iter;
                                     thisPoke["exp"] = exp;
                                 }
-                                console.log("level: " + thisPoke["level"] + " exp: " + thisPoke["exp"]);
+                                // console.log("level: " + thisPoke["level"] + " exp: " + thisPoke["exp"]);
 
                                 if (valName === "friendship") {
-                                    console.log("We even in the friendship block?");
+                                    // console.log("We even in the friendship block?");
                                     let frnd = parseInt(valString);
                                     if (frnd < 0) {
                                         frnd = 0;
@@ -553,7 +593,7 @@ module.exports.run = async (interaction) => {
                                 //use Pokemon.loadFromSQL to convert SQL object into a complete Pokemon object
                                 newPoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, thisPoke).then(async function (results) {
 
-                                    console.log("new Pokemon:");
+                                    /* console.log("new Pokemon:");
                                     console.log(`"${newPoke.pokemonData.stats[0].stat.name}": "${newPoke.pokemonData.stats[0].base_stat}"`);
                                     console.log(`"${newPoke.pokemonData.stats[1].stat.name}": "${newPoke.pokemonData.stats[1].base_stat}"`);
                                     console.log(`"${newPoke.pokemonData.stats[2].stat.name}": "${newPoke.pokemonData.stats[2].base_stat}"`);
@@ -563,7 +603,7 @@ module.exports.run = async (interaction) => {
                                     console.log("Friendship: " + newPoke.friendship);
 
 
-                                    logger.info("SQL has been converted to a Pokemon Object\nAll values recalculated as necessary\nProviding user with comparison embed & awaiting change confirmation...")
+                                    logger.info("SQL has been converted to a Pokemon Object\nAll values recalculated as necessary\nProviding user with comparison embed & awaiting change confirmation...") */
 
                                     // DEBUG display old and new pokes
                                     //interaction.channel.send("Old Pokemon Below (debug)");
@@ -681,7 +721,7 @@ module.exports.run = async (interaction) => {
                                     ];
 
                                     // TODO update above array with charisma calculator when that's done and ready
-                                    console.log("Embedding");
+                                    // console.log("Embedding");
                                     //Converting friendship value to words based on thresholds in FRIEND_THRESH
                                     let frndwrd = "";
                                     let val = newPoke.friendship;
@@ -870,6 +910,7 @@ module.exports.run = async (interaction) => {
                                             newPoke.updatePokemon(interaction.client.mysqlConnection, null, rows[0].private, interaction).then(function (results) {
                                                 let successString = "Success! " + pokeName + "'s " + valName + " has been changed to " + valString + " and all related stats have been updated.\n\nHint: View Pokemon's stat's using `/showpoke [nickname]`";
                                                 logger.info(`[modpoke] ${successString}`)
+                                                console.log(`[modpoke] ${successString}`)
                                                 interaction.editReply({ components: []});
                                                 interaction.channel.send({ content: successString });
                                             }).catch(function (error) {
@@ -879,9 +920,11 @@ module.exports.run = async (interaction) => {
                                             });
                                         } else if (confirmation.customId === 'cancel') {
                                             logger.info("Edits to Pokemon cancelled by user.")
+                                            logger.info("Edits to Pokemon cancelled by user.")
                                             interaction.editReply({ content: pokeName + "'s edits have been cancelled", components: []});
                                         }
                                     } catch (e) {
+                                        logger.error(e)
                                         console.log(e)
                                         interaction.editReply({ content: 'Confirmation not received within 1 minute, cancelling', components: [] });
                                     }
@@ -896,17 +939,19 @@ module.exports.run = async (interaction) => {
 
                                 }, function (rejected) {
                                         logger.error("[modpoke] Promise rejected during modification. Message: " + rejected);
+                                        console.log("[modpoke] Promise rejected during modification. Message: " + rejected);
                                         interaction.editReply(rejected);
                                 }).catch(function (error) {
                                     let loadNewPokeMessage = "Error loading new Pokemon to object. Please make sure you've entered a valid field and value.";
-                                    interaction.editReply(loadNewPokeMessage);
+                                    logger.error(`[modpoke] ${loadNewPokeMessage}\n\t${error.toString()}`);
                                     console.log(error);
-                                    logger.error(`[modpoke] ${loadNewPokeMessage}\n\t${error.toString()}`)
+                                    interaction.editReply(loadNewPokeMessage);
                                 });
                             }).catch(function (error) {
                                 let loadOriginalPokeMessage = "Error while attempting to load the original Pokemon to an object.";
-                                interaction.editReply(loadOriginalPokeMessage);
                                 logger.error(`[modpoke] ${loadOriginalPokeMessage}\n\t${error.toString}`)
+                                console.log(`[modpoke] ${loadOriginalPokeMessage}\n\t${error.toString}`)
+                                interaction.editReply(loadOriginalPokeMessage);
                             });
                         }
                     });
@@ -917,6 +962,7 @@ module.exports.run = async (interaction) => {
 
     } catch (error) {
         logger.error(`[modpoke] Error while attempting to modify the Pokemon.\n\t${error.toString()}`)
+        console.log(`[modpoke] Error while attempting to modify the Pokemon.\n\t${error.toString()}`)
         interaction.channel.send(error.toString());
         interaction.channel.send('Error while attempting to modify the Pokemon.').catch(console.error);
     }

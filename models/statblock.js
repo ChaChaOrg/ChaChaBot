@@ -102,7 +102,7 @@ let modGen = function (abilityScore) {
 
 //assign IVs
 Statblock.prototype.assignRandIVs = function () {
-  logger.info("[statblock] Assigning IVs.")
+  //logger.info("[statblock] Assigning IVs.")
   for (let i = 0; i < STAT_ARRAY_MAX; i++) {
     this.ivStats[i] = Math.floor(Math.random() * IV_MAX); //assigns a value between 0 & 31 to all the IVs
   }
@@ -111,7 +111,7 @@ Statblock.prototype.assignRandIVs = function () {
 //takes an array of types and assigns Saves
 // calculate saving throws - RUN AFTER ABILITY SCORES ARE GENERATED
 Statblock.prototype.calculateSaves = function (pokemon) {
-  logger.info("[statblock] Calculating saves.")
+  //logger.info("[statblock] Calculating saves.")
   //temp values
   tempTypes = [pokemon.type1, pokemon.type2];
 
@@ -159,7 +159,7 @@ Statblock.prototype.calculateSaves = function (pokemon) {
 };
 
 Statblock.prototype.calculateStats = function (pokemon) {
-  logger.info("[statblock] Calculating stats.")
+  //logger.info("[statblock] Calculating stats.")
   // start by taking care of Nature
   //pokemon.nature.calculateNatureStats(pokemon);
   //pokemon.Nautre.calculateNatureStats(pokemon)
@@ -241,7 +241,7 @@ Statblock.prototype.calculateStats = function (pokemon) {
 };
 
 Statblock.prototype.assignBaseStats = function (pokemon) {
-  logger.info("[statblock] Assigning base stats.")
+  //logger.info("[statblock] Assigning base stats.")
   let i = 6;
   pokemon.pokemonData["stats"].forEach((element) => {
     this.baseStats[STAT_ARRAY_MAX - i] = element["base_stat"];

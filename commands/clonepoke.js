@@ -29,6 +29,8 @@ module.exports.autocomplete = async (interaction) => {
 }
 
 module.exports.run = async (interaction) => {
+    console.log("USER: " + interaction.user + " RUNNING CLONEPOKE: " + interaction.toString());
+	logger.info("USER: " + interaction.user + " RUNNING CLONEPOKE: " + interaction.toString());
 	try {
         /*if (args[0] === "help") {
             logger.info("[clonepoke] Displaying help interaction.");
@@ -37,30 +39,32 @@ module.exports.run = async (interaction) => {
         
         let name = interaction.options.getString("name");
         if (name.match(SQL_SANITATION_REGEX)) {
+            console.log("[clonepoke] User tried to put in invalid string input.");
             logger.error("[clonepoke] User tried to put in invalid string input.");
             interaction.editReply("That is not a valid name, please keep input alphanumeric, ', - or _");
             return;
         }
-            logger.info("[clonepoke] Searching database for " + name);
+            // logger.info("[clonepoke] Searching database for " + name);
             let Pokemon = require("../models/pokemon");
             let basePoke = new Pokemon();
             let clonePoke = new Pokemon();
             let sql = `SELECT * FROM pokemon WHERE name = '${name}';`;
-            logger.info(`[showpoke] SQL query: ${sql}`);
+            // logger.info(`[showpoke] SQL query: ${sql}`);
 
             interaction.client.mysqlConnection.query(sql, function (err, response) {
 
                 if (err) throw err;
 
                 if (response.length == 0) {
+                    console.log("[clonepoke] " + name + " not found.");
                     logger.info("[clonepoke] " + name + " not found.");
                     interaction.reply("Your pokemon wasn't found. Cloning canceled.");
                 } else {
-                    logger.info("[clonepoke] Pokemon found.");
+                    // logger.info("[clonepoke] Pokemon found.");
                     let cloneName = name + "Clone";
                     let iterations = 0;
                     let foundClone = true;
-                    logger.info("[clonepoke] Checking for other clones.");
+                    // logger.info("[clonepoke] Checking for other clones.");
                     //while (foundClone) {
                      //   let clonesql = `SELECT * FROM pokemon WHERE name = '${name + iterations}';`;
                      //   connection.query(clonesql, function (err, response) {
@@ -78,22 +82,24 @@ module.exports.run = async (interaction) => {
                     basePoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, response[0]).then(response => {                        let clonesql = `SELECT * FROM pokemon WHERE name LIKE '${cloneName}%';`;
                         interaction.client.mysqlConnection.query(clonesql, function (err, response) {
                             if (!response) {
+                                console.log("[clonepoke] Database communication failed.");
                                 logger.error("[clonepoke] Database communication failed.");
                                 interaction.editReply("Communication with database failed. Could not clone the pokemon. Please try again later.");
                                 //throw "Communication failed. Null response detected.";
                                 return;
                             }
                             if (err) {
+                                console.log("[clonepoke] SQL error detected: " + err);
                                 logger.error("[clonepoke] SQL error detected: " + err);
                                 interaction.editReply("Error detected. Please double check your spelling.");
                                 //throw err;
                                 return;
                             }
                             iterations = response.length + 1;
-                            console.log("Clone Count: " + iterations);
+                            // console.log("Clone Count: " + iterations);
                             if (iterations >= 2) {
                                 cloneName += iterations;
-                                console.log("Clone's name: " + cloneName);
+                                // console.log("Clone's name: " + cloneName);
                             }
 
                             let nameLine = "";
@@ -123,23 +129,26 @@ module.exports.run = async (interaction) => {
                             importString += nameLine + ability + level + evs + nature + ivs;
                             //interaction.reply("DNA sequencing complete.");
                             //interaction.reply("Beginning incubation procedure....");
-                            logger.info("[clonepoke] Importing clone.");
+                            // logger.info("[clonepoke] Importing clone.");
                             clonePoke.importPokemon(interaction.client.mysqlConnection, interaction.client.pokedex, importString).then(response => {
                                 clonePoke.uploadPokemon(interaction.client.mysqlConnection, interaction);
                             }).catch(function (error) {
+                                console.log('[clonepoke] There was an error: ' + error);
                                 logger.error('[clonepoke] There was an error: ' + error);
                                 interaction.editReply("Error checking database! Please try again.");
                                 return;
                             })
                             //interaction.reply("We tried to create a perfect copy of your pokemon.....");
                             //interaction.reply("We suceeded.");
+                            logger.info("[clonepoke] Cloning completed, new clone: " + clonename);
+                            console.log("[clonepoke] Cloning completed, new clone: " + clonename);
                             interaction.editReply("Cloning procedure complete. Use /showpoke " + cloneName + " to view your new old friend.");
-                            logger.info("[clonepoke] Cloning completed.");
                         });
 
 
                     }).catch(function (error) {
                         logger.error('[clonepoke] There was an error: ' + error);
+                        console.log('[clonepoke] There was an error: ' + error);
                         interaction.editReply("Error checking database! Please try again.");
                         return;
                     });

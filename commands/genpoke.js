@@ -66,6 +66,8 @@ module.exports.data = new SlashCommandBuilder()
 		// 		.setMaxValue(100))
 
 module.exports.run = async (interaction) => {
+	console.log("USER: " + interaction.user + " RUNNING GENPOKE: " + interaction.toString());
+	logger.info("USER: " + interaction.user + " RUNNING GENPOKE: " + interaction.toString());
 	await interaction.deferReply();
 	const confirm = new ButtonBuilder()
 		.setCustomId('confirm')
@@ -84,6 +86,7 @@ module.exports.run = async (interaction) => {
 
 	if (namecheck.match(SQL_SANITATION_REGEX) || interaction.options.getString('species').match(SQL_SANITATION_REGEX) || (interaction.options.getString('form') && interaction.options.getString('form').match(SQL_SANITATION_REGEX))) {
 		logger.error("[genpoke] User tried to put in invalid string input.");
+		console.log("[genpoke] User tried to put in invalid string input.");
 		interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
 		return;
 	}
@@ -103,14 +106,16 @@ module.exports.run = async (interaction) => {
 
 	// Call promise with await
 	let dupecheck = await results.catch((err) => {
-		logger.info("[genpoke] " + err);
+		logger.info("[genpoke] dupecheck SQL error " + err);
+		console.log("[genpoke] dupecheck SQL error " + err);
 		interaction.followUp("SQL error, please try again later or contact a maintainer if the issue persists.");
 		return;
 	})
 	
 	// If duplicate, stop
 	if (dupecheck > 0) {
-		logger.warn("[genpoke] Duplicate Pokemon name. Sending warning..");
+		logger.warn("[genpoke] Duplicate Pokemon name. Sending warning.");
+		console.log("[genpoke] Duplicate Pokemon name. Sending warning.");
 		interaction.followUp("Duplicate name exists - please choose another name!");
 		return;
 	}
@@ -136,25 +141,32 @@ module.exports.run = async (interaction) => {
 					genPokemon.init(interaction.client.mysqlConnection, interaction.client.pokedex)
 						.then(function (response) {
 							// upload pokemon to database
-							logger.info("[genpoke] Uploading pokemon to database.");
+							// logger.info("[genpoke] Uploading pokemon to database.");
 							genPokemon.uploadPokemon(interaction.client.mysqlConnection, interaction);
 
 							// post embed
-							logger.info("[genpoke] Sending summary interaction.");
+							// logger.info("[genpoke] Sending summary interaction.");
 							interaction.followUp({ embeds: [genPokemon.sendSummaryMessage(interaction).embed] });
 
 							// alert user that their poke has been added to the database
-							logger.info("[genpoke] Sending upload confirmation and how to remove pokemon.");
+							// logger.info("[genpoke] Sending upload confirmation and how to remove pokemon.");
+							logger.info("[genpoke] Pokemon added: " + genPokemon.name);
+							console.log("[genpoke] Pokemon added: " + genPokemon.name);
 							interaction.followUp(genPokemon.name + " has been added to the database.\nTo remove it, use this command: `+rempoke " + genPokemon.name + "`");
 						})
 						.catch(function (error) {
-							logger.error(error);
+							logger.error("[genpoke] genPokemon error " + error);
+							console.log("[genpoke] genPokemon error " + error);
 							interaction.followUp(error);
 						});
 				} else {
+					logger.info("[genpoke] Generation cancelled.")
+					console.log("[genpoke] Generation cancelled.")
 					interacton.followUp("Generation cancelled.");
 				}
 			} catch (e) {
+				logger.info("[genpoke] Action timed out after 1 minute. Pokemon not generated.Error " + e);
+				console.log("[genpoke] Action timed out after 1 minute. Pokemon not generated.Error " + e);
 				interaction.followUp("Action timed out after 1 minute. Pokemon not generated.");
 			}
 		} else {
@@ -167,19 +179,22 @@ module.exports.run = async (interaction) => {
 			genPokemon.init(interaction.client.mysqlConnection, interaction.client.pokedex)
 				.then(function (response) {
 					// upload pokemon to database
-					logger.info("[genpoke] Uploading pokemon to database.");
+					//logger.info("[genpoke] Uploading pokemon to database.");
 					genPokemon.uploadPokemon(interaction.client.mysqlConnection, interaction);
 
 					// post embed
-					logger.info("[genpoke] Sending summary interaction.");
+					//logger.info("[genpoke] Sending summary interaction.");
 					interaction.followUp({ embeds: [genPokemon.sendSummaryMessage(interaction).embed] });
 
 					// alert user that their poke has been added to the database
-					logger.info("[genpoke] Sending upload confirmation and how to remove pokemon.");
+					//logger.info("[genpoke] Sending upload confirmation and how to remove pokemon.");
+					logger.info("[genpoke] Pokemon added: " + genPokemon.name);
+					console.log("[genpoke] Pokemon added: " + genPokemon.name);
 					interaction.followUp(genPokemon.name + " has been added to the database.\nTo remove it, use this command: `+rempoke " + genPokemon.name + "`");
 				})
 				.catch(function (error) {
-					logger.error(error);
+					logger.error("[genpoke] genPokemon error " + error);
+					console.log("[genpoke] genPokemon error " + error);
 					interaction.followUp(error);
 				});
         }
@@ -187,7 +202,8 @@ module.exports.run = async (interaction) => {
 	}
 	/* istanbul ignore next */
 	catch (error) {
-		logger.error(error);
+		logger.error("[genpoke] Error: " + error);
+		console.log("[genpoke] Error: " + error);
 		interaction.followUp('ChaCha machine :b:roke while attempting to generate a Pokemon, please try again later').catch(console.error);
 	}
 

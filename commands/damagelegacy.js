@@ -151,9 +151,13 @@ module.exports.data = new SlashCommandBuilder()
 	);
 
 module.exports.run = async (interaction) => {
+
+	console.log("USER: " + interaction.user + " RUNNING DAMAGE (Legacy): " + interaction.toString());
+	logger.info("USER: " + interaction.user + " RUNNING DAMAGE (Legacy): " + interaction.toString());
+
 	await interaction.deferReply();
 	try {
-		//variables required
+//variables required
 		let attackName = interaction.options.getString("atkname");
 		let defendName = interaction.options.getString("defname");
 		let level = interaction.options.getInteger("level");
@@ -170,6 +174,7 @@ module.exports.run = async (interaction) => {
 		//clause for helping!
 		if (interaction.options.getBoolean("help")) {
 			logger.info("[damagelegacy] Sending help interaction.")
+			console.log("[damagelegacy] Sending help interaction.")
 			interaction.followUp(HELP_MESSAGE).catch(console.error);
 			return;
 		}
@@ -197,11 +202,13 @@ module.exports.run = async (interaction) => {
 		damageTotal = damageTotal.toFixed(2);
 
 		logger.info("[damagelegacy] " + `${attackName} deals ${damageTotal} damage to the defending ${defendName}`);
+		console.log("[damagelegacy] " + `${attackName} deals ${damageTotal} damage to the defending ${defendName}`);
 		interaction.followUp(`${attackName} deals ${damageTotal} damage to the defending ${defendName}`).catch(console.error);
 
 	}
 	catch (error) {
 		logger.error("[damagelegacy] " + error)
+		console.log("[damagelegacy] " + error)
 		interaction.followUp(error.toString);
 		interaction.followUp('ChaCha machine :b:roke, please try again later').catch(console.error);
 

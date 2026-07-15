@@ -97,8 +97,8 @@ Pokemon.prototype.init = function (connection, P) {
     .then(
       function (response) {
         //let the log know the poke is initializing
-        console.log("Initializing " + this.name + "...");
-        logger.info("[pokemon] Initializing " + this.name + "...");
+        //console.log("Initializing " + this.name + "...");
+        //logger.info("[pokemon] Initializing " + this.name + "...");
         //console.log("Retrieved Pokemon and Species Data!");
 
         //console.log("Reading Type(s)");
@@ -123,8 +123,8 @@ Pokemon.prototype.init = function (connection, P) {
         // calculate random moves
           this.assignMoves();
 
-        console.log("Pokemon Initialization Sequence Complete!");
-        logger.info("[pokemon] Pokemon Initialization Sequence Complete!");
+        //console.log("Pokemon Initialization Sequence Complete!");
+        //logger.info("[pokemon] Pokemon Initialization Sequence Complete!");
       }.bind(this))
     .catch(function (error) {
       throw error;
@@ -155,7 +155,7 @@ let modGen = function (abilityScore) {
 };
 
 // grab + stow types
-logger.info("[pokemon] Assigning types.");
+//logger.info("[pokemon] Assigning types.");
 
 Pokemon.prototype.assignTypes = function () {
   this.type1 = this.pokemonData.types[0].type.name;
@@ -165,7 +165,7 @@ Pokemon.prototype.assignTypes = function () {
 };
 
 // Generates a random ability given the ability options from PokeAPI & the assigned hidden ability chance
-logger.info("[pokemon] Generating random ability.");
+//logger.info("[pokemon] Generating random ability.");
 Pokemon.prototype.genRandAbility = function () {
   // the total # of abilities the pokemon can have
   let abilityTotal = 0;
@@ -267,7 +267,7 @@ Pokemon.prototype.genRandAbility = function () {
 };
 
 //Assign gender
-logger.info("[pokemon] Assigning random gender.");
+//logger.info("[pokemon] Assigning random gender.");
 Pokemon.prototype.assignRandGender = function () {
   //assign gender, default to genderless
   let gender;
@@ -285,13 +285,13 @@ Pokemon.prototype.assignRandGender = function () {
 };
 
 //shiny generator!
-logger.info("[pokemon] Assigning shiny value.");
+//logger.info("[pokemon] Assigning shiny value.");
 Pokemon.prototype.assignShiny = function () {
   this.shiny = Math.floor(Math.random() * SHINY_CHANCE + 1) >= SHINY_CHANCE;
 };
 
 // assign random moves based on level
-logger.info("[pokemon] Assigning random moves based on level");
+//logger.info("[pokemon] Assigning random moves based on level");
 Pokemon.prototype.assignMoves = function () {
 
     // video game level
@@ -459,7 +459,7 @@ Pokemon.prototype.sendSummaryMessage = function (interaction) {
 
   if (thumbnail_url === null) {
     thumbnail_url = "https://e7.pngegg.com/pngimages/960/239/png-clipart-internet-archive-http-404-wayback-machine-error-miscellaneous-text-thumbnail.png"
-    logger.error("[pokemon] Pokemon thumbnail URL was not found, using 404 image.");
+    //logger.error("[pokemon] Pokemon thumbnail URL was not found, using 404 image.");
   }
 
   // set shiny to yes or no based on the boolean
@@ -499,7 +499,7 @@ Pokemon.prototype.sendSummaryMessage = function (interaction) {
                 movesURL[i] = '-';
             }
         }
-        console.log(movesURL[i]);
+        //console.log(movesURL[i]);
         movesURL[i] = "https://bulbapedia.bulbagarden.net/wiki/" + movesURL[i] + "_(move)";
     }
 
@@ -703,15 +703,15 @@ Pokemon.prototype.uploadPokemon = function (connection, interaction) {
         "${this.campaign}",
         "${this.eggParent}")`
   //console.log(sql);
-  logger.info(`[pokemon] upload SQL query: ${sql}`);
+  //logger.info(`[pokemon] upload SQL query: ${sql}`);
   connection.query(sql, function (err, result) {
     if (err) {
       logger.error(err);
       throw err;
     }
     interaction.client.pokemonCacheUpdate();
-    console.log("1 record inserted");
-    logger.info("[pokemon] upload SQL was successful.")
+    //console.log("1 record inserted");
+    //logger.info("[pokemon] upload SQL was successful.")
   });
 };
 
@@ -770,15 +770,15 @@ Pokemon.prototype.updatePokemon = function (connection, message, pokePrivate, in
          WHERE name = "${this.name}";`;
 
   //console.log(sql);
-  logger.info(`[pokemon] update SQL query: ${sql}`);
+  //logger.info(`[pokemon] update SQL query: ${sql}`);
   return new Promise((resolve, reject) => {
     connection.query(sql, function (err, result) {
       if (err) {
         logger.error(`pokemon update SQL error: ${err}`)
         return reject(err);
       }
-      logger.info("[pokemon] update SQL query was successful.");
-      console.log("1 record updated.");
+      //logger.info("[pokemon] update SQL query was successful.");
+      //console.log("1 record updated.");
       interaction.client.pokemonCacheUpdate();
       return resolve(result);
     });
@@ -789,7 +789,7 @@ Pokemon.prototype.updatePokemon = function (connection, message, pokePrivate, in
 
 Pokemon.prototype.importPokemon = function (connection, P, importString) {
   return new Promise((resolve,reject) => {
-  logger.info("[pokemon] Importing Pokemon.");
+  //logger.info("[pokemon] Importing Pokemon.");
   //splits the message into lines then splits the lines into words separated by spaces.
   let lines = ""
   if (importString.includes("\n")) lines = importString.split("\n");
@@ -957,7 +957,8 @@ Pokemon.prototype.importPokemon = function (connection, P, importString) {
   );
     
   if (this.name.match(SQL_SANITATION_REGEX) || this.name.match(SQL_SANITATION_REGEX)){
-    logger.error("[modpoke] User tried to put in invalid string input.");
+    console.log("[pokemon - import] User tried to put in invalid string input.");
+    logger.error("[pokemon - import] User tried to put in invalid string input.");
     interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
     reject();
     return;
@@ -966,7 +967,7 @@ Pokemon.prototype.importPokemon = function (connection, P, importString) {
 
   let sql = `SELECT * FROM pokemon WHERE name = '${this.name}';`;
 
-  console.log(sql);
+  //console.log(sql);
   connection.query(sql, function (err, response) {
       if (err) throw err;
 
@@ -1013,7 +1014,7 @@ Pokemon.prototype.importPokemon = function (connection, P, importString) {
 };
 
 Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
-  console.log("starting getPokemonAndSpeciesData.\n");
+  //console.log("starting getPokemonAndSpeciesData.\n");
   return new Promise(
     function (resolve, reject) {
       let sqlFindPokeForm = `SELECT * FROM pokeForms WHERE species = '${this.species}'`;
@@ -1032,8 +1033,8 @@ Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
               if (pokeForm.form.toLowerCase() === this.form.toLowerCase()) {
                 found = 1;
                 //Found the correct form and species in the SQL!
-                console.log("sanity check, adsfjlaseifj lsdkjgjldfkg");
-                console.log(pokeForm);
+                //console.log("sanity check, adsfjlaseifj lsdkjgjldfkg");
+                //console.log(pokeForm);
                 let formtemplate
                 let speciestemplate
                 try {
@@ -1077,7 +1078,7 @@ Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
           // List Forms, including default
           //
           if (found === 0) {
-            console.log(this);
+            //console.log(this);
             //do we want to display just the species or the form?
             //this.form = this.species;
             //F it SCIENCE!
@@ -1100,46 +1101,48 @@ Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
                         resolve(this.pokemonData);
                       }.bind(this)
                     ).catch(function (error) {
-                      console.log("Error when retrieving pokemon form Data :C   ERROR: ", error);
+                      logger.error("[pokemon] Error retrieving form data! " + error);
+                      console.log("[pokemon] Error retrieving form data! " + error);
                       reject("Error when retrieving pokemon form Data :C   ERROR: " + error);
                     });
                 }.bind(this))
                 .catch(function (error) {
-                  console.log("Error in getPokemonFormByName Science block: ", error);
+                  logger.error("[pokemon] Error in getPokemonFormByName Science block! " + error);
+                  console.log("[pokemon] Error in getPokemonFormByName Science block! " + error);
                   reject("Error finding form. Please double check your spelling.");
                 });
             } else {
-              console.log("Are we here?");
+              //console.log("Are we here?");
               P.getPokemonSpeciesByName(this.species.toLowerCase())
                 .then(function (response) {
-                  console.log(response.varieties[0]);
+                  //console.log(response.varieties[0]);
                   //need to include a check for the .varieties length, just grabbing the id uses the default form
                   //not quite, how do I know which P call to use from here?
                   this.speciesData = response;
                   P.getPokemonByName(this.speciesData.id)
                     .then(
                       function (response) {
-                        console.log("we here? Good.");
+                        //console.log("we here? Good.");
                         this.pokemonData = response;
                         resolve(this.pokemonData);
                       }.bind(this)
                     )
                     .catch(function (error) {
-                      console.log(
-                        "Error when retrieving pokemon species Data :C  ERROR: ",
-                        error
-                      );
+                      logger.error("[pokemon] Error when retrieving pokemon species Data :C  ERROR: " + error)
+                      console.log("[pokemon] Error when retrieving pokemon species Data :C  ERROR: ", error);
                       reject("Error when retrieving pokemon species Data :C  ERROR: " + error)
                       //interaction.channel.send("Error when retrieving pokemon species Data :C  ERROR: ");
                     });
                 }.bind(this))
                 .catch(function (error) {
                   if (!error.response) {
-                    console.log("Empty error response detected. Error: " + error);
+                    console.log("[pokemon] Empty error response detected. Error: " + error);
+                    logger.error("[pokemon] Empty error response detected. Error: " + error);
 
                     reject("Unknown Error.");
                   } else {
-                    console.log("Error when retrieving pokemon Data :C  ERROR: ", error.response.statusText);
+                    console.log("[pokemon] Error when retrieving pokemon Data :C  ERROR: ", error.response.statusText);
+                    logger.error("[pokemon] Error when retrieving pokemon Data :C  ERROR: ", error.response.statusText);
 
                     if (error.response.status === 404) {
                       let errMsg = "Pokemon not found, please check your spelling."
@@ -1232,8 +1235,8 @@ Pokemon.prototype.loadFromSQL = function (connection, P, sqlObject) {
                         i--;
                     });
 
-                    console.log("Calculating Stats of " + this.name);
-                    logger.info("[pokemon] Calculating stats of " + this.name);
+                    //console.log("Calculating Stats of " + this.name);
+                    //logger.info("[pokemon] Calculating stats of " + this.name);
 
                     // calculate stats and saves before re-assigning actual stats
                     this.statBlock.calculateStats(this);
@@ -1255,6 +1258,7 @@ Pokemon.prototype.loadFromSQL = function (connection, P, sqlObject) {
     )
         .catch(function (error) {
             console.log("Error when Loading from SQL :C  ERROR: ", error);
+            logger.error("Error when Loading from SQL :C  ERROR: " + error);
             //interaction.channel.send("Error when retrieving pokemon Data :C");
         });
 }

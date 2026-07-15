@@ -35,6 +35,9 @@ module.exports.autocomplete = async (interaction) => {
 module.exports.run = async (interaction) => {
     await interaction.deferReply();
 
+    console.log("USER: " + interaction.user + " RUNNING SHOWPOKE: " + interaction.toString());
+    logger.info("USER: " + interaction.user + " RUNNING SHOWPOKE: " + interaction.toString());
+
     try {
         // if (args.join(" ").includes("\'")) {
         //     logger.warn("[showpoke] User put single quote in command, sending warning.");
@@ -44,7 +47,9 @@ module.exports.run = async (interaction) => {
 
         let name = interaction.options.getString('nickname');
 
+
         if (name.match(SQL_SANITATION_REGEX)){
+            console.log("[showpoke] User tried to put in invalid string input.")
             logger.error("[showpoke] User tried to put in invalid string input.");
             interaction.editReply("That is not a valid string input, please keep input alphanumeric, ', - or _");
             return;
@@ -54,7 +59,7 @@ module.exports.run = async (interaction) => {
         let tempPoke = new Pokemon;
 
         let sql = `SELECT * FROM pokemon WHERE name = '${name}';`;
-        logger.info(`[showpoke] SQL query: ${sql}`);
+        // logger.info(`[showpoke] SQL query: ${sql}`);
 
         let notFoundMessage = name + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `/listpoke` to view the Pokemon you can edit.)";
 
@@ -63,12 +68,14 @@ module.exports.run = async (interaction) => {
             if (err) throw err;
 
             if (response.length == 0) {
+                console.log("[showpoke] Pokemon not found in database. Please check your spelling, or the Pokemon may not be there.")
                 logger.info("[showpoke] Pokemon not found in database. Please check your spelling, or the Pokemon may not be there.")
                 interaction.editReply("Pokemon not found in database. Please check your spelling, or the Pokemon may not be there.")
             }
             else {
                 // check if the user is allowed to edit the Pokemon. If a Pokemon is private, the user's discord ID must match the Pokemon's creator ID
                 if (response[0].private > 0 && interaction.member.user.id !== response[0].discordID) {
+                    console.log("[modpoke] Detected user attempting to edit private Pokemon that isn't their own.")
                     logger.info("[modpoke] Detected user attempting to edit private Pokemon that isn't their own.")
                     // If user found a pokemon that was marked private and belongs to another user, act as if the pokemon doesn't exist in messages
                     interaction.editReply(notFoundMessage);
@@ -78,8 +85,8 @@ module.exports.run = async (interaction) => {
                 tempPoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, response[0])
                     .then(response => {
 
-
-                        logger.info("[showpoke] Sending summary message to user.");
+                        console.info("[showpoke] Sent summary message to user.")
+                        logger.info("[showpoke] Sent summary message to user.");
                         interaction.editReply({
                             embeds: [tempPoke.sendSummaryMessage(interaction).embed]
                         });
@@ -89,6 +96,7 @@ module.exports.run = async (interaction) => {
         })
 
     } catch (error) {
+        console.log("[showpoke] " + error.toString());
         logger.error("[showpoke] " + error.toString());
         interaction.channel.send(error.toString());
         interaction.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);

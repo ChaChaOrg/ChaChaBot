@@ -9,8 +9,9 @@ module.exports.data = new SlashCommandBuilder()
         .setDescription('The feat you want info about')
         .setRequired(true));
 ;
-module.exports.run = async (interaction) => 
-{
+module.exports.run = async (interaction) => {
+	console.log("USER: " + interaction.user + " RUNNING FEAT: " + interaction.toString());
+	logger.info("USER: " + interaction.user + " RUNNING FEAT: " + interaction.toString());
 //run
 
 
@@ -705,7 +706,8 @@ module.exports.run = async (interaction) =>
 		//if the feat isn't null, print it out
 
 		if (featFound !== null) {
-			logger.info("[feat] Sending embed interaction.")
+			logger.info("[feat] Sending embed interaction for feat: " + featFound.name)
+			console.log("[feat] Sending embed interaction for feat: " + featFound.name)
 			interaction.reply({ embeds: [{
 					color: 3447003,
 					author: {
@@ -740,10 +742,12 @@ module.exports.run = async (interaction) =>
 				}
             ]});
 		} else {
+			console.log("[feat] No feat found.")
 			logger.info("[feat] No feat found.")
 			interaction.reply("No feat found, sorry :^(");
 		}
 	} catch (error) {
+		console.log("[feat] " + error)
 		logger.error("[feat] " + error)
 		interaction.reply(`Error running command: ${error}`);
 	}

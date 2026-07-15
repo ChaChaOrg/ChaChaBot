@@ -24,6 +24,10 @@ module.exports.autocomplete = async (interaction) => {
 };
 
 module.exports.run = async (interaction) => {
+
+  console.log("USER: " + interaction.user + " RUNNING MOVEDEX: " + interaction.toString());
+  logger.info("USER: " + interaction.user + " RUNNING MOVEDEX: " + interaction.toString());
+  
   await interaction.deferReply();
 
   let moveName = interaction.options.getString('move');
@@ -160,15 +164,18 @@ module.exports.run = async (interaction) => {
     };
 
     //embed message
-    logger.info("[movedex] Sending combat embed string.");
+    logger.info("[movedex] Sending embed string.");
+    console.log("[movedex] Sending embed string.");
     interaction.followUp({ embeds: [moveEmbedString] }).catch(console.error);
   }).catch(function (error) {
     if (error.response.status == 404) {
       logger.error("[movedex] Move not found. " + error)
+      console.log("[movedex] Move not found. " + error)
       interaction.followUp("Move not found, check your spelling and whether dashes are needed or not!");
       return;
     } else {
       logger.error('[movedex] There was an error: ' + error);
+      console.log('[movedex] There was an error: ' + error);
       interaction.followUp("Error getting move!");
       return;
     }

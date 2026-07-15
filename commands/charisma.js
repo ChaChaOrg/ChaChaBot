@@ -141,6 +141,8 @@ module.exports.data = new SlashCommandBuilder()
 			));
 
 module.exports.run = async (interaction) => {
+	console.log("USER: " + interaction.user + " RUNNING CHARISMA: " + interaction.toString());
+	logger.info("USER: " + interaction.user + " RUNNING CHARISMA: " + interaction.toString());
 	await interaction.deferReply();
 	if(interaction.options.getSubcommand() === 'modern'){
 		try{
@@ -219,9 +221,11 @@ module.exports.run = async (interaction) => {
 
 		//print results!
 
-		logger.info("[charisma] " + `Your Pokemon's Charisma is ${charisma}(${finalChaModString})`);
+		console.log("[charisma] Calculated charisma: " + charisma);
+		logger.info("[charisma] Calculated charisma: " + charisma);
 		interaction.followUp(`Your Pokemon's charisma is ${charisma}(${finalChaModString})`);
 		} catch (error) {
+		console.log("[charisma] " + error.toString())
 		logger.error("[charisma] " + error.toString())
 		//await interaction.followUp(error.toString());
 		//await interaction.followUp('ChaCha machine :b:roke, please try again later').catch(console.error);
@@ -282,8 +286,11 @@ module.exports.run = async (interaction) => {
 			//print results!
 		
 			logger.info("[charisma] " + `Your Pokemon's Charisma is ${finalCha}(${finalChaModString})`);
+			console.log("[charisma] Calculated charisma: " + finalCha);
+			logger.info("[charisma] Calculated charisma: " + finalCha);
 			interaction.followUp(`Your Pokemon's charisma is ${finalCha}(${finalChaModString})`);
 			} catch (error) {
+			console.log("[charisma] " + error.toString())
 			logger.error("[charisma] " + error.toString())
 			//await interaction.followUp(error.toString());
 			//await interaction.followUp('ChaCha machine :b:roke, please try again later').catch(console.error);
