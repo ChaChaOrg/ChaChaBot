@@ -42,7 +42,7 @@ module.exports.run = async (interaction) => {
 			.setStyle(ButtonStyle.Secondary);
     
     const row = new ActionRowBuilder()
-			.addComponents(cancel, confirm);
+			.addComponents(confirm, cancel);
 
     try {
         // grab the argument given, either the name of a Pokemon or a request for help
