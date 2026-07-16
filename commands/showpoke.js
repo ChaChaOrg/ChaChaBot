@@ -86,7 +86,7 @@ module.exports.run = async (interaction) => {
 
                     });
             }
-        });
+        })
 
     } catch (error) {
         logger.error("[showpoke] " + error.toString());
