@@ -95,11 +95,11 @@ module.exports.autocomplete = async (interaction) => {
 			filtered.map(choice => ({ name: choice, value: choice })),
 		)
 	}else if(focusedValue.name === 'move-name'){
-		var choices = interaction.client.movelist;
-
-		const filtered = choices.filter(choice => choice[1].toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
+ const choices = interaction.client.movelist;
+		const keys = Array.from(choices.keys());
+		const filtered = keys.filter(key => key.toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
 		await interaction.respond(
-			filtered.map(choice => ({ name: choice[1], value: choice[1] })),
+			filtered.map(choice => ({ name: choice, value: choices.get(choice)[1] })),
 		)
 	}else{
 		//Nothing

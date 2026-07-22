@@ -14,12 +14,12 @@ module.exports.data = new SlashCommandBuilder()
       .setAutocomplete(true));
 
 module.exports.autocomplete = async (interaction) => {
-  const focusedValue = interaction.options.getFocused();
-  let choices = interaction.client.movelist;
-
-  const filtered = choices.filter(choice => choice[1].toLowerCase().startsWith(focusedValue.toLowerCase())).slice(0, 24);
+  const focusedValue = interaction.options.getFocused(true);
+  const choices = interaction.client.movelist;
+  const keys = Array.from(choices.keys());
+  const filtered = keys.filter(key => key.toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
   await interaction.respond(
-    filtered.map(choice => ({ name: choice[1], value: choice[8] })),
+    filtered.map(choice => ({ name: choice, value: choices.get(choice)[1] })),
   )
 };
 
@@ -31,8 +31,8 @@ module.exports.run = async (interaction) => {
   await interaction.deferReply();
 
   let moveName = interaction.options.getString('move');
-  moveName = moveName.replace(' ', '-');
-  moveName = moveName.replace('\'', '');
+  moveName = moveName.replaceAll(' ', '-');
+  moveName = moveName.replaceAll('\'', '');
 
   let moveType;
   let moveCategory;
@@ -60,10 +60,10 @@ module.exports.run = async (interaction) => {
     }
     movePriority = moveData.priority;
     effect_chance = moveData.effect_chance;
-    if(!moveData.effect_entries[0]){
+    if(!moveData.effect_entries[1]){
       moveEffect = "null";
     }else {
-      moveEffect = moveData.effect_entries[0].short_effect;
+      moveEffect = moveData.effect_entries[1].short_effect;
     }    
 
     if(moveEffect.includes("$effect_chance")){
