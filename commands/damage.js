@@ -72,7 +72,15 @@ module.exports.data = new SlashCommandBuilder()
           .setMinValue(0.001))
       .addIntegerOption(option =>
         option.setName('level-offset')
-          .setDescription(`Adjusts Attacking Pokemon's level. For use with Pokemon prestige classes. Can't reduce below 0.`))
+              .setDescription(`Adjusts Attacking Pokemon's level. For use with Pokemon prestige classes. Can't reduce below 0.`))
+      .addBooleanOption(option =>
+        option.setName('terastalize-attack')
+              .setDescription('The attacker is terastalized and using its tera type.')
+              .setRequired(false))
+      .addBooleanOption(option =>
+        option.setName('terastalize-defend')
+              .setDescription('The defender is terastalized and using its tera type.')
+              .setRequired(false))
   )
   .addSubcommand(subcommand =>
     subcommand
@@ -110,7 +118,11 @@ module.exports.data = new SlashCommandBuilder()
           .setMinValue(0.001))
       .addIntegerOption(option =>
         option.setName('level-offset')
-          .setDescription(`Adjusts Attacking Pokemon's level. For use with Pokemon prestige classes. Can't reduce below 0.`))
+              .setDescription(`Adjusts Attacking Pokemon's level. For use with Pokemon prestige classes. Can't reduce below 0.`))
+      .addBooleanOption(option =>
+        option.setName('terastalize-attack')
+              .setDescription('The attacker is terastalized and using its tera type.')
+              .setRequired(false))
   )
   .addSubcommand(subcommand =>
     subcommand
@@ -156,7 +168,11 @@ module.exports.data = new SlashCommandBuilder()
       .addNumberOption(option =>
         option.setName('multiplicitive-bonus')
           .setDescription('Extra damage *multiplying* the base power. Must be at least 0.001')
-          .setMinValue(0.001))
+              .setMinValue(0.001))
+      .addBooleanOption(option =>
+        option.setName('terastalize-defend')
+          .setDescription('The defender is terastalized and using its tera type.')
+          .setRequired(false))
   )
   .addSubcommand(subcommand =>
     subcommand
@@ -199,7 +215,7 @@ module.exports.data = new SlashCommandBuilder()
       .addNumberOption(option =>
         option.setName('multiplicitive-bonus')
           .setDescription('Extra damage *multiplying* the base power. Must be at least 0.001')
-          .setMinValue(0.001))
+              .setMinValue(0.001))
   )
   .addSubcommand(subcommand =>
     subcommand
@@ -316,7 +332,89 @@ module.exports.data = new SlashCommandBuilder()
           .setMinValue(0.001))
       .addIntegerOption(option =>
         option.setName('level-offset')
-          .setDescription(`Adjusts Attacking Pokemon's level. For use with Pokemon prestige classes. Can't reduce below 0.`))
+              .setDescription(`Adjusts Attacking Pokemon's level. For use with Pokemon prestige classes. Can't reduce below 0.`))
+      .addBooleanOption(option =>
+        option.setName('terastalize-attack')
+              .setDescription('The attacker is terastalized and using its tera type.')
+              .setRequired(false))
+      .addBooleanOption(option =>
+        option.setName('terastalize-defend')
+              .setDescription('The defender is terastalized and using its tera type.')
+              .setRequired(false))
+      .addStringOption(option =>
+        option.setName('fusionstyle-type')
+              .setDescription('Type changed to using Fusion Style Strike.')
+              .setRequired(false)
+              .addChoices({
+                      name: 'Normal',
+                      value: 'normal'
+              }, {
+                      name: 'Fire',
+                      value: 'fire'
+              }, {
+                      name: 'Fighting',
+                      value: 'fighting'
+              }, {
+                      name: 'Water',
+                      value: 'water'
+              }, {
+                      name: 'Flying',
+                      value: 'flying'
+              }, {
+                      name: 'Grass',
+                      value: 'grass'
+              }, {
+                      name: 'Poison',
+                      value: 'poison'
+              }, {
+                      name: 'Electric',
+                      value: 'electric'
+              }, {
+                      name: 'Ground',
+                      value: 'ground'
+              }, {
+                      name: 'Psychic',
+                      value: 'psychic'
+              }, {
+                      name: 'Rock',
+                      value: 'rock'
+              }, {
+                      name: 'Ice',
+                      value: 'ice'
+              }, {
+                      name: 'Bug',
+                      value: 'bug'
+              }, {
+                      name: 'Dragon',
+                      value: 'dragon'
+              }, {
+                      name: 'Ghost',
+                      value: 'ghost'
+              }, {
+                      name: 'Dark',
+                      value: 'dark'
+              }, {
+                      name: 'Steel',
+                      value: 'steel'
+              }, {
+                      name: 'Fairy',
+                      value: 'fairy'
+              }))
+      .addIntegerOption(option =>
+          option.setName('fusionstyle-level')
+              .setDescription('Level used by Fusion Style Strike. Overrides the attacker\'s level.')
+              .setRequired(false)
+              .setMinValue(1)
+              .setMaxValue(20)
+      )
+      .addIntegerOption(option =>
+          option.setName('fusionstyle-atkstat')
+              .setDescription('Attack stat being used during a Fusion Style Strike.')
+              .setRequired(false)
+              .setMinValue(1)
+              .setMaxValue(658)
+      )
+
   );
 
 module.exports.autocomplete = async (interaction) => {
@@ -546,8 +644,8 @@ module.exports.run = async (interaction) => {
               //
               // Grab each pokemon's types into a temporary object
               //
-              let attackerTypes = [attackPoke.type1.toLowerCase(), attackPoke.type2.toLowerCase()];
-              let defenderTypes = [defendPoke.type1.toLowerCase(), defendPoke.type2.toLowerCase()];
+              let attackerTypes = [attackPoke.type1.toLowerCase(), attackPoke.type2.toLowerCase(), attackPoke.teraType.toLowerCase()];
+              let defenderTypes = [defendPoke.type1.toLowerCase(), defendPoke.type2.toLowerCase(), defendPoke.teraType.toLowerCase()];
 
               //Set STAB bonus
               //If either of the Pokemon's types are the same as the move, stab is set to 1.5. Other wise it is 1.0
@@ -557,8 +655,13 @@ module.exports.run = async (interaction) => {
                 attackerTypes[1].toLowerCase()  === moveData.type.name
               ) {
                 stab = 1.5;
-              }
+                }
 
+              let atkTera = interaction.options.getBoolean('terastalize-attack');
+              let defTera = interaction.options.getBoolean('terastalize-defend');
+              if (atkTera && attackerTypes[2] === moveData.type.name) {
+                  stab = 2;
+              }
               //
               // Calculate Type Effectiveness
               //
@@ -567,8 +670,8 @@ module.exports.run = async (interaction) => {
                   // Loops through the "typeData" api object for the types that this move deals half damage to.
                   // It then multiplies the effectiveness accordingly.
                   //
-                  typeElement.name === defenderTypes[0] ||
-                  typeElement.name === defenderTypes[1]
+                    (!defTera && (typeElement.name === defenderTypes[0] || typeElement.name === defenderTypes[1])) ||
+                    (defTera && typeElement.name === defenderTypes[2])
                 )
                   effective = effective * 0.5;
               });
@@ -579,8 +682,8 @@ module.exports.run = async (interaction) => {
                     // Loops through the "typeData" api object for the types that this move deals double damage to.
                     // It then multiplies the effectiveness accordingly.
                     //
-                    typeElement.name === defenderTypes[0] ||
-                    typeElement.name === defenderTypes[1]
+                      (!defTera && (typeElement.name === defenderTypes[0] || typeElement.name === defenderTypes[1])) ||
+                      (defTera && typeElement.name === defenderTypes[2])
                   )
                     effective = effective * 2;
                 }
@@ -591,8 +694,8 @@ module.exports.run = async (interaction) => {
                   // Loops through the "typeData" api object for the types that this move deals no damage to.
                   // It then sets the effectiveness accordingly.
                   //
-                  typeElement.name === defenderTypes[0] ||
-                  typeElement.name === defenderTypes[1]
+                    (!defTera && (typeElement.name === defenderTypes[0] || typeElement.name === defenderTypes[1])) ||
+                    (defTera && typeElement.neme === defenderTypes[2])
                 )
                   effective = 0;
               });
@@ -619,14 +722,18 @@ module.exports.run = async (interaction) => {
                 numHits = 1;
               };
               let dicePool = new Array(numHits);
-
+                let pow = moveData.power;
+                if (pow < 60 && atkTera && moveData.type.name == attackerTypes[2] && numHits == 1) {
+                    pow = 60;
+                    //add in prio check when added to move data
+                } 
               for (let hitNum = 0; hitNum < numHits; hitNum++) {
                 dice = 0;
                 //
                 // calculate damage dice roll
                 //
 
-                for (let numDice = Math.floor((moveData.power + other) * 0.2); numDice > 0; numDice--) {
+                for (let numDice = Math.floor((pow + other) * 0.2); numDice > 0; numDice--) {
                   dice += Math.floor(Math.random() * 8 + 1);
                 }
                 dicePool[hitNum] = dice;
@@ -707,7 +814,7 @@ module.exports.run = async (interaction) => {
                 defendPoke.form.slice(1);
 
               // get # of dice rolled
-              let diceRolled = Math.floor(moveData.power / 5);
+              let diceRolled = Math.floor(pow / 5);
               diceRolled += "d8";
 
               //format move
@@ -807,7 +914,7 @@ module.exports.run = async (interaction) => {
                     {
                       name: `${tempMove} Info`,
                       value: `**Move Info:** ${capitalizeWord(moveData.damage_class.name)} ${capitalizeWord(moveData.type.name)} Attack` +
-                          `\n**Base Power:** ${moveData.power} pw\n**Damage Roll:** ${dicePool} (${diceRolled} for ${numHits} hit(s))\n**Hunger Cost:** ${moveHungerCost}\n**Dodge DC:** ${attackPoke.level + 5} / ${attackPoke.level + 7} / ${attackPoke.level + 10} / ${attackPoke.level + 14}`,
+                          `\n**Base Power:** ${pow} pw\n**Damage Roll:** ${dicePool} (${diceRolled} for ${numHits} hit(s))\n**Hunger Cost:** ${moveHungerCost}\n**Dodge DC:** ${attackPoke.level + 5} / ${attackPoke.level + 7} / ${attackPoke.level + 10} / ${attackPoke.level + 14}`,
                     },
                   ],
                   timestamp: new Date(),
@@ -865,7 +972,15 @@ module.exports.run = async (interaction) => {
 
       attackerName = interaction.options.getString('attacker-name');
       attackerMove = interaction.options.getString('move-name');
+      let move = interaction.client.movelist.get(attackerMove);
 
+      if (!move) {
+         attackerMove = interaction.options.getString('move-name');
+      } else {
+
+         attackerMove = move[move.length - 1];
+      }
+      attackerMove = attackerMove.replaceAll(" ", "-").replaceAll("'", "");
 
       if (interaction.options.getNumber('additive-bonus'))
         other = interaction.options.getNumber('additive-bonus');
@@ -943,7 +1058,7 @@ module.exports.run = async (interaction) => {
               //
               // Grab the pokemon's types into a temporary object, create a type for the trainer
               //
-              let attackerTypes = [attackPoke.type1.toLowerCase(), attackPoke.type2.toLowerCase()];
+              let attackerTypes = [attackPoke.type1.toLowerCase(), attackPoke.type2.toLowerCase(), attackPoke.teraType.toLowerCase()];
               let defenderTypes = [2];
               defenderTypes[0] = interaction.options.getString("type1") ?? '';
               defenderTypes[0] = defenderTypes[0].toLowerCase();
@@ -959,7 +1074,10 @@ module.exports.run = async (interaction) => {
               ) {
                 stab = 1.5;
               }
-
+              let atkTera = interaction.options.getBoolean('terastalize-attack');
+              if (atkTera && attackerTypes[2].toLowerCase === moveData.type.name) {
+                  stab = 2;
+              }
               //
               // Calculate Type Effectiveness
               //
@@ -1020,14 +1138,18 @@ module.exports.run = async (interaction) => {
                 numHits = 1;
               };
               let dicePool = new Array(numHits);
-
+                let pow = moveData.power;
+                if (pow < 60 && atkTera && moveData.type.name == attackerTypes[2] && numHits == 1) {
+                    pow = 60;
+                    //add in prio check when added to move data
+                }
               for (let hitNum = 0; hitNum < numHits; hitNum++) {
                 dice = 0;
                 //
                 // calculate damage dice roll
                 //
 
-                for (let numDice = Math.floor((moveData.power + other) * 0.2); numDice > 0; numDice--) {
+                for (let numDice = Math.floor((pow + other) * 0.2); numDice > 0; numDice--) {
                   dice += Math.floor(Math.random() * 8 + 1);
                 }
                 dicePool[hitNum] = dice;
@@ -1099,7 +1221,7 @@ module.exports.run = async (interaction) => {
                 attackPoke.form.slice(1);
 
               // get # of dice rolled
-              let diceRolled = Math.floor(moveData.power / 5);
+              let diceRolled = Math.floor(pow / 5);
               diceRolled += "d8";
 
               //format move
@@ -1207,7 +1329,7 @@ module.exports.run = async (interaction) => {
                     {
                       name: `${tempMove} Info`,
                       value: `**Move Info:** ${capitalizeWord(moveData.damage_class.name)} ${capitalizeWord(moveData.type.name)} Attack` +
-                        `\n**Base Power:** ${moveData.power} pw\n**Damage Roll:** ${dicePool} (${diceRolled} for ${numHits} hit(s))\n**Hunger Cost:** ${moveHungerCost}`,
+                        `\n**Base Power:** ${pow} pw\n**Damage Roll:** ${dicePool} (${diceRolled} for ${numHits} hit(s))\n**Hunger Cost:** ${moveHungerCost}`,
                     },
                   ],
                   timestamp: new Date(),
@@ -1263,6 +1385,16 @@ module.exports.run = async (interaction) => {
 
       attackerName = "Trainer";
       attackerMove = interaction.options.getString('move-name');
+      let move = interaction.client.movelist.get(attackerMove);
+
+      if (!move) {
+          attackerMove = interaction.options.getString('move-name');
+      } else {
+
+          attackerMove = move[move.length - 1];
+      }
+      attackerMove = attackerMove.replaceAll(" ", "-").replaceAll("'", "");
+
       defenderName = interaction.options.getString('defender-name');
 
       if (interaction.options.getInteger('stages-of-attack'))
@@ -1364,7 +1496,7 @@ module.exports.run = async (interaction) => {
               //
               // Grab each pokemon's types into a temporary object
               //
-              let defenderTypes = [defendPoke.type1.toLowerCase(), defendPoke.type2.toLowerCase()];
+              let defenderTypes = [defendPoke.type1.toLowerCase(), defendPoke.type2.toLowerCase(), defendPoke.teraType.toLowerCase()];
 
               //Set STAB bonus
               //If either of the Pokemon's types are the same as the move, stab is set to 1.5. Other wise it is 1.0
@@ -1373,7 +1505,7 @@ module.exports.run = async (interaction) => {
               {
                 stab = 1.5;
               }
-
+              let defTera = interaction.options.getBoolean('terastalize-defend');
               //
               // Calculate Type Effectiveness
               //
@@ -1382,8 +1514,8 @@ module.exports.run = async (interaction) => {
                   // Loops through the "typeData" api object for the types that this move deals half damage to.
                   // It then multiplies the effectiveness accordingly.
                   //
-                  typeElement.name === defenderTypes[0] ||
-                  typeElement.name === defenderTypes[1]
+                    (!defTera && (typeElement.name === defenderTypes[0] || typeElement.name === defenderTypes[1])) ||
+                    (defTera && typeElement.neme === defenderTypes[2])
                 )
                   effective = effective * 0.5;
               });
@@ -1394,8 +1526,8 @@ module.exports.run = async (interaction) => {
                     // Loops through the "typeData" api object for the types that this move deals double damage to.
                     // It then multiplies the effectiveness accordingly.
                     //
-                    typeElement.name === defenderTypes[0] ||
-                    typeElement.name === defenderTypes[1]
+                      (!defTera && (typeElement.name === defenderTypes[0] || typeElement.name === defenderTypes[1])) ||
+                      (defTera && typeElement.neme === defenderTypes[2])
                   )
                     effective = effective * 2;
                 }
@@ -1406,8 +1538,8 @@ module.exports.run = async (interaction) => {
                   // Loops through the "typeData" api object for the types that this move deals no damage to.
                   // It then sets the effectiveness accordingly.
                   //
-                  typeElement.name === defenderTypes[0] ||
-                  typeElement.name === defenderTypes[1]
+                    (!defTera && (typeElement.name === defenderTypes[0] || typeElement.name === defenderTypes[1])) ||
+                    (defTera && typeElement.neme === defenderTypes[2])
                 )
                   effective = 0;
               });
@@ -1673,7 +1805,15 @@ module.exports.run = async (interaction) => {
 
       attackerName = "Attacking Trainer";
       attackerMove = interaction.options.getString('move-name');
+      let move = interaction.client.movelist.get(attackerMove);
 
+      if (!move) {
+          attackerMove = interaction.options.getString('move-name');
+      } else {
+
+          attackerMove = move[move.length - 1];
+      }
+      attackerMove = attackerMove.replaceAll(" ", "-").replaceAll("'", "");
       if (interaction.options.getNumber('additive-bonus'))
         other = interaction.options.getNumber('additive-bonus');
       if (interaction.options.getNumber('multiplicitive-bonus'))
@@ -2195,10 +2335,15 @@ module.exports.run = async (interaction) => {
             //
             // Grab each pokemon's types into a temporary object
             //
-            let attackerTypes = [attackPoke.type1, attackPoke.type2];
+            let attackerTypes;
+            if (interaction.options.getString('fusionstyle-type')) {
+                attackerTypes = [interaction.options.getString('fusionstyle-type'), "", ""];
+            } else {
+                attackerTypes = [attackPoke.type1, attackPoke.type2, attackPoke.teraType];
+            }
             let defenderTypes = [defendPoke.type1, defendPoke.type2];
 
-
+            let atkTera = interaction.options.getBoolean('terastalize-attack');
             //Set STAB bonus
             //If either of the Pokemon's types are the same as the move, stab is set to 1.5. Other wise it is 1.0
             //
@@ -2208,7 +2353,10 @@ module.exports.run = async (interaction) => {
             ) {
               stab = 1.5;
             }
-
+            if (atkTera && attackerTypes[2].toLowerCase() === moveType) {
+                stab = 2;
+            }
+            let defTera = interaction.options.getBoolean('terastalize-defend');
             //
             // Calculate Type Effectiveness
             //
@@ -2218,7 +2366,7 @@ module.exports.run = async (interaction) => {
                 // It then multiplies the effectiveness accordingly.
                 //
                 typeElement.name === defenderTypes[0] ||
-                typeElement.name === defenderTypes[1]
+                  typeElement.name === defenderTypes[1] || (defTera && typeElement.neme === defenderTypes[2])
               )
                 effective = effective * 0.5;
             });
@@ -2230,7 +2378,7 @@ module.exports.run = async (interaction) => {
                   // It then multiplies the effectiveness accordingly.
                   //
                   typeElement.name === defenderTypes[0] ||
-                  typeElement.name === defenderTypes[1]
+                    typeElement.name === defenderTypes[1] || (defTera && typeElement.neme === defenderTypes[2])
                 )
                   effective = effective * 2;
               }
@@ -2242,7 +2390,7 @@ module.exports.run = async (interaction) => {
                 // It then sets the effectiveness accordingly.
                 //
                 typeElement.name === defenderTypes[0] ||
-                typeElement.name === defenderTypes[1]
+                  typeElement.name === defenderTypes[1] || (defTera && typeElement.neme === defenderTypes[2])
               )
                 effective = 0;
             });
@@ -2269,7 +2417,10 @@ module.exports.run = async (interaction) => {
               numHits = 1;
             };
             let dicePool = new Array(numHits);
-
+              if (movePower < 60 && atkTera && moveType == attackerTypes[2] && numHits == 1) {
+                  movePower = 60;
+                  //add in prio check when added to move data
+              }
             for (let hitNum = 0; hitNum < numHits; hitNum++) {
               dice = 0;
               //
@@ -2290,13 +2441,15 @@ module.exports.run = async (interaction) => {
             let tempDefense = 0;
 
             if (moveCategory === "physical") {
-              tempAttack = attackPoke.statBlock.finalStats[ATK_ARRAY_INDEX];
+
+              tempAttack = interaction.options.getInteger('fusionstyle-atkstat') ?? attackPoke.statBlock.finalStats[ATK_ARRAY_INDEX];
               tempDefense = defendPoke.statBlock.finalStats[DEF_ARRAY_INDEX];
             } else {
-              tempAttack = attackPoke.statBlock.finalStats[SPA_ARRAY_INDEX];
+              tempAttack = interaction.options.getInteger('fusionstyle-atkstat') ?? attackPoke.statBlock.finalStats[SPA_ARRAY_INDEX];
               tempDefense = defendPoke.statBlock.finalStats[SPD_ARRAY_INDEX];
             }
-
+             // console.log(tempAttack);
+              //console.log(interaction.options.getInteger('fusionstyle-attack'));
             //
             // Final damage calculation
             //
@@ -2306,6 +2459,11 @@ module.exports.run = async (interaction) => {
             let critBonus = 0;
             let critAtk = 1;
             let critDef = 1;
+            let level = attackPoke.level;
+          
+              if (interaction.options.getInteger('fusionstyle-level')) {
+                  level = interaction.options.getInteger('fusionstyle-level');
+              }
             if (stageModAtk > 1) {
               critAtk = stageModAtk;
             }
@@ -2314,7 +2472,7 @@ module.exports.run = async (interaction) => {
             }
             for (let hitNum = 0; hitNum < numHits; hitNum++) {
               damageTotal =
-                ((10 * (attackPoke.level + atkLevelOffset) + 10) / 250) *
+                ((10 * (level + atkLevelOffset) + 10) / 250) *
                 ((tempAttack * stageModAtk) /
                   (tempDefense * stageModDef)) *
                 dicePool[hitNum] *
@@ -2323,7 +2481,7 @@ module.exports.run = async (interaction) => {
                 otherMult;
 
               critTotal =
-                ((10 * (attackPoke.level + atkLevelOffset) + 10) / 250) *
+                ((10 * (level + atkLevelOffset) + 10) / 250) *
                 ((tempAttack * critAtk) /
                   (tempDefense * critDef)) *
                 dicePool[hitNum] *
@@ -2446,7 +2604,7 @@ module.exports.run = async (interaction) => {
                   },
                   {
                     name: "Attacker Info",
-                    value: `**${attackerName}**, Lv ${attackPoke.level} ${atkPokeSpecies_formatted}\n=================`,
+                    value: `**${attackerName}**, Lv ${level} ${atkPokeSpecies_formatted}\n=================`,
                   },
                   {
                     name: "Defender Info",

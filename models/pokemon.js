@@ -159,9 +159,16 @@ logger.info("[pokemon] Assigning types.");
 
 Pokemon.prototype.assignTypes = function () {
   this.type1 = this.pokemonData.types[0].type.name;
-  if (this.pokemonData.types.length === 2) {
-    this.type2 = this.pokemonData.types[1].type.name;
-  }
+    if (this.pokemonData.types.length === 2) {
+        this.type2 = this.pokemonData.types[1].type.name;
+        if (Math.random() > 0.5) {
+            this.teraType = this.type1
+        } else {
+            this.teraType = this.type2
+        }
+    } else {
+        this.teraType = this.type1;
+    }
 };
 
 // Generates a random ability given the ability options from PokeAPI & the assigned hidden ability chance
@@ -576,7 +583,8 @@ Pokemon.prototype.sendSummaryMessage = function (interaction) {
             value: `**Ability:** [${tempAbility}](${tempAbilityURL}) | **Gender:** ${this.gender} \n**Egg Move Parent:** ${this.eggParent}\n**Nature:** ${this.nature.natureFinal} | ` +
             `**Shiny: ** ${shiny} ` + `\n**OT:** ${this.originalTrainer} | **Campaign:** ${this.campaign}` +
             `\n**Type 1:** [${capitalizeWord(this.type1)}](https://bulbapedia.bulbagarden.net/wiki/${this.type1}_(type)) ` +
-            `**Type 2:** [${capitalizeWord(this.type2)}](https://bulbapedia.bulbagarden.net/wiki/${this.type2}_(type))`+
+            `**Type 2:** [${capitalizeWord(this.type2)}](https://bulbapedia.bulbagarden.net/wiki/${this.type2}_(type))` +
+            `**Tera Type:** [${capitalizeWord(this.teraType)}](https://bulbapedia.bulbagarden.net/wiki/${this.teraType}_(type))` +
             `\n**Form:** ${capitalizeWord(this.form)} **Species:** ${capitalizeWord(this.species)}\n=================`,
         },
         {
@@ -654,7 +662,7 @@ Pokemon.prototype.uploadPokemon = function (connection, interaction) {
       }
   }
 
-    let sql = `INSERT INTO pokemon (name, species, form, level, nature, gender, ability, type1, type2, shiny, 
+    let sql = `INSERT INTO pokemon (name, species, form, level, nature, gender, ability, type1, type2, teraType, shiny, 
         hp, atk, def, spa, spd, spe, 
         hpIV, atkIV, defIV, spaIV, spdIV, speIV, 
         hpEV, atkEV, defEV, spaEV, spdEV, speEV, exp,
@@ -670,6 +678,7 @@ Pokemon.prototype.uploadPokemon = function (connection, interaction) {
         "${this.ability.name}",
         "${this.type1}",
         "${this.type2}",
+        "${this.teraType}",
         ${this.shiny},
         ${this.statBlock.finalStats[HP_ARRAY_INDEX]},
         ${this.statBlock.finalStats[ATK_ARRAY_INDEX]},
@@ -733,6 +742,7 @@ Pokemon.prototype.updatePokemon = function (connection, message, pokePrivate, in
             ability = "${this.ability.name}",
             type1 = "${this.type1}",
             type2 = "${this.type2}",
+            teraType = "${this.teraType}",
             shiny = ${this.shiny},
         
             hp = ${this.statBlock.finalStats[HP_ARRAY_INDEX]},
@@ -1032,8 +1042,8 @@ Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
               if (pokeForm.form.toLowerCase() === this.form.toLowerCase()) {
                 found = 1;
                 //Found the correct form and species in the SQL!
-                console.log("sanity check, adsfjlaseifj lsdkjgjldfkg");
-                console.log(pokeForm);
+               // console.log("sanity check, adsfjlaseifj lsdkjgjldfkg");
+                //console.log(pokeForm);
                 let formtemplate
                 let speciestemplate
                 try {
@@ -1077,7 +1087,7 @@ Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
           // List Forms, including default
           //
           if (found === 0) {
-            console.log(this);
+            //console.log(this);
             //do we want to display just the species or the form?
             //this.form = this.species;
             //F it SCIENCE!
@@ -1112,14 +1122,14 @@ Pokemon.prototype.getPokemonAndSpeciesData = function (connection, P) {
               console.log("Are we here?");
               P.getPokemonSpeciesByName(this.species.toLowerCase())
                 .then(function (response) {
-                  console.log(response.varieties[0]);
+                  //console.log(response.varieties[0]);
                   //need to include a check for the .varieties length, just grabbing the id uses the default form
                   //not quite, how do I know which P call to use from here?
                   this.speciesData = response;
                   P.getPokemonByName(this.speciesData.id)
                     .then(
                       function (response) {
-                        console.log("we here? Good.");
+                        //console.log("we here? Good.");
                         this.pokemonData = response;
                         resolve(this.pokemonData);
                       }.bind(this)
@@ -1172,6 +1182,7 @@ Pokemon.prototype.loadFromSQL = function (connection, P, sqlObject) {
                     //type(s)
                     this.type1 = sqlObject.type1;
                     this.type2 = sqlObject.type2;
+                    this.teraType = sqlObject.teraType;
 
                     this.gender = sqlObject.gender;
                     this.ability.name = sqlObject.ability;
