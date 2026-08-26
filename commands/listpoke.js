@@ -54,7 +54,12 @@ module.exports.data = new SlashCommandBuilder()
 		option.setName('species')
 		.setDescription("Filter by species")
 		.setRequired(false)
-        )
+    )
+    .addStringOption(option => 
+        option.setName('form')
+            .setDescription("Filter by form")
+            .setRequired(false)
+    )
     .addStringOption(option =>
 		option.setName('type1')
 		.setDescription("Filter by a type")
