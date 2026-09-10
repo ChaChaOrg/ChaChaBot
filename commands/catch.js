@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const logger = require('../logs/logger.js');
+const SQL_SANITATION_REGEX = /[^a-zA-Z0-9-'_]/;
 // Catch calculator
 
 const HELP_MESSAGE = "Catch Rate Calculator. Variables in order:\n "
@@ -10,40 +11,85 @@ const HELP_MESSAGE = "Catch Rate Calculator. Variables in order:\n "
 
 
 module.exports.data = new SlashCommandBuilder()
-		.setName('catch')
-		.setDescription('Pokemon Catch Rate Calculator')
-		.addStringOption(option =>
-			option.setName('pokemon-name')
-				.setDescription('Name of the Pokemon being caught')
-				.setRequired(true))
-		.addIntegerOption(option =>
-			option.setName('max-hp')
-				.setDescription('Max HP of the Pokemon being caught')
-				.setRequired(true))
-		.addIntegerOption(option =>
-			option.setName('current-hp')
-				.setDescription('Current HP of the Pokemon being caught')
-				.setRequired(true))
-		.addNumberOption(option =>
-			option.setName('capture-rate')
-				.setDescription('Capture Rate of the Pokemon being caught')
-				.setRequired(true))
-		.addIntegerOption(option =>
-			option.setName('level')
-				.setDescription('Level of the Pokemon being caught')
-				.setRequired(true))
-		.addNumberOption(option =>
-			option.setName('ball-bonus')
-				.setDescription('Bonus from Pokeball'))								
-		.addNumberOption(option =>
-			option.setName('player-bonus')
-				.setDescription('Bonus from Player'))
-		.addNumberOption(option =>
-			option.setName('cp-bonus')
-				.setDescription('Bonus from Capture Power'))
-		.addNumberOption(option =>
-			option.setName('status-bonus')
-				.setDescription('Bonus from Status'));
+	.setName('catch')
+	.setDescription('Pokemon Catch Rate Calculator')
+	.addSubcommand(subcommand =>
+		subcommand
+			.setName('automatic')
+			.setDescription('Gets CatchRate and Level automatically from a Pokemon in the bot.')
+			.addStringOption(option =>
+				option.setName('pokemon-auto')
+					.setDescription('Name of the Pokemon being caught')
+					.setRequired(true))
+			.addIntegerOption(option =>
+				option.setName('max-hp')
+					.setDescription('Max HP of the Pokemon being caught')
+					.setRequired(true))
+			.addIntegerOption(option =>
+				option.setName('current-hp')
+					.setDescription('Current HP of the Pokemon being caught')
+					.setRequired(true))
+			.addNumberOption(option =>
+				option.setName('ball-bonus')
+					.setDescription('Bonus from Pokeball'))
+			.addNumberOption(option =>
+				option.setName('player-bonus')
+					.setDescription('Bonus from Player'))
+			.addNumberOption(option =>
+				option.setName('cp-bonus')
+					.setDescription('Bonus from Capture Power'))
+			.addNumberOption(option =>
+				option.setName('status-bonus')
+					.setDescription('Bonus from Status')))
+	.addSubcommand(subcommand =>
+		subcommand
+			.setName('manual')
+			.setDescription('Uses input CatchRate.')
+			.addStringOption(option =>
+				option.setName('pokemon-name')
+					.setDescription('Name of the Pokemon being caught')
+					.setRequired(true))
+			.addIntegerOption(option =>
+				option.setName('max-hp')
+					.setDescription('Max HP of the Pokemon being caught')
+					.setRequired(true))
+			.addIntegerOption(option =>
+				option.setName('current-hp')
+					.setDescription('Current HP of the Pokemon being caught')
+					.setRequired(true))
+			.addNumberOption(option =>
+				option.setName('capture-rate')
+					.setDescription('Capture Rate of the Pokemon being caught')
+					.setRequired(true))
+			.addIntegerOption(option =>
+				option.setName('level')
+					.setDescription('Level of the Pokemon being caught')
+					.setRequired(true))
+			.addNumberOption(option =>
+				option.setName('ball-bonus')
+					.setDescription('Bonus from Pokeball'))
+			.addNumberOption(option =>
+				option.setName('player-bonus')
+					.setDescription('Bonus from Player'))
+			.addNumberOption(option =>
+				option.setName('cp-bonus')
+					.setDescription('Bonus from Capture Power'))
+			.addNumberOption(option =>
+				option.setName('status-bonus')
+					.setDescription('Bonus from Status')));
+
+module.exports.autocomplete = async (interaction) => {
+	const focusedValue = interaction.options.getFocused(true);
+	if (focusedValue.name === 'pokemon-auto') {
+		var choices = interaction.client.pokemonCache;
+		const filtered = choices.filter(choice => (!choice.private || (choice.discordID == interaction.user)) && choice.name.toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
+		await interaction.respond(
+			filtered.map(choice => ({ name: choice.name, value: choice.name })),
+		)
+	} else {
+		//nothing
+	}
+}
 
 module.exports.run = async (interaction) => {
 	//get pokeball emoji
@@ -87,16 +133,70 @@ module.exports.run = async (interaction) => {
 			catchbonus = 1;
 		}
 
+		var pokeName;
+		var rate;
+		var level;
 		//list out required variables
-		let pokeName = interaction.options.getString('pokemon-name');
+		if (interaction.options.getSubcommand() === 'automatic') {
+			pokeName = interaction.options.getString('pokemon-auto');
+			let notFoundMessage = pokeName + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `/listpoke` to view the Pokemon you can edit.)";
+			if (pokeName.match(SQL_SANITATION_REGEX)) {
+				logger.error("[catch] User tried to put in invalid string input.");
+				console.log("[catch] User tried to put in invalid string input.");
+				interaction.editReply("That is not a valid name, please keep input alphanumeric, ', - or _");
+				return;
+			}
+			let Pokemon = require(`../models/pokemon`);
+			let tempPoke = new Pokemon;
+			let sql = `SELECT * FROM pokemon WHERE name = '${pokeName}';`;
+			let autoSQL = new Promise(async function (resolve, reject) {
+				interaction.client.mysqlConnection.query(sql, function (err, response) {
+					if (err) throw err;
+
+					if (response.length == 0) {
+						logger.info("[catch] Pokemon not found in database. Please check your spelling, or the Pokemon may not be there.")
+						console.log("[catch] Pokemon not found in database. Please check your spelling, or the Pokemon may not be there.")
+						interaction.editReply("Pokemon not found in database. Please check your spelling, or the Pokemon may not be there.")
+					}
+					else {
+						// check if the user is allowed to edit the Pokemon. If a Pokemon is private, the user's discord ID must match the Pokemon's creator ID
+						if (response[0].private > 0 && interaction.member.user.id !== response[0].discordID) {
+							logger.info("[catch] Detected user attempting to edit private Pokemon that isn't their own.")
+							console.log("[catch] Detected user attempting to edit private Pokemon that isn't their own.")
+							// If user found a pokemon that was marked private and belongs to another user, act as if the pokemon doesn't exist in messages
+							interaction.editReply(notFoundMessage);
+							return;
+						}
+
+						tempPoke.loadFromSQL(interaction.client.mysqlConnection, interaction.client.pokedex, response[0])
+							.then(response => {
+								level = tempPoke.statBlock.level;
+								tempPoke.getPokemonAndSpeciesData(interaction.client.mysqlConnection, interaction.client.pokedex).then(
+									function (response) {
+										rate = tempPoke.speciesData.capture_rate;
+										resolve();
+									});
+							});
+					}
+				})
+			}).catch(function (error) {
+				logger.error("[move] Error during SQL or response: " + error);
+				interaction.editReply("Error fetching Pokemons. This may be temporary error - please retry");
+				return;
+			})
+			await (autoSQL);
+		} else {
+			pokeName = interaction.options.getString('pokemon-name');
+			rate = interaction.options.getNumber('capture-rate');
+			level = interaction.options.getInteger('level');
+		}
+		
 		let maxHP = interaction.options.getInteger('max-hp');
 		let curHP = interaction.options.getInteger('current-hp');
-		let rate = interaction.options.getNumber('capture-rate');
 		// let bball = args[4];
 		// let bstatus = args[5];
 		// let cpfactor = args[6];
 		// let catchbonus = args[7];
-		let level = interaction.options.getInteger('level');
 		let troubleshoot = null;
 
 		const LINE_ONE_STRING = `data received! loading... ${shakey}\n`;
@@ -235,8 +335,9 @@ module.exports.run = async (interaction) => {
 
 	} catch (error) {
 		logger.error("[catch] " + error.toString())
-		//await interaction.followUp(error.toString());
-		//await interaction.followUp('ChaCha machine :b:roke, please try again later').catch(console.error);
+		console.log("[catch] " + error.toString())
+		interaction.channel.send(error.toString());
+		interaction.channel.send('ChaCha machine :b:roke, please try again later').catch(console.error);
 	}
 };
 
