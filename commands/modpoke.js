@@ -871,10 +871,18 @@ module.exports.run = async (interaction) => {
                                                 let successString = "Success! " + pokeName + "'s " + valName + " has been changed to " + valString + " and all related stats have been updated.\n\nHint: View Pokemon's stat's using `/showpoke [nickname]`";
                                                 logger.info(`[modpoke] ${successString}`)
                                                 interaction.editReply({ components: []});
-                                                confmsg.edit({ content: successString });
+                                                if(typeof interaction.channel === 'undefined' || interaction.channel == null){
+                                                    interaction.followUp({ content: successString });
+                                                }else{
+                                                    confmsg.edit({ content: successString });   
+                                                }
                                             }).catch(function (error) {
                                                 interaction.editReply({ components: []});
-                                                confmsg.edit({ content: "Error updating SQL for: " + pokeName })
+                                                if(typeof interaction.channel === 'undefined' || interaction.channel == null){
+                                                    interaction.followUp({ content: "Error updating SQL for: " + pokeName })
+                                                }else{
+                                                    confmsg.edit({ content: "Error updating SQL for: " + pokeName })
+                                                }
                                                 logger.error(`[modpoke] Error updating SQL for ${pokeName}`)
                                             });
                                         } else if (confirmation.customId === 'cancel') {
