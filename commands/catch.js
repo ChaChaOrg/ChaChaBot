@@ -20,6 +20,7 @@ module.exports.data = new SlashCommandBuilder()
 			.addStringOption(option =>
 				option.setName('pokemon-auto')
 					.setDescription('Name of the Pokemon being caught')
+					.setAutocomplete(true)
 					.setRequired(true))
 			.addIntegerOption(option =>
 				option.setName('max-hp')
