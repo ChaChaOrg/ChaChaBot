@@ -313,24 +313,24 @@ module.exports.run = async (interaction) => {
 					} else {
 						logger.info("[catch] " + pokeName + " broke free!")
 						CumulativeString += SO_CLOSE_STRING;
-						await interaction.followUp(CumulativeString).catch(console.error);
+						await interaction.editReply(CumulativeString).catch(console.error);
 					}
 				
 				} else {
 					logger.info("[catch] " + pokeName + " broke free!")
 					CumulativeString += GOT_OUT_STRING;
-					await interaction.followUp(CumulativeString).catch(console.error);
+					await interaction.editReply(CumulativeString).catch(console.error);
 				}
 			
 			} else {
 				logger.info("[catch] " + pokeName + " broke free!")
 				CumulativeString += OH_NO_STRING;
-				await interaction.followUp(CumulativeString).catch(console.error);
+				await interaction.editReply(CumulativeString).catch(console.error);
 			}
 		} else {
 			logger.info("[catch] " + pokeName + " broke free!")
 			CumulativeString += DRAT_STRING;
-			await interaction.followUp(CumulativeString).catch(console.error);
+			await interaction.editReply(CumulativeString).catch(console.error);
 		}
 
 
