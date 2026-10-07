@@ -18,7 +18,7 @@ module.exports.data = new SlashCommandBuilder()
 			.setName('automatic')
 			.setDescription('Gets CatchRate and Level automatically from a Pokemon in the bot.')
 			.addStringOption(option =>
-				option.setName('pokemon-auto')
+				option.setName('pokemon-name')
 					.setDescription('Name of the Pokemon being caught')
 					.setAutocomplete(true)
 					.setRequired(true))
@@ -47,7 +47,7 @@ module.exports.data = new SlashCommandBuilder()
 			.setName('manual')
 			.setDescription('Uses input CatchRate.')
 			.addStringOption(option =>
-				option.setName('pokemon-name')
+				option.setName('name')
 					.setDescription('Name of the Pokemon being caught')
 					.setRequired(true))
 			.addIntegerOption(option =>
@@ -81,7 +81,7 @@ module.exports.data = new SlashCommandBuilder()
 
 module.exports.autocomplete = async (interaction) => {
 	const focusedValue = interaction.options.getFocused(true);
-	if (focusedValue.name === 'pokemon-auto') {
+	if (focusedValue.name === 'pokemon-name') {
 		var choices = interaction.client.pokemonCache;
 		const filtered = choices.filter(choice => (!choice.private || (choice.discordID == interaction.user)) && choice.name.toLowerCase().startsWith(focusedValue.value.toLowerCase())).slice(0, 24);
 		await interaction.respond(
@@ -139,7 +139,7 @@ module.exports.run = async (interaction) => {
 		var level;
 		//list out required variables
 		if (interaction.options.getSubcommand() === 'automatic') {
-			pokeName = interaction.options.getString('pokemon-auto');
+			pokeName = interaction.options.getString('pokemon-name');
 			let notFoundMessage = pokeName + " not found. Please check that you entered the name properly (case-sensitive) and try again.\n\n(Hint: use `/listpoke` to view the Pokemon you can edit.)";
 			if (pokeName.match(SQL_SANITATION_REGEX)) {
 				logger.error("[catch] User tried to put in invalid string input.");
@@ -187,7 +187,7 @@ module.exports.run = async (interaction) => {
 			})
 			await (autoSQL);
 		} else {
-			pokeName = interaction.options.getString('pokemon-name');
+			pokeName = interaction.options.getString('name');
 			rate = interaction.options.getNumber('capture-rate');
 			level = interaction.options.getInteger('level');
 		}
