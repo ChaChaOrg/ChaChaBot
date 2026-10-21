@@ -410,9 +410,9 @@ module.exports.run = async (interaction) =>
 
         } else if(interaction.options.getSubcommand("remove")){
             //in future, may want to add a confirmation step to the deletion process
-            let species = interaction.options.getString("species-name").toLowerCase();
-            let form = interaction.options.getString("form-name").toLowerCase();
-            if (form.match(REGEX_SANI_STRING) || species.match(REGEX_SANI_STRING)) {
+            let ownerSpecies = interaction.options.getString("species-name").toLowerCase();
+            let formToDelete = interaction.options.getString("form-name").toLowerCase();
+            if (formToDelete.match(REGEX_SANI_STRING) || ownerSpecies.match(REGEX_SANI_STRING)) {
 
                 logger.error("[form remove] User attempted to use invalid character.");
                 console.log("Invalid character detected.");
@@ -430,7 +430,16 @@ module.exports.run = async (interaction) =>
 
                 if (confirmation.customId == 'confirm') {
                     logger.info("[form] Removing form");
-                    let sql = `DELETE FROM pokeForms WHERE species='` + species + `' AND form='` + form + `';`;
+                    //let monsql = `SELECT * FROM WHERE form ='` + form + `';`;
+                    let monsql = `UPDATE pokemon SET form='` + ownerSpecies + `' WHERE form='` + formToDelete + `';`;
+                    interaction.client.mysqlConnection.query(monsql, function (err, result) {
+                        //study sql commands, specifically looking for an update field command, it should exist, but i don't remember
+                        if (err) {
+                            logger.error("[form remove] Unable to reset pokemon forms to base species form.\nError: " + err.message);
+                        }
+                        logger.log("[form remove] Reset pokemon with form: " + formToDelete + " to their base species form." );
+                    });
+                    let sql = `DELETE FROM pokeForms WHERE species='` + ownerSpecies + `' AND form='` + formToDelete + `';`;
                     interaction.client.mysqlConnection.query(sql, function (err, result) {
                         if (err) {
                             logger.error(err);
