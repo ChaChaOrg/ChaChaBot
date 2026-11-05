@@ -646,6 +646,90 @@ Pokemon.prototype.sendSummaryMessage = function (interaction) {
   };
 };
 
+// =========== EXPORT ===========
+
+Pokemon.prototype.sendRawStats = function (interaction) {
+  // Just raw values, table formatting
+  let tempAbility = this.ability.name;
+  let tempSpecies = this.species;
+
+  // grab all the stored moves
+  let moves = [this.moveSet.move1,this.moveSet.move2,this.moveSet.move3,this.moveSet.move4];
+
+  for (let i = 0; i < moves.length; i++) {
+      if (!moves[i] || moves[i] === "undefined") {
+        moves[i] = "-";
+      } else if ((typeof moves[i] === 'object' && moves[i] !== null) || moves[i] === undefined) {
+          try {moves[i] = fixAbilityOrMoveFormatting(moves[i].move.name, " ");
+          } catch (e) {
+              moves[i] = '-';
+          }
+      } else {
+          try {moves[i] = fixAbilityOrMoveFormatting(moves[i], " ");
+          } catch (e) {
+              moves[i] = '-';
+          }
+      }
+  }
+
+  let fullName = "";
+
+  // check if species and name are the same; don't display twice if not
+    if (this.species.toLowerCase() === this.form.toLowerCase()) {
+        fullName = capitalizeWord(this.species);
+    } else {
+        fullName = capitalizeWord(this.species) + " (" + capitalizeWord(this.form) + ")";
+    }
+
+    //add + to stat list if positive, do nothing if negative
+    let addPlusOrNah = function (num) {
+        if (num > 0) return "+" + num;
+        else return num;
+    }
+
+    let saveStats = [
+        addPlusOrNah(this.statBlock.fortSave),
+        addPlusOrNah(this.statBlock.refSave),
+        addPlusOrNah(this.statBlock.willSave)
+    ]
+
+    let avatarURL = interaction.user.avatarURL();
+    let username = interaction.user.username;
+
+
+  return {
+    embed: {
+      description: '',
+      color: 3447003,
+      author: {
+        name: username,
+        icon_url: avatarURL,
+      },
+      title: `Level ${this.level} ${fullName} ~ ${this.name}`, 
+     
+
+      fields: [
+        {
+          name: "Titles",
+          value: "Name,Species,Form,Gender,Nature,Ability,Type1,Type2,TeraType,HP,ATK,DEF,SPA,SPD,SPE,STR,STRmod,DEX,,DEXmod,CON,CONmod,INT,INTmod,WIS,WISmod,FORT,REF,WILL,AC,DodgeDC,MoveSpeed",
+        },       
+        {
+          name: "Values",
+          value: `${this.name},${this.species},${this.form},${this.gender},${this.nature.natureFinal},${this.ability.name},${this.type1},${this.type2},${this.teraType},${this.statBlock.finalStats[0]},${this.statBlock.finalStats[1]},${this.statBlock.finalStats[1]}` +
+          `,${this.statBlock.finalStats[2]},${this.statBlock.finalStats[3]},${this.statBlock.finalStats[4]},${this.statBlock.finalStats[5]},${this.statBlock.finalStats[1]},${this.statBlock.strBase.toFixed(0)},${this.statBlock.strMod},${this.statBlock.dexBase.toFixed(0)}` +
+          `,${this.statBlock.dexMod},${this.statBlock.conBase.toFixed(0)},${this.statBlock.conMod},${this.statBlock.intBase.toFixed(0)},${this.statBlock.intMod},${this.statBlock.wisBase.toFixed(0)},${this.statBlock.wisMod},${saveStats[0]},${saveStats[1]},${saveStats[2]}` +
+          `,${this.statBlock.armorClass},${this.statBlock.armorClass},${this.level}` + 5 + `,${this.statBlock.moveSpeed}`,
+        },
+      ],
+      timestamp: new Date(),
+      footer: {
+        icon_url: avatarURL,
+        text: "Chambers and Charizard!",
+      },
+    },
+  };
+};
+
 // =========== Upload ===========
 
 Pokemon.prototype.uploadPokemon = function (connection, interaction) {
