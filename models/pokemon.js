@@ -711,14 +711,14 @@ Pokemon.prototype.sendRawStats = function (interaction) {
       fields: [
         {
           name: "Titles",
-          value: "Name,Species,Form,Gender,Nature,Ability,Type1,Type2,TeraType,HP,ATK,DEF,SPA,SPD,SPE,STR,STRmod,DEX,,DEXmod,CON,CONmod,INT,INTmod,WIS,WISmod,FORT,REF,WILL,AC,DodgeDC,MoveSpeed",
+          value: "Name,Species,Form,Gender,Nature,Ability,Type1,Type2,TeraType,HP,ATK,DEF,SPA,SPD,SPE,STR,STRmod,DEX,DEXmod,CON,CONmod,INT,INTmod,WIS,WISmod,FORT,REF,WILL,AC,DodgeDC,MoveSpeed",
         },       
         {
           name: "Values",
           value: `${this.name},${this.species},${this.form},${this.gender},${this.nature.natureFinal},${this.ability.name},${this.type1},${this.type2},${this.teraType},${this.statBlock.finalStats[0]},${this.statBlock.finalStats[1]},${this.statBlock.finalStats[1]}` +
           `,${this.statBlock.finalStats[2]},${this.statBlock.finalStats[3]},${this.statBlock.finalStats[4]},${this.statBlock.finalStats[5]},${this.statBlock.finalStats[1]},${this.statBlock.strBase.toFixed(0)},${this.statBlock.strMod},${this.statBlock.dexBase.toFixed(0)}` +
           `,${this.statBlock.dexMod},${this.statBlock.conBase.toFixed(0)},${this.statBlock.conMod},${this.statBlock.intBase.toFixed(0)},${this.statBlock.intMod},${this.statBlock.wisBase.toFixed(0)},${this.statBlock.wisMod},${saveStats[0]},${saveStats[1]},${saveStats[2]}` +
-          `,${this.statBlock.armorClass},${this.statBlock.armorClass},${this.level}` + 5 + `,${this.statBlock.moveSpeed}`,
+          `,${this.statBlock.armorClass},${this.statBlock.armorClass},${this.level + 5},${this.statBlock.moveSpeed}`,
         },
       ],
       timestamp: new Date(),
