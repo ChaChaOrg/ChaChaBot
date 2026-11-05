@@ -855,7 +855,7 @@ module.exports.run = async (interaction) => {
                                         components: [row] 
                                     })
 
-                                    await interaction.channel.send("Changes displayed in embed above. Confirm with confirm or deny.")
+                                    let confmsg = await interaction.followUp("Changes displayed in embed above. Confirm with confirm or deny.")
                                     
                                     const collectorFilter = i => i.user.id === interaction.user.id;
 
@@ -871,10 +871,18 @@ module.exports.run = async (interaction) => {
                                                 let successString = "Success! " + pokeName + "'s " + valName + " has been changed to " + valString + " and all related stats have been updated.\n\nHint: View Pokemon's stat's using `/showpoke [nickname]`";
                                                 logger.info(`[modpoke] ${successString}`)
                                                 interaction.editReply({ components: []});
-                                                interaction.channel.send({ content: successString });
+                                                if(typeof interaction.channel === 'undefined' || interaction.channel == null){
+                                                    interaction.followUp({ content: successString });
+                                                }else{
+                                                    confmsg.edit({ content: successString });   
+                                                }
                                             }).catch(function (error) {
                                                 interaction.editReply({ components: []});
-                                                interaction.channel.send({ content: "Error updating SQL for: " + pokeName })
+                                                if(typeof interaction.channel === 'undefined' || interaction.channel == null){
+                                                    interaction.followUp({ content: "Error updating SQL for: " + pokeName })
+                                                }else{
+                                                    confmsg.edit({ content: "Error updating SQL for: " + pokeName })
+                                                }
                                                 logger.error(`[modpoke] Error updating SQL for ${pokeName}`)
                                             });
                                         } else if (confirmation.customId === 'cancel') {
@@ -917,7 +925,7 @@ module.exports.run = async (interaction) => {
 
     } catch (error) {
         logger.error(`[modpoke] Error while attempting to modify the Pokemon.\n\t${error.toString()}`)
-        interaction.channel.send(error.toString());
-        interaction.channel.send('Error while attempting to modify the Pokemon.').catch(console.error);
+        interaction.followUp(error.toString());
+        interaction.followUp('Error while attempting to modify the Pokemon.').catch(console.error);
     }
 };
