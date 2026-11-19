@@ -295,6 +295,9 @@ module.exports.data = new SlashCommandBuilder()
           }, {
             name: 'Fairy',
             value: 'fairy'
+          }, {
+              name: 'Stellar',
+              value: 'stellar'
           }))
       .addIntegerOption(option =>
         option.setName('move-power')
@@ -399,6 +402,9 @@ module.exports.data = new SlashCommandBuilder()
               }, {
                       name: 'Fairy',
                       value: 'fairy'
+              }, {
+                  name: 'Stellar',
+                  value: 'stellar'
               }))
       .addIntegerOption(option =>
           option.setName('fusionstyle-level')
@@ -2394,7 +2400,9 @@ module.exports.run = async (interaction) => {
               )
                 effective = 0;
             });
-
+              if(moveType === 'stellar' && (defTera || defenderTypes[0] === 'stellar' || defenderTypes[1] === 'stellar')){
+                  effective = 2;
+              }
             //
             // Sets the relevant effectiveness string.
             //
