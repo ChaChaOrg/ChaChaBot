@@ -2400,7 +2400,7 @@ module.exports.run = async (interaction) => {
               )
                 effective = 0;
             });
-              if(moveType === 'stellar' && (defTera || defenderTypes[0] === 'stellar')){
+              if(moveType === 'stellar' && (defTera || defenderTypes[0] === 'stellar' || defenderTypes[1] === 'stellar')){
                   effective = 2;
               }
             //
